@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write            # output/ 와 digest.db 커밋용
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,5 +46,21 @@ jobs:
             git push || (git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && git push)
           fi
 
-  # output/ 를 GitHub Pages 로 배포하려면 저장소 Settings > Pages 에서
-  # branch = main / folder = /output 지정. (또는 별도 deploy job 추가)
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
