@@ -157,9 +157,12 @@
 - [ ] 실데이터 며칠 돌리며 dedup 임계값(0.83)·카테고리 상한(6) 튜닝
 
 **P1~P2 — 자동화 ("완전 자동" 목표 완성):**
-- [ ] 개인 GitHub 레포 + `ANTHROPIC_API_KEY` 시크릿 + Actions cron + Pages 켜기
-- [ ] `.gitignore` (.venv, __pycache__), `digest.db` 커밋 여부 결정
-- [ ] cron 시간대(UTC) 확인, 모델 선택(Sonnet/Haiku) 비용
+- [x] 개인 GitHub 레포 + `GEMINI_API_KEY` 시크릿 + Actions cron + Pages 켜기 — 2026-07-28 완료
+  (private repo `ujuappa/ai_news`, 상세는 변경로그 참고)
+- [x] `.gitignore` (.venv, __pycache__), `digest.db` 커밋 여부 결정 — 2026-07-28. `digest.db`는
+  `.github/workflows/daily.yml`이 이미 `git add output/ digest.db`로 커밋하는 구조라 "커밋함"으로 확정.
+  `.DS_Store`/`.claude/settings.local.json` 도 `.gitignore`에 추가(로컬 전용 파일이라 레포에 불필요).
+- [x] cron 시간대(UTC) 확인 — 매일 14:00 UTC 그대로 유지, 모델은 `gemini-2.5-flash` 확정(비용 재검토는 라이브 며칠 관찰 후).
 
 - [x] **1회성 6개월 백필** — 2026-07-27 완료. `backfill.py` 신규(블로그/랩 발표 7개 소스만:
   OpenAI/Anthropic/DeepMind/Meta/HuggingFace/Ahead of AI/Import AI, arXiv·TechCrunch·HN 은 볼륨
@@ -338,3 +341,16 @@
   TechCrunch/HN 제외)였음을 재확인. 지금 재백필하지 않고, API 로 접근 가능한 소스가 더 늘어나면 그때
   소스를 확장해서 지난 6개월 아카이브를 다시 만들기로 결정(§5 파킹 아이디어에 추가). 지금은 진행 중인
   작업 없음 — 남은 할일은 §9/§5 참고.
+- 2026-07-28: **GitHub 레포 생성 + Actions cron + Pages 자동화 완료**. private repo
+  `github.com/ujuappa/ai_news` 생성 후 로컬 `git init` + 첫 커밋 + push(`.DS_Store`,
+  `.claude/settings.local.json` 은 로컬 전용이라 `.gitignore` 추가 후 제외). HTTPS push 가 비밀번호
+  인증 미지원으로 막혀서 `credential.helper=osxkeychain` 설정 후 사용자가 별도 터미널에서 PAT 로 직접
+  인증(토큰은 채팅에 노출 안 시킴). `.github/workflows/daily.yml` 에 Pages 배포 잡 추가 —
+  기존 주석은 "branch=main/folder=/output" 를 제안했지만 이건 실제로 불가능(GitHub Pages 브랜치 배포는
+  `/root` 나 `/docs` 만 지원, 임의 폴더 불가) → `actions/upload-pages-artifact@v3`(path: output) +
+  `actions/deploy-pages@v4` 잡으로 교체(레포 Settings > Pages > Source 도 "GitHub Actions" 로 변경 필요).
+  **첫 수동 실행(`workflow_dispatch`) 실패 디버깅**: `ValueError: No API key was provided` —
+  `GEMINI_API_KEY` 를 Repository secret 이 아니라 Pages 가 자동 생성한 `github-pages` **Environment**
+  secret 으로 등록해서 `environment: github-pages` 를 선언 안 한 `build` 잡에서 안 보였던 것. Repository
+  secret 으로 재등록 후 재실행 성공 확인(사용자 확인). (참고: 로그에 뜬 "Node.js 20 deprecated" 경고는
+  무관한 러너 인프라 공지, 실패 원인 아니었음.)
