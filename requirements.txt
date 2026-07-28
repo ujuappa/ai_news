@@ -1,0 +1,8 @@
+google-genai>=1.0
+python-dotenv>=1.0
+feedparser>=6.0.11
+sentence-transformers>=3.0     # cross-day dedup 임베딩 (torch 딸려옴; 가벼운 대안은 README 참고)
+numpy>=1.26
+PyYAML>=6.0
+requests>=2.31
+Jinja2>=3.1

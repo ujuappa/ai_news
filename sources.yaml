@@ -1,0 +1,210 @@
+# ============================================================
+# AI News Digest — 소스 설정 파일 (v1) 
+# 피드 검증 완료: 2026-07-25
+# ============================================================
+# status 값:
+#   verified  -> 실제로 살아있고 유효한 피드 확인됨
+#   verify    -> 표준 형식이라 맞을 가능성 높지만 build 때 첫 fetch로 확인
+#   no_feed   -> 공식 RSS 없음. 미러/생성피드/자체파서 필요 (source-health로 감시!)
+#
+# parse: easy(깨끗한 RSS/JSON) / medium(가끔 부서짐) / hard(스크래핑·트랜스크립트)
+# enabled: v1에서 켤지 여부. false = v2 파킹(로드맵 겸용)
+# ============================================================
+
+settings:
+  feeds_verified_on: 2026-07-25
+  max_items_per_category: 6
+  min_items_fallback: true
+  flag_major_at_top: true
+  preserve_key_numbers_verbatim: true
+  min_significance: 0.25    # 이 미만은 랭킹/상한 전에 드롭 (홍보성/저가치 필터).
+                            # 2026-07-27 백필 412건 분석: 0.25 미만 36건(8.7%)이 대부분
+                            # 고객사례/템플릿성 페이지("Healthcare", "ChatGPT for marketing teams" 등)
+  max_item_age_days: 7      # 일간 파이프라인 전용 신선도 컷오프. 뜸한 소스(Import AI 주간,
+                            # Ahead of AI 월간)의 오래된 백로그가 seen-store 리셋 직후
+                            # "신규"로 잡혀 significance 만으로 리드 자리를 차지하는 걸 방지
+                            # (2026-07-28 발견: 5개월 전 펀딩 뉴스가 리드로 뜬 사고). backfill.py 는
+                            # since 파라미터로 직접 호출해서 이 값과 무관.
+
+  dedup:
+    method: embedding_cosine
+    threshold: 0.83                  # 실제 출력 보고 튜닝
+    cross_day: true
+    seen_store_retention_days: 14
+
+  ranking_rubric:
+    - frontier_model_release
+    - major_funding_or_acquisition
+    - benchmark_record_or_capability
+    - notable_policy_shift
+    - incremental_research
+    - community_reaction
+
+# ============================================================
+# CATEGORY 1: Model releases
+# ============================================================
+model_releases:
+  - id: openai
+    name: OpenAI News
+    feed_url: https://openai.com/news/rss.xml
+    parse: easy
+    status: verified
+    enabled: true
+    notes: 구 openai.com/blog/rss.xml 도 작동
+
+  - id: anthropic
+    name: Anthropic News
+    feed_url: https://www.anthropic.com/sitemap.xml
+    parse: sitemap           # RSS 미러(rsshub) 전부 403/timeout -> sitemap.xml + og:title/description 스크레이프로 대체
+    status: verified          # 2026-07-27 확인: /news/ 250건, lastmod 2024-05 까지 -> 백필도 가능
+    enabled: true
+    notes: >-
+      공식 RSS 없음. fetch.py fetch_sitemap_source 가 sitemap.xml 의 /news/ 항목을
+      lastmod 순으로 스크레이프. 사이트 구조 바뀌면 og:title/description 셀렉터 깨질 수 있음 -> source-health 감시 유지
+
+  - id: deepmind
+    name: Google DeepMind Blog
+    feed_url: https://deepmind.google/blog/rss.xml      # ★수정됨 (기존 /discover/blog/ 는 틀림)
+    parse: easy
+    status: verified          # 2026-07-16 최신글까지 실제 피드 확인
+    enabled: true
+    notes: 대체 URL 후보 https://deepmind.google/blog/feed/basic/
+
+  - id: meta_ai
+    name: Meta AI Blog
+    feed_url: https://about.fb.com/news/tag/ai/feed/    # Meta Newsroom(WordPress) "ai" 태그 공식 RSS -> ai.meta.com/blog 는 RSS 없지만 이건 정식 피드
+    parse: easy
+    status: verified          # 2026-07-27 확인: 정상 RSS, AI 관련 항목 확인
+    enabled: true
+    notes: >-
+      ai.meta.com/blog 자체 RSS 는 없음(RSSHub 이슈 #16938 여전). 대신 회사 뉴스룸의 "ai" 태그
+      공식 피드 사용 -> 연구 블로그보다 넓은 회사 PR 포함 가능, 카테고리/랭킹으로 필터될 것
+
+  - id: mistral
+    name: Mistral AI News
+    feed_url: https://rsshub.app/mistral/news           # 공식 피드 없음 -> 생성/미러
+    parse: medium
+    status: no_feed
+    enabled: false           # v1.5
+    notes: Olshansk/rss-feeds 의 feed_mistral.xml 참고 가능
+
+# ============================================================
+# CATEGORY 2: Research
+# ============================================================
+research:
+  - id: arxiv_ai
+    name: arXiv cs.AI
+    feed_url: https://rss.arxiv.org/rss/cs.AI
+    parse: easy
+    status: verified
+    enabled: true
+    notes: 볼륨 폭탄 -> dedup+랭킹으로 강하게 필터, 상한 낮게. export.arxiv.org 는 cs.AI 만 빈 채널
+      반환(arXiv 쪽 버그로 추정, 2026-07-27 확인) -> rss.arxiv.org 로 교체
+
+  - id: arxiv_lg
+    name: arXiv cs.LG (Machine Learning)
+    feed_url: http://export.arxiv.org/rss/cs.LG
+    parse: easy
+    status: verified
+    enabled: true
+
+  - id: arxiv_cl
+    name: arXiv cs.CL (NLP)
+    feed_url: http://export.arxiv.org/rss/cs.CL
+    parse: easy
+    status: verified
+    enabled: false           # 넘치면 추가
+
+  - id: ahead_of_ai
+    name: Ahead of AI (Sebastian Raschka)
+    feed_url: https://magazine.sebastianraschka.com/feed
+    parse: easy
+    status: verified          # 활발, Substack 커스텀 도메인
+    enabled: true
+    notes: 저빈도(월 몇 회). 매일은 안 옴 -> cross-day dedup이 알아서 처리
+
+  - id: the_gradient
+    name: The Gradient
+    feed_url: https://thegradient.pub/rss/
+    parse: easy
+    status: verify            # 표준 Ghost 피드. v2라 build때 확인
+    enabled: false            # v2 (발행 빈도 낮을 수 있음)
+
+# ============================================================
+# CATEGORY 3: Tools & products
+# ============================================================
+tools_products:
+  - id: hn_ai
+    name: Hacker News (AI, 100+ points)
+    feed_url: https://hnrss.org/newest?q=AI&points=100
+    parse: easy
+    status: verified
+    enabled: true
+    notes: 점수 임계값으로 노이즈 제어. q=/points= 조정 가능
+
+  - id: hn_show
+    name: Hacker News — Show HN (AI)
+    feed_url: https://hnrss.org/show?q=AI&points=50
+    parse: easy
+    status: verified
+    enabled: false           # v1.5: 제품 출시 잡기용
+
+  - id: huggingface_blog
+    name: Hugging Face Blog
+    feed_url: https://huggingface.co/blog/feed.xml
+    parse: medium
+    status: verified          # 확인됨 (item에 <link> 누락 이슈 있음 -> guid로 URL 파싱)
+    enabled: true
+
+# ============================================================
+# CATEGORY 4: Policy & business
+# ============================================================
+policy_business:
+  - id: import_ai
+    name: Import AI (Jack Clark)
+    feed_url: https://importai.substack.com/feed
+    parse: easy
+    status: verified          # 활발
+    enabled: true
+    notes: 주간 뉴스레터. 정책/거버넌스 커버 강함. 매일은 안 옴
+
+  - id: techcrunch_ai
+    name: TechCrunch — AI
+    feed_url: https://techcrunch.com/category/artificial-intelligence/feed/
+    parse: easy
+    status: verified          # 공식 피드 확인
+    enabled: true
+    notes: 고볼륨(하루 20~40건)+본문 발췌만. 랭킹으로 강하게 눌러
+
+  - id: verge_ai
+    name: The Verge — AI
+    feed_url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+    parse: easy
+    status: verified          # 확인됨 (본문은 발췌만)
+    enabled: false            # v2 (TechCrunch와 커버 중복)
+
+# ============================================================
+# CATEGORY 5: Community takes  (v1 전체 OFF)
+# ============================================================
+community_takes:
+  - id: reddit_localllama
+    name: r/LocalLLaMA
+    feed_url: https://www.reddit.com/r/LocalLLaMA/.rss
+    parse: medium
+    status: verified          # .rss 규칙 확인
+    enabled: false            # v2
+    notes: 노이즈 많음. search.rss?q=...&restrict_sr=on 로 좁히기 가능
+
+  - id: reddit_ml
+    name: r/MachineLearning
+    feed_url: https://www.reddit.com/r/MachineLearning/.rss
+    parse: medium
+    status: verified
+    enabled: false            # v2
+
+  - id: simonw
+    name: Simon Willison's Blog
+    feed_url: https://simonwillison.net/atom/everything/
+    parse: easy
+    status: verify            # 표준 Atom, 유명. build때 확인
+    enabled: false            # v2 — 개발자 시각 해설 좋음

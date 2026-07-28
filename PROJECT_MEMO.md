@@ -1,0 +1,340 @@
+# AI News Digest — 프로젝트 메모 (결정 로그)
+
+> 이 파일은 아이디어 단계부터 쌓아온 결정과 제안을 버리지 않고 모아두는 곳.
+> 프로젝트 끝날 때까지 계속 업데이트하면서 참조.
+> 최종 수정: 2026-07-27
+
+---
+
+## 0. 목표 (한 줄)
+
+매일 AI 뉴스를 자동 수집 → 중복제거 → 분류 → 요약 → 랭킹해서, **웹페이지에 데일리 다이제스트로 굽는** 완전자동 개인용 앱.
+
+---
+
+## 1. 확정된 스코프
+
+| 항목 | 결정 |
+|---|---|
+| 완성도 | **완전 자동 데일리 앱** |
+| 제작자 수준 | 개발 익숙 |
+| 전달 방식 | **웹페이지** (정적 사이트) |
+
+---
+
+## 2. 아키텍처 (결정)
+
+파이프라인 한 줄:
+**수집 → 정규화·중복제거(상태 보유) → LLM(분류+요약+랭킹) → DB 저장 → 정적 페이지 재생성**
+
+추천 스택 (서버리스, 저비용, 안 깨짐):
+- Python 파이프라인
+- SQLite (히스토리 + seen-store)
+- 임베딩 (중복제거)
+- 정적 생성 (Astro/11ty 또는 md→HTML)
+- GitHub Actions 크론 (매일 실행)
+- Vercel / Netlify / GitHub Pages 호스팅
+- → 아카이브가 공짜로 딸려옴
+
+---
+
+## 3. 다이제스트 규칙 (원 프로젝트 프롬프트 + 리뷰에서 보강)
+
+카테고리 5개:
+1. Model releases
+2. Research
+3. Tools & products
+4. Policy & business
+5. Community takes  *(v1에서는 OFF)*
+
+핵심 규칙:
+- **중복제거**: 같은 사건 묶기. 날짜 넘는 dedup 필수(seen-store).
+- **요약**: 항목당 2~3문장, 자기 말로. 단 **벤치마크·파라미터 등 숫자는 원문 그대로 보존**(할루시네이션 방지).
+- **랭킹 rubric** (고정): 프런티어 모델 > 대형 펀딩/인수 > 벤치 신기록/역량 > 정책 전환 > 점진 연구 > 커뮤니티 반응.
+- **signal > volume**: minor·중복은 스킵. 카테고리당 상한(기본 6개), 조용한 날엔 상한 무시.
+- **상단 플래그**: 프런티어 모델 / 대형 딜 / 정책 전환은 맨 위에.
+- **소스 신뢰도**: 확인된 뉴스 vs 추측 구분 (특히 forum/community).
+
+---
+
+## 4. v1 vs 나중 (스코프 크립 방지)
+
+### v1 (목표: 이번 주말, 실작업 2~4일)
+- 소스 **10개 안쪽**: 랩 블로그 4~5 + arXiv 2~3 + HN 필터 1 + Import AI
+- 기본 dedup + LLM 스텝 + 정적 페이지 + 크론
+- **Community takes 카테고리 OFF**
+- 실제 출력 며칠 눈으로 보고 나서 튜닝 (임계값/랭킹)
+
+### v2 (+1~2주)
+- 임베딩 크로스데이 dedup 정교화
+- 소스 확장 (Reddit/포럼, 유튜브 트랜스크립트, X/트위터)
+- 페이지 다듬기, 랭킹 튜닝, 아카이브/검색
+
+---
+
+## 5. 파킹된 아이디어 (버리지 말 것 — 나중에 재검토)
+
+- [ ] **어제 대비 "변경점(diff)" 뷰** ⭐ — 굴러가는 스토리 추적. DB 있으면 거의 공짜. "새 소식"보다 "어제 그거 어떻게 됐어"가 중요할 때 많음. **v2 1순위 후보.**
+- [ ] **소스 헬스 모니터링** — 미러/생성 피드가 조용히 죽는 것 감지. "N일간 아이템 0개"면 다이제스트 하단에 `⚠️ 소스 이상` 배지. 코드 몇 줄, 가치 큼. **v1 막판~v2 초 후보.**
+- [ ] **과거 다이제스트 아카이브 + 검색** — 정적 구조면 거의 자동.
+- [ ] **다이제스트를 RSS로도 출력** — 나중에 리더/이메일 연동이 공짜가 됨.
+- [ ] **취향 학습/개인화** — 관심 카테고리 가중치. 명시적 v1 제외, 한참 나중.
+- [ ] **공식 피드 없는 블로그용 자체 파서** — Olshansk/rss-feeds 참고. 미러 의존 줄이면 안정성↑.
+- [ ] **아카이브 재백필(소스 확장)** — 2026-07-28 사용자 확인: 현재 6개월 백필 아카이브는 블로그/랩
+  발표 7개 소스만 사용(arXiv/TechCrunch/HN 은 볼륨 폭탄이라 당시 의도적으로 제외, §7/§9 참고) 라서
+  아카이브 페이지에 소스가 사실상 하나만 보이는 것처럼 느껴짐. **지금 당장 손대지 않기로 결정** — 나중에
+  (호출 가능한 API 소스가 더 확보되면) 소스를 더 모아서 지난 6개월 흐름을 다시 보는 용도로 재백필하기로 함.
+
+---
+
+## 6. 시간 추정 (개발 익숙 기준)
+
+- v1 엔드투엔드: **2~4일** (주말 하나~저녁 며칠)
+- v2 정교화: **+1~2주**
+- → 쓸 만한 건 이번 주말, 진짜 좋은 건 2~4주
+
+---
+
+## 7. 소스 리스트
+
+→ 별도 파일 `sources.yaml` 참조. **피드 검증 완료: 2026-07-25.**
+
+검증 결과 요약:
+- **수정**: DeepMind → `https://deepmind.google/blog/rss.xml` (기존 `/discover/blog/` 는 틀림)
+- **공식 피드 없음(no_feed)**: Anthropic(미러), Meta AI(RSSHub 경로/자체파서), Mistral(생성피드) → **source-health 감시 대상**
+- **verified 승격**: OpenAI, DeepMind, arXiv(AI/LG/CL), Hugging Face, Import AI, Ahead of AI, TechCrunch, The Verge, HN, Reddit
+- **still verify(v2)**: The Gradient, Simon Willison — 표준 형식이라 build 때 확인
+- 주의: Import AI/Ahead of AI는 **저빈도**(주간·월간), TechCrunch는 **고볼륨+본문 발췌만**, HF 피드는 item `<link>` 누락 → guid로 URL 파싱
+
+---
+
+## 8. 첫 라이브 실행에서 발견한 것 (2026-07-27)
+
+- ✅ `--dry-run` 성공: 키 없이 24개 수집·렌더 확인 (맥, 인터넷 열림 → 소스 라이브 수집).
+- ✅ 진짜 실행(API 키): **LLM 요약 정상** — 2~3문장 재작성, 숫자 보존(예: "43%"), 심지어
+  "홍보성 공지, 새 뉴스 아님" 같은 signal 판단까지 함. 분류·숫자보존 동작 확인.
+- ⚠️ **진짜 실행이 2개만 나온 이유 = 버그 아님, seen-store 오염**: 앞선 `--dry-run` 이
+  24개를 seen-store 에 커밋 → 진짜 실행 때 전부 "이미 다룸"으로 스킵됨. cross-day dedup 은
+  제대로 작동한 것. **단, `--dry-run` 이 상태를 건드리면 안 됨 → P0 버그.**
+- ⚠️ arXiv cs.AI 0건 (원인 확인 필요: 주말 미발행? http→https? 포맷?). Anthropic/Meta 0건은 예상됨(공식 피드 없음).
+- ⚠️ 홍보/이벤트성 아이템(TechCrunch Disrupt 아젠다)이 통과됨 → min-significance 컷 필요.
+
+## 9. 우선순위 TODO (현재 작업 목록)
+
+**P0 — 지금 당장 (버그, 이번 실행에서 발견):**
+- [x] `--dry-run` 부작용 제거: dry-run 이면 `save_items`/`commit_seen`/`purge_old_seen`/`record_digest` 건너뛰기 (pipeline.py) — 2026-07-27
+- [x] seen-store 리셋 수단 + 문서화 (`--reset` 플래그, digest.db 삭제) — 2026-07-27. ※ 기존 DB는 아직 오염 상태 그대로 남아있음 — 깨끗한 실행하려면 `python pipeline.py --reset` 먼저 실행 필요
+
+**P1 — 첫 "진짜" 다이제스트 제대로 뽑기:**
+- [x] **min-significance 컷 추가** — 2026-07-27. 백필 412건 데이터로 분석: significance<0.25 가 36건(8.7%),
+  대부분 고객사례/템플릿 페이지("Healthcare", "ChatGPT for marketing teams", "Claude for Financial Services" 등).
+  `sources.yaml settings.min_significance: 0.25` 추가, `config.py Settings.min_significance` 필드 추가,
+  `pipeline.py`/`backfill.py` 모두 LLM 엔리치 직후 `ranked_pool = [it for it in clustered if it["significance"] >= settings.min_significance]`
+  로 랭킹/상한/저장 전에 드롭 (단 `commit_seen` 은 드롭된 것 포함 전체에 호출 — 내일 같은 저의미 스토리 재스코어 안 하려고).
+  **참고**: 기존에 이미 생성된 6개월 백필 아카이브(27주)는 이 필터 적용 전 데이터라 0.25 미만 항목이 일부 남아있음 — 재실행은 안 함(비용), 다음 백필/일간 실행부터 적용됨.
+- [x] **dedup 임계값(0.83) 검증** — 2026-07-27. 백필 원본 598건으로 로컬 재클러스터링(임베딩만, API 비용 없음)해서
+  0.80/0.83/0.85/0.88 비교. **0.83 이 이미 적절함, 변경 안 함.** 근거: 0.80 으로 낮추면 "Claude Opus 4.5"↔"Claude Opus 4.6"
+  (다른 모델), "$65B Series H"↔"$30B Series G"(다른 펀딩 라운드) 가 오탐 병합됨. 0.83 에서는 둘 다 정확히 분리.
+- [ ] **카테고리 상한(6) 튜닝** — 보류. 백필(주간 버킷)로 확인해보니 바쁜 주(W28/W30)엔 4개 카테고리 중 3개가
+  정확히 6건에서 꽉 참(캡이 실제로 컷하고 있음) — 그런데 이건 주간 집계라 일간 다이제스트보다 상대적으로 빡빡한 게
+  당연해서 이 데이터로는 일간 캡 적정성을 판단 불가. **실제 며칠 라이브 실행 후 재평가하기로 결정.**
+- [x] arXiv cs.AI 0건 원인 확인/수정 — 2026-07-27. 원인: `export.arxiv.org/rss/cs.AI` 가 빈 채널(`<item>` 0개) 반환.
+  arxiv.org 자체 리스팅엔 최근 1111건 있고, 같은 export 호스트에서 cs.LG/cs.CL 은 정상(rss.arxiv.org 와 바이트 단위 동일) →
+  cs.AI 카테고리에 한해 export.arxiv.org 쪽 캐시/렌더링 버그로 추정(arXiv 측 문제, 우리 코드 버그 아님).
+  `rss.arxiv.org/rss/cs.AI` (arXiv 신규 표준 RSS 호스트)는 정상(223건) → `sources.yaml` feed_url 교체로 해결.
+  dry-run 재확인: arxiv_ai 25건 정상 수집.
+- [ ] min-significance 컷 추가 (예: 0.25 미만 드롭) — 홍보/이벤트성 필터
+- [x] Anthropic/Meta `no_feed` 해결 — 2026-07-27. RSSHub 계열 미러(rsshub.app/bestblogs.dev) 전부 403/timeout 확인 후 폐기:
+  - **Anthropic**: 공식 RSS 없음 → `sitemap.xml`(`/news/` 250건, lastmod 2024-05까지) + 기사 페이지 스크레이프로 대체
+    (`fetch.py: fetch_sitemap_source`, `sources.yaml: parse: sitemap`). og:description 이 일부 페이지에서
+    사이트 공통 문구(boilerplate)만 주는 것 발견 → `<main>` 첫 문단 우선 추출로 수정(안 그러면 Opus 4.5/4.7/5 가
+    dedup 에서 뭉개질 뻔함 — 실제로 fix 전엔 240→233 클러스터, fix 후 240→237 로 늘어남, 4개 Opus 버전 모두 분리 확인).
+  - **Meta**: `ai.meta.com/blog` 자체 RSS는 여전히 없음(RSSHub #16938) → 대신 Meta Newsroom(WordPress)의
+    공식 `"ai"` 태그 피드(`about.fb.com/news/tag/ai/feed/`) 사용. 연구 블로그보다 범위가 넓어(하드웨어/PR 포함)
+    카테고리·랭킹에서 걸러질 것으로 기대, 관찰 필요.
+  - 부수적으로 `_clean()` 에 `html.unescape` 추가(엔티티 `&#x27;` 등 안 풀리던 버그, 전체 소스 공통 개선).
+  - Mistral 은 여전히 no_feed (v1.5 비활성이라 보류, sitemap-0.xml 은 있지만 lastmod 없어서 더 손이 감).
+- [ ] 실데이터 며칠 돌리며 dedup 임계값(0.83)·카테고리 상한(6) 튜닝
+
+**P1~P2 — 자동화 ("완전 자동" 목표 완성):**
+- [ ] 개인 GitHub 레포 + `ANTHROPIC_API_KEY` 시크릿 + Actions cron + Pages 켜기
+- [ ] `.gitignore` (.venv, __pycache__), `digest.db` 커밋 여부 결정
+- [ ] cron 시간대(UTC) 확인, 모델 선택(Sonnet/Haiku) 비용
+
+- [x] **1회성 6개월 백필** — 2026-07-27 완료. `backfill.py` 신규(블로그/랩 발표 7개 소스만:
+  OpenAI/Anthropic/DeepMind/Meta/HuggingFace/Ahead of AI/Import AI, arXiv·TechCrunch·HN 은 볼륨
+  폭탄이라 제외 — cs.AI 만 6개월 34,000건+). 598건 수집 → dedup 580 클러스터 → ISO 주 단위로
+  버킷팅 → 주당 `archive/YYYY-Www.html` 다이제스트 27개 생성(Haiku 로 엔리치, 비용 절감).
+  seen-store 는 건드리지 않음(commit_seen 미호출 — 14일 롤링 cross-day dedup 과 무관한 과거
+  데이터라 의미 없음), 오늘자 `output/index.html` 도 미변경(`render.render_archive_digest` 로
+  archive/ 에만 씀). 재사용 가능한 부산물: `fetch.py` 에 `fetch_sitemap_source`(sitemap.xml 스크레이프,
+  no_feed 소스용, since 파라미터로 백필도 지원)와 `fetch_paginated_feed`(WordPress `?paged=`),
+  `llm.enrich()` 에 `model` 파라미터 추가.
+
+**v2 — 파킹 (섹션 5 참조):**
+- [ ] 어제 대비 diff 뷰 (1순위) / 아카이브 검색 / RSS 출력 / 페이지 디자인
+- [ ] 소스 확장(Reddit·YouTube·X) / 개인화 / cross-day "새 각도면 업데이트" 로직
+
+---
+
+## 변경 로그
+- 2026-07-25: 스코프 확정(완전자동/웹), 아키텍처·rubric·v1 소스 결정. config 초안 + 이 메모 생성.
+- 2026-07-25: 피드 URL 전수 검증. DeepMind URL 수정, Meta/Mistral no_feed 확정, 나머지 verified 승격.
+- 2026-07-25: v1 파이프라인 스켈레톤 완성(8개 모듈+워크플로+README). 합성데이터로 렌더/랭킹 검증.
+- 2026-07-27: 초보용 lite 경로 추가(torch 없이 해싱 dedup 폴백). 맥 실행 가이드 README 반영.
+- 2026-07-27: **첫 라이브 실행 성공** (맥). dry-run 24건 수집·렌더 확인 → 진짜 실행 LLM 요약 확인. dry-run seen-store 오염(P0), arXiv 0건, promo 누출 발견. 우선순위 TODO 작성.
+- 2026-07-27: **P0 수정**: `pipeline.py` — dry-run 시 `save_items`/`commit_seen`/`purge_old_seen`/`record_digest` 스킵하도록 write 경로를 `if not dry_run:` 으로 가드. `--reset` 플래그 추가(digest.db 삭제). `--dry-run` 재실행으로 DB row count·md5 불변 확인(회귀 없음). README/CLAUDE.md 문서 반영. 사용자 확인 후 오염된 digest.db `--reset` 으로 초기화 완료.
+- 2026-07-27: **P1 — arXiv cs.AI 0건 수정**: 원인은 `export.arxiv.org/rss/cs.AI` 가 빈 채널을 반환하는 arXiv 측 버그(cs.LG/cs.CL 은 같은 호스트에서 정상). `sources.yaml` 의 arxiv_ai feed_url 을 `rss.arxiv.org/rss/cs.AI` 로 교체 → dry-run 에서 25건 정상 수집 확인.
+- 2026-07-27: **P1 — Anthropic/Meta no_feed 해결**: Anthropic 은 sitemap.xml+스크레이프(`fetch_sitemap_source` 신규), Meta 는 Newsroom "ai" 태그 공식 RSS 로 교체. 스크레이프 중 og:description boilerplate 문제 발견해 `<main>` 첫 문단 추출로 수정, `_clean()` html.unescape 추가. dry-run 에서 anthropic 25건/meta_ai 10건, Opus 4.5/4.6/4.7/5 모두 별개 클러스터로 분리 확인.
+- 2026-07-27: **1회성 6개월 백필 실행**: `backfill.py` 작성, 사용자와 스코프 확정(블로그/랩 발표 7소스·6개월·Haiku·주간 아카이브) 후 실행 완료. 598건 → 580 클러스터 → 27주 다이제스트. seen-store/오늘자 index.html 미변경 확인. ⚠️ 이 과정에서 사용자가 ANTHROPIC_API_KEY 를 `!` prefix 대신 채팅에 직접 붙여넣어 대화 기록에 평문 노출됨 — 세션 종료 후 키 교체(rotate) 권고함.
+- 2026-07-27: **P1 튜닝 3종 마무리**: 백필 데이터로 min-significance 컷(0.25) 데이터 기반 결정 후 코드 반영(`config.py`/`pipeline.py`/`backfill.py`). dedup 임계값(0.83)은 로컬 재클러스터링으로 검증만 하고 유지(0.80은 Opus 4.5/4.6, $65B/$30B 펀딩을 오병합하는 것 확인). 카테고리 상한(6)은 주간 백필 데이터로 일간 캡 적정성 판단이 안 돼서 보류, 라이브 며칠 후 재평가.
+- 2026-07-28: **LLM 프로바이더 Anthropic → Gemini 전환**. Anthropic API 키 소진, Gemini Cloud 키로 교체.
+  `llm.py`: `anthropic` SDK → `google-genai`(`genai.Client`/`generate_content`, `response_mime_type=application/json`
+  로 JSON 강제) 로 교체. `config.py`: `ANTHROPIC_API_KEY`→`GEMINI_API_KEY`, `MODEL` 기본값
+  `claude-sonnet-5`→`gemini-2.5-flash`. `backfill.py`: `BACKFILL_MODEL`(대량/저비용 티어)
+  `claude-haiku-4-5`→`gemini-2.5-flash-lite`. `requirements.txt`: `anthropic`→`google-genai`.
+  README/CLAUDE.md 의 env var·모델명 문서도 갱신. `sources.yaml`/`backfill.py` 의 `anthropic`
+  뉴스 소스(Anthropic 블로그 스크레이프)는 LLM 프로바이더와 무관해서 손대지 않음.
+  dry-run 재확인 완료(임포트/문법 정상, 227 클러스터 렌더). **모델명(`gemini-2.5-flash`,
+  `gemini-2.5-flash-lite`)은 마이그레이션 시점 기준 추정값 — 실제 실행 전 Google AI Studio에서
+  현재 유효한 모델명인지 재확인 필요.**
+- 2026-07-28: **키 노출 재발 + `.env` 방식으로 전환**. Gemini 키 교체 과정에서 사용자가 `!` 접두사로
+  `export GEMINI_API_KEY=...`를 실행했으나, `!` 는 실행 방식만 바꿀 뿐 명령어 텍스트 자체(키 값 포함)가
+  대화 기록에 그대로 남는다는 걸 확인 — 노출 재발(1차는 2026-07-27 Anthropic 키). 게다가 export 한 값이
+  내 Bash 툴 쉘에 반영도 안 됨(툴 호출 간 쉘 상태 비유지) 확인 → 노출만 되고 기능적 이득도 없었음.
+  사용자에게 즉시 해당 Gemini 키 재발급 요청. 재발 방지로 `config.py` 에 `python-dotenv` 로딩 추가
+  (`load_dotenv(ROOT / ".env")`), `.env`/`.venv`/`__pycache__` 를 `.gitignore` 에 추가(신규 생성),
+  `requirements.txt` 에 `python-dotenv` 추가, README/CLAUDE.md 셋업 안내를 `export` 대신
+  `echo "GEMINI_API_KEY=..." > .env`(별도 터미널에서 직접 작성) 방식으로 갱신. **앞으로 비밀값은
+  채팅에 어떤 형태로도(`!` 포함) 붙여넣지 않고 `.env` 파일로만 주고받기로 함.**
+- 2026-07-28: **Gemini 인증을 API 키 → Vertex AI 서비스 계정으로 전환**. 발급받은 키가
+  Google Cloud 콘솔 키였는데 `403 API_KEY_SERVICE_BLOCKED`로 막힘(Generative Language API
+  미활성/키 제한 추정) → 단순 API 키 대신 Vertex AI(GCP 프로젝트 `bcc-bon-innovation-ai`,
+  리전 `us-central1`) 로 전환하기로 결정. `llm.py` 의 `genai.Client(api_key=...)` 를
+  `genai.Client()`(인자 없음, `.env`의 `GOOGLE_GENAI_USE_VERTEXAI`/`GOOGLE_CLOUD_PROJECT`/
+  `GOOGLE_CLOUD_LOCATION`/`GOOGLE_APPLICATION_CREDENTIALS` 로 자동 인증)로 교체.
+  `config.py` 의 이제 안 쓰는 `GEMINI_API_KEY` 상수 제거. `.gitignore` 에 `service-account.json`
+  추가. `.github/workflows/daily.yml` 도 Anthropic 기준으로 남아있던 걸 발견해서 같이 갱신
+  (서비스 계정 JSON 시크릿을 파일로 써서 `GOOGLE_APPLICATION_CREDENTIALS` 로 지정하는 스텝 추가,
+  `DIGEST_MODEL=gemini-2.5-flash`). README 셋업/배포 섹션도 반영. **서비스 계정 JSON 키 파일
+  생성·로컬 배치는 사용자가 GCP 콘솔+터미널에서 직접 진행 중 — 완료되면 실제 파이프라인
+  재테스트 필요.**
+- 2026-07-28: **다시 일반 Gemini API 키(Developer API)로 복귀 + 실전 검증 완료**. Vertex AI 서비스
+  계정 설정 대신 일반 API 키로 되돌림 — `genai.Client()` 를 인자 없이 호출하는 코드라 `.env` 에
+  `GEMINI_API_KEY` 만 있으면 자동으로 Developer API 모드로 붙어서 코드 변경 없이 바로 동작.
+  실제 실행(`python pipeline.py`) 중 `JSONDecodeError: Unterminated string` 발견 → 원인은
+  Gemini 2.5 계열의 기본 활성화된 thinking(내부 추론) 토큰이 `max_output_tokens`(4000) 예산을
+  다 소모해 실제 JSON 응답이 잘림. `llm.py` 의 `enrich()`/`generate_recap()` 양쪽에
+  `thinking_config=types.ThinkingConfig(thinking_budget=0)` 추가(이 작업엔 추론 불필요)로
+  끄고, `max_output_tokens` 도 여유 있게 상향(4000→16000, 1000→4000). 재실행으로 240건 수집→
+  237 클러스터→엔리치 성공→저의미 17건 드롭→리캡 생성→렌더(24 items, 12 major) 전 구간 확인,
+  요약 숫자 보존("$30 billion", "$380 billion", "1M-token" 등)도 정상 동작 확인.
+  **Gemini 마이그레이션 사실상 완료** (남은 건 며칠 라이브 돌리며 품질/비용 관찰).
+- 2026-07-28: **리드 스토리가 5개월 전 뉴스로 뜨는 버그 발견·수정**. 재실행한 다이제스트 홈페이지
+  1등(significance 0.95) 항목이 실제로는 `2026-02-12` 발행(오늘 대비 5.5개월 전) 펀딩 뉴스였음.
+  원인 2가지: (1) 랭킹이 `llm.py` rubric 상 significance 만으로 결정되고 최신성은 전혀 반영 안 함
+  (의도된 고정 rubric), (2) `fetch.py: fetch_source`/`fetch_sitemap_source` 가 일간 파이프라인
+  에서도 "최근 N일" 컷오프 없이 그냥 "피드의 최신 25개 항목"만 가져옴 — 업데이트 뜸한 소스
+  (Anthropic sitemap 등)의 오래된 백로그가 그 25개 안에 남아있을 수 있음. 여기에 어제 `--reset`
+  으로 seen-store 를 비운 직후의 첫 실행이라 그 오래된 항목이 "신규"로 잡혀 리드 자리를 차지.
+  사용자와 상의해 **수집 단계에 신선도 컷오프 추가**로 결정(랭킹 rubric 자체는 안 건드림 —
+  PROJECT_MEMO 3장에 고정으로 못박은 부분이라 별도 논의 필요). `sources.yaml settings.max_item_age_days: 7`
+  신설, `config.py Settings.max_item_age_days` 필드 추가, `fetch.py fetch_source()/fetch_all()`
+  에 `max_age_days` 옵션 파라미터 추가(발행일 파싱 실패 항목은 안전하게 통과시킴, backfill.py 는
+  이 인자 없이 직접 호출해서 영향 없음), `pipeline.py` 에서 `settings.max_item_age_days` 전달.
+  `--reset` 후 재실행으로 검증: DeepMind 25→2건, Ahead of AI 20→0건(월간 주기라 이번 주는 0건이
+  맞음, source-health 배지로 정상 표시), 리드 스토리들 전부 `2026-07-22~07-28` 로 정상화 확인.
+- 2026-07-27: **UI/UX 전면 개편 ("Modernist" 디자인, Claude Design 연동)**. 사용자가 claude.ai/design 프로젝트
+  "AI-Digest UI Redesign"(캔버스 `AI Digest Redesign.dc.html`, 3턴 반복)에서 만든 디자인을 DesignSync MCP 로
+  가져와 포팅. 이전 SIGNAL 디자인(시그널 미터/히어로 카드/JetBrains Mono)은 전부 폐기.
+  - **비주얼**: Archivo 폰트 단일 사용, radius 0(완전 각짐). 카테고리별 섹션 그룹 대신 significance 기준
+    플랫 랭킹 구조(리드 스토리 1건 + 3열 그리드 + 목록 + in-brief) + 사이드바(signal-index 히스토그램 +
+    source-alert).
+  - **팔레트**: Cream·Cobalt/Sage·Teal/Blush·Plum/Oat·Ember/Mist·Signal-red 5색 세트를 사용자가 "라이브
+    피커 실제 구현"으로 선택 → `localStorage` 저장 + CSS 커스텀 프로퍼티로 즉시 전환되는 실제 기능 구현
+    (캔버스의 팔레트 피커는 원래 React 기반 캔버스-툴 전용 데모였음 — 실제 vanilla JS+localStorage 로 재구현).
+    기본값은 Mist·Signal-red(기존 사이트 정체성과 가장 가까움, styles.css 자체 기본값이기도 함) — 5개 중
+    하나로 확정되지 않은 채 디자인 세션이 끝나서 임의로 정함, 필요하면 바꿀 수 있음.
+  - **신규 페이지 타입**: 카테고리별 필터 페이지(오늘은 `{category}.html` 루트, 과거 주는
+    `archive/{label}-{category}.html`) 추가 — 필터 pill(All/Major/최다소스), 랭킹순 플랫 리스트,
+    "category cap 6 · min significance 0.25" 같은 실제 튜닝값을 푸터에 노출.
+  - **검색**: "헤더에 인라인(디자인안)" 선택 — 검색창은 모든 페이지 헤더에 넣되, 실제 검색 결과는 여전히
+    `search.html` 한 곳에서만 처리(412+건 전체를 모든 페이지에 중복 임베드하는 건 낭비라 판단, 시각적
+    위치만 디자인 반영). `search.html` 자체는 3b 목업대로 `<mark>` 하이라이트 + 히트카운트 + significance
+    점수 프리픽스로 재디자인.
+  - **아카이브 인덱스**: 27주 전체 나열 대신 최근 6개 + "+21개 더보기"(정적 텍스트, 클릭 토글 아님 —
+    디자인 원본에도 없던 기능이라 그대로 따름) + 주간 볼륨 미니바 차트로 개편.
+  - **신규 LLM 콘텐츠**("추가한다" 선택): `llm.py` 에 `generate_recap()` 추가 — 주간 편집 헤드라인
+    (예: "The week Anthropic shipped six models"), $ 집계(펀딩/투자만 대상, 신뢰 안 되면 null 반환하도록
+    프롬프트에 명시 — "대략적 근사치"로 표시), 카테고리별 한 줄 요약을 한 번의 API 호출로 생성. `store.py`
+    에 `recaps` 테이블 신설. **다만 헤드라인/$ 집계는 주간 아카이브 페이지(1f 디자인)에만 쓰이고,
+    카테고리 one-liner 는 오늘/과거 카테고리 페이지 둘 다에 씀** — 일간 홈페이지(3a 디자인)엔 원래
+    디자인에 없던 요소라 안 씀, 그래서 daily pipeline.py 도 recap 을 매일 한 번 생성은 하지만
+    실제 화면엔 카테고리 one-liner 만 노출됨.
+  - **라우팅 버그 발견·수정**: 기존에도 `render_digest` 가 `index.html`(루트)과 `archive/{date}.html`
+    (하위 폴더)에 같은 HTML 을 복사만 해서 상대링크가 한쪽에서 깨지는 구조적 문제가 있었음 — 이번에
+    루트/아카이브 버전을 각각 다시 렌더링하도록 고쳐서 근본 해결(재렌더 테스트로 확인).
+  - **보안**: 기존 `render.py` 는 Jinja2 `Template()` 을 autoescape=False 로 썼던 잠재 리스크 있었음
+    (RSS/스크레이프 콘텐츠에 `<`/`&` 등이 그대로 삽입될 수 있었음) — 이번에 `Environment(autoescape=True)`
+    + `DictLoader` 매크로 구조로 전면 교체하며 같이 고침.
+  - **미완료(사용자가 나중에 하기로 함)**: 기존 27주 백필 아카이브는 recap 기능 추가 전 데이터라 헤드라인/
+    $ 집계 없음(폴백 텍스트 "Week N digest" + "—" 로 표시됨). `generate_recaps.py` 신규(소급 생성용, API
+    키 필요) 작성 완료, 실행은 보류.
+  - **부수 발견**: `store.list_digests()` 에 각 다이제스트의 최고-significance 항목 제목(top_title) 서브쿼리
+    추가(아카이브 인덱스의 "Top story" 컬럼용). `rerender.py`/`pipeline.py`/`backfill.py` 모두 새 시그니처
+    (`total_records`, 카테고리 페이지 호출, recap 저장/조회)에 맞춰 갱신.
+- 2026-07-28: **"메인에 옛날 뉴스" 재발 — 진짜 원인 3개 찾아서 수정(런타임 증거 기반)**. 07-28 오전에
+  `max_item_age_days: 7` 을 넣었는데도 리드가 5일 전 항목이었음. 코드 리뷰 + 실제 라이브 fetch 로 검증한 원인:
+  - **(1) sitemap `<lastmod>` 는 발행일이 아님 (최대 296일 오차)**. Anthropic 은 공식 RSS 가 없어서
+    sitemap 스크레이프를 쓰는데, `lastmod` 를 그대로 `published` 로 저장하고 있었음. 실제로는 사이트 리빌드
+    타임스탬프여서 옛 글이 "이번 주 발행"으로 위장됨. 라이브 검증 결과: `claude-sonnet-4-5` lastmod 07-22 /
+    실제 2025-09-29(296일), `skills` 07-22 / 2025-10-16(279일), `claude-opus-4-5` 07-23 / 2025-11-24(241일),
+    `claude-opus-4-8` 07-22 / 2026-05-28(55일). 리빌드 흔적도 확인(07-22T01:13~01:28 사이에 4개 페이지가
+    한꺼번에 갱신). 발견 단서는 **버전 역순** — Opus 4.5 가 4.6 보다 늦은 날짜로 찍혀 있었음(불가능).
+    → `fetch.py` 에 `_article_published()` 신설: JSON-LD `datePublished` 우선, 없으면 `PostDetail` 헤드라인
+    바로 아래 날짜 줄(`<div class="body-3 agate">`) 파싱, 둘 다 실패 시에만 lastmod 폴백.
+    JSON-LD 를 먼저 보는 이유: Webflow 계열 페이지는 HTML 맨 앞에 `Last Published` 빌드 시각 주석이 있어서
+    "문서의 첫 날짜"를 쓰면 그걸 집음. `_scrape_article_meta()` 반환값이 3-tuple 로 바뀜.
+  - **(2) 랭킹 동점 처리가 카테고리 열거 순서로 결정됐음**. significance 0.80 에 4건이 동점이었고
+    Python `sort` 가 stable 이라 `CATEGORY_ORDER` 첫 항목(`model_releases`)이 무조건 리드를 차지 —
+    같은 0.80 인 당일 $410M 딜이 밀렸음. → `render._flatten_ranked` 정렬 키에 `published` 추가(동점 시 최신 우선).
+    **랭킹 rubric(3장) 자체는 안 건드림** — 원래 정의가 없던 동점 처리만 결정론적으로 만든 것.
+  - **(3) 모든 RSS 발행일이 머신 UTC 오프셋만큼 밀려 있었음**. `_published()` 가 `time.mktime()` 을 썼는데
+    feedparser 의 `*_parsed` 는 이미 UTC struct 이고 `mktime` 은 struct 를 로컬시간으로 해석 → 로컬(UTC-6)에서
+    +7h 밀림. (2) 를 고치자 "내일 발행" 항목이 3개 소스에서 튀어나와 발견. CI 는 `TZ=UTC` 라 오차 0 이어서
+    안 보였던 로컬 전용 버그. 신선도 컷오프도 7시간 느슨했음. → `calendar.timegm()` 으로 교체.
+  - 부수 수정: `_parse_dt()` 가 tz 없는 값(date-only lastmod 등)을 그대로 반환해서 aware cutoff 와 비교할 때
+    `TypeError` 로 파이프라인이 죽던 문제 → UTC 로 정규화. (Python 3.9 의 `fromisoformat` 은 3.12 보다
+    훨씬 엄격해서 로컬/CI 동작이 갈렸음 — 로컬 3.9.6 / CI 3.12 불일치도 별건으로 남아있음.)
+  - **검증**: `--reset` 후 실제 실행(원래 버그가 터졌던 조건 그대로 재현). 결과 114건 수집 → 21건 게시,
+    발행일 범위 `2026-07-22~07-28`, 리드 = 당일 "Recursive Superintelligence $410M" (significance 0.9),
+    8~10개월 된 Anthropic 모델 글 6건 전부 사라짐. 남은 Anthropic 모델 글은 Opus 5(실제 07-24) 1건뿐.
+- 2026-07-28: **코드 리뷰에서 나온 추가 버그 3건 수정**.
+  - `rerender.py` 가 **과거 주간 다이제스트를 홈페이지로 발행**하던 문제. `digests.date` 한 컬럼에 일간
+    `YYYY-MM-DD` 과 주간 `YYYY-Www` 라벨이 섞여 있고, 텍스트 정렬에서 `'W'`(0x57) > `'0'`(0x30) 이라
+    주간 라벨이 모든 일간 날짜보다 위로 올라감 → `is_today = (i == 0)` 이 `2026-W31` 을 집어서
+    `index.html` 에 씀. 실측 확인: 옛 정렬 `['2026-W31','2026-W30','2026-W27','2026-07-28']`.
+    → `store.label_sort_key()` 신설(주간 라벨을 해당 주 월요일 날짜로 환산)해서 `list_digests()` 를
+    시간순 정렬(아카이브 인덱스 순서/미니바도 같이 고쳐짐), `rerender.py` 는 위치가 아니라
+    **일간 라벨 패턴으로 최신 일간을 명시 선택**. 일간이 하나도 없으면 `index.html` 은 건드리지 않음.
+  - **조용한 날 어제 페이지가 그대로 남던 문제**: 신규 0건이면 `run()` 이 렌더 전에 `return` 해서
+    `index.html` 이 어제 내용인데 헤더만 오늘 날짜인 상태로 남았음 → 빈 다이제스트로 렌더 + `record_digest(0)`
+    + 아카이브 인덱스 갱신. 실측 검증(두 번째 실행이 자연히 신규 0건): "0 stories" 페이지 정상 렌더.
+  - `.github/workflows/daily.yml` 이 **철회된 Vertex AI 서비스계정 인증을 그대로 쓰고 있어서 첫 cron 이
+    실패할 상태**였음 → `GEMINI_API_KEY` 시크릿 방식으로 교체(`llm.py` 의 `genai.Client()` 가 자동 인식).
+    `git push` 도 pull 없이 밀어서 충돌 위험이 있어 rebase 재시도로 감쌈.
+  - ⚠️ 이 과정에서 `Untitled.py`(curl 스크래치 파일)에 **Gemini API 키가 평문으로** 있고 `.gitignore` 에도
+    안 걸려 있는 걸 발견 — git init 하면 바로 유출될 상태였음. 사용자가 파일 삭제함(키 재발급 필요).
+    이번이 3번째 키 노출(1차 Anthropic, 2차 Gemini, 3차 이 파일) → 비밀값은 `.env` 만 쓰기로 한 규칙 유지.
+- **남은 리뷰 지적 사항(미수정, 사용자가 보류 선택)**: 27주 백필 아카이브가 `--reset` 으로 DB 에서 사라져
+  인덱스에서 접근 불가(HTML 파일은 `output/archive/` 에 그대로 있음) · `--dry-run` 이 `output/` 을
+  플레이스홀더로 덮어씀(DB 는 안 건드림) · 카테고리 상한(6)에 밀린 항목도 `commit_seen` 되어 영구 누락 ·
+  `render._annotate` 가 idempotent 하지 않아 카테고리 페이지 소스 표기가 `(+1 more) (+2 more)` 로 중복
+  누적(현재는 멀티소스 클러스터가 없어서 안 보임) · `llm.py` 가 `summary: null` 에 크래시하고 배치 하나
+  실패하면 앞선 배치 결과까지 전부 날림 · `settings.min_items_fallback` 이 파싱만 되고 미구현 ·
+  로컬 3.9.6 / CI 3.12 파이썬 버전 불일치.
+- 2026-07-28: **아카이브 소스 부족 관련 논의**. 사용자가 사이트 확인 중 아카이브에 소스가 하나만 보이는
+  것 같다고 지적 → 원인은 버그가 아니라 §9 6개월 백필 당시의 의도된 스코프(블로그/랩 7소스만, arXiv/
+  TechCrunch/HN 제외)였음을 재확인. 지금 재백필하지 않고, API 로 접근 가능한 소스가 더 늘어나면 그때
+  소스를 확장해서 지난 6개월 아카이브를 다시 만들기로 결정(§5 파킹 아이디어에 추가). 지금은 진행 중인
+  작업 없음 — 남은 할일은 §9/§5 참고.

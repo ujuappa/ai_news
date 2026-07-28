@@ -1,0 +1,83 @@
+"""중복 제거: (1) 배치 내 클러스터링 (2) seen-store 대비 cross-day 중복 스킵.
+
+임베딩은 sentence-transformers(all-MiniLM-L6-v2) 사용.
+가벼운 대안: TfidfVectorizer 로 embed() 만 갈아끼우면 됨 (README 참고).
+"""
+from __future__ import annotations
+
+import numpy as np
+
+from store import Store
+
+_model = None
+
+
+def _get_model():
+    global _model
+    if _model is None:
+        from sentence_transformers import SentenceTransformer  # lazy import (torch 무거움)
+        _model = SentenceTransformer("all-MiniLM-L6-v2")
+    return _model
+
+
+def embed(texts: list[str]) -> np.ndarray:
+    if not texts:
+        return np.zeros((0, 384), dtype=np.float32)
+    vecs = _get_model().encode(texts, normalize_embeddings=True)
+    return np.asarray(vecs, dtype=np.float32)
+
+
+def _cos(a: np.ndarray, b: np.ndarray) -> float:
+    return float(np.dot(a, b))  # 정규화되어 있으므로 내적 = 코사인
+
+
+def dedup_batch(items: list[dict], threshold: float) -> list[dict]:
+    """배치 내에서 유사 아이템을 클러스터로 묶어 대표 1개만 남김.
+    대표에는 cluster_sources(중복 커버한 소스들)를 기록."""
+    if not items:
+        return []
+    embs = embed([f"{it['title']}. {it['summary_raw']}" for it in items])
+    for it, e in zip(items, embs):
+        it["_emb"] = e
+
+    clusters: list[list[dict]] = []
+    for it in items:
+        placed = False
+        for cl in clusters:
+            if _cos(it["_emb"], cl[0]["_emb"]) >= threshold:
+                cl.append(it)
+                placed = True
+                break
+        if not placed:
+            clusters.append([it])
+
+    reps: list[dict] = []
+    for cl in clusters:
+        rep = cl[0]
+        rep["cluster_sources"] = sorted({c["source_name"] for c in cl})
+        rep["cluster_size"] = len(cl)
+        reps.append(rep)
+    return reps
+
+
+def drop_cross_day(items: list[dict], store: Store, threshold: float,
+                   retention_days: int) -> list[dict]:
+    """지난 N일 seen-store 와 비교해 이미 다룬 스토리는 제외.
+    (v1은 '스킵'만. '새 각도면 업데이트' 로직은 v2 diff 뷰에서 확장)"""
+    seen = store.recent_seen(retention_days)
+    seen_embs = [s["embedding"] for s in seen if s["embedding"] is not None]
+
+    fresh: list[dict] = []
+    for it in items:
+        if store.is_known(it["id"]):
+            continue  # 동일 URL 재등장
+        emb = it["_emb"]
+        if any(_cos(emb, se) >= threshold for se in seen_embs):
+            continue  # 며칠 전 다룬 스토리와 사실상 동일
+        fresh.append(it)
+    return fresh
+
+
+def commit_seen(items: list[dict], store: Store):
+    for it in items:
+        store.add_seen(it["id"], it["title"], it["url"], it.get("_emb"))

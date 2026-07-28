@@ -1,0 +1,276 @@
+
+
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}];var KEY='ai-digest-theme';var stored=parseInt(localStorage.getItem(KEY),10);var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){localStorage.setItem(KEY,idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>AI Digest — Tools &amp; products — Tuesday · 28 July 2026 · 21 stories</title>
+<style>:root{--g:#f3f2f2;--g2:#eae9e9;--bar:#201e1d;--ink:#201e1d;--ink2:#444141;--muted:#605d5d;--n1:#7d7979;--n2:#bab6b6;--acc:#ec3013;--accd:#ae1800;--acclt:#ff9783;--grgb:243,242,242;--inkrgb:32,30,29;}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--g); color:var(--ink); font-family:Archivo,system-ui,sans-serif; }
+a { color:var(--accd); }
+a:hover { color:var(--acc); }
+.wrap { max-width:1280px; margin:0 auto; background:var(--g);
+        border-left:1px solid rgba(var(--inkrgb),.15); border-right:1px solid rgba(var(--inkrgb),.15); }
+.masthead { background:var(--bar); padding:16px 44px 0; }
+.masthead-row1 { display:flex; align-items:center; justify-content:space-between; gap:24px;
+                 padding-bottom:14px; flex-wrap:wrap; }
+.masthead-id { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+.wordmark { font:900 15px Archivo,sans-serif; letter-spacing:.26em; text-transform:uppercase;
+            color:var(--g); text-decoration:none; }
+.period-meta { font:500 12px Archivo,sans-serif; letter-spacing:.06em; color:rgba(var(--grgb),.55); }
+.masthead-tools { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.search-form { display:flex; align-items:stretch; gap:0; min-width:260px; }
+.search-field { display:flex; align-items:center; gap:10px; flex:1; border:1px solid rgba(var(--grgb),.35);
+                padding:9px 12px; background:rgba(var(--grgb),.06); }
+.search-field input { border:0; background:none; outline:0; flex:1; font:400 13px Archivo,sans-serif;
+                       color:var(--g); min-width:0; }
+.search-field input::placeholder { color:rgba(var(--grgb),.5); }
+.records-chip { display:flex; align-items:center; background:var(--acc); color:var(--g);
+                font:800 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+                padding:0 14px; white-space:nowrap; }
+.theme-picker { display:flex; gap:6px; align-items:center; }
+.theme-swatch { display:flex; padding:2px; background:none; border:0; cursor:pointer;
+                box-shadow:0 0 0 1px rgba(var(--grgb),.3); }
+.theme-swatch[aria-pressed="true"] { box-shadow:0 0 0 2px var(--g); }
+.theme-swatch span { width:10px; height:10px; display:block; }
+.nav { display:flex; align-items:stretch; gap:0; border-top:1px solid rgba(var(--grgb),.18); flex-wrap:wrap; }
+.nav a { display:flex; align-items:baseline; gap:7px; padding:14px 22px 12px 0; text-decoration:none;
+         border-bottom:3px solid transparent; }
+.nav a:not(:first-child) { padding-left:22px; }
+.nav a.active { border-bottom-color:var(--acc); }
+.nav a .tab-label { font:700 13px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+                     color:rgba(var(--grgb),.65); }
+.nav a.active .tab-label { font-weight:800; color:var(--g); }
+.nav a .tab-count { font:700 11px Archivo,sans-serif; color:rgba(var(--grgb),.4); font-variant-numeric:tabular-nums; }
+.nav a.active .tab-count { color:var(--acclt); }
+.nav a.archive-link { margin-left:auto; padding:14px 0 12px 22px; }
+.nav a.archive-link .tab-label { color:var(--acclt); }
+.simple-header { background:var(--bar); padding:18px 36px; display:flex; align-items:baseline;
+                 justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.simple-header-id { display:flex; align-items:baseline; gap:16px; }
+.simple-header-sub { font:500 12px Archivo,sans-serif; color:rgba(var(--grgb),.5); }
+.simple-header nav { display:flex; gap:18px; }
+.simple-header nav a { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+                        text-decoration:none; color:rgba(var(--grgb),.6); }
+.simple-header nav a.accent { color:var(--acc); }
+footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-top:1px solid rgba(var(--inkrgb),.2);
+                      display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.term-line { font-family:Archivo,sans-serif; font-size:.78rem; color:rgba(var(--inkrgb),.5); }
+.term-line::before { content:'$ '; color:var(--accd); }
+footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
+                            text-transform:uppercase; text-decoration:none; }
+footer.site-footer nav a:hover { color:var(--ink); }
+
+.cat-body { background:var(--g); padding:32px 44px 40px; }
+@media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
+.cat-top { display:grid; grid-template-columns:1fr auto; gap:30px; align-items:end; padding-bottom:16px; }
+@media (max-width:700px) { .cat-top { grid-template-columns:1fr; } }
+.cat-title { margin:0 0 8px; font:900 clamp(30px,6vw,56px)/0.96 Archivo,sans-serif; letter-spacing:-.035em;
+             color:var(--ink); }
+.cat-dek { margin:0; font:400 16px/1.5 Archivo,sans-serif; color:var(--muted); max-width:60ch; }
+.pill-row { display:flex; gap:8px; flex-wrap:wrap; }
+.pill { border:1px solid rgba(var(--inkrgb),.35); color:var(--ink); font:700 11px Archivo,sans-serif;
+        letter-spacing:.08em; text-transform:uppercase; padding:7px 12px; }
+.pill.active { border-color:var(--acc); background:var(--acc); color:var(--g); }
+.cat-row { display:grid; grid-template-columns:70px 1fr 220px; gap:0; padding:22px 0;
+           border-bottom:1px solid rgba(var(--inkrgb),.18); text-decoration:none; align-items:start; }
+@media (max-width:700px) { .cat-row { grid-template-columns:50px 1fr; } .cat-row-side { display:none; } }
+.cat-score { font:900 22px Archivo,sans-serif; color:var(--acc); font-variant-numeric:tabular-nums; }
+.cat-row-title { font:900 34px/1.04 Archivo,sans-serif; letter-spacing:-.03em; color:var(--ink); }
+.cat-row-dek { font:400 15px/1.5 Archivo,sans-serif; color:var(--muted); margin-top:8px; max-width:66ch; }
+.cat-row-link { font:600 13px Archivo,sans-serif; color:var(--accd); margin-top:8px; display:block; }
+.cat-row-side .tag { margin-bottom:8px; }
+.cat-row-side-source { font:600 11px/1.5 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+                        color:rgba(var(--inkrgb),.6); }
+.cat-footer { display:flex; justify-content:space-between; align-items:baseline; margin-top:26px; padding-top:14px;
+              border-top:2px solid rgba(var(--inkrgb),.4); flex-wrap:wrap; gap:10px; }
+.cat-footer-note { font:500 11px Archivo,sans-serif; letter-spacing:.08em; color:rgba(var(--inkrgb),.5); }
+.cat-footer-link { font:700 11px Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+                    color:var(--accd); text-decoration:none; }
+</style>
+</head><body>
+<div class="wrap">
+<header class="masthead">
+  <div class="masthead-row1">
+    <div class="masthead-id">
+      <a class="wordmark" href="index.html">AI Digest</a>
+      <span class="period-meta">Tuesday · 28 July 2026 · 21 stories</span>
+    </div>
+    <div class="masthead-tools">
+      
+      <form class="search-form" action="search.html" method="get">
+        <div class="search-field">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--grgb),.6)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
+        </div>
+      </form>
+      <span class="records-chip">21 records</span>
+      
+      <div class="theme-picker">
+  
+  <button type="button" class="theme-swatch" data-theme-btn="0"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
+    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="1"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(1)" title="White · Teal">
+    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="2"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
+    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="3"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(3)" title="White · Ember">
+    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="4"
+          aria-pressed="true"
+          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
+    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
+  </button>
+  
+</div>
+    </div>
+  </div>
+  <nav class="nav">
+    
+    <a href="index.html" class="">
+      <span class="tab-label">Home</span><span class="tab-count">21</span>
+    </a>
+    
+    <a href="model_releases.html" class="">
+      <span class="tab-label">Model releases</span><span class="tab-count">3</span>
+    </a>
+    
+    <a href="research.html" class="">
+      <span class="tab-label">Research</span><span class="tab-count">6</span>
+    </a>
+    
+    <a href="tools_products.html" class="active">
+      <span class="tab-label">Tools &amp; products</span><span class="tab-count">6</span>
+    </a>
+    
+    <a href="policy_business.html" class="">
+      <span class="tab-label">Policy &amp; business</span><span class="tab-count">6</span>
+    </a>
+    
+    <a href="archive/index.html" class="archive-link">
+      <span class="tab-label">Archive</span><span class="tab-count">21</span>
+    </a>
+  </nav>
+</header>
+<div class="cat-body">
+<div class="cat-top">
+  <div>
+    <h1 class="cat-title">Tools &amp; products</h1>
+    <p class="cat-dek">New tools and products emphasize enterprise AI agents, health data integration, and advanced cybersecurity solutions.</p>
+  </div>
+  <div class="pill-row">
+    <span class="pill active">All 6</span>
+    
+    <span class="pill">OpenAI News 2</span>
+  </div>
+</div>
+<div class="hr2" style="margin:0"></div>
+
+
+
+<a class="cat-row" href="https://openai.com/index/health-in-chatgpt">
+  <span class="cat-score" style="font-size:34px">.60</span>
+  <div>
+    <div class="cat-row-title" style="font-size:34px">Launching Health in ChatGPT</div>
+    <div class="cat-row-dek">OpenAI has launched &#39;Health in ChatGPT&#39; for eligible U.S. users, allowing them to securely link medical records and Apple Health data. This feature aims to provide more personalized health insights and improve understanding of personal health information.</div>
+    <span class="cat-row-link">openai.com/index/health-in-chatgpt →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">OpenAI News · major</div>
+  </div>
+</a>
+
+<a class="cat-row" href="https://openai.com/index/introducing-openai-presence">
+  <span class="cat-score" style="font-size:28px">.60</span>
+  <div>
+    <div class="cat-row-title" style="font-size:28px">Introducing OpenAI Presence</div>
+    <div class="cat-row-dek">OpenAI introduced &#39;OpenAI Presence,&#39; an enterprise AI agent platform designed to help organizations implement trusted voice and chat agents. These agents are intended for use in customer service and internal workflow automation.</div>
+    <span class="cat-row-link">openai.com/index/introducing-openai-prese… →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">OpenAI News · major</div>
+  </div>
+</a>
+
+<a class="cat-row" href="https://www.anthropic.com/news/anthropic-economic-index-connector">
+  <span class="cat-score" style="font-size:22px">.60</span>
+  <div>
+    <div class="cat-row-title" style="font-size:22px">The Anthropic Economic Index connector</div>
+    
+    <span class="cat-row-link">anthropic.com/news/anthropic-economic-ind… →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">Anthropic News · major</div>
+  </div>
+</a>
+
+<a class="cat-row" href="https://techcrunch.com/2026/07/27/microsoft-launches-its-first-cyber-model-and-a-new-agentic-cybersecurity-system/">
+  <span class="cat-score" style="font-size:17px">.60</span>
+  <div>
+    <div class="cat-row-title" style="font-size:17px">Microsoft launches its first cybersecurity model, plus a new agentic cybersecurity system</div>
+    
+    <span class="cat-row-link">techcrunch.com/2026/07/27/microsoft-launc… →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">TechCrunch — AI · major</div>
+  </div>
+</a>
+
+<a class="cat-row" href="https://about.fb.com/news/2026/07/introducing-facebook-verified/">
+  <span class="cat-score" style="font-size:15px">.50</span>
+  <div>
+    <div class="cat-row-title" style="font-size:15px">Introducing Facebook Verified</div>
+    
+    <span class="cat-row-link">about.fb.com/news/2026/07/introducing-fac… →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">Meta AI Blog · high</div>
+  </div>
+</a>
+
+<a class="cat-row" href="https://github.com/schildep/verified-3d-mesh-intersection">
+  <span class="cat-score" style="font-size:15px">.50</span>
+  <div>
+    <div class="cat-row-title" style="font-size:15px">Show HN: Formally verified 3D CSG: Trust 93 lines spec, not 1000 lines AI code</div>
+    
+    <span class="cat-row-link">github.com/schildep/verified-3d-mesh-inte… →</span>
+  </div>
+  <div class="cat-row-side">
+    
+    <div class="cat-row-side-source">Hacker News (AI, 100+ points) · high</div>
+  </div>
+</a>
+
+
+<div class="cat-footer">
+  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <a class="cat-footer-link" href="archive/index.html">Tools &amp; products in earlier weeks →</a>
+</div>
+</div>
+</div>
+<footer class="site-footer">
+  <span class="term-line">digest --items 6 --status ok</span>
+  <nav><a href="archive/index.html">Archive index</a></nav>
+</footer>
+</body></html>
