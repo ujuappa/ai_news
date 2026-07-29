@@ -369,8 +369,8 @@
 - **남은 리뷰 지적 사항** (2026-07-29 기준 갱신):
   - **미수정**: 27주 백필 아카이브가 `--reset` 으로 DB 에서 사라져 인덱스에서 접근 불가(HTML 은
     `output/archive/` 에 그대로. 재발 원인은 `--purge-all` 분리로 수정했지만 이미 잃은 데이터는 그대로) ·
-    `settings.min_items_fallback` 과 `settings.flag_major_at_top` 이 파싱만 되고 미구현/무효 ·
-    로컬 3.9.6 / CI 3.12 파이썬 버전 불일치.
+    `settings.min_items_fallback` 과 `settings.flag_major_at_top` 이 파싱만 되고 미구현/무효.
+  - **해결됨(추가)**: ~~로컬 3.9.6 / CI 3.12 파이썬 버전 불일치~~ ✅ 2026-07-29 로컬 3.12.9 전환 완료.
   - **부분 해결**: `--dry-run` 이 `output/` 을 덮어쓰는 건 여전하지만, DB 기반 렌더로 바뀌면서 이제
     "플레이스홀더 1~2건"이 아니라 "DB 의 오늘자 + 이번 실행분"을 그린다. 신규분 significance 가 0.5
     고정이라 미리보기일 뿐이므로 커밋 전 `git status` 확인은 계속 필요.
@@ -562,5 +562,30 @@
   - **부수 발견**: README 셋업이 **07-28 에 철회된 Vertex AI 서비스계정 인증**을 그대로 안내하고 있었음
     (`GOOGLE_GENAI_USE_VERTEXAI`/`GOOGLE_APPLICATION_CREDENTIALS`). CLAUDE.md·변경로그와 모순 →
     `echo "GEMINI_API_KEY=..." > .env` 방식으로 수정.
-  - **미완**: 로컬에 3.12 가 아직 없음(시스템 3.9.6 만, Homebrew 미설치). 사용자가 설치하면
-    `.venv` 재생성 + `--dry-run` 통과 확인 필요.
+  - **완료**: 사용자가 python.org 설치본으로 3.12.9 설치. `.venv` 재생성(기존은 `.venv.bak` 백업 후
+    검증 완료하고 삭제) + `pip install -r requirements.txt` + `--dry-run` 통과. 3.9 에서 실패했던
+    날짜 형식 4종이 3.12 에서 전부 OK, `_require_py312()` 게이트도 통과 확인.
+- 2026-07-29: **3.12 전환에서 전 소스 0건 사고 — `feedparser.parse(url)` 을 requests 경유로 교체**.
+  새 venv 로 첫 `--dry-run` 을 돌리자 11개 소스 중 10개가 0건. 유일하게 살아남은 `anthropic` 이
+  `parse: sitemap`(=`requests.get`) 경로라는 게 단서였음. 원인은 feedparser 버전이 아니라
+  **python.org macOS 설치본의 CA 인증서 미설치** — `feedparser.parse(url)` 은 urllib 으로 받아서
+  파이썬 기본 SSL 컨텍스트를 쓰는데 CA 스토어가 비어 있어 전부 `CERTIFICATE_VERIFY_FAILED`.
+  `requests` 는 certifi 를 쓰므로 영향 없었음.
+  - 공식 해법인 `/Applications/Python 3.12/Install Certificates.command` 는 site-packages 가 root
+    소유여서 sudo 없이는 실패(아무것도 변경 안 됨). 사용자와 상의해 **머신 설정 대신 코드를 고치는 쪽**
+    선택 — 07-29 오전에 이미 권고했다가 "잘 돌고 있어서 보류"했던 그 수정.
+  - `fetch._parse_feed()` 신설: `requests.get(url, headers=_UA, timeout=20)` 으로 받아 bytes 를
+    `feedparser.parse()` 에 넘김. `fetch_source_counted` 와 `fetch_paginated_feed`(백필용) 양쪽 교체.
+    지수 백오프 재시도 3회(2s→4s)도 함께. **한 번에 해결된 것 4가지**:
+    (1) SSL — 머신 CA 설정에 의존하지 않음, (2) **타임아웃 부재** — urllib 기본 소켓 타임아웃이 None
+    이라 서버가 응답을 안 주면 무한 대기(CI 는 job 한도까지 태움), (3) UA 불일치 — 이제 sitemap 경로와
+    같은 `_UA`, (4) HTTP 에러 비가시성 — 403/429/404 가 예외로 드러남(전엔 빈 `entries` 라
+    "새 글 없음"과 구분 불가).
+  - **임베딩 호환성 확인**: sentence-transformers 5.1.2→5.6.1, torch 2.8→2.13, numpy 2.0→2.5 로
+    크게 올라가서 `seen` 의 기존 임베딩 146건이 무효화될 위험을 점검. `.venv.bak`(구 환경)과 새 환경에서
+    **동일 텍스트를 임베딩해 비교 → 코사인 1.000000**(4/4). 저장된 벡터 그대로 유효, dedup 임계값
+    0.83 에 영향 없음. (첫 시도에서 0.53~0.89 가 나온 건 내 테스트 실수 — `seen` 에는 title 만 저장되는데
+    `dedup_batch` 는 `title + summary_raw` 를 임베딩하므로 애초에 다른 입력을 비교했던 것.)
+  - **검증**: `_parse_feed` 단위 8건(실제 피드 SSL 통과 / 타임아웃 3회 시도 6초 종료 / 404 가 HTTPError /
+    실패 소스는 `([], 0)` 로 흡수돼 파이프라인 생존). `--dry-run` 은 11소스 109건 정상 수집으로 복구,
+    가짜 배지 없음, cross-day 신규 8건 → 오늘 후보 19건(신규 8 + DB 11) 렌더.

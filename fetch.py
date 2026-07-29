@@ -34,6 +34,9 @@ _POST_DETAIL_DATE_RE = re.compile(
 _PROSE_DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y")
 _SITEMAP_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 _UA = {"User-Agent": "Mozilla/5.0 (compatible; ai-digest/1.0)"}
+FEED_TIMEOUT = 20        # 초. urllib 기본값(None=무한 대기) 때문에 파이프라인이 멈추던 걸 방지
+FEED_RETRIES = 3         # 피드당 총 시도 횟수
+FEED_BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
 
 def _clean(text: str, limit: int = 800) -> str:
     text = _TAG_RE.sub(" ", text or "")
@@ -207,9 +210,9 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
     for page in range(1, max_pages + 1):
         url = source.feed_url if page == 1 else f"{source.feed_url}{sep}paged={page}"
         try:
-            parsed = feedparser.parse(url)
+            parsed = _parse_feed(url)  # requests 경유 (타임아웃/SSL/UA — _parse_feed 주석 참고)
         except Exception as e:  # noqa: BLE001
-            print(f"  [!] {source.id} page {page} 실패: {e}")
+            print(f"  [!] {source.id} page {page} 실패: {type(e).__name__}: {e}")
             break
         if not parsed.entries:
             break
@@ -244,6 +247,35 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
     return items
 
 
+def _parse_feed(feed_url: str):
+    """피드를 requests 로 받아서 bytes 를 feedparser 에 넘긴다.
+
+    `feedparser.parse(url)` 에 URL 을 직접 주면 feedparser 가 urllib 으로 받는데, 그러면
+      - **타임아웃이 없다**(urllib 기본 소켓 타임아웃 None) → 서버가 연결만 받고 응답을 안 주면
+        파이프라인이 무한 대기. CI 에서는 job 한도까지 돌다 죽는다.
+      - 파이썬 기본 SSL 컨텍스트를 쓴다 → python.org macOS 설치본은 CA 스토어가 비어 있어
+        전 소스가 `CERTIFICATE_VERIFY_FAILED` 로 0건이 된다(2026-07-29 로컬 3.12 전환에서 실제 발생).
+      - feedparser 기본 UA(`feedparser/6.0.x ...`)로 나가서 이 파일의 `_UA` 와 어긋난다.
+      - HTTP 에러에 예외를 안 던지고 빈 `entries` 를 돌려줘서 403/429 가 "새 글 없음"과 구분이 안 된다.
+    requests 는 certifi 를 쓰고 timeout·status_code 를 주므로 네 가지가 한 번에 해결된다.
+    일시적 실패(레이트리밋/5xx)는 지수 백오프로 재시도."""
+    last: Exception | None = None
+    for attempt in range(1, FEED_RETRIES + 1):
+        try:
+            resp = requests.get(feed_url, headers=_UA, timeout=FEED_TIMEOUT)
+            resp.raise_for_status()
+            return feedparser.parse(resp.content)
+        except Exception as e:  # noqa: BLE001
+            last = e
+            if attempt == FEED_RETRIES:
+                break
+            wait = FEED_BACKOFF_BASE**attempt
+            print(f"      ↻ {feed_url} 재시도 {attempt}/{FEED_RETRIES - 1} "
+                  f"({type(e).__name__}) — {wait:.0f}s 대기")
+            time.sleep(wait)
+    raise last  # type: ignore[misc]
+
+
 def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
     """단일 소스 수집(신선도 컷 적용분만). backfill.py 등 개수 통계가 필요 없는 호출부용."""
     fresh, _raw = fetch_source_counted(source, max_entries, max_age_days)
@@ -264,9 +296,9 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
         items = fetch_sitemap_source(source, max_entries)
     else:
         try:
-            parsed = feedparser.parse(source.feed_url)
+            parsed = _parse_feed(source.feed_url)
         except Exception as e:  # noqa: BLE001
-            print(f"  [!] {source.id} fetch 실패: {e}")
+            print(f"  [!] {source.id} fetch 실패: {type(e).__name__}: {e}")
             return [], 0
 
         items = []
