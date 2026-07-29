@@ -619,3 +619,18 @@
   - **검증**: 크롤 13페이지 깨진 링크 0, 주간 헤드라인 정상(예: `2026-W24` "Anthropic Fable 5 pulled as
     OpenAI files for IPO" / $150M), 검색 인덱스 400건 파싱 확인(2023-W10~2026-W31).
     `--dry-run` 회귀 통과. 백필 전 `digest.db`/`output/` 은 스크래치패드에 백업.
+
+## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
+
+파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:
+
+- **Full-Text Extraction**: 단순 RSS Snippet(TechCrunch 등)의 한계를 극복하기 위해 `trafilatura` 를 도입. `<description>` 대신 기사 본문 전체를 긁어와(3000자 제한) LLM이 더 풍부한 요약을 생성하도록 개선.
+- **GNews 통합**: `gnews` 라이브러리를 추가하여, `sources.yaml` 에 `parse: gnews` 로 키워드(예: "Artificial Intelligence OR Large Language Models") 기반 뉴스 검색이 가능해짐.
+- **Gemini Search Grounding**: `llm.py` 에 `catch_missed_news()` 를 추가, Gemini 의 네이티브 Google Search (Grounding) 도구를 사용해 기존 파이프라인이 놓친 주요 뉴스를 찾아와 보강함.
+
+### Phase 2b: Expanded Curated Sources (보류됨)
+
+당장 추가하지 않고 다음 단계로 파킹된 아이디어들:
+- Substack 뉴스레터 자동화 (현재 `import_ai` 는 단일 피드로 동작 중이지만 더 확장)
+- Reddit (`r/LocalLLaMA`, `r/MachineLearning`) 재활성화 및 트렌드 파악
+- YouTube (`youtube-transcript-api`) 연동을 통한 기술 심층 분석 영상 요약

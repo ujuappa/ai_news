@@ -105,6 +105,16 @@ def run(dry_run: bool = False):
     else:
         print(f"[3/5] LLM 강화 — model={config.MODEL}")
         clustered = llm.enrich(clustered)
+        
+        print("      Gemini Grounding (놓친 뉴스 확인)")
+        existing_titles = [it["title"] for it in clustered]
+        missed = llm.catch_missed_news(existing_titles)
+        if missed:
+            print(f"      놓친 뉴스 {len(missed)}건 추가 발견, 강화 시작")
+            for it in missed:
+                it["summary_raw"] = fetch._extract_full_text(it["url"], it.get("summary_raw", ""))
+            missed_enriched = llm.enrich(missed)
+            clustered.extend(missed_enriched)
 
     id_to_name = {s.id: s.name for s in cfg.sources}
     pool = _todays_pool(store, clustered, today, id_to_name)

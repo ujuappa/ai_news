@@ -160,6 +160,14 @@ tools_products:
 # CATEGORY 4: Policy & business
 # ============================================================
 policy_business:
+  - id: gnews_ai
+    name: Google News (AI)
+    feed_url: "Artificial Intelligence OR Large Language Models"
+    parse: gnews
+    status: verify
+    enabled: true
+    notes: Broad keyword search to catch overarching news
+
   - id: import_ai
     name: Import AI (Jack Clark)
     feed_url: https://importai.substack.com/feed

@@ -14,6 +14,8 @@ from xml.etree import ElementTree
 
 import feedparser
 import requests
+import trafilatura
+from gnews import GNews
 
 from config import Source
 
@@ -43,6 +45,20 @@ def _clean(text: str, limit: int = 800) -> str:
     text = html.unescape(text)
     text = re.sub(r"\s+", " ", text).strip()
     return text[:limit]
+
+
+def _extract_full_text(url: str, fallback_snippet: str, limit: int = 3000) -> str:
+    """Uses trafilatura to extract the main article text from the URL.
+    Returns the extracted text (truncated to limit) if successful; otherwise, returns the fallback_snippet."""
+    try:
+        downloaded = trafilatura.fetch_url(url)
+        if downloaded:
+            extracted = trafilatura.extract(downloaded, include_links=False, include_images=False, include_tables=False)
+            if extracted:
+                return _clean(extracted, limit=limit)
+    except Exception as e:
+        print(f"  [!] trafilatura fetch 실패 ({url}): {type(e).__name__}: {e}")
+    return fallback_snippet
 
 
 def _item_url(entry) -> str:
@@ -173,6 +189,7 @@ def fetch_sitemap_source(source: Source, max_entries: int = 25,
             continue
         # 실제 발행일 우선. 못 찾으면 lastmod 로 폴백하지만 그건 리빌드 시각일 수 있음.
         published = page_published or _norm_date(lastmod)
+        summary_full = _extract_full_text(url, summary_raw)
         items.append(
             {
                 "id": _hash(url, title),
@@ -181,7 +198,7 @@ def fetch_sitemap_source(source: Source, max_entries: int = 25,
                 "category": source.category,
                 "title": title,
                 "url": url,
-                "summary_raw": summary_raw,
+                "summary_raw": summary_full,
                 "published": published,
             }
         )
@@ -229,6 +246,8 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
                 oldest_on_page = dt
             if dt and since_dt and dt < since_dt:
                 continue
+            summary_raw = _clean(getattr(entry, "summary", "") or getattr(entry, "description", ""))
+            summary_full = _extract_full_text(entry_url, summary_raw)
             items.append(
                 {
                     "id": _hash(entry_url, title),
@@ -237,7 +256,7 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
                     "category": source.category,
                     "title": title,
                     "url": entry_url,
-                    "summary_raw": _clean(getattr(entry, "summary", "") or getattr(entry, "description", "")),
+                    "summary_raw": summary_full,
                     "published": published,
                 }
             )
@@ -276,6 +295,43 @@ def _parse_feed(feed_url: str):
     raise last  # type: ignore[misc]
 
 
+def fetch_gnews_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
+    period = f"{max_age_days}d" if max_age_days else "7d"
+    google_news = GNews(period=period, max_results=max_entries)
+    try:
+        articles = google_news.get_news(source.feed_url)
+    except Exception as e:
+        print(f"  [!] {source.id} gnews 실패: {type(e).__name__}: {e}")
+        return []
+
+    items = []
+    for article in articles:
+        url = article.get("url", "")
+        title = _clean(article.get("title", ""), 300)
+        if not title or not url:
+            continue
+
+        published_str = article.get("published date", "")
+        summary_raw = _clean(article.get("description", ""))
+        summary_full = _extract_full_text(url, summary_raw)
+        
+        publisher = article.get("publisher", {}).get("title")
+        source_name = f"{source.name} ({publisher})" if publisher else source.name
+
+        items.append({
+            "id": _hash(url, title),
+            "source_id": source.id,
+            "source_name": source_name,
+            "category": source.category,
+            "title": title,
+            "url": url,
+            "summary_raw": summary_full,
+            "published": _norm_date(published_str),
+        })
+        time.sleep(0.15)
+    return items
+
+
 def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
     """단일 소스 수집(신선도 컷 적용분만). backfill.py 등 개수 통계가 필요 없는 호출부용."""
     fresh, _raw = fetch_source_counted(source, max_entries, max_age_days)
@@ -294,6 +350,8 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
     (날짜 메타데이터가 없는 소스까지 과도하게 걸러내지 않으려는 의도)."""
     if source.parse == "sitemap":
         items = fetch_sitemap_source(source, max_entries)
+    elif source.parse == "gnews":
+        items = fetch_gnews_source(source, max_entries, max_age_days)
     else:
         try:
             parsed = _parse_feed(source.feed_url)
@@ -308,6 +366,7 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
             if not title:
                 continue
             summary_raw = _clean(getattr(entry, "summary", "") or getattr(entry, "description", ""))
+            summary_full = _extract_full_text(url, summary_raw)
             items.append(
                 {
                     "id": _hash(url, title),
@@ -316,7 +375,7 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
                     "category": source.category,
                     "title": title,
                     "url": url,
-                    "summary_raw": summary_raw,
+                    "summary_raw": summary_full,
                     "published": _published(entry),
                 }
             )

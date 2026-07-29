@@ -247,3 +247,46 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
         "dollar_committed": data.get("dollar_committed"),
         "category_one_liners": data.get("category_one_liners", {}),
     }
+
+
+def catch_missed_news(existing_titles: list[str], model: str | None = None) -> list[dict]:
+    """Gemini 의 Google Search 기능을 사용해 오늘 우리가 놓친 주요 AI 뉴스가 있는지 확인한다."""
+    client = genai.Client()
+    
+    prompt = (
+        "Search the web for the top 3 major Artificial Intelligence announcements or news from the last 24 hours. "
+        "Do NOT include any of the following stories, as we already have them:\n"
+        + "\n".join(f"- {t}" for t in existing_titles) +
+        "\n\nReturn ONLY a JSON array of the missed stories. Each element should be:\n"
+        '{"title": "...", "url": "...", "summary_raw": "...", "category": "model_releases" (or research, tools_products, policy_business), "source_name": "..."}'
+    )
+    
+    try:
+        resp = client.models.generate_content(
+            model=model or config.MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                tools=[{"google_search": {}}],
+                response_mime_type="application/json",
+                temperature=0.3,
+            ),
+        )
+        data = _rows(resp.text or "")
+        
+        import hashlib
+        from datetime import datetime, timezone
+        items = []
+        for it in data:
+            title = it.get("title", "")
+            url = it.get("url", "")
+            if not title or not url:
+                continue
+            it["id"] = hashlib.sha1((url or title).encode("utf-8")).hexdigest()[:16]
+            it["source_id"] = "gemini_grounding"
+            it["source_name"] = it.get("source_name", "Google Search Grounding")
+            it["published"] = datetime.now(timezone.utc).isoformat()
+            items.append(it)
+        return items
+    except Exception as e:
+        print(f"      [!] catch_missed_news 실패: {type(e).__name__}: {e}")
+        return []
