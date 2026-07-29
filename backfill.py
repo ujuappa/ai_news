@@ -1,7 +1,13 @@
 """1회성 백필: 최근 N개월간 블로그/랩 발표 소스를 모아 주간 아카이브 다이제스트로 생성.
 
-    python backfill.py            # 기본 6개월
+    python pipeline.py --purge-all   # ← 재백필이면 반드시 선행 (아래 주의 참고)
+    python backfill.py               # 기본 6개월
     python backfill.py --months 12
+
+⚠️ **재백필(이미 백필한 걸 소스 확장해서 다시) 전에는 `pipeline.py --purge-all` 로 DB 를 비울 것.**
+   `save_items` 는 아이템 id 기준 INSERT OR REPLACE 라 같은 항목은 덮어쓰지만, 소스 구성이 바뀌면
+   주간 클러스터링 결과가 달라져서 옛 실행에서 온 아이템이 그대로 남고 `digests` 라벨도 옛 집계로
+   덮인다. 섞인 아카이브가 되니 처음부터 다시 만들 것.
 
 - 대상 소스: BACKFILL_SOURCE_IDS (블로그/랩 발표만. arXiv/TechCrunch/HN 은 볼륨 폭탄이라 제외)
 - 엔리치 모델: BACKFILL_MODEL (기본 gemini-2.5-flash-lite — 대량 처리라 비용 절감)

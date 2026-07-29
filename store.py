@@ -102,6 +102,13 @@ class Store:
         self.conn.execute("DELETE FROM seen WHERE first_seen < ?", (cutoff,))
         self.conn.commit()
 
+    def counts(self) -> dict[str, int]:
+        """테이블별 행 수 — 파괴적 작업 전에 "뭘 잃는지" 보여주는 용도."""
+        return {
+            t: self.conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+            for t in ("seen", "items", "digests", "recaps")
+        }
+
     def clear_seen(self) -> int:
         """seen-store 전체 비우기 (지운 행 수 반환). items/digests/recaps 는 그대로 —
         dedup 백엔드를 바꿔서 임베딩을 못 쓰게 됐을 때 아카이브를 잃지 않고 초기화하는 용도."""

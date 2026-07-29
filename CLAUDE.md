@@ -25,14 +25,15 @@ pip install -r requirements.txt          # torch 포함. 가벼운 건 requireme
 echo "GEMINI_API_KEY=..." > .env         # 개인 키 (aistudio.google.com). .env 는 .gitignore 처리, 채팅에 붙여넣지 말 것
 python pipeline.py --dry-run             # LLM 없이 수집/dedup (DB 미변경)
 python pipeline.py                       # 전체
-python pipeline.py --reset               # seen-store(cross-day dedup 기록)만 초기화, 아카이브 보존
+python pipeline.py --reset               # seen 테이블만 비움 (items/digests/recaps 보존)
+python pipeline.py --purge-all           # digest.db 통째 삭제. 재백필 전 선행 (--yes 로 확인 생략)
 open output/index.html
 ```
 
 ## 지금 우선순위 (자세한 건 PROJECT_MEMO 섹션 9)
 - **P0**: ✅ 완료 — `--dry-run` 은 이제 `save_items`/`commit_seen`/`purge_old_seen`/`record_digest` 를 스킵(DB 미변경).
-  `--reset` 플래그로 seen-store 초기화 가능(2026-07-29 부터 `seen` 테이블만 비움 — 아카이브 히스토리 보존.
-  DB 전체를 밀어야 하면 `rm digest.db`). 오염됐던 기존 DB도 초기화 완료.
+  `--reset` 은 2026-07-29 부터 `seen` 테이블만 비움(아카이브 히스토리 보존), DB 전체 삭제는 `--purge-all`
+  로 분리. 오염됐던 기존 DB도 초기화 완료.
 - **P1**: ~~arXiv cs.AI 0건~~ ✅ · ~~Anthropic/Meta no_feed~~ ✅ · ~~6개월 백필~~ ✅(`backfill.py`) ·
   ~~min-significance 컷~~ ✅ 0.25 로 반영(`sources.yaml settings.min_significance`) ·
   ~~dedup 임계값(0.83)~~ ✅ 검증 완료, 변경 없음(0.80은 오병합 확인됨) ·

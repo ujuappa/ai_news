@@ -2,7 +2,9 @@
 
     python pipeline.py            # 정상 실행
     python pipeline.py --dry-run  # LLM 호출 없이 수집/dedup 까지만 (원문 발췌로 렌더, DB 미변경)
-    python pipeline.py --reset    # seen-store(cross-day dedup 기록)만 초기화, 아카이브는 보존
+    python pipeline.py --reset      # seen 테이블만 비움 (items/digests/recaps 보존)
+    python pipeline.py --purge-all  # digest.db 파일 통째 삭제 (확인 프롬프트, --yes 로 생략)
+                                    # 재백필 전에 반드시 선행
 """
 from __future__ import annotations
 
@@ -140,24 +142,49 @@ def run(dry_run: bool = False):
 
 
 def reset_db():
-    """seen-store 초기화 — cross-day dedup 기록만 비우고 아카이브 히스토리는 보존.
+    """seen-store 초기화 — `seen` 테이블만 비우고 items/digests/recaps 는 보존.
 
-    예전엔 digest.db 를 통째로 지웠는데 그러면 items/digests/recaps 까지 날아가서
-    과거 다이제스트가 아카이브 인덱스에서 사라졌음(백필 27주치를 그렇게 잃음).
-    DB 전체를 밀어야 하는 상황이면 `rm digest.db` 로 직접."""
+    예전엔 digest.db 를 통째로 지웠는데 그러면 아카이브 히스토리까지 날아갔음
+    (백필 27주치를 그렇게 잃음). 전체 삭제가 필요하면 --purge-all."""
     if not config.DB_PATH.exists():
         print(f"{config.DB_PATH} 없음 — 이미 깨끗함")
         return
     store = Store(config.DB_PATH)
+    c = store.counts()
     n = store.clear_seen()
-    kept = len(store.all_items())
     store.close()
-    print(f"✅ seen-store 초기화 완료 — {n}건 삭제 (아카이브 {kept}건은 보존)")
-    print("   다음 실행에서 모든 아이템이 '신규'로 잡힘. DB 전체를 밀려면 rm digest.db")
+    print(f"✅ seen-store 초기화 완료 — {n}건 삭제 "
+          f"(items {c['items']} / digests {c['digests']} / recaps {c['recaps']} 보존)")
+    print("   다음 실행에서 모든 아이템이 '신규'로 잡힘. 전체 삭제는 --purge-all")
+
+
+def purge_all(assume_yes: bool = False):
+    """digest.db 파일 통째 삭제 — seen-store + 아카이브 히스토리 전부 소멸, 복구 불가.
+
+    **재백필(§5 '아카이브 재백필') 전에 반드시 선행**: 소스를 늘려 과거를 다시 만들 때
+    옛 아카이브가 남아 있으면 같은 주가 두 벌 생기고 digests 라벨이 충돌한다.
+    일상적인 dedup 초기화는 --reset 으로 충분하니 이건 정말 재구축할 때만."""
+    if not config.DB_PATH.exists():
+        print(f"{config.DB_PATH} 없음 — 이미 깨끗함")
+        return
+    store = Store(config.DB_PATH)
+    c = store.counts()
+    store.close()
+    print(f"⚠️ {config.DB_PATH} 전체 삭제 — seen {c['seen']} / items {c['items']} / "
+          f"digests {c['digests']} / recaps {c['recaps']} 전부 사라짐 (복구 불가).")
+    print(f"   output/ 의 HTML 은 남지만 아카이브 인덱스에서는 빠짐. "
+          f"dedup 기록만 지우려면 --reset.")
+    if not assume_yes and input("   정말 삭제하려면 'yes' 입력: ").strip() != "yes":
+        print("취소됨 — 아무것도 지우지 않음")
+        return
+    config.DB_PATH.unlink()
+    print(f"✅ {config.DB_PATH} 삭제 완료")
 
 
 if __name__ == "__main__":
-    if "--reset" in sys.argv:
+    if "--purge-all" in sys.argv:
+        purge_all(assume_yes="--yes" in sys.argv)
+    elif "--reset" in sys.argv:
         reset_db()
     else:
         run(dry_run="--dry-run" in sys.argv)

@@ -31,7 +31,8 @@ GOOGLE_APPLICATION_CREDENTIALS=/절대/경로/service-account.json
 EOF
 python pipeline.py            # 정상 실행
 python pipeline.py --dry-run  # LLM 없이 수집/dedup 까지만 확인 (DB 미변경)
-python pipeline.py --reset    # seen-store(cross-day dedup 기록)만 초기화, 아카이브 히스토리는 보존
+python pipeline.py --reset      # seen 테이블만 비움 (items/digests/recaps 보존)
+python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, --yes 로 생략). 재백필 전 선행
 ```
 
 첫 실행 시 `sentence-transformers` 가 임베딩 모델(all-MiniLM-L6-v2)을 내려받음.
