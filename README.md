@@ -20,15 +20,21 @@ pipeline.py    오케스트레이터 (엔트리포인트)
 
 ## 셋업
 
+**Python 3.12 필요** (CI 도 3.12). macOS 시스템 파이썬 3.9 로는 돌아가긴 하지만
+`datetime.fromisoformat` 이 3.12 보다 엄격해서 일부 날짜 형식(`+0000` 콜론 없는 오프셋,
+2자리/9자리 소수초, 구분자 없는 `20260729T120000Z`)을 파싱하지 못하고 **조용히 버린다.**
+일간 파이프라인은 파싱 실패를 통과시키지만 `backfill.py` 는 아이템을 드롭하거나 엉뚱한 주로
+분류하므로, **백필/재백필은 반드시 3.12 에서 실행할 것.**
+
 ```bash
-pip install -r requirements.txt
-# Gemini는 Vertex AI 모드로 인증 (GCP 서비스 계정). .env는 .gitignore 처리됨:
-cat > .env <<'EOF'
-GOOGLE_GENAI_USE_VERTEXAI=true
-GOOGLE_CLOUD_PROJECT=<프로젝트ID>
-GOOGLE_CLOUD_LOCATION=us-central1
-GOOGLE_APPLICATION_CREDENTIALS=/절대/경로/service-account.json
-EOF
+python3.12 -m venv .venv && source .venv/bin/activate
+python -V                                # Python 3.12.x 확인
+pip install -r requirements.txt           # torch 포함. 가벼운 건 requirements-lite.txt
+
+# 비밀값은 .env 에만 (gitignore 처리됨). 채팅/커밋에 붙여넣지 말 것.
+# 키는 aistudio.google.com 에서 발급 — 별도 터미널에서 직접 작성:
+echo "GEMINI_API_KEY=..." > .env
+
 python pipeline.py            # 정상 실행
 python pipeline.py --dry-run  # LLM 없이 수집/dedup 까지만 확인 (DB 미변경)
 python pipeline.py --reset      # seen 테이블만 비움 (items/digests/recaps 보존)

@@ -548,3 +548,19 @@
     전부 죽음), `fetch_source_counted` 의 fresh·raw 분리(합성 RSS 로 1·3·30·60일 전 4건 → raw 4,
     fresh 2), 컷 없을 때 fresh==raw, `fetch_source` 리스트 반환 유지, 빈 피드·예외 모두 `(0,0)`.
     실제 `--dry-run` 에서 **`⚠️ 소스 이상: Ahead of AI` 가 사라진 것** 확인.
+- 2026-07-29: **Python 3.12 를 요구사항으로 명시 + `backfill.py` 에 하드 게이트**. 로컬 3.9.6 / CI 3.12
+  불일치가 §"남은 리뷰 지적 사항"에 남아 있었는데, 재백필 계획이 있어서 먼저 정리. 3.9 에서 실제로 깨지는
+  형식을 측정: `+0000`(콜론 없는 오프셋) · `.12`/`.123456789` 소수초 · `20260729T120000Z` 4종이
+  `ValueError` (`Z` 접미사·공백 구분자·날짜만은 3.9 에서도 OK — 이미 `.replace("Z","+00:00")` 처리 중).
+  - **영향이 백필에서 특히 나쁜 이유**: `_parse_dt` 가 None 을 주면 (1) `fetch_backfill_items` 의 since
+    필터에서 아이템이 **통째로 드롭**되고, (2) 살아남아도 주 버킷이 `now()` 로 폴백돼 **엉뚱한 주**에
+    들어간다. 조용히 망가진 아카이브가 나옴. 일간 파이프라인은 파싱 실패를 통과시켜서(`or cutoff`)
+    영향이 작다.
+  - `backfill.py._require_py312()` 신설 — 3.12 미만이면 네트워크 요청 전에 `sys.exit(1)`. 경고가 아니라
+    하드 게이트로 둔 이유는 실패가 조용해서 사후에 알아채기 어렵기 때문. 3.9 에서 exit code 1 확인.
+  - README 셋업을 `python3.12 -m venv .venv` + `python -V` 확인으로 갱신, CLAUDE.md 실행 블록도 동일.
+  - **부수 발견**: README 셋업이 **07-28 에 철회된 Vertex AI 서비스계정 인증**을 그대로 안내하고 있었음
+    (`GOOGLE_GENAI_USE_VERTEXAI`/`GOOGLE_APPLICATION_CREDENTIALS`). CLAUDE.md·변경로그와 모순 →
+    `echo "GEMINI_API_KEY=..." > .env` 방식으로 수정.
+  - **미완**: 로컬에 3.12 가 아직 없음(시스템 3.9.6 만, Homebrew 미설치). 사용자가 설치하면
+    `.venv` 재생성 + `--dry-run` 통과 확인 필요.

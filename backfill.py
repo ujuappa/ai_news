@@ -35,6 +35,24 @@ BACKFILL_SOURCE_IDS = {
 BACKFILL_MODEL = "gemini-2.5-flash-lite"
 
 
+def _require_py312():
+    """3.12 미만에서는 실행 거부. 3.9 의 `fromisoformat` 은 훨씬 엄격해서 `+0000`(콜론 없는
+    오프셋)·2/9자리 소수초·`20260729T120000Z` 같은 실제 피드 형식을 ValueError 로 떨군다.
+    그러면 `_parse_dt` 가 None 을 돌려주는데, 백필에서는 그게
+      (1) 수집 단계에서 아이템이 통째로 드롭되고(fetch_backfill_items 의 since 필터),
+      (2) 살아남아도 주 버킷이 `now()` 로 폴백돼 엉뚱한 주에 들어간다.
+    조용히 망가진 아카이브가 나오므로 경고가 아니라 하드 게이트로 둔다."""
+    if sys.version_info < (3, 12):
+        v = ".".join(map(str, sys.version_info[:3]))
+        sys.exit(
+            f"❌ Python {v} 로는 백필을 실행하지 않습니다 (3.12 이상 필요).\n"
+            f"   3.9 의 fromisoformat 은 일부 날짜 형식을 조용히 버려서 아이템이 드롭되거나\n"
+            f"   엉뚱한 주로 분류됩니다. README 셋업 참고:\n"
+            f"     python3.12 -m venv .venv && source .venv/bin/activate\n"
+            f"     pip install -r requirements.txt"
+        )
+
+
 def _parse_dt(iso: str) -> datetime | None:
     if not iso:
         return None
@@ -135,6 +153,7 @@ def run(months: int = 6):
 
 
 if __name__ == "__main__":
+    _require_py312()
     months = 6
     if "--months" in sys.argv:
         months = int(sys.argv[sys.argv.index("--months") + 1])
