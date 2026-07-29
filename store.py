@@ -30,9 +30,11 @@ CREATE TABLE IF NOT EXISTS items (
     summary      TEXT,               -- LLM 요약 (없으면 원문 발췌)
     significance REAL DEFAULT 0,
     is_major     INTEGER DEFAULT 0,
-    published    TEXT,
+    published    TEXT,               -- 기사 발행일(ISO). 게재 여부가 아님 — 그건 is_published
     fetched_at   TEXT,
-    digest_date  TEXT                -- 어느 날짜 다이제스트에 실렸는지
+    digest_date  TEXT,               -- 어느 날짜 다이제스트에 실렸는지
+    is_published INTEGER DEFAULT 1,  -- 1=다이제스트에 실림, 0=수집했지만 탈락
+    drop_reason  TEXT DEFAULT ''     -- is_published=0 일 때의 사유 (min_significance 등)
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -66,12 +68,29 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+# CREATE TABLE IF NOT EXISTS 는 기존 테이블에 새 컬럼을 추가해주지 않으므로,
+# 이미 있는 DB 를 위한 ALTER 도 따로 필요. (컬럼명, DDL 조각)
+_MIGRATIONS = [
+    ("is_published", "ALTER TABLE items ADD COLUMN is_published INTEGER DEFAULT 1"),
+    ("drop_reason", "ALTER TABLE items ADD COLUMN drop_reason TEXT DEFAULT ''"),
+]
+
+
 class Store:
     def __init__(self, path: Path):
         self.conn = sqlite3.connect(path)
         self.conn.row_factory = sqlite3.Row
         self.conn.executescript(SCHEMA)
+        self._migrate()
         self.conn.commit()
+
+    def _migrate(self):
+        """기존 DB 에 없는 컬럼만 추가. 여러 번 호출해도 안전(멱등) — 매 Store() 마다 돈다.
+        기존 행은 DEFAULT 1 로 채워지는데, 예전엔 게재된 아이템만 저장했으니 그게 맞다."""
+        have = {r["name"] for r in self.conn.execute("PRAGMA table_info(items)")}
+        for column, ddl in _MIGRATIONS:
+            if column not in have:
+                self.conn.execute(ddl)
 
     # ---- seen-store (cross-day dedup) ----
     def recent_seen(self, retention_days: int) -> list[dict]:
@@ -118,18 +137,23 @@ class Store:
         return n
 
     # ---- items + digests ----
-    def save_items(self, items: list[dict], digest_date: str):
+    def save_items(self, items: list[dict], digest_date: str,
+                   is_published: bool = True, drop_reason: str = ""):
+        """아이템 저장. is_published=False 면 탈락분 아카이브 — drop_reason 에 사유를 남긴다
+        (컷 튜닝할 때 "뭘 버렸는지" 를 나중에 볼 수 있게). 읽기 API 는 기본적으로 게재분만 반환.
+        아이템별 사유가 다르면 사유별로 나눠서 호출할 것."""
         for it in items:
             self.conn.execute(
                 """INSERT OR REPLACE INTO items
                    (id, source_id, category, title, url, summary, significance,
-                    is_major, published, fetched_at, digest_date)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                    is_major, published, fetched_at, digest_date, is_published, drop_reason)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     it["id"], it["source_id"], it["category"], it["title"], it["url"],
                     it.get("summary", ""), it.get("significance", 0.0),
                     int(it.get("is_major", False)), it.get("published", ""),
-                    _now(), digest_date,
+                    _now(), digest_date, int(is_published),
+                    "" if is_published else drop_reason,
                 ),
             )
         self.conn.commit()
@@ -147,7 +171,7 @@ class Store:
         텍스트 정렬로는 시간순이 안 나옴."""
         rows = self.conn.execute(
             """SELECT d.date, d.item_count, d.html_path,
-                      (SELECT title FROM items WHERE digest_date = d.date
+                      (SELECT title FROM items WHERE digest_date = d.date AND is_published = 1
                        ORDER BY significance DESC LIMIT 1) AS top_title
                FROM digests d"""
         ).fetchall()
@@ -155,11 +179,13 @@ class Store:
                       key=lambda r: label_sort_key(r["date"]), reverse=True)
 
     def items_for_digest(self, digest_date: str) -> list[dict]:
-        """저장된 아이템 재조회 (템플릿 변경 후 재렌더용). source_name/cluster_sources 는 저장 안 되므로
+        """저장된 게재 아이템 재조회 (템플릿 변경 후 재렌더용). 탈락분(is_published=0)은 제외 —
+        재렌더가 원본 다이제스트와 달라지면 안 됨. source_name/cluster_sources 는 저장 안 되므로
         호출부에서 source_id -> 소스 이름 매핑을 채워줘야 함(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, url, summary, significance,
-                      is_major, published FROM items WHERE digest_date=?""",
+                      is_major, published FROM items
+               WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
         items = []
@@ -188,13 +214,27 @@ class Store:
         return {r["category"]: dict(r) for r in rows}
 
     def all_items(self) -> list[dict]:
-        """검색 인덱스용: 저장된 전체 아이템 (최신순). source_name 매핑은 호출부 책임(config.py 참고)."""
+        """검색 인덱스용: 게재된 전체 아이템 (최신순). 탈락분은 제외 — 사이트에 없는 글이
+        검색 결과에 뜨면 안 됨. source_name 매핑은 호출부 책임(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, url, summary, significance,
                       is_major, published, digest_date FROM items
+               WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()
         return [dict(r) for r in rows]
+
+    def dropped_items(self, digest_date: str | None = None) -> list[dict]:
+        """탈락분 조회 (사유 포함). 카테고리 상한/min_significance 튜닝할 때
+        "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""
+        sql = """SELECT id, source_id, category, title, url, summary, significance,
+                        is_major, published, digest_date, drop_reason FROM items
+                 WHERE is_published=0"""
+        params: tuple = ()
+        if digest_date is not None:
+            sql += " AND digest_date=?"
+            params = (digest_date,)
+        return [dict(r) for r in self.conn.execute(sql + " ORDER BY significance DESC", params)]
 
     def close(self):
         self.conn.close()

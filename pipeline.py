@@ -36,6 +36,26 @@ def _rank_and_cap(items: list[dict], settings) -> list[tuple[str, list[dict]]]:
     return groups
 
 
+def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str, list[dict]]:
+    """게재되지 못한 아이템을 사유별로 묶는다. 사유는 파이프라인이 거른 순서대로 판정 —
+    LLM 실패 > 저의미 > 카테고리 OFF > 카테고리 상한. 컷 튜닝할 때 근거 데이터가 됨."""
+    published_ids = {it["id"] for it in flat}
+    buckets: dict[str, list[dict]] = {}
+    for it in clustered:
+        if it["id"] in published_ids:
+            continue
+        if not it.get("_enriched", True):
+            reason = "enrich_failed"
+        elif it["significance"] < settings.min_significance:
+            reason = "min_significance"
+        elif it["category"] == "community_takes":
+            reason = "category_off"  # v1 에서 통째로 제외되는 카테고리
+        else:
+            reason = "category_cap"
+        buckets.setdefault(reason, []).append(it)
+    return buckets
+
+
 def _health_warnings(health: dict[str, int], sources) -> list[str]:
     id_to_name = {s.id: s.name for s in sources}
     return [id_to_name.get(sid, sid) for sid, n in health.items() if n == 0]
@@ -95,8 +115,13 @@ def run(dry_run: bool = False):
     majors.sort(key=lambda it: it["significance"], reverse=True)
 
     flat = [it for _c, items in groups for it in items]
+    buckets = _drop_reasons(clustered, flat, settings)
+    if buckets:
+        print("      탈락 " + ", ".join(f"{r} {len(v)}건" for r, v in sorted(buckets.items())))
     if not dry_run:
         store.save_items(flat, today)
+        for reason, items in buckets.items():
+            store.save_items(items, today, is_published=False, drop_reason=reason)
         # 드롭된 저의미 아이템도 seen 처리 -> 내일 재스코어 안 함.
         # 단 LLM 배치가 죽어서 significance 0.0 으로 폴백된 건은 제외 — seen 에 넣으면
         # 판단도 못 받고 영영 사라짐. 내일 다시 시도하게 남겨둔다.

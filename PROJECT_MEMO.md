@@ -369,7 +369,8 @@
 - **남은 리뷰 지적 사항(미수정, 사용자가 보류 선택)**: 27주 백필 아카이브가 `--reset` 으로 DB 에서 사라져
   인덱스에서 접근 불가(HTML 파일은 `output/archive/` 에 그대로 있음 — 재발 원인은 2026-07-29 에 수정,
   이미 잃은 데이터는 그대로) · `--dry-run` 이 `output/` 을
-  플레이스홀더로 덮어씀(DB 는 안 건드림) · 카테고리 상한(6)에 밀린 항목도 `commit_seen` 되어 영구 누락 ·
+  플레이스홀더로 덮어씀(DB 는 안 건드림) · 카테고리 상한(6)에 밀린 항목도 `commit_seen` 되어 내일 다시
+  안 올라옴(2026-07-29 부터 최소한 DB 에는 `is_published=0`+`drop_reason` 으로 남아 데이터 유실은 아님) ·
   `render._annotate` 가 idempotent 하지 않아 카테고리 페이지 소스 표기가 `(+1 more) (+2 more)` 로 중복
   누적(현재는 멀티소스 클러스터가 없어서 안 보임) · ~~`llm.py` 가 `summary: null` 에 크래시하고 배치 하나
   실패하면 앞선 배치 결과까지 전부 날림~~ ✅ 2026-07-29 수정(변경로그 최신 항목) ·
@@ -442,3 +443,25 @@
   **검증**: 사본 DB 로 7개 시나리오 — `--reset`(seen 만 0, 파일 유지) / `purge-all`+`yes`(삭제) /
   `no`·빈입력·`YES`·`y`·` yes please`(전부 취소, 데이터 무변경) / `--yes`(프롬프트 호출 자체가 없음을
   input 스텁으로 확인) / DB 부재 시 양쪽 다 파일 생성 없이 안전 종료. 실제 `digest.db` 무변경 확인.
+- 2026-07-29: **탈락 아이템도 DB 에 보관 (`is_published`/`drop_reason` 신설)**. 지금까지 `save_items` 는
+  게재분만 저장해서 "왜 안 실렸는지"가 어디에도 안 남았음 — §9 의 카테고리 상한(6) 튜닝이 "라이브 며칠
+  보고 재평가" 상태로 멈춰 있던 것도 판단 근거 데이터가 없어서였음. 이제 컷에 걸린 아이템도 사유와 함께 저장.
+  - **컬럼명 주의**: `items.published` 는 이미 **기사 발행일**(TEXT)로 쓰이고 있어서(fetch/render/backfill
+    8곳이 소비, 특히 `render.py:802` 동점 처리 정렬은 07-28 버그수정 지점) 새 불리언은 **`is_published`**
+    로 명명 — 같은 테이블 `is_major` 와 작명규칙도 맞음. 날짜 컬럼은 손대지 않음.
+  - `store.py`: `SCHEMA` 에 `is_published INTEGER DEFAULT 1` / `drop_reason TEXT DEFAULT ''` 추가(신규 DB용)
+    + `_migrate()` 신설(기존 DB용). `CREATE TABLE IF NOT EXISTS` 는 기존 테이블에 컬럼을 안 붙여주므로
+    `PRAGMA table_info` 로 확인 후 없는 것만 `ALTER TABLE ADD COLUMN` — 매 `Store()` 마다 도는 멱등 방식.
+    기존 행은 DEFAULT 1 로 채워지는데 예전엔 게재분만 저장했으니 의미상 정확함.
+  - `save_items(items, digest_date, is_published=True, drop_reason="")` 로 확장. 게재분은 `drop_reason` 을
+    강제로 빈 문자열 — `INSERT OR REPLACE` 라 탈락→게재 전이 시 옛 사유가 남는 걸 방지.
+  - 읽기 API 는 전부 게재분만: `all_items()`(검색 인덱스 — 사이트에 없는 글이 검색에 뜨면 안 됨),
+    `items_for_digest()`(재렌더가 원본과 달라지면 안 됨), **그리고 `list_digests()` 의 `top_title`
+    서브쿼리도** — 안 고치면 다른 카테고리에서 상한에 밀린 고significance 항목이 아카이브 인덱스의
+    "Top story" 로 뜰 수 있었음. 탈락분 조회는 `dropped_items(digest_date=None)` 별도 신설.
+  - `pipeline.py`: `_drop_reasons()` 신설 — 파이프라인이 거른 순서대로 사유 판정
+    (`enrich_failed` > `min_significance` > `category_off`(community_takes) > `category_cap`).
+    저장은 사유별로 나눠 호출하고, 콘솔에도 "탈락 category_cap 3건, min_significance 5건" 식으로 출력.
+  - **검증**: 18개 테스트 통과 — 마이그레이션(기존 33행 전부 `is_published=1`, 3회 재실행 멱등, 기존 컬럼
+    보존) / 신규 DB / 세 읽기 API 필터 / `top_title` 이 sig 0.99 짜리 탈락분을 안 집는지 / 게재↔탈락 전이 시
+    사유 비워짐 / 사유 판정 4종. 실제 `digest.db` 는 컬럼만 추가되고 33행·seen 146건 그대로.

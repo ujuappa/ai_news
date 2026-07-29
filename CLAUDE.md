@@ -38,6 +38,8 @@ open output/index.html
   ~~min-significance 컷~~ ✅ 0.25 로 반영(`sources.yaml settings.min_significance`) ·
   ~~dedup 임계값(0.83)~~ ✅ 검증 완료, 변경 없음(0.80은 오병합 확인됨) ·
   카테고리 상한(6) 튜닝 — 보류(라이브 며칠 실행 후 재평가, PROJECT_MEMO §9 참고).
+  2026-07-29 부터 탈락 아이템이 `items.is_published=0` + `drop_reason` 으로 쌓이므로
+  `store.dropped_items()` 로 근거 데이터를 볼 수 있음.
 - **자동화**: 개인 GitHub 레포 + Actions cron + Pages.
 
 ## 규칙 · 주의
