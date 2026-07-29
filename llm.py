@@ -49,17 +49,41 @@ def _payload(items: list[dict]) -> str:
     return json.dumps(slim, ensure_ascii=False)
 
 
-def _parse(text: str) -> list[dict]:
+def _parse(text: str):
+    """응답 텍스트에서 JSON 을 뽑는다. 반환은 list 또는 dict — 정규화는 `_rows` 담당.
+
+    `raw_decode` 로 앞에서부터 문서를 차례로 읽는 이유: 모델이 배열 하나를 온전히 낸 뒤
+    **또 배열을 이어붙이거나** 산문을 덧붙이는 경우가 있다(2026-07-29 백필에서
+    gemini-3.1-flash-lite 가 실제로 그랬고 `JSONDecodeError: Extra data` 로 4개 주 32건이 누락).
+    예전 폴백은 `find("[")` ~ `rfind("]")` 로 잘라서 배열 둘을 한 덩어리로 만들어 여전히 실패했다.
+    문서가 하나면 그대로 반환해 기존 동작(단일 객체 / `{"items": [...]}` 래핑)을 유지한다."""
     text = text.strip()
     if text.startswith("```"):
         text = text.split("```", 2)[1].lstrip("json").strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        start, end = text.find("["), text.rfind("]")
-        if start != -1 and end != -1:
-            return json.loads(text[start : end + 1])
-        raise
+    decoder = json.JSONDecoder()
+    docs: list = []
+    first_err: json.JSONDecodeError | None = None
+    i, n = 0, len(text)
+    while i < n:
+        while i < n and text[i] not in "[{":  # 다음 문서 시작으로 이동(선행 산문 스킵)
+            i += 1
+        if i >= n:
+            break
+        try:
+            doc, i = decoder.raw_decode(text, i)
+        except json.JSONDecodeError as e:
+            if first_err is None:
+                first_err = e
+            break  # 앞쪽에서 건진 게 있으면 그걸로 진행, 없으면 아래에서 raise
+        docs.append(doc)
+    if not docs:
+        raise first_err or json.JSONDecodeError("JSON 을 찾지 못함", text, 0)
+    if len(docs) == 1:
+        return docs[0]
+    merged: list = []
+    for doc in docs:
+        merged.extend(doc if isinstance(doc, list) else [doc])
+    return merged
 
 
 def _rows(text: str) -> list[dict]:
