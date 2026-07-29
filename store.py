@@ -128,6 +128,17 @@ class Store:
             for t in ("seen", "items", "digests", "recaps")
         }
 
+    def unsee(self, ids: list[str]) -> int:
+        """seen 에서 제거 (지운 행 수 반환). 같은 날 재실행에서 오전에 실렸던 항목이 오후 고득점에
+        밀려 탈락하는 경우가 있는데, 그때 seen 에 남겨두면 캡 드롭인데도 내일 재시도를 못 받는다."""
+        if not ids:
+            return 0
+        cur = self.conn.execute(
+            f"DELETE FROM seen WHERE id IN ({','.join('?' * len(ids))})", ids
+        )
+        self.conn.commit()
+        return cur.rowcount
+
     def clear_seen(self) -> int:
         """seen-store 전체 비우기 (지운 행 수 반환). items/digests/recaps 는 그대로 —
         dedup 백엔드를 바꿔서 임베딩을 못 쓰게 됐을 때 아카이브를 잃지 않고 초기화하는 용도."""

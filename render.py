@@ -14,7 +14,27 @@ from pathlib import Path
 
 from jinja2 import DictLoader, Environment
 
-from config import CATEGORY_LABELS
+from config import CATEGORY_LABELS, CATEGORY_ORDER
+
+
+def group_by_category(items: list[dict], cap: int | None = None) -> list[tuple[str, list[dict]]]:
+    """카테고리별 유의성 내림차순 그룹. community_takes 는 v1 제외.
+
+    cap 지정 시 카테고리당 상한 적용(pipeline: 아직 안 잘린 풀에 사용),
+    None 이면 정렬만(rerender: DB 의 게재분은 이미 잘려 있음).
+    pipeline._rank_and_cap 과 rerender._grouped 로 나뉘어 있던 걸 합친 것 — 따로 두니
+    한쪽만 고쳐져서 두 경로의 정렬 결과가 갈릴 수 있었음."""
+    groups: list[tuple[str, list[dict]]] = []
+    for cat in CATEGORY_ORDER:
+        if cat == "community_takes":
+            continue
+        picked = sorted(
+            (it for it in items if it["category"] == cat),
+            key=lambda it: (it["significance"], it.get("published") or ""),
+            reverse=True,
+        )
+        groups.append((cat, picked[:cap] if cap else picked))
+    return groups
 
 # ---- 팔레트 (Claude Design 캔버스의 라이브 컬러피커에서 포팅) ----
 PALETTES = [

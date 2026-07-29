@@ -17,23 +17,28 @@ import dedup
 import fetch
 import llm
 import render
-from config import CATEGORY_ORDER
 from store import Store
 
 
-def _rank_and_cap(items: list[dict], settings) -> list[tuple[str, list[dict]]]:
-    """카테고리별로 유의성 내림차순 정렬 + 상한 적용. community_takes 는 v1 제외."""
-    groups: list[tuple[str, list[dict]]] = []
-    for cat in CATEGORY_ORDER:
-        if cat == "community_takes":
-            continue  # v1 OFF
-        picked = sorted(
-            [it for it in items if it["category"] == cat],
-            key=lambda it: it["significance"],
-            reverse=True,
-        )
-        groups.append((cat, picked[: settings.max_items_per_category]))
-    return groups
+def _todays_pool(store: Store, clustered: list[dict], today: str,
+                 id_to_name: dict[str, str]) -> list[dict]:
+    """오늘의 후보 풀 = DB 에 저장된 오늘자 아이템(게재분+탈락분) + 이번 실행분.
+    id 가 겹치면 이번 실행분이 이김(판정이 더 최신).
+
+    이번 실행분만 가지고 렌더하면 같은 날 두 번째 실행이 index.html 을 그 실행분
+    (보통 1~2건)으로 잘라먹는다 — cross-day dedup 이 오전에 이미 실은 항목을 '본 것'으로
+    걸러내서 clustered 가 거의 비기 때문. DB 를 하루치의 단일 진실로 삼고 매 실행이
+    누적 전체를 다시 랭킹한다."""
+    pool: dict[str, dict] = {}
+    for it in store.items_for_digest(today) + store.dropped_items(today):
+        it["_enriched"] = it.get("drop_reason") != "enrich_failed"
+        it["is_major"] = bool(it["is_major"])
+        it.setdefault("cluster_sources", [])
+        pool[it["id"]] = it
+    pool.update({it["id"]: it for it in clustered})
+    for it in pool.values():
+        it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])
+    return list(pool.values())
 
 
 def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str, list[dict]]:
@@ -82,20 +87,11 @@ def run(dry_run: bool = False):
         )
         print(f"      cross-day 후 신규 {len(clustered)} items")
 
+    # 신규 0건도 별도 경로를 타지 않는다. 아래 풀 구성이 DB 에서 오늘자를 읽어오므로
+    # 같은 렌더 경로로 "오늘 이미 실린 것"이 그대로 다시 나온다(예전엔 빈 페이지로 덮었음).
     if not clustered:
-        # 여기서 그냥 return 하면 어제 페이지가 오늘 날짜인 척 그대로 남음 -> 빈 다이제스트로 렌더.
-        print("      신규 아이템 없음 — 빈 다이제스트로 렌더")
-        empty_groups = [(c, []) for c in CATEGORY_ORDER if c != "community_takes"]
-        all_items = store.all_items()
-        render.render_digest(today, empty_groups, [], _health_warnings(health, sources),
-                             config.OUTPUT_DIR, total_records=len(all_items))
-        if not dry_run:
-            store.record_digest(today, 0, f"archive/{today}.html")
-        render.render_archive_index(store.list_digests(), config.OUTPUT_DIR)
-        store.close()
-        return
-
-    if dry_run:
+        print("[3/5] 신규 아이템 없음 — LLM 스킵, DB 의 오늘자로 재렌더")
+    elif dry_run:
         print("[3/5] LLM 스킵 (--dry-run): 원문 발췌로 채움")
         for it in clustered:
             it["summary"] = it["summary_raw"]
@@ -105,17 +101,22 @@ def run(dry_run: bool = False):
         print(f"[3/5] LLM 강화 — model={config.MODEL}")
         clustered = llm.enrich(clustered)
 
-    ranked_pool = [it for it in clustered if it["significance"] >= settings.min_significance]
-    dropped = len(clustered) - len(ranked_pool)
+    id_to_name = {s.id: s.name for s in cfg.sources}
+    pool = _todays_pool(store, clustered, today, id_to_name)
+    ranked_pool = [it for it in pool if it["significance"] >= settings.min_significance]
+    dropped = len(pool) - len(ranked_pool)
 
     print(f"[4/5] 랭킹 + 상한{' (dry-run: 저장 스킵)' if dry_run else ' + 저장'}"
-          + (f" — significance<{settings.min_significance} {dropped}건 드롭(홍보성 필터)" if dropped else ""))
-    groups = _rank_and_cap(ranked_pool, settings)
-    majors = [it for it in ranked_pool if it.get("is_major")] if settings.flag_major_at_top else []
-    majors.sort(key=lambda it: it["significance"], reverse=True)
+          f" — 오늘 후보 {len(pool)}건(신규 {len(clustered)} + DB {len(pool) - len(clustered)})"
+          + (f", significance<{settings.min_significance} {dropped}건 드롭(홍보성 필터)" if dropped else ""))
+    groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
 
     flat = [it for _c, items in groups for it in items]
-    buckets = _drop_reasons(clustered, flat, settings)
+    # majors 는 게재분에서만 — 캡에 밀린 항목을 상단 배너에만 띄우면 DB(is_published=0)/
+    # 검색 인덱스/rerender 결과와 어긋난다.
+    majors = [it for it in flat if it.get("is_major")] if settings.flag_major_at_top else []
+    majors.sort(key=lambda it: (it["significance"], it.get("published") or ""), reverse=True)
+    buckets = _drop_reasons(pool, flat, settings)
     if buckets:
         print("      탈락 " + ", ".join(f"{r} {len(v)}건" for r, v in sorted(buckets.items())))
     if not dry_run:
@@ -130,7 +131,14 @@ def run(dry_run: bool = False):
         #   enrich_failed   — 판정 자체를 못 받음(LLM 배치 실패)
         #   category_off    — community_takes 는 v1 OFF. 지금은 소스가 전부 비활성이라 0건이지만,
         #                     켜지 않은 채 소스만 살리면 매일 재엔리치되니 그때 재검토할 것
-        dedup.commit_seen(flat + buckets.get("min_significance", []), store)
+        # 추가 대상은 이번 실행분(clustered)으로 한정 — DB 에서 읽어온 항목엔 임베딩(_emb)이 없어서
+        # seen 에 넣으면 임베딩 없는 행이 되어 cross-day 유사도 비교가 안 된다.
+        seen_ids = {it["id"] for it in flat} | {it["id"] for it in buckets.get("min_significance", [])}
+        dedup.commit_seen([it for it in clustered if it["id"] in seen_ids], store)
+        # 반대로 빼기도 해야 위 정책이 실제로 지켜진다. 오전에 실렸다가 오후 고득점에 밀린 항목은
+        # 이미 seen 에 들어가 있어서, 지워주지 않으면 캡 드롭인데도 내일 재시도를 못 받는다.
+        store.unsee([it["id"] for r, items in buckets.items()
+                     if r != "min_significance" for it in items])
         store.purge_old_seen(settings.seen_store_retention_days)
 
     recap = {"headline": "", "dollar_committed": None, "category_one_liners": {}}
@@ -144,7 +152,6 @@ def run(dry_run: bool = False):
 
     print("[5/5] 렌더")
     warnings = _health_warnings(health, sources)
-    id_to_name = {s.id: s.name for s in cfg.sources}
     all_items = store.all_items()
     for it in all_items:
         it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])

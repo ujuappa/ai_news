@@ -13,25 +13,9 @@ import re
 
 import config
 import render
-from config import CATEGORY_ORDER
 from store import Store
 
 _DAILY_LABEL_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-
-
-def _grouped(items: list[dict]) -> list[tuple[str, list[dict]]]:
-    """이미 저장 시점에 카테고리 상한이 적용된 데이터라 다시 자르지 않고 유의성순 정렬만."""
-    groups = []
-    for cat in CATEGORY_ORDER:
-        if cat == "community_takes":
-            continue
-        picked = sorted(
-            [it for it in items if it["category"] == cat],
-            key=lambda it: it["significance"],
-            reverse=True,
-        )
-        groups.append((cat, picked))
-    return groups
 
 
 def run():
@@ -57,7 +41,8 @@ def run():
         items = store.items_for_digest(label)
         for it in items:
             it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])
-        groups = _grouped(items)
+        # cap 없음: DB 의 게재분은 저장 시점에 이미 상한이 적용돼 있음
+        groups = render.group_by_category(items)
         majors = [it for it in items if it["is_major"]] if settings.flag_major_at_top else []
         majors.sort(key=lambda it: it["significance"], reverse=True)
         recaps = store.recaps_for(label)

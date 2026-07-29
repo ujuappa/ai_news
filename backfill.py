@@ -26,7 +26,6 @@ import dedup
 import fetch
 import llm
 import render
-from config import CATEGORY_ORDER
 from store import Store
 
 BACKFILL_SOURCE_IDS = {
@@ -34,21 +33,6 @@ BACKFILL_SOURCE_IDS = {
     "huggingface_blog", "ahead_of_ai", "import_ai",
 }
 BACKFILL_MODEL = "gemini-2.5-flash-lite"
-
-
-def _rank_and_cap(items: list[dict], settings) -> list[tuple[str, list[dict]]]:
-    """pipeline._rank_and_cap 와 동일 로직(카테고리별 유의성 정렬 + 상한). community_takes 는 v1 제외."""
-    groups: list[tuple[str, list[dict]]] = []
-    for cat in CATEGORY_ORDER:
-        if cat == "community_takes":
-            continue
-        picked = sorted(
-            [it for it in items if it["category"] == cat],
-            key=lambda it: it["significance"],
-            reverse=True,
-        )
-        groups.append((cat, picked[: settings.max_items_per_category]))
-    return groups
 
 
 def _parse_dt(iso: str) -> datetime | None:
@@ -116,7 +100,7 @@ def run(months: int = 6):
         week_items = buckets[label]
         enriched = llm.enrich(week_items, model=BACKFILL_MODEL)
         ranked_pool = [it for it in enriched if it["significance"] >= settings.min_significance]
-        groups = _rank_and_cap(ranked_pool, settings)
+        groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
         majors = [it for it in ranked_pool if it.get("is_major")] if settings.flag_major_at_top else []
         majors.sort(key=lambda it: it["significance"], reverse=True)
 
