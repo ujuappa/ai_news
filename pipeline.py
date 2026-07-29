@@ -122,10 +122,15 @@ def run(dry_run: bool = False):
         store.save_items(flat, today)
         for reason, items in buckets.items():
             store.save_items(items, today, is_published=False, drop_reason=reason)
-        # 드롭된 저의미 아이템도 seen 처리 -> 내일 재스코어 안 함.
-        # 단 LLM 배치가 죽어서 significance 0.0 으로 폴백된 건은 제외 — seen 에 넣으면
-        # 판단도 못 받고 영영 사라짐. 내일 다시 시도하게 남겨둔다.
-        dedup.commit_seen([it for it in clustered if it.get("_enriched", True)], store)
+        # seen 에는 "제대로 판정받고 끝난 것" 만 넣는다.
+        #   게재분          — 내일 또 실으면 안 됨
+        #   min_significance — LLM 이 보고 낮게 매김. 내일 재스코어해도 결과 같으니 토큰 낭비
+        # 나머지는 구조적 이유로 밀린 거라 내일 다시 기회를 준다(=seen 에 안 넣음):
+        #   category_cap    — 컷은 넘겼는데 자리가 없었을 뿐. 캡 튜닝 데이터도 여기서 나옴
+        #   enrich_failed   — 판정 자체를 못 받음(LLM 배치 실패)
+        #   category_off    — community_takes 는 v1 OFF. 지금은 소스가 전부 비활성이라 0건이지만,
+        #                     켜지 않은 채 소스만 살리면 매일 재엔리치되니 그때 재검토할 것
+        dedup.commit_seen(flat + buckets.get("min_significance", []), store)
         store.purge_old_seen(settings.seen_store_retention_days)
 
     recap = {"headline": "", "dollar_committed": None, "category_one_liners": {}}
