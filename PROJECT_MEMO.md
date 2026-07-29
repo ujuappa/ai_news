@@ -369,9 +369,8 @@
 - **남은 리뷰 지적 사항** (2026-07-29 기준 갱신):
   - **미수정**: 27주 백필 아카이브가 `--reset` 으로 DB 에서 사라져 인덱스에서 접근 불가(HTML 은
     `output/archive/` 에 그대로. 재발 원인은 `--purge-all` 분리로 수정했지만 이미 잃은 데이터는 그대로) ·
-    `render._annotate` 가 idempotent 하지 않아 카테고리 페이지 소스 표기가 `(+1 more) (+2 more)` 로
-    중복 누적(현재는 멀티소스 클러스터가 없어서 안 보임) · `settings.min_items_fallback` 이 파싱만 되고
-    미구현 · 로컬 3.9.6 / CI 3.12 파이썬 버전 불일치.
+    `settings.min_items_fallback` 과 `settings.flag_major_at_top` 이 파싱만 되고 미구현/무효 ·
+    로컬 3.9.6 / CI 3.12 파이썬 버전 불일치.
   - **부분 해결**: `--dry-run` 이 `output/` 을 덮어쓰는 건 여전하지만, DB 기반 렌더로 바뀌면서 이제
     "플레이스홀더 1~2건"이 아니라 "DB 의 오늘자 + 이번 실행분"을 그린다. 신규분 significance 가 0.5
     고정이라 미리보기일 뿐이므로 커밋 전 `git status` 확인은 계속 필요.
@@ -511,3 +510,26 @@
     추가 시 누적 기준 캡 6건 유지 + 밀린 2건 `category_cap` 기록 + seen 에서 제거. `rerender.py` 실DB
     사본으로 스모크(11+22=33건, index title 일치). 실제 `--dry-run` 결과가 **"1 items" → "13 items
     (신규 2 + DB 11)"** 로 바뀐 것 확인.
+- 2026-07-29: **렌더 버그 4종 일괄 수정**.
+  - **`_annotate` 멱등화**: `_source_line_name()` 이 접미사가 붙은 `source_name` 을 다시 입력으로 써서
+    같은 dict 을 두 번 annotate 하면(홈에서 한 번, 카테고리 페이지에서 또) `TechCrunch (+1 more) (+2 more)`
+    처럼 누적됐음. 숫자가 커지는 이유는 접미사 붙은 이름이 `cluster_sources` 의 어떤 값과도 안 맞아서
+    자기 자신까지 others 에 세어졌기 때문. → 원본을 `_source_base` 에 보존하고 항상 거기서 계산.
+    (멀티소스 클러스터가 아직 안 생겨서 눈에 안 띄었을 뿐, 호출 경로상 이미 매번 두 번씩 돌고 있었음.)
+  - **`render_archive_index` 정렬**: 볼륨 미니바용 `ordered_asc` 가 `d["date"]` 텍스트 정렬이라
+    주간 라벨이 뒤로 밀리고(같은 'W' > '0' 문제), 마지막 원소를 '최신'으로 강조하는 것도 엉뚱한 걸 집었음.
+    → `store.label_sort_key` 사용(`list_digests` 와 동일 키). 검증에서 `2026-W31` 이 `2026-07-27` 로
+    환산돼 `2026-07-28` 앞에 오는 것까지 확인(처음엔 내 기대값이 틀렸고 코드가 맞았음).
+  - **조용한 날 카테고리/검색 페이지**: 별도 조치 불필요 — 직전 커밋에서 early-return 을 없앤 것으로
+    이미 해결돼 있었음. 회귀 테스트로 확인만 함(신규 0건 실행 후 7개 페이지 전부 재생성 + 내용 동일).
+  - **`majors` 죽은 파라미터 제거**: `render_digest`/`render_archive_digest` 가 받기만 하고 본문에서
+    한 번도 안 썼음. SIGNAL 디자인의 '상단 major 배너'용이었는데 07-27 Modernist 개편에서 significance
+    플랫 랭킹으로 바뀌며 배너가 사라진 뒤 잔재로 남은 것. 파라미터와 3개 호출부의 `majors` 계산을 삭제.
+    **`is_major` 자체는 유지** — 항목별 `MAJOR` 태그로 실제 렌더되고 DB/LLM 출력에도 쓰임.
+    부작용으로 `settings.flag_major_at_top` 이 완전히 무효가 됨 → §"남은 리뷰 지적 사항"의
+    `min_items_fallback` 옆에 같이 기재(설정은 파싱만 되고 동작 없음).
+  - 부수: `render_category_page` 정렬도 `(significance, published)` 로 통일 — 홈과 카테고리 페이지에서
+    동점 항목 순서가 갈리던 것.
+  - **검증**: 23건 통과(멱등화 5 · 아카이브 정렬 6 · majors 시그니처 3 · 조용한 날 9). 추가로 `rerender.py`
+    실DB 사본 재렌더 후 전체 HTML 을 `more) (+` 로 스캔해 중복 접미사 0건 확인, 실제 `--dry-run`(14건)
+    출력물도 동일 스캔 통과.

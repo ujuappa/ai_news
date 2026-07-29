@@ -15,6 +15,7 @@ from pathlib import Path
 from jinja2 import DictLoader, Environment
 
 from config import CATEGORY_LABELS, CATEGORY_ORDER
+from store import label_sort_key
 
 
 def group_by_category(items: list[dict], cap: int | None = None) -> list[tuple[str, list[dict]]]:
@@ -800,11 +801,15 @@ def _tier(sig: float) -> str:
 
 
 def _source_line_name(it: dict) -> str:
-    others = [s for s in it.get("cluster_sources", []) if s != it["source_name"]]
-    name = it["source_name"]
-    if others:
-        name += f" (+{len(others)} more)"
-    return name
+    """멀티소스 클러스터면 '(+N more)' 를 붙인 표기.
+
+    원본 이름을 `_source_base` 에 따로 보존한다. 같은 dict 이 홈과 카테고리 페이지에서 각각
+    _annotate 되는데, 예전엔 접미사가 붙은 source_name 을 다시 입력으로 써서
+    'TechCrunch (+1 more) (+2 more)' 처럼 누적됐다(접미사 붙은 이름은 cluster_sources 의
+    어떤 값과도 안 맞아서 자기 자신까지 others 에 세어지는 바람에 숫자도 커졌음)."""
+    base = it.setdefault("_source_base", it["source_name"])
+    others = [s for s in it.get("cluster_sources", []) if s != base]
+    return f"{base} (+{len(others)} more)" if others else base
 
 
 def _annotate(it: dict, rank: int | None = None) -> None:
@@ -870,9 +875,13 @@ def _signal_bands(flat: list[dict]) -> list[dict]:
     ]
 
 
-def render_digest(date: str, groups: list[tuple[str, list[dict]]], majors: list[dict],
+def render_digest(date: str, groups: list[tuple[str, list[dict]]],
                   warnings: list[str], output_dir: Path, total_records: int = 0) -> Path:
-    """오늘자 다이제스트: index.html(루트) + archive/{date}.html 동일 내용, 상대경로만 다르게."""
+    """오늘자 다이제스트: index.html(루트) + archive/{date}.html 동일 내용, 상대경로만 다르게.
+
+    majors 파라미터는 2026-07-29 에 제거 — SIGNAL 디자인의 '상단 major 배너'용이었는데
+    07-27 Modernist 개편에서 significance 플랫 랭킹으로 바뀌며 배너가 없어졌고, 이후로는
+    받기만 하고 쓰지 않았음. major 표시는 지금도 항목별 `it.is_major` 태그로 나감."""
     flat = _flatten_ranked(groups)
     total = len(flat)
     for i, it in enumerate(flat, start=1):
@@ -908,7 +917,7 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]], majors: list[
     return archive_dir / f"{date}.html"
 
 
-def render_archive_digest(label: str, groups: list[tuple[str, list[dict]]], majors: list[dict],
+def render_archive_digest(label: str, groups: list[tuple[str, list[dict]]],
                           output_dir: Path, recap: dict | None = None, total_records: int = 0) -> Path:
     """백필/재렌더용 주간 리캡 페이지: archive/{label}.html (1f 디자인 — 헤드라인+통계밴드)."""
     flat = _flatten_ranked(groups)
@@ -940,7 +949,9 @@ def render_category_page(period_label: str, category: str, groups: list[tuple[st
                          cap: int = 6, min_sig: float = 0.25, total_records: int = 0) -> Path:
     """카테고리 필터 뷰: 오늘은 {category}.html(루트), 과거 주는 archive/{label}-{category}.html."""
     items = next((its for c, its in groups if c == category), [])
-    items = sorted(items, key=lambda it: it["significance"], reverse=True)
+    # 동점 처리는 group_by_category/_flatten_ranked 와 같은 키로 — 안 맞추면 홈과 카테고리
+    # 페이지의 같은 점수 항목 순서가 갈린다.
+    items = sorted(items, key=lambda it: (it["significance"], it.get("published") or ""), reverse=True)
     row_sizes = [34, 28, 22, 17, 15, 15]
     for i, it in enumerate(items):
         _annotate(it)
@@ -1010,7 +1021,10 @@ def render_search_page(items: list[dict], output_dir: Path):
 
 
 def render_archive_index(digests: list[dict], output_dir: Path):
-    ordered_asc = sorted(digests, key=lambda d: d["date"])
+    # 볼륨 미니바는 시간순이어야 하는데 date 를 텍스트 정렬하면 주간 라벨('2026-W31')이
+    # 'W'(0x57) > '0'(0x30) 때문에 모든 일간 날짜보다 뒤로 가서, 막대 순서도 틀리고
+    # 마지막 원소를 '최신'으로 강조하는 것도 엉뚱한 걸 집는다. store 와 같은 키를 쓴다.
+    ordered_asc = sorted(digests, key=lambda d: label_sort_key(d["date"]))
     max_count = max((d["item_count"] for d in digests), default=1) or 1
     bars = []
     for i, d in enumerate(ordered_asc):

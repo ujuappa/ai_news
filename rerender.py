@@ -43,19 +43,17 @@ def run():
             it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])
         # cap 없음: DB 의 게재분은 저장 시점에 이미 상한이 적용돼 있음
         groups = render.group_by_category(items)
-        majors = [it for it in items if it["is_major"]] if settings.flag_major_at_top else []
-        majors.sort(key=lambda it: it["significance"], reverse=True)
         recaps = store.recaps_for(label)
         is_today = label == latest_daily
 
         if is_today:
             # 최신 것만 index.html(루트)에도 반영 — render_digest 가 루트/archive 상대경로를 각각 맞춰 씀
-            render.render_digest(label, groups, majors, [], config.OUTPUT_DIR, total_records=total_records)
+            render.render_digest(label, groups, [], config.OUTPUT_DIR, total_records=total_records)
         else:
             whole = recaps.get("", {})
             stats = json.loads(whole.get("stats_json") or "{}")
             recap = {"headline": whole.get("headline"), "dollar_committed": stats.get("dollar_committed")}
-            render.render_archive_digest(label, groups, majors, config.OUTPUT_DIR,
+            render.render_archive_digest(label, groups, config.OUTPUT_DIR,
                                           recap=recap, total_records=total_records)
 
         for cat, cat_items in groups:

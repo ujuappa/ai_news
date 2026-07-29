@@ -112,10 +112,6 @@ def run(dry_run: bool = False):
     groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
 
     flat = [it for _c, items in groups for it in items]
-    # majors 는 게재분에서만 — 캡에 밀린 항목을 상단 배너에만 띄우면 DB(is_published=0)/
-    # 검색 인덱스/rerender 결과와 어긋난다.
-    majors = [it for it in flat if it.get("is_major")] if settings.flag_major_at_top else []
-    majors.sort(key=lambda it: (it["significance"], it.get("published") or ""), reverse=True)
     buckets = _drop_reasons(pool, flat, settings)
     if buckets:
         print("      탈락 " + ", ".join(f"{r} {len(v)}건" for r, v in sorted(buckets.items())))
@@ -157,7 +153,7 @@ def run(dry_run: bool = False):
         it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])
     total_records = len(all_items)
 
-    render.render_digest(today, groups, majors, warnings, config.OUTPUT_DIR, total_records=total_records)
+    render.render_digest(today, groups, warnings, config.OUTPUT_DIR, total_records=total_records)
     for cat, cat_items in groups:
         render.render_category_page(
             today, cat, groups, config.OUTPUT_DIR, in_archive=False,
@@ -170,7 +166,8 @@ def run(dry_run: bool = False):
     render.render_archive_index(store.list_digests(), config.OUTPUT_DIR)
     render.render_search_page(all_items, config.OUTPUT_DIR)
 
-    print(f"완료 → {config.OUTPUT_DIR/'index.html'}  ({len(flat)} items, {len(majors)} major)")
+    n_major = sum(1 for it in flat if it.get("is_major"))
+    print(f"완료 → {config.OUTPUT_DIR/'index.html'}  ({len(flat)} items, {n_major} major)")
     if dry_run:
         print("      (dry-run: seen-store/DB 미변경)")
     if warnings:

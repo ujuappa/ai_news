@@ -101,8 +101,6 @@ def run(months: int = 6):
         enriched = llm.enrich(week_items, model=BACKFILL_MODEL)
         ranked_pool = [it for it in enriched if it["significance"] >= settings.min_significance]
         groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
-        majors = [it for it in ranked_pool if it.get("is_major")] if settings.flag_major_at_top else []
-        majors.sort(key=lambda it: it["significance"], reverse=True)
 
         flat = [it for _c, items in groups for it in items]
         store.save_items(flat, label)  # seen-store 는 건드리지 않음 (commit_seen 호출 안 함)
@@ -114,7 +112,7 @@ def run(months: int = 6):
         for cat, one_liner in recap["category_one_liners"].items():
             store.save_recap(label, cat, one_liner=one_liner)
 
-        render.render_archive_digest(label, groups, majors, config.OUTPUT_DIR,
+        render.render_archive_digest(label, groups, config.OUTPUT_DIR,
                                       recap=recap, total_records=approx_total_records)
         for cat, cat_items in groups:
             render.render_category_page(
