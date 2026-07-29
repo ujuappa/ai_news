@@ -32,7 +32,11 @@ BACKFILL_SOURCE_IDS = {
     "openai", "anthropic", "deepmind", "meta_ai",
     "huggingface_blog", "ahead_of_ai", "import_ai",
 }
-BACKFILL_MODEL = "gemini-2.5-flash-lite"
+# 2026-07-29: gemini-2.5-flash-lite 가 404 로 막힘("no longer available to new users").
+# 대체 후보를 llm.enrich() 실제 경로로 검증한 결과 gemini-3.1-flash-lite 채택 —
+# 3.5-flash-lite/flash-lite-latest 는 llm.py 의 thinking_budget=0 을 400 으로 거부한다
+# (Gemini 3.5 계열은 thinking 비활성화 불가). 변별력도 확인: 홍보성 0.1~0.2 vs 주요뉴스 0.9~1.0.
+BACKFILL_MODEL = "gemini-3.1-flash-lite"
 
 
 def _require_py312():
