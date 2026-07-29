@@ -61,9 +61,14 @@ def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str
     return buckets
 
 
-def _health_warnings(health: dict[str, int], sources) -> list[str]:
+def _health_warnings(health: dict[str, tuple[int, int]], sources) -> list[str]:
+    """피드 자체가 안 잡히는 소스만 경고(raw==0 — 죽었거나 파싱 실패).
+
+    예전엔 신선도 컷 통과분이 0 이면 경고했는데, 그러면 월간 발행 소스(Ahead of AI 등)가
+    이번 주 글이 없다는 이유로 매번 ⚠️ 배지를 달았다. 진짜 이상과 구분이 안 돼서
+    배지가 의미를 잃음 → 피드에서 아무것도 못 가져온 경우만 경고."""
     id_to_name = {s.id: s.name for s in sources}
-    return [id_to_name.get(sid, sid) for sid, n in health.items() if n == 0]
+    return [id_to_name.get(sid, sid) for sid, (_fresh, raw) in health.items() if raw == 0]
 
 
 def run(dry_run: bool = False):

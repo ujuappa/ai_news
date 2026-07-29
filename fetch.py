@@ -245,9 +245,20 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
 
 
 def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
-    """단일 소스 수집. 실패해도 예외 대신 빈 리스트 반환 (source-health 는 개수로 판단).
-    max_age_days 지정 시 그보다 오래된 항목은 드롭 (일간 파이프라인 신선도 컷오프;
-    backfill.py 는 이 인자 없이 직접 호출해서 영향 없음). 발행일 파싱 실패 항목은 드롭하지 않음
+    """단일 소스 수집(신선도 컷 적용분만). backfill.py 등 개수 통계가 필요 없는 호출부용."""
+    fresh, _raw = fetch_source_counted(source, max_entries, max_age_days)
+    return fresh
+
+
+def fetch_source_counted(source: Source, max_entries: int = 25,
+                         max_age_days: int | None = None) -> tuple[list[dict], int]:
+    """(신선도 컷 통과분, 컷 적용 전 수집 개수) 반환. 실패해도 예외 대신 ([], 0).
+
+    raw 개수를 따로 돌려주는 이유: "피드가 죽었다"(raw==0)와 "저빈도 소스라 이번 주 발행이
+    없다"(raw>0, fresh==0)는 완전히 다른 상태인데, 컷 적용 후 개수만 보면 구분이 안 돼서
+    월간 발행 소스(Ahead of AI 등)에 가짜 ⚠️ 배지가 붙었다.
+
+    max_age_days 지정 시 그보다 오래된 항목은 드롭. 발행일 파싱 실패 항목은 드롭하지 않음
     (날짜 메타데이터가 없는 소스까지 과도하게 걸러내지 않으려는 의도)."""
     if source.parse == "sitemap":
         items = fetch_sitemap_source(source, max_entries)
@@ -256,7 +267,7 @@ def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None
             parsed = feedparser.parse(source.feed_url)
         except Exception as e:  # noqa: BLE001
             print(f"  [!] {source.id} fetch 실패: {e}")
-            return []
+            return [], 0
 
         items = []
         for entry in parsed.entries[:max_entries]:
@@ -278,19 +289,25 @@ def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None
                 }
             )
 
+    raw_count = len(items)
     if max_age_days is not None:
         cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
         items = [it for it in items if (_parse_dt(it["published"]) or cutoff) >= cutoff]
-    return items
+    return items, raw_count
 
 
-def fetch_all(sources: list[Source], max_age_days: int | None = None) -> tuple[list[dict], dict[str, int]]:
-    """전체 수집. (아이템 목록, 소스별 개수) 반환. 개수 0 은 source-health 경고 후보."""
+def fetch_all(sources: list[Source],
+              max_age_days: int | None = None) -> tuple[list[dict], dict[str, tuple[int, int]]]:
+    """전체 수집. (아이템 목록, {source_id: (fresh, raw)}) 반환.
+
+    fresh = 신선도 컷 통과분, raw = 컷 이전 수집분. source-health 경고는 raw==0 일 때만
+    (피드가 죽었거나 파싱 실패). raw>0 · fresh==0 은 저빈도 소스의 정상 상태다."""
     all_items: list[dict] = []
-    health: dict[str, int] = {}
+    health: dict[str, tuple[int, int]] = {}
     for src in sources:
-        got = fetch_source(src, max_age_days=max_age_days)
-        health[src.id] = len(got)
-        print(f"  {src.id:22s} {len(got):3d} items  ({src.status})")
+        got, raw = fetch_source_counted(src, max_age_days=max_age_days)
+        health[src.id] = (len(got), raw)
+        aged_out = f"  (피드 {raw}건 중 {raw - len(got)}건 기간 밖)" if raw > len(got) else ""
+        print(f"  {src.id:22s} {len(got):3d} items  ({src.status}){aged_out}")
         all_items.extend(got)
     return all_items, health
