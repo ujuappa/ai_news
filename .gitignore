@@ -5,3 +5,4 @@ __pycache__/
 service-account.json
 .DS_Store
 .claude/settings.local.json
+boncom-ai-skills-main/

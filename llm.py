@@ -6,12 +6,17 @@
 from __future__ import annotations
 
 import json
+import math
+import time
 
 from google import genai
 from google.genai import types
 
 import config
 from config import CATEGORY_LABELS
+
+MAX_RETRIES = 3     # 배치당 총 시도 횟수
+BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
 
 SYSTEM = """You curate a personal daily AI-news digest. Items are pre-deduplicated.
 For EACH item, decide:
@@ -57,44 +62,105 @@ def _parse(text: str) -> list[dict]:
         raise
 
 
+def _rows(text: str) -> list[dict]:
+    """_parse 결과를 dict 행 리스트로 정규화. 배열이 아니면(객체 하나만 오거나
+    {"items": [...]} 로 한 겹 싸서 오는 경우) 건져내고, 그래도 아니면 ValueError -> 재시도."""
+    data = _parse(text)
+    if isinstance(data, dict):
+        if "id" in data:
+            data = [data]  # 배치에 1건이라 객체 하나만 온 경우
+        else:
+            data = next((v for v in data.values() if isinstance(v, list)), None)
+    if not isinstance(data, list):
+        raise ValueError("응답이 JSON 배열이 아님")
+    return [r for r in data if isinstance(r, dict)]
+
+
+def _as_float(value, default: float = 0.0) -> float:
+    """LLM 이 null/문자열/범위 밖 숫자를 줄 수 있어 방어. 0.0-1.0 로 클램프."""
+    try:
+        f = float(value)
+    except (TypeError, ValueError):
+        return default
+    if not math.isfinite(f):
+        return default
+    return min(1.0, max(0.0, f))
+
+
+def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
+    """배치 하나를 호출 + 파싱. 일시적 실패(레이트리밋/5xx/JSON 깨짐)는 지수 백오프로
+    재시도하고, 마지막 시도까지 실패하면 그대로 raise (호출자가 배치 단위로 격리)."""
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            resp = client.models.generate_content(
+                model=model,
+                contents=_payload(chunk),
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM,
+                    max_output_tokens=16000,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),  # 분류/요약은 추론 불필요, thinking 끄면 출력 토큰 잘림 방지
+                    response_mime_type="application/json",
+                ),
+            )
+            return _rows(resp.text or "")
+        except Exception as e:
+            if attempt == MAX_RETRIES:
+                raise
+            wait = BACKOFF_BASE**attempt
+            print(f"      ↻ 재시도 {attempt}/{MAX_RETRIES - 1} ({type(e).__name__}: {e}) — {wait:.0f}s 대기")
+            time.sleep(wait)
+    raise AssertionError("unreachable")
+
+
 def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) -> list[dict]:
-    """items 에 category/summary/significance/is_major 를 채워 반환.
+    """items 에 category/summary/significance/is_major/_enriched 를 채워 반환.
     model 미지정 시 config.MODEL(환경변수 DIGEST_MODEL) 사용 — 백필처럼 다른 모델을 쓰고
-    싶을 때만 명시적으로 넘기면 됨."""
+    싶을 때만 명시적으로 넘기면 됨.
+
+    배치 하나가 죽어도 나머지는 살린다(실패 배치의 아이템은 `_enriched: False` + 원문 폴백).
+    단 전량 실패면 RuntimeError — 조용히 빈 다이제스트를 커밋하고 CI 가 초록불이 되는 걸 막는다."""
     if not items:
         return []
     client = genai.Client()  # .env 의 GEMINI_API_KEY(Developer API) 또는 GOOGLE_GENAI_USE_VERTEXAI 계열(Vertex AI) 로 자동 인증
     by_id = {it["id"]: it for it in items}
+    model_name = model or config.MODEL
 
-    for i in range(0, len(items), batch_size):
-        chunk = items[i : i + batch_size]
-        resp = client.models.generate_content(
-            model=model or config.MODEL,
-            contents=_payload(chunk),
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM,
-                max_output_tokens=16000,
-                thinking_config=types.ThinkingConfig(thinking_budget=0),  # 분류/요약은 추론 불필요, thinking 끄면 출력 토큰 잘림 방지
-                response_mime_type="application/json",
-            ),
-        )
-        text = resp.text or ""
-        for row in _parse(text):
+    batches = [items[i : i + batch_size] for i in range(0, len(items), batch_size)]
+    failed = 0
+    for n, chunk in enumerate(batches, 1):
+        try:
+            rows = _call_batch(client, model_name, chunk)
+        except Exception as e:
+            failed += 1
+            print(f"      ⚠️ 배치 {n}/{len(batches)} 포기 — {len(chunk)}건 원문 폴백 ({type(e).__name__}: {e})")
+            continue
+        for row in rows:
             it = by_id.get(row.get("id"))
             if not it:
                 continue
             cat = row.get("category")
             if cat in CATEGORY_LABELS:
                 it["category"] = cat
-            it["summary"] = row.get("summary", it.get("summary_raw", ""))[:600]
-            it["significance"] = float(row.get("significance", 0.0))
+            it["summary"] = (row.get("summary") or it.get("summary_raw") or "")[:600]
+            it["significance"] = _as_float(row.get("significance"))
             it["is_major"] = bool(row.get("is_major", False))
+            it["_enriched"] = True
 
-    # LLM 이 빠뜨린 아이템 폴백
+    # LLM 이 빠뜨렸거나 배치가 죽은 아이템 폴백
     for it in items:
         it.setdefault("summary", it.get("summary_raw", ""))
         it.setdefault("significance", 0.0)
         it.setdefault("is_major", False)
+        it.setdefault("_enriched", False)
+
+    done = sum(1 for it in items if it["_enriched"])
+    if not done:
+        raise RuntimeError(
+            f"LLM 강화 전량 실패 — {len(batches)}개 배치 전부 실패, {len(items)}건 미처리. "
+            "API 키/쿼터/모델명을 확인할 것."
+        )
+    if done < len(items):
+        print(f"      ⚠️ 부분 실패 — {done}/{len(items)}건만 강화됨 (배치 {failed}/{len(batches)} 실패)")
     return items
 
 

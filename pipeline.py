@@ -95,7 +95,10 @@ def run(dry_run: bool = False):
     flat = [it for _c, items in groups for it in items]
     if not dry_run:
         store.save_items(flat, today)
-        dedup.commit_seen(clustered, store)  # 드롭된 저의미 아이템도 seen 처리 -> 내일 재스코어 안 함
+        # 드롭된 저의미 아이템도 seen 처리 -> 내일 재스코어 안 함.
+        # 단 LLM 배치가 죽어서 significance 0.0 으로 폴백된 건은 제외 — seen 에 넣으면
+        # 판단도 못 받고 영영 사라짐. 내일 다시 시도하게 남겨둔다.
+        dedup.commit_seen([it for it in clustered if it.get("_enriched", True)], store)
         store.purge_old_seen(settings.seen_store_retention_days)
 
     recap = {"headline": "", "dollar_committed": None, "category_one_liners": {}}
