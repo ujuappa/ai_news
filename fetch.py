@@ -61,6 +61,31 @@ def _extract_full_text(url: str, fallback_snippet: str, limit: int = 3000) -> st
     return fallback_snippet
 
 
+def resolve_url(url: str, timeout: int = 15) -> str:
+    """리다이렉트를 끝까지 따라가 최종 URL 을 반환. 도달 불가면 ''.
+
+    grounding(catch_missed_news)용. 두 가지를 동시에 해결한다:
+    (1) Gemini 가 `vertexaisearch.cloud.google.com/grounding-api-redirect/...` 같은 불투명한
+        리다이렉트 주소를 주는 경우 → 실제 기사 주소로 바꾼다(id 해시도 안정된다),
+    (2) 모델이 그럴듯하게 지어낸 URL(404) → 걸러낸다.
+    HEAD 를 막는 사이트가 있어 실패 시 GET(stream)으로 한 번 더 시도한다."""
+    if not url.startswith("http"):
+        return ""
+    for use_get in (False, True):
+        try:
+            if use_get:
+                resp = requests.get(url, headers=_UA, allow_redirects=True,
+                                    timeout=timeout, stream=True)
+                resp.close()
+            else:
+                resp = requests.head(url, headers=_UA, allow_redirects=True, timeout=timeout)
+            if resp.status_code < 400:
+                return resp.url
+        except Exception:  # noqa: BLE001
+            continue
+    return ""
+
+
 def _item_url(entry) -> str:
     # 대부분 entry.link. HF 블로그처럼 <link> 누락 시 guid(id) 로 폴백.
     url = getattr(entry, "link", "") or ""

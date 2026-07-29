@@ -5,14 +5,17 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import time
+from datetime import datetime, timezone
 
 from google import genai
 from google.genai import types
 
 import config
+import fetch
 from config import CATEGORY_LABELS
 
 MAX_RETRIES = 3     # 배치당 총 시도 횟수
@@ -74,7 +77,10 @@ def _parse(text: str):
         except json.JSONDecodeError as e:
             if first_err is None:
                 first_err = e
-            break  # 앞쪽에서 건진 게 있으면 그걸로 진행, 없으면 아래에서 raise
+            if docs:
+                break  # 앞에서 건진 게 있으면 뒤쪽 잡음은 무시
+            i += 1     # 아직 없으면 산문 속 괄호였을 수 있으니 계속 훑는다
+            continue   # (grounding 응답처럼 JSON 모드를 못 쓰는 경우 앞에 설명이 붙는다)
         docs.append(doc)
     if not docs:
         raise first_err or json.JSONDecodeError("JSON 을 찾지 못함", text, 0)
@@ -98,6 +104,11 @@ def _rows(text: str) -> list[dict]:
     if not isinstance(data, list):
         raise ValueError("응답이 JSON 배열이 아님")
     return [r for r in data if isinstance(r, dict)]
+
+
+def _clean_str(value) -> str:
+    """LLM 이 준 값을 안전한 문자열로. None/숫자/리스트가 와도 죽지 않게."""
+    return value.strip() if isinstance(value, str) else ""
 
 
 def _as_float(value, default: float = 0.0) -> float:
@@ -250,43 +261,71 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
 
 
 def catch_missed_news(existing_titles: list[str], model: str | None = None) -> list[dict]:
-    """Gemini 의 Google Search 기능을 사용해 오늘 우리가 놓친 주요 AI 뉴스가 있는지 확인한다."""
+    """Gemini 의 Google Search grounding 으로 우리가 놓친 주요 AI 뉴스를 찾는다.
+
+    `response_mime_type="application/json"` 을 쓰지 않는다 — 툴 사용과 함께 지정하면
+    API 가 `400 Tool use with a response mime type: 'application/json' is unsupported` 로 거부한다
+    (2026-07-29 확인. 그 전까지 이 함수는 매번 400 을 맞고 조용히 빈 리스트를 반환하고 있었음).
+    대신 프롬프트로 JSON 만 요구하고 `_parse` 가 앞뒤 산문/코드펜스를 걷어낸다.
+
+    실패해도 예외를 올리지 않는다 — 보조 경로라 여기서 파이프라인을 죽일 이유가 없다."""
     client = genai.Client()
-    
+
     prompt = (
         "Search the web for the top 3 major Artificial Intelligence announcements or news from the last 24 hours. "
         "Do NOT include any of the following stories, as we already have them:\n"
         + "\n".join(f"- {t}" for t in existing_titles) +
-        "\n\nReturn ONLY a JSON array of the missed stories. Each element should be:\n"
-        '{"title": "...", "url": "...", "summary_raw": "...", "category": "model_releases" (or research, tools_products, policy_business), "source_name": "..."}'
+        "\n\nReturn ONLY a JSON array of the missed stories — no prose, no markdown fences. Each element:\n"
+        '{"title": "...", "url": "...", "summary_raw": "...", '
+        '"category": "model_releases" (or research, tools_products, policy_business), "source_name": "..."}'
     )
-    
-    try:
-        resp = client.models.generate_content(
-            model=model or config.MODEL,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                tools=[{"google_search": {}}],
-                response_mime_type="application/json",
-                temperature=0.3,
-            ),
-        )
-        data = _rows(resp.text or "")
-        
-        import hashlib
-        from datetime import datetime, timezone
-        items = []
-        for it in data:
-            title = it.get("title", "")
-            url = it.get("url", "")
-            if not title or not url:
-                continue
-            it["id"] = hashlib.sha1((url or title).encode("utf-8")).hexdigest()[:16]
-            it["source_id"] = "gemini_grounding"
-            it["source_name"] = it.get("source_name", "Google Search Grounding")
-            it["published"] = datetime.now(timezone.utc).isoformat()
-            items.append(it)
-        return items
-    except Exception as e:
-        print(f"      [!] catch_missed_news 실패: {type(e).__name__}: {e}")
-        return []
+
+    data = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            resp = client.models.generate_content(
+                model=model or config.MODEL,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    tools=[{"google_search": {}}],
+                    temperature=0.3,
+                ),
+            )
+            data = _rows(resp.text or "")
+            break
+        except Exception as e:  # noqa: BLE001
+            # 간헐적으로 빈 응답/산문만 오는 경우가 있어 재시도. 하루 한 번 도는 보조 경로라
+            # 조용히 0건이 되면 기능이 죽은 걸 눈치채기 어렵다 -> 실패해도 로그는 남긴다.
+            if attempt == MAX_RETRIES:
+                print(f"      [!] catch_missed_news 실패: {type(e).__name__}: {e}")
+                return []
+            time.sleep(BACKOFF_BASE**attempt)
+
+    items, unreachable = [], 0
+    for it in data or []:
+        title = _clean_str(it.get("title"))
+        raw_url = _clean_str(it.get("url"))
+        if not title or not raw_url:
+            continue
+        # grounding 은 불투명한 리다이렉트 주소를 주거나 URL 자체를 지어내기도 한다.
+        # 최종 주소로 풀고, 도달 안 되면 버린다(깨진 링크를 싣느니 빼는 게 낫다).
+        url = fetch.resolve_url(raw_url)
+        if not url:
+            unreachable += 1
+            continue
+        cat = it.get("category")
+        items.append({
+            "id": hashlib.sha1(url.encode("utf-8")).hexdigest()[:16],
+            "source_id": "gemini_grounding",
+            "source_name": _clean_str(it.get("source_name")) or "Google Search",
+            # enrich(_payload) 가 category/summary_raw 를 필수로 읽으므로 기본값을 반드시 채운다
+            "category": cat if cat in CATEGORY_LABELS else "tools_products",
+            "title": title,
+            "url": url,
+            "summary_raw": _clean_str(it.get("summary_raw")) or title,
+            "published": datetime.now(timezone.utc).isoformat(),
+            "cluster_sources": [],
+        })
+    if unreachable:
+        print(f"      [!] grounding URL {unreachable}건 도달 불가(404/환각) — 제외")
+    return items

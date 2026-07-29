@@ -619,6 +619,33 @@
   - **검증**: 크롤 13페이지 깨진 링크 0, 주간 헤드라인 정상(예: `2026-W24` "Anthropic Fable 5 pulled as
     OpenAI files for IPO" / $150M), 검색 인덱스 400건 파싱 확인(2023-W10~2026-W31).
     `--dry-run` 회귀 통과. 백필 전 `digest.db`/`output/` 은 스크래치패드에 백업.
+- 2026-07-29: **`catch_missed_news`(Gemini Grounding) 가 매번 400 으로 죽고 있던 것 수정**.
+  `d3afe61`("expanding news sources 1")에서 추가된 기능인데, 검증해보니 **한 번도 동작한 적이 없었음** —
+  `tools=[{"google_search": {}}]` 와 `response_mime_type="application/json"` 을 함께 주면 API 가
+  `400 Tool use with a response mime type: 'application/json' is unsupported` 로 거부한다.
+  try/except 로 감싸여 있어 파이프라인은 안 죽고 **조용히 빈 리스트만 반환**하고 있었음.
+  - `response_mime_type` 제거. JSON 강제를 못 쓰는 대신 프롬프트로 요구하고, 오늘 고친 `_parse` 가
+    앞뒤 산문·코드펜스를 걷어낸다(실측 5/5 파싱 성공. 응답이 ```json 펜스로 오는 경우가 절반).
+  - `_parse` 보강: 산문 안에 괄호가 있으면(`"(note: ...)"` 같은) 첫 시도가 실패하고 그대로 포기했음 →
+    아직 건진 문서가 없으면 한 글자씩 밀며 계속 훑도록 수정.
+  - **URL 검증 추가(`fetch.resolve_url`)**: grounding 이 주는 URL 이 두 가지로 망가져 있었음 —
+    (1) `vertexaisearch.cloud.google.com/grounding-api-redirect/...` 불투명 리다이렉트,
+    (2) **모델이 지어낸 404 URL**(실측으로 cbsnews.com 링크 하나가 404). 리다이렉트를 끝까지 따라가
+    최종 주소로 바꾸고, 도달 불가면 아이템을 버린다. id 해시도 최종 URL 기준이라 cross-day 안정.
+    HEAD 를 막는 사이트가 있어 GET(stream) 폴백.
+  - 재시도 3회 추가(간헐적 빈 응답 관측). 실패해도 예외 대신 로그+빈 리스트 — 보조 경로라 하루치를
+    통째로 날릴 이유가 없음.
+  - 방어 보강: `category` 가 유효값이 아니면 `tools_products` 로, `summary_raw` 없으면 title 로 채움
+    (`llm._payload` 가 두 키를 필수로 읽어서 없으면 `KeyError` 로 파이프라인이 죽음).
+  - **검증 10건**: `resolve_url` 4종(정상/404/없는 도메인/비-URL) + 실제 grounding 호출에서
+    리다이렉트 URL 0건·전 URL 도달 가능·`enrich` 통과. 실행 중 환각 URL 1건이 실제로 걸러짐.
+  - **함께 확인한 것**: `gnews_ai` 소스는 코드 문제 없음 — 로컬에서만 실패하는데 원인은 gnews 가
+    내부적으로 `feedparser.parse(url)` 을 써서 **python.org 파이썬의 CA 인증서 부재**에 걸리는 것
+    (`object has no attribute 'status'`). `SSL_CERT_FILE` 을 certifi 로 지정하니 25건 정상 수집.
+    CI(Linux)는 영향 없음. `trafilatura` 본문 추출도 정상(3000자).
+    ⚠️ 다만 gnews 키워드가 넓어(`Artificial Intelligence OR Large Language Models`) 노이즈가 많음
+    (예: "Academic Orthopaedic Surgeons Prefer Peer-Reviewed Guidelines"). 매일 25건을 LLM 에
+    태우는 비용 대비 효용은 며칠 관찰 후 재평가할 것.
 
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
