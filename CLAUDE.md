@@ -25,13 +25,14 @@ pip install -r requirements.txt          # torch 포함. 가벼운 건 requireme
 echo "GEMINI_API_KEY=..." > .env         # 개인 키 (aistudio.google.com). .env 는 .gitignore 처리, 채팅에 붙여넣지 말 것
 python pipeline.py --dry-run             # LLM 없이 수집/dedup (DB 미변경)
 python pipeline.py                       # 전체
-python pipeline.py --reset                # seen-store/히스토리 초기화 (digest.db 삭제)
+python pipeline.py --reset               # seen-store(cross-day dedup 기록)만 초기화, 아카이브 보존
 open output/index.html
 ```
 
 ## 지금 우선순위 (자세한 건 PROJECT_MEMO 섹션 9)
 - **P0**: ✅ 완료 — `--dry-run` 은 이제 `save_items`/`commit_seen`/`purge_old_seen`/`record_digest` 를 스킵(DB 미변경).
-  `--reset` 플래그로 seen-store/히스토리 초기화(`digest.db` 삭제) 가능. 오염됐던 기존 DB도 `--reset` 으로 초기화 완료.
+  `--reset` 플래그로 seen-store 초기화 가능(2026-07-29 부터 `seen` 테이블만 비움 — 아카이브 히스토리 보존.
+  DB 전체를 밀어야 하면 `rm digest.db`). 오염됐던 기존 DB도 초기화 완료.
 - **P1**: ~~arXiv cs.AI 0건~~ ✅ · ~~Anthropic/Meta no_feed~~ ✅ · ~~6개월 백필~~ ✅(`backfill.py`) ·
   ~~min-significance 컷~~ ✅ 0.25 로 반영(`sources.yaml settings.min_significance`) ·
   ~~dedup 임계값(0.83)~~ ✅ 검증 완료, 변경 없음(0.80은 오병합 확인됨) ·
@@ -41,7 +42,7 @@ open output/index.html
 ## 규칙 · 주의
 - 요약은 2~3문장 자기 말로. **단 숫자(벤치·파라미터·금액·%)는 원문 그대로 보존.**
 - signal > volume: 카테고리당 상한(기본 6). `community_takes` 는 v1 에서 OFF.
-- cross-day dedup 은 seen-store(최근 14일 임베딩) 기반. 백엔드 바꾸면 `digest.db` 초기화 필요.
+- cross-day dedup 은 seen-store(최근 14일 임베딩) 기반. 백엔드 바꾸면 `--reset` 으로 seen-store 초기화 필요.
 - `sources.yaml` 의 `status: verify` 는 첫 fetch 때 검증 필요. Mistral 만 아직 `no_feed`(v1.5 비활성이라 보류).
   Anthropic(sitemap 스크레이프)·Meta(Newsroom 태그 피드)는 대체 완료했지만 여전히 사이트 구조/피드
   변경에 죽을 수 있음 → source-health 배지로 계속 감시.

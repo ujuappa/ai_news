@@ -102,6 +102,14 @@ class Store:
         self.conn.execute("DELETE FROM seen WHERE first_seen < ?", (cutoff,))
         self.conn.commit()
 
+    def clear_seen(self) -> int:
+        """seen-store 전체 비우기 (지운 행 수 반환). items/digests/recaps 는 그대로 —
+        dedup 백엔드를 바꿔서 임베딩을 못 쓰게 됐을 때 아카이브를 잃지 않고 초기화하는 용도."""
+        n = self.conn.execute("SELECT COUNT(*) FROM seen").fetchone()[0]
+        self.conn.execute("DELETE FROM seen")
+        self.conn.commit()
+        return n
+
     # ---- items + digests ----
     def save_items(self, items: list[dict], digest_date: str):
         for it in items:

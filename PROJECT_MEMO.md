@@ -365,7 +365,8 @@
     안 걸려 있는 걸 발견 — git init 하면 바로 유출될 상태였음. 사용자가 파일 삭제함(키 재발급 필요).
     이번이 3번째 키 노출(1차 Anthropic, 2차 Gemini, 3차 이 파일) → 비밀값은 `.env` 만 쓰기로 한 규칙 유지.
 - **남은 리뷰 지적 사항(미수정, 사용자가 보류 선택)**: 27주 백필 아카이브가 `--reset` 으로 DB 에서 사라져
-  인덱스에서 접근 불가(HTML 파일은 `output/archive/` 에 그대로 있음) · `--dry-run` 이 `output/` 을
+  인덱스에서 접근 불가(HTML 파일은 `output/archive/` 에 그대로 있음 — 재발 원인은 2026-07-29 에 수정,
+  이미 잃은 데이터는 그대로) · `--dry-run` 이 `output/` 을
   플레이스홀더로 덮어씀(DB 는 안 건드림) · 카테고리 상한(6)에 밀린 항목도 `commit_seen` 되어 영구 누락 ·
   `render._annotate` 가 idempotent 하지 않아 카테고리 페이지 소스 표기가 `(+1 more) (+2 more)` 로 중복
   누적(현재는 멀티소스 클러스터가 없어서 안 보임) · ~~`llm.py` 가 `summary: null` 에 크래시하고 배치 하나
@@ -417,3 +418,13 @@
     ⚠️ dry-run 이 오늘 cron 이 만든 `output/` 을 1건짜리 렌더로 덮어써서 `git checkout -- output/` 로
     복원함 — 위 "남은 리뷰 지적 사항"의 dry-run 항목이 실제로 물린 사례. 커밋 전 `git status` 확인 필수.
   - `.gitignore`: `boncom-ai-skills-main/`(사내 자료), `.cursor/` 추가.
+- 2026-07-29: **`--reset` 을 "seen-store만 초기화"로 변경** (아카이브 히스토리 보존). 기존 `reset_db()` 는
+  `digest.db` 파일을 통째로 `unlink()` 해서 `seen` 뿐 아니라 `items`/`digests`/`recaps` 까지 날렸고,
+  실제로 그 때문에 27주 백필 아카이브가 인덱스에서 사라진 적이 있음(§"남은 리뷰 지적 사항"). dedup 백엔드를
+  바꿨을 때 필요한 건 임베딩 무효화뿐인데 대가가 너무 컸음. → `store.py` 에 `clear_seen()` 신설
+  (`DELETE FROM seen`, 지운 행 수 반환), `pipeline.reset_db()` 가 파일 삭제 대신 이걸 호출하고
+  "N건 삭제 / 아카이브 M건 보존" 을 출력. DB 전체를 밀어야 하는 경우는 `rm digest.db` 로 안내(별도 플래그는
+  안 만듦 — 쓸 일이 드물고 실수 여지만 늘어남). README/CLAUDE.md 의 `--reset` 설명도 갱신.
+  **검증**: 실제 DB 를 건드리지 않으려고 `digest.db` 사본에 `config.DB_PATH` 를 물려서 테스트 —
+  seen 146→0, `items`/`digests`/`recaps` 는 33/2/8 그대로 유지 확인. DB 파일이 없을 때 새로 만들지 않는 것,
+  두 번 호출해도 안전한 것(멱등)도 확인. 실제 `digest.db` 무변경 확인.

@@ -2,7 +2,7 @@
 
     python pipeline.py            # 정상 실행
     python pipeline.py --dry-run  # LLM 호출 없이 수집/dedup 까지만 (원문 발췌로 렌더, DB 미변경)
-    python pipeline.py --reset    # seen-store/히스토리 초기화 (digest.db 삭제)
+    python pipeline.py --reset    # seen-store(cross-day dedup 기록)만 초기화, 아카이브는 보존
 """
 from __future__ import annotations
 
@@ -140,12 +140,20 @@ def run(dry_run: bool = False):
 
 
 def reset_db():
-    """seen-store + 히스토리 전체 초기화 (DB 파일 삭제)."""
-    if config.DB_PATH.exists():
-        config.DB_PATH.unlink()
-        print(f"✅ {config.DB_PATH} 삭제 완료 — seen-store/히스토리 초기화됨")
-    else:
+    """seen-store 초기화 — cross-day dedup 기록만 비우고 아카이브 히스토리는 보존.
+
+    예전엔 digest.db 를 통째로 지웠는데 그러면 items/digests/recaps 까지 날아가서
+    과거 다이제스트가 아카이브 인덱스에서 사라졌음(백필 27주치를 그렇게 잃음).
+    DB 전체를 밀어야 하는 상황이면 `rm digest.db` 로 직접."""
+    if not config.DB_PATH.exists():
         print(f"{config.DB_PATH} 없음 — 이미 깨끗함")
+        return
+    store = Store(config.DB_PATH)
+    n = store.clear_seen()
+    kept = len(store.all_items())
+    store.close()
+    print(f"✅ seen-store 초기화 완료 — {n}건 삭제 (아카이브 {kept}건은 보존)")
+    print("   다음 실행에서 모든 아이템이 '신규'로 잡힘. DB 전체를 밀려면 rm digest.db")
 
 
 if __name__ == "__main__":
