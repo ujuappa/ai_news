@@ -523,7 +523,7 @@ git commit -m "feat(render): headline 우선 표시 + 원제목은 title 툴팁�
 - Consumes: nothing from earlier tasks.
 - Produces: `config.CategoryRule(max_items: int, min_significance: float)` and `config.Settings.rule_for(category: str) -> CategoryRule`. Tasks 6 and 7 call `rule_for`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/test_config_rules.py`:
 
@@ -550,12 +550,12 @@ def test_rule_for_unknown_category_falls_back_to_globals():
     assert rule.min_significance == cfg.settings.min_significance
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_config_rules.py -v`
 Expected: FAIL with `AttributeError: 'Settings' object has no attribute 'rule_for'`
 
-- [ ] **Step 3: Add the YAML block**
+- [x] **Step 3: Add the YAML block**
 
 In `sources.yaml`, inside `settings:` directly after the `max_item_age_days` comment block (before `dedup:`), add:
 
@@ -574,7 +574,7 @@ In `sources.yaml`, inside `settings:` directly after the `max_item_age_days` com
     policy_business: { max_items: 10, min_significance: 0.40 }
 ```
 
-- [ ] **Step 4: Add `CategoryRule` and `rule_for`**
+- [x] **Step 4: Add `CategoryRule` and `rule_for`**
 
 In `config.py`, add after the `Source` dataclass (line 44):
 
@@ -620,12 +620,12 @@ In `load()`, build the rules before constructing `Settings`:
 
 and pass `category_rules=rules,` as the last argument to the `Settings(...)` call.
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 16 passed
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add config.py sources.yaml tests/test_config_rules.py
