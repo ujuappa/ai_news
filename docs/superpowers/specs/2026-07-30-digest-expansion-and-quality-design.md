@@ -97,11 +97,13 @@ outlets overlap.
 - Suppressing recurring stories.
 - Re-backfilling the archive (separate, already-parked decision requiring `--purge-all`).
 - Reddit / YouTube / Substack expansion (parked in memo §11 Phase 2b).
+- A mobile rewrite — the site is already responsive; Phase 6 is polish and density only.
 
 ## Phases
 
-Ordered for visible wins first. The one hard dependency: **Phase 4 must follow Phase 3**, because
-source expansion is what creates the overlap condition Phase 3 defends against.
+Ordered for visible wins first. Two hard dependencies: **Phases 4 and 5 must follow Phase 3**,
+because source expansion is what creates the overlap condition Phase 3 defends against; and
+**Phase 6 runs last**, so the redesign is done against final content rather than being retrofitted.
 
 ### Phase 1 — `headline` field
 
@@ -184,6 +186,52 @@ Aimed at the starved beats rather than broad volume.
 **Verification:** dry-run shows each new source returning > 0 items; `tools_products` and
 `model_releases` counts rise; re-run the same-day cross-source duplicate scan and confirm nothing
 appears above 0.83.
+
+### Phase 5 — Generic source adapter, quarantine, user-supplied APIs
+
+Added 2026-07-30 after the design review: further sources will be supplied ad hoc, in a form not yet
+known, so **a new provider must be configuration rather than code**.
+
+- **Adapter registry:** replace the `if/elif` chain in `fetch.fetch_source_counted` with a
+  `PARSERS: dict[str, Callable]` registry keyed by the `parse:` value. Existing `easy`, `sitemap`,
+  and `gnews` modes register into it unchanged.
+- **Declarative JSON APIs:** a `parse: json_api` mode driven entirely by `sources.yaml` — endpoint
+  URL with `{key}`/`{query}` placeholders, an `api_key_env` naming the `.env` variable, and a
+  `field_map` giving the JSON paths for title, url, summary, published, and publisher. A new
+  provider becomes a YAML block, not a new function.
+- **Secrets:** every API key lives in `.env` locally and a GitHub Actions secret in CI, following
+  the existing `GEMINI_API_KEY` pattern. Keys are never committed and never pasted into chat.
+- **Quarantine:** a `quarantine: true` flag on a source. Quarantined sources fetch and enrich
+  normally and their items are stored, but they must clear a higher significance floor
+  (`settings.quarantine_min_significance`, default 0.60) to publish. This gives several days of
+  visible evidence in `drop_reason` before a source is trusted, which is exactly what was missing
+  when gnews shipped enabled and produced content-farm noise.
+
+**Verification:** register a throwaway `json_api` source against a public no-key endpoint, confirm
+items parse with correct dates and URLs; confirm a `quarantine: true` source with items below 0.60
+stores rows with `drop_reason='quarantine'` and publishes nothing.
+
+### Phase 6 — UI/UX
+
+Runs last, once every display field exists, so the design is done against final content. Two
+problems named in review: **visual polish** and **density/scanning**, the latter mattering more as
+the digest grows past 30 items.
+
+- **Prerequisite decomposition:** `render.py` is 1,046 lines holding every Jinja template and all
+  CSS as inline strings. Split into `templates/` (one file per page) and `static/digest.css` before
+  any visual work, so the redesign is not a merge into one enormous file. This is the "improve the
+  code you're working in" case, not unrelated refactoring.
+- **Design source:** the user produces the design in Claude Design and hands over exported CSS/HTML,
+  which is integrated manually. The DesignSync MCP used on 2026-07-27 is **not currently registered**
+  in this workspace, so the export path is the working one; re-enabling the MCP is optional.
+- **Must accommodate:** `headline`, the "Earlier: …" thread link, the "covered by N sources" badge,
+  and a 30+ item digest.
+
+Note the site is already responsive — 12 breakpoints and correct viewport meta — so this is a
+polish and information-density pass, not a mobile rescue.
+
+**Verification:** `rerender.py` reproduces every archived page under the new templates with no
+content diff other than the intended visual changes; spot-check one daily and one weekly page.
 
 ## Cost
 
