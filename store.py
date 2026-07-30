@@ -1,6 +1,7 @@
 """SQLite 저장소: 아이템 히스토리 + cross-day dedup 을 위한 seen-store."""
 from __future__ import annotations
 
+import json
 import re
 import sqlite3
 from datetime import date, datetime, timedelta, timezone
@@ -35,7 +36,9 @@ CREATE TABLE IF NOT EXISTS items (
     fetched_at   TEXT,
     digest_date  TEXT,               -- 어느 날짜 다이제스트에 실렸는지
     is_published INTEGER DEFAULT 1,  -- 1=다이제스트에 실림, 0=수집했지만 탈락
-    drop_reason  TEXT DEFAULT ''     -- is_published=0 일 때의 사유 (min_significance 등)
+    drop_reason  TEXT DEFAULT '',    -- is_published=0 일 때의 사유 (min_significance 등)
+    cluster_sources TEXT DEFAULT '[]',  -- 같은 스토리를 함께 다룬 소스 이름 (JSON 배열)
+    cluster_size    INTEGER DEFAULT 1   -- 클러스터 크기(대표 1 + 병합된 N)
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -75,6 +78,8 @@ _MIGRATIONS = [
     ("is_published", "ALTER TABLE items ADD COLUMN is_published INTEGER DEFAULT 1"),
     ("drop_reason", "ALTER TABLE items ADD COLUMN drop_reason TEXT DEFAULT ''"),
     ("headline", "ALTER TABLE items ADD COLUMN headline TEXT DEFAULT ''"),
+    ("cluster_sources", "ALTER TABLE items ADD COLUMN cluster_sources TEXT DEFAULT '[]'"),
+    ("cluster_size", "ALTER TABLE items ADD COLUMN cluster_size INTEGER DEFAULT 1"),
 ]
 
 
@@ -159,8 +164,9 @@ class Store:
             self.conn.execute(
                 """INSERT OR REPLACE INTO items
                    (id, source_id, category, title, headline, url, summary, significance,
-                    is_major, published, fetched_at, digest_date, is_published, drop_reason)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    is_major, published, fetched_at, digest_date, is_published, drop_reason,
+                    cluster_sources, cluster_size)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     it["id"], it["source_id"], it["category"], it["title"],
                     it.get("headline", ""), it["url"],
@@ -168,6 +174,8 @@ class Store:
                     int(it.get("is_major", False)), it.get("published", ""),
                     _now(), digest_date, int(is_published),
                     "" if is_published else drop_reason,
+                    json.dumps(it.get("cluster_sources") or [], ensure_ascii=False),
+                    int(it.get("cluster_size", 1) or 1),
                 ),
             )
         self.conn.commit()
@@ -192,23 +200,32 @@ class Store:
         return sorted((dict(r) for r in rows),
                       key=lambda r: label_sort_key(r["date"]), reverse=True)
 
+    @staticmethod
+    def _row_to_item(row) -> dict:
+        """DB 행 -> 파이프라인/렌더가 기대하는 dict. 읽기 API 세 곳이 같은 변환을 해야 해서
+        한 군데로 모음 — 예전엔 items_for_digest 만 cluster_sources 를 손봤고(그것도 []로
+        덮어썼음) all_items/dropped_items 는 원시 문자열을 그대로 흘려보냈다."""
+        it = dict(row)
+        it["is_major"] = bool(it.get("is_major", 0))
+        raw = it.get("cluster_sources")
+        try:
+            it["cluster_sources"] = json.loads(raw) if raw else []
+        except (json.JSONDecodeError, TypeError):
+            it["cluster_sources"] = []
+        it["cluster_size"] = int(it.get("cluster_size") or 1)
+        return it
+
     def items_for_digest(self, digest_date: str) -> list[dict]:
         """저장된 게재 아이템 재조회 (템플릿 변경 후 재렌더용). 탈락분(is_published=0)은 제외 —
-        재렌더가 원본 다이제스트와 달라지면 안 됨. source_name/cluster_sources 는 저장 안 되므로
+        재렌더가 원본 다이제스트와 달라지면 안 됨. source_name 은 저장하지 않으므로
         호출부에서 source_id -> 소스 이름 매핑을 채워줘야 함(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
-                      is_major, published FROM items
+                      is_major, published, cluster_sources, cluster_size FROM items
                WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
-        items = []
-        for r in rows:
-            it = dict(r)
-            it["is_major"] = bool(it["is_major"])
-            it["cluster_sources"] = []
-            items.append(it)
-        return items
+        return [self._row_to_item(r) for r in rows]
 
     def save_recap(self, digest_date: str, category: str, headline: str = "",
                    one_liner: str = "", stats_json: str = "{}"):
@@ -232,23 +249,25 @@ class Store:
         검색 결과에 뜨면 안 됨. source_name 매핑은 호출부 책임(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
-                      is_major, published, digest_date FROM items
+                      is_major, published, digest_date, cluster_sources, cluster_size FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()
-        return [dict(r) for r in rows]
+        return [self._row_to_item(r) for r in rows]
 
     def dropped_items(self, digest_date: str | None = None) -> list[dict]:
         """탈락분 조회 (사유 포함). 카테고리 상한/min_significance 튜닝할 때
         "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""
         sql = """SELECT id, source_id, category, title, headline, url, summary, significance,
-                        is_major, published, digest_date, drop_reason FROM items
+                        is_major, published, digest_date, drop_reason,
+                        cluster_sources, cluster_size FROM items
                  WHERE is_published=0"""
         params: tuple = ()
         if digest_date is not None:
             sql += " AND digest_date=?"
             params = (digest_date,)
-        return [dict(r) for r in self.conn.execute(sql + " ORDER BY significance DESC", params)]
+        return [self._row_to_item(r)
+                for r in self.conn.execute(sql + " ORDER BY significance DESC", params)]
 
     def close(self):
         self.conn.close()
