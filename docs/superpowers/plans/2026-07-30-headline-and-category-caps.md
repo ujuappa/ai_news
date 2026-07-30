@@ -748,7 +748,7 @@ git commit -m "feat(render): group_by_category 가 카테고리별 하한/상한
 - Consumes: `group_by_category(items, settings=...)` from Task 6, `Settings.rule_for` from Task 5.
 - Produces: `drop_reason` values now include `category_floor`. No later task depends on this.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/test_drop_reasons.py`:
 
@@ -789,12 +789,12 @@ def test_enrich_failure_wins():
     assert buckets["enrich_failed"][0]["id"] == "d"
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_drop_reasons.py -v`
 Expected: FAIL — `KeyError: 'category_floor'`, since the item currently lands in `category_cap`
 
-- [ ] **Step 3: Add the reason**
+- [x] **Step 3: Add the reason**
 
 In `pipeline.py` `_drop_reasons`, replace the classification chain (the `if/elif` block, lines 52-59) with:
 
@@ -813,7 +813,7 @@ In `pipeline.py` `_drop_reasons`, replace the classification chain (the `if/elif
 
 Update the docstring's reason order to `LLM 실패 > 전역 하한 > 카테고리 OFF > 카테고리 하한 > 카테고리 상한`.
 
-- [ ] **Step 4: Pass settings through the pipeline**
+- [x] **Step 4: Pass settings through the pipeline**
 
 In `pipeline.py`, replace the `groups = render.group_by_category(...)` line with:
 
@@ -864,18 +864,18 @@ and the category-page call at lines 141-146 with:
             )
 ```
 
-- [ ] **Step 4b: Confirm no caller still uses the old `cap=` argument**
+- [x] **Step 4b: Confirm no caller still uses the old `cap=` argument**
 
 Run: `rg -n 'group_by_category\(' --glob '*.py'`
 
 Expected: four call sites — `render.py` (the definition), `pipeline.py` and `backfill.py` passing `settings=settings`, and `rerender.py` passing nothing. No occurrence of `cap=` on a `group_by_category` call.
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 24 passed
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add pipeline.py rerender.py tests/test_drop_reasons.py
