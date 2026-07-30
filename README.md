@@ -30,6 +30,8 @@ pipeline.py    오케스트레이터 (엔트리포인트)
 python3.12 -m venv .venv && source .venv/bin/activate
 python -V                                # Python 3.12.x 확인
 pip install -r requirements.txt           # torch 포함(무거움). 줄이려면 아래 '확장 포인트' 의 가벼운 dedup 참고
+pip install -r requirements-dev.txt   # 테스트용 (pytest). 파이프라인 실행에는 불필요
+pytest                                 # 단위 테스트
 
 # 비밀값은 .env 에만 (gitignore 처리됨). 채팅/커밋에 붙여넣지 말 것.
 # 키는 aistudio.google.com 에서 발급 — 별도 터미널에서 직접 작성:

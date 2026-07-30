@@ -723,6 +723,24 @@
     임계값으로 풀 문제가 아니라 grounding 프롬프트에 1차 출처 선호를 넣거나 도메인 차단
     목록이 필요함. 다음 후보 작업.
 
+- 2026-07-30: **headline 필드 + 카테고리별 상한/하한** (스펙 Phase 1-2,
+  `docs/superpowers/specs/2026-07-30-digest-expansion-and-quality-design.md`).
+  - 제목: 게재 415건 중 42%가 60자 초과, 최대 150자인데 템플릿이 원제목을 그대로 찍어서
+    `.lead-title`(최대 62px)이 깨졌다. `:` 분리 같은 규칙은 21%밖에 못 고쳐서
+    (측정) `llm.enrich` 의 기존 JSON 스키마에 `headline` 을 추가 — 호출이 안 늘어서
+    비용은 출력 토큰 몇 개뿐. 렌더는 `_annotate` 가 정하는 `display_title` 하나만 보고,
+    원제목은 `title=` 툴팁으로 남는다. 아카이브 415건은 headline 이 비어 원제목으로 폴백.
+  - 캡: 전역 6 하나로는 안 맞았음. 07-30 풀 기준 research 는 후보 51건 중 29건이 0.40 에
+    몰린 일반 arXiv 였고, tools_products 는 후보가 2건뿐이라 캡이 아무 일도 안 한다.
+    `CategoryRule(max_items, min_significance)` 로 카테고리마다 따로 두고, 하한을 상한보다
+    먼저 적용(자리가 남는다고 약한 항목이 올라오면 안 됨). 설정에 없는 카테고리는 전역값 폴백.
+    research 하한은 0.60 이 아니라 0.55 — 0.60 이면 통과가 딱 6건이라 캡이 무의미해지고
+    점수가 조금만 내려가도 카테고리가 통째로 빈다. 0.55 면 10건이 남아 캡이 실제로 일한다.
+    결과: 19건 -> 22건 (policy_business 6->10, tools_products 2->1 은 0.25 짜리가 하한에 걸린 것).
+  - `category_floor` 탈락 사유 신설 — 전역 하한 미달(`min_significance`)과 구분해야
+    캡 튜닝 데이터가 해석 가능해진다.
+  - pytest 도입(`requirements-dev.txt`, `tests/`). CI 는 다이제스트 생성 전용이라 안 붙임.
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:
