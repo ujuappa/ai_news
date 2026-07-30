@@ -155,9 +155,22 @@ def _merge_row(it: dict, row: dict) -> None:
     it["_enriched"] = True
 
 
+def _thinking_config(model: str) -> types.ThinkingConfig:
+    """모델 계열에 맞는 thinking 설정.
+
+    Gemini 3 Pro 계열은 thinking_level 을 쓰고 budget=0 을 거부한다.
+    gemini-2.5-flash 는 thinking_level 자체를 거부한다(CI DIGEST_MODEL) — budget=0 으로
+    thinking 을 끈다. 3.1-flash-lite(백필)도 budget=0 이 검증된 경로."""
+    name = (model or "").lower()
+    if "gemini-3" in name and "pro" in name:
+        return types.ThinkingConfig(thinking_level=types.ThinkingLevel.HIGH)
+    return types.ThinkingConfig(thinking_budget=0)
+
+
 def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
     """배치 하나를 호출 + 파싱. 일시적 실패(레이트리밋/5xx/JSON 깨짐)는 지수 백오프로
     재시도하고, 마지막 시도까지 실패하면 그대로 raise (호출자가 배치 단위로 격리)."""
+    thinking = _thinking_config(model)
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             resp = client.models.generate_content(
@@ -166,8 +179,7 @@ def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM,
                     max_output_tokens=16000,
-                    # Gemini 3.1 Pro 는 thinking 끌 수 없음(budget=0 거부). thinking_level 로 깊이만 조절.
-                    thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.HIGH),
+                    thinking_config=thinking,
                     response_mime_type="application/json",
                 ),
             )
@@ -264,13 +276,14 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
         ],
         ensure_ascii=False,
     )
+    model_name = model or config.MODEL
     resp = client.models.generate_content(
-        model=model or config.MODEL,
+        model=model_name,
         contents=payload,
         config=types.GenerateContentConfig(
             system_instruction=RECAP_SYSTEM,
             max_output_tokens=8000,  # thinking 토큰이 출력 예산에 잡히므로 여유를 둠
-            thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.HIGH),
+            thinking_config=_thinking_config(model_name),
             response_mime_type="application/json",
         ),
     )
