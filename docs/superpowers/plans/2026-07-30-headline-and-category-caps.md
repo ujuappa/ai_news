@@ -250,7 +250,7 @@ git commit -m "feat(llm): 스키마에 headline 추가 — 긴 제목 표시용 
 - Consumes: items carrying `headline` from Task 2.
 - Produces: `items.headline` column; every read API returns a `headline` key (empty string for pre-existing rows). Task 4 depends on that key being present but possibly empty.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/test_store_headline.py`:
 
@@ -285,12 +285,12 @@ def test_headline_defaults_to_empty_when_absent(tmp_path):
     store.close()
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_store_headline.py -v`
 Expected: FAIL with `KeyError: 'headline'` or `sqlite3.OperationalError: no such column: headline`
 
-- [ ] **Step 3: Add the column to the schema and migrations**
+- [x] **Step 3: Add the column to the schema and migrations**
 
 In `store.py` `SCHEMA`, add a line to the `items` table after `title TEXT,`:
 
@@ -304,7 +304,7 @@ And append to `_MIGRATIONS` (after the `drop_reason` entry):
     ("headline", "ALTER TABLE items ADD COLUMN headline TEXT DEFAULT ''"),
 ```
 
-- [ ] **Step 4: Write and read the column**
+- [x] **Step 4: Write and read the column**
 
 In `save_items`, replace the `INSERT` statement and its parameter tuple with:
 
@@ -350,12 +350,12 @@ In `dropped_items`:
                  WHERE is_published=0"""
 ```
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 9 passed
 
-- [ ] **Step 6: Confirm the migration is safe on the real DB**
+- [x] **Step 6: Confirm the migration is safe on the real DB**
 
 Run:
 
@@ -373,7 +373,7 @@ s.close()
 
 Expected: counts unchanged from before (items 474), column present, all 474 rows empty — the migration adds the column without touching data.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add store.py tests/test_store_headline.py
