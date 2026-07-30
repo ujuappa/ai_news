@@ -13,6 +13,7 @@ llm.py         Gemini API: 분류/요약(2-3문장, 숫자 보존)/유의성/maj
 store.py       SQLite: 아이템 히스토리 + seen-store + 다이제스트 기록
 render.py      Jinja2 → index.html + 날짜별 아카이브 + 아카이브 인덱스
 pipeline.py    오케스트레이터 (엔트리포인트)
+backfill_embeddings.py  아카이브 임베딩 소급 생성 — threading 용, API 비용 0, 재실행 안전
 .github/workflows/daily.yml   매일 크론 실행 + 커밋
 ```
 
@@ -58,7 +59,9 @@ python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, 
 
 ## 설계 메모 (반영된 것)
 
-- **cross-day dedup**: `seen` 테이블에 최근 N일 임베딩 저장, 이미 다룬 스토리 스킵
+- **cross-day dedup**: `seen` 테이블에 최근 14일 임베딩을 저장해 이미 다룬 스토리를 스킵한다.
+  아카이브 threading 용 `item_emb` 는 별도 180일 창으로 보관하며, 이전 날짜의 같은 이야기만
+  “Earlier” 링크 후보로 삼는다.
 - **signal > volume**: 카테고리당 `max_items_per_category` 상한, 유의성 내림차순
 - **상단 major 플래그**: 프런티어 모델/대형 딜/정책 전환만 `is_major`
 - **숫자 보존**: 요약 시 벤치마크·파라미터·금액은 원문 그대로 (프롬프트에 명시)
