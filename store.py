@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS items (
     is_published INTEGER DEFAULT 1,  -- 1=다이제스트에 실림, 0=수집했지만 탈락
     drop_reason  TEXT DEFAULT '',    -- is_published=0 일 때의 사유 (min_significance 등)
     cluster_sources TEXT DEFAULT '[]',  -- 같은 스토리를 함께 다룬 소스 이름 (JSON 배열)
-    cluster_size    INTEGER DEFAULT 1   -- 클러스터 크기(대표 1 + 병합된 N)
+    cluster_size    INTEGER DEFAULT 1,  -- 클러스터 크기(대표 1 + 병합된 N)
+    thread_parent_id TEXT DEFAULT ''    -- 같은 스토리의 '앞 이야기' items.id (없으면 '')
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -86,6 +87,7 @@ _MIGRATIONS = [
     ("headline", "ALTER TABLE items ADD COLUMN headline TEXT DEFAULT ''"),
     ("cluster_sources", "ALTER TABLE items ADD COLUMN cluster_sources TEXT DEFAULT '[]'"),
     ("cluster_size", "ALTER TABLE items ADD COLUMN cluster_size INTEGER DEFAULT 1"),
+    ("thread_parent_id", "ALTER TABLE items ADD COLUMN thread_parent_id TEXT DEFAULT ''"),
 ]
 
 
@@ -220,8 +222,8 @@ class Store:
                 """INSERT OR REPLACE INTO items
                    (id, source_id, category, title, headline, url, summary, significance,
                     is_major, published, fetched_at, digest_date, is_published, drop_reason,
-                    cluster_sources, cluster_size)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    cluster_sources, cluster_size, thread_parent_id)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     it["id"], it["source_id"], it["category"], it["title"],
                     it.get("headline", ""), it["url"],
@@ -231,6 +233,7 @@ class Store:
                     "" if is_published else drop_reason,
                     json.dumps(it.get("cluster_sources") or [], ensure_ascii=False),
                     int(it.get("cluster_size", 1) or 1),
+                    it.get("thread_parent_id") or "",
                 ),
             )
         self.conn.commit()
@@ -276,8 +279,8 @@ class Store:
         호출부에서 source_id -> 소스 이름 매핑을 채워줘야 함(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
-                      is_major, published, cluster_sources, cluster_size FROM items
-               WHERE digest_date=? AND is_published=1""",
+                      is_major, published, cluster_sources, cluster_size, thread_parent_id
+               FROM items WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
         return [self._row_to_item(r) for r in rows]
@@ -304,7 +307,8 @@ class Store:
         검색 결과에 뜨면 안 됨. source_name 매핑은 호출부 책임(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
-                      is_major, published, digest_date, cluster_sources, cluster_size FROM items
+                      is_major, published, digest_date, cluster_sources, cluster_size,
+                      thread_parent_id FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()
@@ -323,6 +327,25 @@ class Store:
             params = (digest_date,)
         return [self._row_to_item(r)
                 for r in self.conn.execute(sql + " ORDER BY significance DESC", params)]
+
+    def thread_parent_info(self, ids: list[str]) -> dict[str, dict]:
+        """thread_parent_id -> {"display", "date"} 매핑.
+
+        렌더가 'Earlier: {제목} ({날짜})' 를 그리려면 부모의 표시 제목과 실린 날짜가 필요한데,
+        부모는 보통 몇 달 전 다이제스트라 현재 렌더 중인 groups 안에 없다. 그래서 DB 조회."""
+        ids = [i for i in dict.fromkeys(ids) if i]
+        if not ids:
+            return {}
+        rows = self.conn.execute(
+            f"""SELECT id, headline, title, digest_date FROM items
+                WHERE id IN ({','.join('?' * len(ids))})""",
+            ids,
+        ).fetchall()
+        return {
+            r["id"]: {"display": (r["headline"] or "").strip() or r["title"],
+                      "date": r["digest_date"]}
+            for r in rows
+        }
 
     def close(self):
         self.conn.close()
