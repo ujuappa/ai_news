@@ -109,6 +109,31 @@ def _grounding_items(clustered: list[dict], store: Store, settings) -> list[dict
         return []
 
 
+def _thread_parents(flat: list[dict], store: Store, today: str, settings) -> int:
+    """게재분에 '앞 이야기'를 연결하고 연결 건수를 반환.
+
+    후보를 이전 날짜로만 좁히는 게 오연결 방지의 핵심이다. 2026-07-30 의 Gemini Robotics 2 와
+    Gemini Robotics ER 2 는 cos 0.824 로 구간 안이지만 한 발표에서 나온 다른 모델이라 이어지면
+    안 되는데, 같은 날이라 애초에 후보에 안 들어온다.
+
+    이번 실행분(_emb 가 있는 것)만 대상. DB 에서 읽어온 항목은 저장된 thread_parent_id 를
+    그대로 들고 와 다시 저장되므로 덮어써지지 않는다 — 같은 날 두 번 돌려도 안전."""
+    earlier = store.embeddings_before(today)
+    if not earlier:
+        return 0
+    linked = 0
+    for it in flat:
+        emb = it.get("_emb")
+        if emb is None or it.get("thread_parent_id"):
+            continue
+        parent = dedup.find_thread_parent(
+            emb, earlier, settings.thread_min_similarity, settings.thread_max_similarity)
+        if parent:
+            it["thread_parent_id"] = parent["id"]
+            linked += 1
+    return linked
+
+
 def _health_warnings(health: dict[str, tuple[int, int]], sources) -> list[str]:
     """피드 자체가 안 잡히는 소스만 경고(raw==0 — 죽었거나 파싱 실패).
 
@@ -171,6 +196,9 @@ def run(dry_run: bool = False):
     if buckets:
         print("      탈락 " + ", ".join(f"{r} {len(v)}건" for r, v in sorted(buckets.items())))
     if not dry_run:
+        linked = _thread_parents(flat, store, today, settings)
+        if linked:
+            print(f"      앞 이야기 연결 {linked}건")
         store.save_items(flat, today)
         for reason, items in buckets.items():
             store.save_items(items, today, is_published=False, drop_reason=reason)
@@ -191,6 +219,12 @@ def run(dry_run: bool = False):
         store.unsee([it["id"] for r, items in buckets.items()
                      if r != "min_significance" for it in items])
         store.purge_old_seen(settings.seen_store_retention_days)
+        # 임베딩은 seen 과 다른 창(180일)으로 따로 관리 — threading 이 몇 달 전까지 닿아야 함.
+        # `_emb` 가 있는 것만 저장되므로 DB 풀에서 올라온 항목(오전에 캡 드롭됐다가 오후에
+        # 게재된 경우 등)은 빠질 수 있다. 치명적이지 않고 backfill_embeddings.py 를 다시
+        # 돌리면 메워지므로, 여기서 임베딩을 새로 계산하지는 않는다(모델 로드 비용).
+        store.save_embeddings(flat, today)
+        store.purge_old_embeddings(settings.embedding_retention_days)
 
     recap = {"headline": "", "dollar_committed": None, "category_one_liners": {}}
     if not dry_run and flat:

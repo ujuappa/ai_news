@@ -55,6 +55,13 @@ settings:
                                      # cos 0.8116 이라 0.83 을 통과해 중복 게재됨.
     cross_day: true
     seen_store_retention_days: 14
+    thread_min: 0.75                 # [thread_min, thread_max) = "관련 있지만 중복은 아님".
+    thread_max: 0.83                 # 상한을 threshold 와 같게 두는 게 핵심 — 그 위는 중복이라
+                                     # 이어붙일 게 아니라 합쳐야 한다. 2026-07-30 측정에서
+                                     # 이 구간에 든 64쌍은 대부분 후속편이었다
+                                     # (Sonnet 4.5->4.6 0.844 는 구간 위, Series G->H 0.829 는 안).
+    embedding_retention_days: 180    # seen(14일)과 별개 창. Series G(W07) -> Series H(W22) 처럼
+                                     # 몇 달 걸쳐 이어지는 스토리를 잡으려면 이만큼 필요.
 
   ranking_rubric:
     - frontier_model_release

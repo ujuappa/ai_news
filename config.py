@@ -65,6 +65,9 @@ class Settings:
     grounding_dedup_threshold: float = 0.78   # grounding 전용(더 엄격한 신규성 기준)
     dedup_cross_day: bool = True
     seen_store_retention_days: int = 14
+    thread_min_similarity: float = 0.75       # 이 아래는 남남
+    thread_max_similarity: float = 0.83       # 이 위는 중복(=dedup 이 합칠 것)
+    embedding_retention_days: int = 180
     ranking_rubric: list[str] = field(default_factory=list)
     category_rules: dict[str, CategoryRule] = field(default_factory=dict)
 
@@ -107,6 +110,9 @@ def load(path: Path = SOURCES_FILE) -> Config:
         grounding_dedup_threshold=dedup.get("grounding_threshold", 0.78),
         dedup_cross_day=dedup.get("cross_day", True),
         seen_store_retention_days=dedup.get("seen_store_retention_days", 14),
+        thread_min_similarity=dedup.get("thread_min", 0.75),
+        thread_max_similarity=dedup.get("thread_max", 0.83),
+        embedding_retention_days=dedup.get("embedding_retention_days", 180),
         ranking_rubric=s.get("ranking_rubric", []),
         category_rules=rules,
     )
