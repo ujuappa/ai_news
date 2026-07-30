@@ -15,6 +15,7 @@ PAIRS_IN_BAND = [("Series G -> Series H", "d7d47956", "a3d8c6fa", 0.8286)]
 # 이 테스트는 그 결정을 고정하는 회귀 가드다 — 나중에 누가 thread_max 를 올리면 여기서 깨진다.
 PAIRS_ABOVE_BAND = [("Sonnet 4.5 -> Sonnet 4.6", "1ccc22f7", "45f898f6", 0.8445)]
 SAME_DAY = ("7909c613", "06b8d0ad")
+SAME_DAY_MEASURED = 0.8238
 
 
 @pytest.fixture(scope="module")
@@ -29,8 +30,15 @@ def live():
         pytest.skip("item_emb 비어 있음 — backfill_embeddings.py 를 먼저 실행할 것")
     meta = {r["id"]: r["digest_date"]
             for r in store.conn.execute("SELECT id, digest_date FROM items")}
+    full = {}
+    for item_id in meta:
+        prefix = item_id[:8]
+        if prefix in full:
+            store.close()
+            pytest.fail(f"id prefix 충돌: {prefix}: {full[prefix]} / {item_id}")
+        full[prefix] = item_id
     yield {"embs": embs, "meta": meta,
-           "full": {i[:8]: i for i in meta},
+           "full": full,
            "settings": config.load().settings}
     store.close()
 
@@ -39,10 +47,10 @@ def _pair(live, a, b):
     ids = live["full"]
     for short in (a, b):
         if short not in ids:
-            pytest.skip(f"{short} 아이템이 DB 에 없음")
-    va, vb = live["embs"].get(ids[a]), live["embs"].get(ids[b])
-    if va is None or vb is None:
-        pytest.skip("임베딩 없음")
+            pytest.fail(f"id prefix {short} 아이템이 DB 에 없음")
+        if ids[short] not in live["embs"]:
+            pytest.fail(f"id prefix {short} 아이템의 임베딩이 없음")
+    va, vb = live["embs"][ids[a]], live["embs"][ids[b]]
     return float(np.dot(va, vb)), ids[a], ids[b]
 
 
@@ -50,6 +58,9 @@ def _pair(live, a, b):
 def test_in_band_pairs_land_in_the_threading_band(live, name, a, b, measured):
     s = live["settings"]
     sim, _ia, _ib = _pair(live, a, b)
+    assert abs(sim - measured) < 0.005, (
+        f"{name}: cos={sim:.4f} 가 기록된 실측 {measured} 에서 벗어남 — 임베딩 입력이나 "
+        f"모델이 바뀌었을 수 있다. 원인을 확인하고 값을 갱신할 것")
     assert s.thread_min_similarity <= sim < s.thread_max_similarity, (
         f"{name}: cos={sim:.4f} 가 [{s.thread_min_similarity}, "
         f"{s.thread_max_similarity}) 밖 (2026-07-30 실측 {measured})")
@@ -79,6 +90,9 @@ def test_above_band_pairs_are_not_threaded(live, name, a, b, measured):
     의도된 동작 — 누가 구간을 넓히면 이 테스트가 깨지면서 결정을 다시 보게 만든다."""
     s = live["settings"]
     sim, ida, idb = _pair(live, a, b)
+    assert abs(sim - measured) < 0.005, (
+        f"{name}: cos={sim:.4f} 가 기록된 실측 {measured} 에서 벗어남 — 임베딩 입력이나 "
+        f"모델이 바뀌었을 수 있다. 원인을 확인하고 값을 갱신할 것")
     assert sim >= s.thread_max_similarity, (
         f"{name}: cos={sim:.4f} 가 상한 {s.thread_max_similarity} 아래로 내려옴 "
         f"(2026-07-30 실측 {measured}) — 이제 연결 가능하니 결정을 재검토할 것")
@@ -96,6 +110,14 @@ def test_same_day_siblings_are_never_linked(live):
     a, b = SAME_DAY
     sim, ida, idb = _pair(live, a, b)
     assert live["meta"][ida] == live["meta"][idb], "같은 날 항목이어야 이 테스트가 의미 있음"
+    s = live["settings"]
+    # 이 검증이 없으면 cos 가 밴드 밖으로 내려가도 후보 제외만 통과하는 tautology 가 된다.
+    assert s.thread_min_similarity <= sim < s.thread_max_similarity, (
+        f"same-day Gemini: cos={sim:.4f} 가 [{s.thread_min_similarity}, "
+        f"{s.thread_max_similarity}) 밖")
+    assert abs(sim - SAME_DAY_MEASURED) < 0.005, (
+        f"same-day Gemini: cos={sim:.4f} 가 기록된 실측 {SAME_DAY_MEASURED} 에서 벗어남 — "
+        f"임베딩 입력이나 모델이 바뀌었을 수 있다. 원인을 확인하고 값을 갱신할 것")
     store = Store(config.DB_PATH)
     cand_ids = {c["id"] for c in store.embeddings_before(live["meta"][idb])}
     store.close()
