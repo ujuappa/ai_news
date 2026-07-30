@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS items (
     source_id    TEXT,
     category     TEXT,
     title        TEXT,
+    headline     TEXT DEFAULT '',    -- 표시용 짧은 제목 (LLM 생성). 비면 title 로 폴백
     url          TEXT,
     summary      TEXT,               -- LLM 요약 (없으면 원문 발췌)
     significance REAL DEFAULT 0,
@@ -73,6 +74,7 @@ def _now() -> str:
 _MIGRATIONS = [
     ("is_published", "ALTER TABLE items ADD COLUMN is_published INTEGER DEFAULT 1"),
     ("drop_reason", "ALTER TABLE items ADD COLUMN drop_reason TEXT DEFAULT ''"),
+    ("headline", "ALTER TABLE items ADD COLUMN headline TEXT DEFAULT ''"),
 ]
 
 
@@ -156,11 +158,12 @@ class Store:
         for it in items:
             self.conn.execute(
                 """INSERT OR REPLACE INTO items
-                   (id, source_id, category, title, url, summary, significance,
+                   (id, source_id, category, title, headline, url, summary, significance,
                     is_major, published, fetched_at, digest_date, is_published, drop_reason)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
-                    it["id"], it["source_id"], it["category"], it["title"], it["url"],
+                    it["id"], it["source_id"], it["category"], it["title"],
+                    it.get("headline", ""), it["url"],
                     it.get("summary", ""), it.get("significance", 0.0),
                     int(it.get("is_major", False)), it.get("published", ""),
                     _now(), digest_date, int(is_published),
@@ -194,7 +197,7 @@ class Store:
         재렌더가 원본 다이제스트와 달라지면 안 됨. source_name/cluster_sources 는 저장 안 되므로
         호출부에서 source_id -> 소스 이름 매핑을 채워줘야 함(config.py 참고)."""
         rows = self.conn.execute(
-            """SELECT id, source_id, category, title, url, summary, significance,
+            """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published FROM items
                WHERE digest_date=? AND is_published=1""",
             (digest_date,),
@@ -228,7 +231,7 @@ class Store:
         """검색 인덱스용: 게재된 전체 아이템 (최신순). 탈락분은 제외 — 사이트에 없는 글이
         검색 결과에 뜨면 안 됨. source_name 매핑은 호출부 책임(config.py 참고)."""
         rows = self.conn.execute(
-            """SELECT id, source_id, category, title, url, summary, significance,
+            """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, digest_date FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
@@ -238,7 +241,7 @@ class Store:
     def dropped_items(self, digest_date: str | None = None) -> list[dict]:
         """탈락분 조회 (사유 포함). 카테고리 상한/min_significance 튜닝할 때
         "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""
-        sql = """SELECT id, source_id, category, title, url, summary, significance,
+        sql = """SELECT id, source_id, category, title, headline, url, summary, significance,
                         is_major, published, digest_date, drop_reason FROM items
                  WHERE is_published=0"""
         params: tuple = ()
