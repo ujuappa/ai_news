@@ -49,6 +49,12 @@ CREATE TABLE IF NOT EXISTS seen (
     first_seen TEXT
 );
 
+CREATE TABLE IF NOT EXISTS item_emb (
+    id          TEXT PRIMARY KEY,   -- items.id 와 동일
+    embedding   BLOB,               -- float32 벡터
+    digest_date TEXT                -- 일간 'YYYY-MM-DD' 또는 주간 'YYYY-Www'
+);
+
 CREATE TABLE IF NOT EXISTS digests (
     date        TEXT PRIMARY KEY,
     item_count  INTEGER,
@@ -132,7 +138,7 @@ class Store:
         """테이블별 행 수 — 파괴적 작업 전에 "뭘 잃는지" 보여주는 용도."""
         return {
             t: self.conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-            for t in ("seen", "items", "digests", "recaps")
+            for t in ("seen", "items", "digests", "recaps", "item_emb")
         }
 
     def unsee(self, ids: list[str]) -> int:
@@ -153,6 +159,55 @@ class Store:
         self.conn.execute("DELETE FROM seen")
         self.conn.commit()
         return n
+
+    # ---- item_emb (장기 임베딩 — story threading 용) ----
+    def save_embeddings(self, items: list[dict], digest_date: str):
+        """게재분의 임베딩을 장기 보관. seen-store 와 따로 두는 이유는 보존 기간이 달라서다 —
+        seen 은 14일이면 충분하지만(며칠 전 기사 재게재 방지), threading 은 몇 달 전과 이어야
+        한다(Series G W07 -> Series H W22). 한 테이블에 합치면 둘 중 하나가 반드시 손해."""
+        for it in items:
+            emb = it.get("_emb")
+            if emb is None:
+                continue
+            self.conn.execute(
+                "INSERT OR REPLACE INTO item_emb (id, embedding, digest_date) VALUES (?,?,?)",
+                (it["id"], np.asarray(emb, dtype=np.float32).tobytes(), digest_date),
+            )
+        self.conn.commit()
+
+    def embeddings_before(self, digest_date: str) -> list[dict]:
+        """주어진 라벨보다 **이전** 다이제스트의 임베딩만 반환.
+
+        같은 날을 빼는 게 오연결 방지의 핵심 — 2026-07-30 의 Gemini Robotics 2 와
+        Gemini Robotics ER 2 는 cos 0.824 로 threading 구간에 들어오지만 한 발표에서 나온
+        서로 다른 모델이라 이어붙이면 안 된다.
+
+        비교를 SQL 이 아니라 파이썬에서 하는 이유: digest_date 에 주간 라벨('2026-W07')이
+        섞여 있어 문자열 비교로는 시간순이 안 나온다(label_sort_key 주석 참고)."""
+        key = label_sort_key(digest_date)
+        out = []
+        for r in self.conn.execute("SELECT id, embedding, digest_date FROM item_emb"):
+            if not r["embedding"] or label_sort_key(r["digest_date"]) >= key:
+                continue
+            out.append({
+                "id": r["id"],
+                "embedding": np.frombuffer(r["embedding"], dtype=np.float32),
+                "digest_date": r["digest_date"],
+            })
+        return out
+
+    def purge_old_embeddings(self, retention_days: int) -> int:
+        """보존 기간 지난 임베딩 삭제 (지운 행 수 반환). purge_old_seen 과 분리된 함수인 건
+        의도적 — 두 보존 창(180일 / 14일)이 서로를 자르지 않아야 한다."""
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=retention_days)).date().isoformat()
+        stale = [r["id"] for r in self.conn.execute("SELECT id, digest_date FROM item_emb")
+                 if label_sort_key(r["digest_date"]) < cutoff]
+        for i in range(0, len(stale), 500):   # SQLite 변수 상한(999) 회피
+            chunk = stale[i:i + 500]
+            self.conn.execute(
+                f"DELETE FROM item_emb WHERE id IN ({','.join('?' * len(chunk))})", chunk)
+        self.conn.commit()
+        return len(stale)
 
     # ---- items + digests ----
     def save_items(self, items: list[dict], digest_date: str,

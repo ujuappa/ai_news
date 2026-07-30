@@ -261,7 +261,9 @@ def purge_all(assume_yes: bool = False):
     c = store.counts()
     store.close()
     print(f"⚠️ {config.DB_PATH} 전체 삭제 — seen {c['seen']} / items {c['items']} / "
-          f"digests {c['digests']} / recaps {c['recaps']} 전부 사라짐 (복구 불가).")
+          f"digests {c['digests']} / recaps {c['recaps']} / item_emb {c['item_emb']} "
+          f"전부 사라짐 (복구 불가).")
+    print("   item_emb 는 backfill_embeddings.py 로 재생성 가능(API 비용 0).")
     print(f"   output/ 의 HTML 은 남지만 아카이브 인덱스에서는 빠짐. "
           f"dedup 기록만 지우려면 --reset.")
     if not assume_yes and input("   정말 삭제하려면 'yes' 입력: ").strip() != "yes":
