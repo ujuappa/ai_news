@@ -92,12 +92,16 @@ _MIGRATIONS = [
 
 
 class Store:
-    def __init__(self, path: Path):
-        self.conn = sqlite3.connect(path)
+    def __init__(self, path: Path, read_only: bool = False):
+        self.conn = sqlite3.connect(
+            f"file:{path.resolve()}?mode=ro" if read_only else path,
+            uri=read_only,
+        )
         self.conn.row_factory = sqlite3.Row
-        self.conn.executescript(SCHEMA)
-        self._migrate()
-        self.conn.commit()
+        if not read_only:
+            self.conn.executescript(SCHEMA)
+            self._migrate()
+            self.conn.commit()
 
     def _migrate(self):
         """기존 DB 에 없는 컬럼만 추가. 여러 번 호출해도 안전(멱등) — 매 Store() 마다 돈다.

@@ -12,21 +12,29 @@ threading 구간을 튜닝할 땐 이 비대칭을 감안할 것(측정값은 PR
 """
 from __future__ import annotations
 
+from datetime import date, timedelta
+
 import config
 import dedup
-from store import Store
+from store import Store, label_sort_key
 
 
 def run():
     store = Store(config.DB_PATH)
     have = {r["id"] for r in store.conn.execute("SELECT id FROM item_emb")}
-    todo = [it for it in store.all_items() if it["id"] not in have]
+    retention_days = config.load().settings.embedding_retention_days
+    cutoff = date.today() - timedelta(days=retention_days)
+    items = store.all_items()
+    old_ids = {it["id"] for it in items
+               if date.fromisoformat(label_sort_key(it["digest_date"])) < cutoff}
+    todo = [it for it in items if it["id"] not in have and it["id"] not in old_ids]
     if not todo:
-        print(f"이미 전부 채워짐 — item_emb {len(have)}건")
+        print(f"이미 전부 채워짐 — item_emb {len(have)}건 (보존 기간 밖 {len(old_ids)}건 건너뜀)")
         store.close()
         return
 
-    print(f"{len(todo)}건 임베딩 생성 (기존 {len(have)}건 건너뜀) — 로컬 모델, API 비용 없음")
+    print(f"{len(todo)}건 임베딩 생성 (기존 {len(have)}건, 보존 기간 밖 {len(old_ids)}건 건너뜀)"
+          " — 로컬 모델, API 비용 없음")
     embs = dedup.embed([f"{it['title']}. {it.get('summary') or ''}" for it in todo])
     for it, e in zip(todo, embs, strict=True):
         it["_emb"] = e
