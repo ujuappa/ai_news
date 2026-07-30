@@ -221,11 +221,6 @@
 ---
 
 ## 변경 로그
-- 2026-07-30: **스토리 threading 완성 + 실데이터 회귀 검증**. 같은 사건의 후속 보도를 중복으로 버리지 않고 이전 장으로 연결하되, 중복 판정선은 넘지 않게 분리했다.
-  - `items` 에 클러스터 출처를 담는 `cluster_sources`(JSON), 묶인 원문 수 `cluster_size`, 이전 장 id `thread_parent_id` 세 컬럼을 추가했다. `thread_parent_id` 는 렌더에서 “Earlier: …” 링크의 근거다.
-  - `item_emb(id, embedding, digest_date)` 테이블은 아카이브 항목 임베딩을 **180일** 보관한다. 일간 cross-day dedup 용 `seen` 의 **14일** 창과 독립이며, `purge_old_embeddings()` 가 180일 경과분을 정리한다. `backfill_embeddings.py` 는 기존 아카이브에 이를 소급 생성하는 재실행 안전·API 비용 0 스크립트다. 임베딩 입력은 라이브 저장 경로와 맞추기 위해 `title. summary` 를 쓰지만, 백필 원문에는 정제 요약이 없으므로 `title. summary_raw` 를 쓴다는 비대칭을 의도적으로 수용했다.
-  - threading 후보는 현재 항목보다 **이전 날짜**인 것만 대상으로 하고 `[0.75, 0.83)` 유사도 밴드에 들어온 경우에만 연결한다. 실DB 검증에서 Anthropic Series G→H 는 cosine **0.82860172**로 밴드 안이라 연결됐고, Sonnet 4.5→4.6 은 **0.84447765**로 상한 밖이라 연결하지 않았다. 후자도 사람이 보기에는 후속 릴리스지만 상한을 넓히면 진짜 중복이 “Earlier”로 연결된다. 따라서 main dedup 임계값은 **0.83**, grounding 신규성 임계값은 **0.78** 그대로 유지하며 밴드를 넓히지 않는다.
-  - 같은 날 Gemini Robotics 2 / Gemini Robotics ER 2 는 cosine **0.82381856**로 밴드 안이지만 서로 다른 단일 출시의 모델이다. `embeddings_before()` 의 날짜-엄격 후보 선택이 같은 날짜를 제외하므로 후보가 되지 않으며, 이것이 same-day sibling announcement를 보호한다. 라이브 DB 회귀 테스트 4건(밴드 확인·부모 선택·상한 밖 비연결·동일일 제외)을 모두 PASSED로 고정했다.
 - 2026-07-25: 스코프 확정(완전자동/웹), 아키텍처·rubric·v1 소스 결정. config 초안 + 이 메모 생성.
 - 2026-07-25: 피드 URL 전수 검증. DeepMind URL 수정, Meta/Mistral no_feed 확정, 나머지 verified 승격.
 - 2026-07-25: v1 파이프라인 스켈레톤 완성(8개 모듈+워크플로+README). 합성데이터로 렌더/랭킹 검증.
@@ -745,6 +740,11 @@
   - `category_floor` 탈락 사유 신설 — 전역 하한 미달(`min_significance`)과 구분해야
     캡 튜닝 데이터가 해석 가능해진다.
   - pytest 도입(`requirements-dev.txt`, `tests/`). CI 는 다이제스트 생성 전용이라 안 붙임.
+- 2026-07-30: **스토리 threading 완성 + 실데이터 회귀 검증**. 같은 사건의 후속 보도를 중복으로 버리지 않고 이전 장으로 연결하되, 중복 판정선은 넘지 않게 분리했다.
+  - `items` 에 클러스터 출처를 담는 `cluster_sources`(JSON), 묶인 원문 수 `cluster_size`, 이전 장 id `thread_parent_id` 세 컬럼을 추가했다. `thread_parent_id` 는 렌더에서 “Earlier: …” 링크의 근거다.
+  - `item_emb(id, embedding, digest_date)` 테이블은 아카이브 항목 임베딩을 **180일** 보관한다. 일간 cross-day dedup 용 `seen` 의 **14일** 창과 독립이며, `purge_old_embeddings()` 가 180일 경과분을 정리한다. `backfill_embeddings.py` 는 기존 아카이브에 이를 소급 생성하는 재실행 안전·API 비용 0 스크립트다. 임베딩 입력은 라이브 경로에서는 `title. summary_raw`(원문 발췌)를 쓰고, 아카이브에는 원문이 남아 있지 않아 백필에서는 `title. summary`(LLM 요약)를 쓴다. 둘 다 제목이 지배적이라 실무상 드리프트는 작지만 실제로 존재하므로, 이를 수용하되 측정 cosine을 함께 기록한다.
+  - threading 후보는 현재 항목보다 **이전 날짜**인 것만 대상으로 하고 `[0.75, 0.83)` 유사도 밴드에 들어온 경우에만 연결한다. 실DB 검증에서 Anthropic Series G→H 는 cosine **0.82860172**로 밴드 안이라 연결됐고, Sonnet 4.5→4.6 은 **0.84447765**로 상한 밖이라 연결하지 않았다. 후자도 사람이 보기에는 후속 릴리스지만 상한을 넓히면 진짜 중복이 “Earlier”로 연결된다. 따라서 main dedup 임계값은 **0.83**, grounding 신규성 임계값은 **0.78** 그대로 유지하며 밴드를 넓히지 않는다.
+  - 같은 날 Gemini Robotics 2 / Gemini Robotics ER 2 는 cosine **0.82381856**로 밴드 안이지만 서로 다른 단일 출시의 모델이다. `embeddings_before()` 의 날짜-엄격 후보 선택이 같은 날짜를 제외하므로 후보가 되지 않으며, 이것이 same-day sibling announcement를 보호한다. 라이브 DB 회귀 테스트 4건(밴드 확인·부모 선택·상한 밖 비연결·동일일 제외)을 모두 PASSED로 고정했다.
 
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
