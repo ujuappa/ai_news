@@ -58,10 +58,11 @@ def run():
 
         for cat, cat_items in groups:
             one_liner = recaps.get(cat, {}).get("one_liner", "")
+            rule = settings.rule_for(cat)
             render.render_category_page(
                 label, cat, groups, config.OUTPUT_DIR, in_archive=not is_today,
-                one_liner=one_liner, cap=settings.max_items_per_category,
-                min_sig=settings.min_significance, total_records=total_records,
+                one_liner=one_liner, cap=rule.max_items,
+                min_sig=rule.min_significance, total_records=total_records,
             )
         print(f"  {label}: {len(items)} items")
 

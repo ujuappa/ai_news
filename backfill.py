@@ -123,7 +123,7 @@ def run(months: int = 6):
         week_items = buckets[label]
         enriched = llm.enrich(week_items, model=BACKFILL_MODEL)
         ranked_pool = [it for it in enriched if it["significance"] >= settings.min_significance]
-        groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
+        groups = render.group_by_category(ranked_pool, settings=settings)
 
         flat = [it for _c, items in groups for it in items]
         store.save_items(flat, label)  # seen-store 는 건드리지 않음 (commit_seen 호출 안 함)
@@ -138,10 +138,11 @@ def run(months: int = 6):
         render.render_archive_digest(label, groups, config.OUTPUT_DIR,
                                       recap=recap, total_records=approx_total_records)
         for cat, cat_items in groups:
+            rule = settings.rule_for(cat)
             render.render_category_page(
                 label, cat, groups, config.OUTPUT_DIR, in_archive=True,
                 one_liner=recap["category_one_liners"].get(cat, ""),
-                cap=settings.max_items_per_category, min_sig=settings.min_significance,
+                cap=rule.max_items, min_sig=rule.min_significance,
                 total_records=approx_total_records,
             )
         store.record_digest(label, len(flat), f"archive/{label}.html")

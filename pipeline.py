@@ -50,7 +50,7 @@ def _todays_pool(store: Store, clustered: list[dict], today: str,
 
 def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str, list[dict]]:
     """게재되지 못한 아이템을 사유별로 묶는다. 사유는 파이프라인이 거른 순서대로 판정 —
-    LLM 실패 > 저의미 > 카테고리 OFF > 카테고리 상한. 컷 튜닝할 때 근거 데이터가 됨."""
+    LLM 실패 > 전역 하한 > 카테고리 OFF > 카테고리 하한 > 카테고리 상한. 컷 튜닝할 때 근거 데이터가 됨."""
     published_ids = {it["id"] for it in flat}
     buckets: dict[str, list[dict]] = {}
     for it in clustered:
@@ -59,11 +59,13 @@ def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str
         if not it.get("_enriched", True):
             reason = "enrich_failed"
         elif it["significance"] < settings.min_significance:
-            reason = "min_significance"
+            reason = "min_significance"          # 전역 하한 — 홍보성/저가치
         elif it["category"] == "community_takes":
-            reason = "category_off"  # v1 에서 통째로 제외되는 카테고리
+            reason = "category_off"              # v1 에서 통째로 제외되는 카테고리
+        elif it["significance"] < settings.rule_for(it["category"]).min_significance:
+            reason = "category_floor"            # 카테고리 하한 — 자리는 있었지만 기준 미달
         else:
-            reason = "category_cap"
+            reason = "category_cap"              # 기준은 넘겼는데 자리가 없었음
         buckets.setdefault(reason, []).append(it)
     return buckets
 
@@ -162,7 +164,7 @@ def run(dry_run: bool = False):
     print(f"[4/5] 랭킹 + 상한{' (dry-run: 저장 스킵)' if dry_run else ' + 저장'}"
           f" — 오늘 후보 {len(pool)}건(신규 {len(clustered)} + DB {len(pool) - len(clustered)})"
           + (f", significance<{settings.min_significance} {dropped}건 드롭(홍보성 필터)" if dropped else ""))
-    groups = render.group_by_category(ranked_pool, cap=settings.max_items_per_category)
+    groups = render.group_by_category(ranked_pool, settings=settings)
 
     flat = [it for _c, items in groups for it in items]
     buckets = _drop_reasons(pool, flat, settings)
@@ -208,10 +210,11 @@ def run(dry_run: bool = False):
 
     render.render_digest(today, groups, warnings, config.OUTPUT_DIR, total_records=total_records)
     for cat, cat_items in groups:
+        rule = settings.rule_for(cat)
         render.render_category_page(
             today, cat, groups, config.OUTPUT_DIR, in_archive=False,
             one_liner=recap["category_one_liners"].get(cat, ""),
-            cap=settings.max_items_per_category, min_sig=settings.min_significance,
+            cap=rule.max_items, min_sig=rule.min_significance,
             total_records=total_records,
         )
     if not dry_run:
