@@ -31,10 +31,16 @@ For EACH item, decide:
    > notable policy shift > incremental research > community reaction
 4. is_major — true only for a genuine frontier-model release, major funding/acquisition,
    or notable policy shift. Be strict; most items are false.
+5. headline — a display title, AT MOST 60 characters. Keep the specific subject (model name,
+   company, dollar amount) and PRESERVE numbers verbatim. Drop subtitles after a colon,
+   marketing adjectives, and any " - Publisher" suffix. No trailing period.
+   Example: "Gemini Robotics ER 2: powering robotics with video understanding, task
+   orchestration, and multi-robot collaboration" -> "Gemini Robotics ER 2"
 
 Prioritize signal over volume: if an item is minor or purely promotional, give it a low
 significance. Return ONLY a JSON array, no prose, no markdown fences. Each element:
-{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false}"""
+{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
+ "headline": "..."}"""
 
 
 def _payload(items: list[dict]) -> str:
@@ -200,19 +206,14 @@ def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) ->
             it = by_id.get(row.get("id"))
             if not it:
                 continue
-            cat = row.get("category")
-            if cat in CATEGORY_LABELS:
-                it["category"] = cat
-            it["summary"] = (row.get("summary") or it.get("summary_raw") or "")[:600]
-            it["significance"] = _as_float(row.get("significance"))
-            it["is_major"] = bool(row.get("is_major", False))
-            it["_enriched"] = True
+            _merge_row(it, row)
 
     # LLM 이 빠뜨렸거나 배치가 죽은 아이템 폴백
     for it in items:
         it.setdefault("summary", it.get("summary_raw", ""))
         it.setdefault("significance", 0.0)
         it.setdefault("is_major", False)
+        it.setdefault("headline", it["title"])
         it.setdefault("_enriched", False)
 
     done = sum(1 for it in items if it["_enriched"])
