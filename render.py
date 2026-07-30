@@ -18,23 +18,26 @@ from config import CATEGORY_LABELS, CATEGORY_ORDER
 from store import label_sort_key
 
 
-def group_by_category(items: list[dict], cap: int | None = None) -> list[tuple[str, list[dict]]]:
+def group_by_category(items: list[dict], settings=None) -> list[tuple[str, list[dict]]]:
     """카테고리별 유의성 내림차순 그룹. community_takes 는 v1 제외.
 
-    cap 지정 시 카테고리당 상한 적용(pipeline: 아직 안 잘린 풀에 사용),
-    None 이면 정렬만(rerender: DB 의 게재분은 이미 잘려 있음).
-    pipeline._rank_and_cap 과 rerender._grouped 로 나뉘어 있던 걸 합친 것 — 따로 두니
-    한쪽만 고쳐져서 두 경로의 정렬 결과가 갈릴 수 있었음."""
+    settings 를 주면 카테고리별 하한(min_significance) -> 상한(max_items) 순으로 적용한다
+    (pipeline: 아직 안 잘린 풀). None 이면 정렬만 — rerender 는 DB 의 게재분을 읽는데
+    그건 저장 시점에 이미 잘려 있어서 다시 자르면 이중 적용이 된다.
+    하한을 상한보다 먼저 거는 이유: 자리가 남는다고 약한 항목이 올라오면 안 되기 때문
+    (tools_products 는 후보가 2건뿐이라 캡만으로는 아무것도 못 거른다)."""
     groups: list[tuple[str, list[dict]]] = []
     for cat in CATEGORY_ORDER:
         if cat == "community_takes":
             continue
-        picked = sorted(
-            (it for it in items if it["category"] == cat),
-            key=lambda it: (it["significance"], it.get("published") or ""),
-            reverse=True,
-        )
-        groups.append((cat, picked[:cap] if cap else picked))
+        picked = [it for it in items if it["category"] == cat]
+        rule = settings.rule_for(cat) if settings is not None else None
+        if rule is not None:
+            picked = [it for it in picked if it["significance"] >= rule.min_significance]
+        picked.sort(key=lambda it: (it["significance"], it.get("published") or ""), reverse=True)
+        if rule is not None:
+            picked = picked[: rule.max_items]
+        groups.append((cat, picked))
     return groups
 
 # ---- 팔레트 (Claude Design 캔버스의 라이브 컬러피커에서 포팅) ----
