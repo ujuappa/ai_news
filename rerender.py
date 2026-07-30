@@ -41,6 +41,9 @@ def run():
         items = store.items_for_digest(label)
         for it in items:
             it["source_name"] = id_to_name.get(it["source_id"], it["source_id"])
+        parent_info = store.thread_parent_info([it.get("thread_parent_id", "") for it in items])
+        for it in items:
+            it["thread_parent"] = parent_info.get(it.get("thread_parent_id") or "")
         # cap 없음: DB 의 게재분은 저장 시점에 이미 상한이 적용돼 있음
         groups = render.group_by_category(items)
         recaps = store.recaps_for(label)

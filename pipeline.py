@@ -236,6 +236,9 @@ def run(dry_run: bool = False):
             store.save_recap(today, cat, one_liner=one_liner)
 
     print("[5/5] 렌더")
+    parent_info = store.thread_parent_info([it.get("thread_parent_id", "") for it in flat])
+    for it in flat:
+        it["thread_parent"] = parent_info.get(it.get("thread_parent_id") or "")
     warnings = _health_warnings(health, sources)
     all_items = store.all_items()
     for it in all_items:

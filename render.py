@@ -149,6 +149,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 """
 
 _HOME_CSS = """
@@ -438,6 +443,7 @@ _HOME_TMPL = """
     </div>
     <a class="lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
     <p class="lead-dek">{{ lead.summary }}</p>
+    {% if lead.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
     <div class="byline-row">
       <a class="byline-link" href="{{ lead.url }}">{{ lead.domain_path }} →</a>
       <span class="byline-source">{{ lead.source_name }}</span>
@@ -457,6 +463,7 @@ _HOME_TMPL = """
       <span class="rank-cat {{ 'is-lead-cat' if loop.index == 1 else '' }}">{{ labels[it.category] }}</span></div>
     <a class="item-h3" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="item-dek">{{ it.summary }}</p>
+    {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
     <a class="item-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
     <div class="item-source">{{ it.source_name }}</div>
   </div>
@@ -476,6 +483,7 @@ _HOME_TMPL = """
         <div class="wk-cat">{{ labels[it.category] }}</div>
         <a class="wk-title" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
         <div class="wk-dek">{{ it.summary }}</div>
+        {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
         <a class="wk-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
       </div>
     </div>
@@ -555,6 +563,7 @@ _CATEGORY_TMPL = """
   <div>
     <div class="cat-row-title" style="font-size:{{ it.row_size }}px" title="{{ it.title }}">{{ it.display_title }}</div>
     {% if it.show_dek %}<div class="cat-row-dek">{{ it.summary }}</div>{% endif %}
+    {% if it.thread %}<span class="thread-line">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</span>{% endif %}
     <span class="cat-row-link">{{ it.domain_path }} →</span>
   </div>
   <div class="cat-row-side">
@@ -822,6 +831,10 @@ def _annotate(it: dict, rank: int | None = None) -> None:
     # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
     # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
     it["display_title"] = (it.get("headline") or "").strip() or it["title"]
+    # 앞 이야기. 호출부(pipeline/rerender)가 store.thread_parent_info 로 채워준 것만 쓴다 —
+    # 부모는 보통 몇 달 전 다이제스트라 지금 렌더 중인 groups 안에 없다.
+    parent = it.get("thread_parent")
+    it["thread"] = parent if parent and parent.get("display") else None
     if rank is not None:
         it["rank"] = rank
 
@@ -915,6 +928,7 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
         html = tmpl.render(
             period_meta=period_meta_txt, period_word=period_word, total_records=total_records,
             total=total, nav_links=nav_links, archive_link=archive_link,
+            prefix=prefix,
             search_href=("../search.html" if in_archive else "search.html"),
             lead=flat[0] if flat else None, grid3=flat[1:4], worth=flat[4:8], brief=flat[8:],
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
@@ -999,7 +1013,8 @@ def render_category_page(period_label: str, category: str, groups: list[tuple[st
         category=category, one_liner=one_liner or f"{CATEGORY_LABELS[category]} this {period_word}.",
         items=items, major_count=major_count, top_source=top_source, cap=cap, min_sig=min_sig,
         period_meta=period_meta_txt, period_word=period_word, total_records=total_records,
-        nav_links=nav_links, archive_link=archive_link, search_href=search_href,
+        nav_links=nav_links, archive_link=archive_link, prefix=("../" if in_archive else ""),
+        search_href=search_href,
     )
     out_path.write_text(html, encoding="utf-8")
     return out_path
