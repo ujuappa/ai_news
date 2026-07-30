@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,40 +162,42 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/snowflake-partnership">Snowflake and OpenAI partner to bring frontier intelligence to enterprise data</a>
+      <a class="week-lead-title" href="https://openai.com/index/snowflake-partnership" title="Snowflake and OpenAI partner to bring frontier intelligence to enterprise data">Snowflake and OpenAI partner to bring frontier intelligence to enterprise data</a>
       <p class="week-lead-dek">OpenAI and Snowflake have entered into a $200M partnership agreement to embed frontier AI intelligence directly into enterprise data workflows. The collaboration aims to enable AI-driven insights and agentic actions within the Snowflake environment.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/gpt-5-3-codex-system-card">GPT-5.3-Codex System Card</a>
+      <a class="week-sec-title" href="https://openai.com/index/gpt-5-3-codex-system-card" title="GPT-5.3-Codex System Card">GPT-5.3-Codex System Card</a>
       <p class="week-sec-dek">GPT-5.3-Codex has been released as an advanced agentic coding model, integrating the frontier-level performance of GPT-5.2-Codex with improved professional knowledge and reasoning capabilities. It is positioned as the most capable model in its class for software development.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-opus-4-6"><span class="week-rest-num">03</span><span class="week-rest-title">Claude Opus 4.6</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-opus-4-6" title="Claude Opus 4.6"><span class="week-rest-num">03</span><span class="week-rest-title">Claude Opus 4.6</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gpt-5-lowers-protein-synthesis-cost"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5 lowers the cost of cell-free protein synthesis</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gpt-5-lowers-protein-synthesis-cost" title="GPT-5 lowers the cost of cell-free protein synthesis"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5 lowers the cost of cell-free protein synthesis</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-partners-with-allen-institute-and-howard-hughes-medical-institute"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-partners-with-allen-institute-and-howard-hughes-medical-institute" title="Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/trusted-access-for-cyber"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Trusted Access for Cyber</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/trusted-access-for-cyber" title="Introducing Trusted Access for Cyber"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Trusted Access for Cyber</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-frontier"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing OpenAI Frontier</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-frontier" title="Introducing OpenAI Frontier"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing OpenAI Frontier</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/introducing-holo2-235b-a22b"><span class="week-rest-num">08</span><span class="week-rest-title">H Company&#39;s new Holo2 model takes the lead in UI Localization</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/introducing-holo2-235b-a22b" title="H Company&#39;s new Holo2 model takes the lead in UI Localization"><span class="week-rest-num">08</span><span class="week-rest-title">H Company&#39;s new Holo2 model takes the lead in UI Localization</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk"><span class="week-rest-num">09</span><span class="week-rest-title">Apple’s Xcode now supports the Claude Agent SDK</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk" title="Apple’s Xcode now supports the Claude Agent SDK"><span class="week-rest-num">09</span><span class="week-rest-title">Apple’s Xcode now supports the Claude Agent SDK</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-the-codex-app"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Codex app</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-the-codex-app" title="Introducing the Codex app"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Codex app</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-localization"><span class="week-rest-num">11</span><span class="week-rest-title">Making AI work for everyone, everywhere: our approach to localization</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-localization" title="Making AI work for everyone, everywhere: our approach to localization"><span class="week-rest-num">11</span><span class="week-rest-title">Making AI work for everyone, everywhere: our approach to localization</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part2"><span class="week-rest-num">12</span><span class="week-rest-title">Training Design for Text-to-Image Models: Lessons from Ablations</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part2" title="Training Design for Text-to-Image Models: Lessons from Ablations"><span class="week-rest-num">12</span><span class="week-rest-title">Training Design for Text-to-Image Models: Lessons from Ablations</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/unlocking-the-codex-harness"><span class="week-rest-num">13</span><span class="week-rest-title">Unlocking the Codex harness: how we built the App Server</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/unlocking-the-codex-harness" title="Unlocking the Codex harness: how we built the App Server"><span class="week-rest-num">13</span><span class="week-rest-title">Unlocking the Codex harness: how we built the App Server</span></a>
       
     </div>
   </div>

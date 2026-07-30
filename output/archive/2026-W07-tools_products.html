@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt">
   <span class="cat-score" style="font-size:34px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Introducing Lockdown Mode and Elevated Risk labels in ChatGPT</div>
+    <div class="cat-row-title" style="font-size:34px" title="Introducing Lockdown Mode and Elevated Risk labels in ChatGPT">Introducing Lockdown Mode and Elevated Risk labels in ChatGPT</div>
     <div class="cat-row-dek">ChatGPT has introduced a new Lockdown Mode and Elevated Risk labels. These features are designed to assist organizations in mitigating risks like prompt injection and unauthorized data exfiltration.</div>
+    
     <span class="cat-row-link">openai.com/index/introducing-lockdown-mod… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/scaling-social-science-research">
   <span class="cat-score" style="font-size:28px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Scaling social science research</div>
+    <div class="cat-row-title" style="font-size:28px" title="Scaling social science research">Scaling social science research</div>
     <div class="cat-row-dek">OpenAI released GABRIEL, an open-source toolkit that leverages GPT to transform qualitative data into quantitative insights. This tool is specifically aimed at helping social science researchers analyze large datasets efficiently.</div>
+    
     <span class="cat-row-link">openai.com/index/scaling-social-science-r… →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/beyond-rate-limits">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Beyond rate limits: scaling access to Codex and Sora</div>
+    <div class="cat-row-title" style="font-size:22px" title="Beyond rate limits: scaling access to Codex and Sora">Beyond rate limits: scaling access to Codex and Sora</div>
+    
     
     <span class="cat-row-link">openai.com/index/beyond-rate-limits →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/custom-cuda-kernels-agent-skills">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Custom Kernels for All from Codex and Claude</div>
+    <div class="cat-row-title" style="font-size:17px" title="Custom Kernels for All from Codex and Claude">Custom Kernels for All from Codex and Claude</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/custom-cuda-kernels-a… →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://about.fb.com/news/2026/02/threads-dear-algo/">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Control Your Threads Feed With New Dear Algo Feature</div>
+    <div class="cat-row-title" style="font-size:15px" title="Control Your Threads Feed With New Dear Algo Feature">Control Your Threads Feed With New Dear Algo Feature</div>
+    
     
     <span class="cat-row-link">about.fb.com/news/2026/02/threads-dear-al… →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/transformersjs-v4">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Transformers.js v4: Now Available on NPM!</div>
+    <div class="cat-row-title" style="font-size:15px" title="Transformers.js v4: Now Available on NPM!">Transformers.js v4: Now Available on NPM!</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/transformersjs-v4 →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

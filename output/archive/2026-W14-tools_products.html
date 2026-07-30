@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/gradient-labs">
   <span class="cat-score" style="font-size:34px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Gradient Labs gives every bank customer an AI account manager</div>
+    <div class="cat-row-title" style="font-size:34px" title="Gradient Labs gives every bank customer an AI account manager">Gradient Labs gives every bank customer an AI account manager</div>
     <div class="cat-row-dek">Gradient Labs is utilizing GPT-4.1 and GPT-5.4 (mini and nano) to deploy automated AI account managers for banking customers. The implementation focuses on improving workflow reliability and reducing latency.</div>
+    
     <span class="cat-row-link">openai.com/index/gradient-labs →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/tiiuae/falcon-perception">
   <span class="cat-score" style="font-size:28px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Falcon Perception</div>
+    <div class="cat-row-title" style="font-size:28px" title="Falcon Perception">Falcon Perception</div>
     <div class="cat-row-dek">Falcon Perception has been released, providing new tools for processing and understanding visual data. It serves as a latest addition to the open-weights ecosystem.</div>
+    
     <span class="cat-row-link">huggingface.co/blog/tiiuae/falcon-percept… →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://about.fb.com/news/2026/03/how-ai-is-ushering-in-the-next-era-of-risk-review-at-meta/">
   <span class="cat-score" style="font-size:22px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">How AI Is Ushering in the Next Era of Risk Review at Meta</div>
+    <div class="cat-row-title" style="font-size:22px" title="How AI Is Ushering in the Next Era of Risk Review at Meta">How AI Is Ushering in the Next Era of Risk Review at Meta</div>
+    
     
     <span class="cat-row-link">about.fb.com/news/2026/03/how-ai-is-usher… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/codex-flexible-pricing-for-teams">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Codex now offers more flexible pricing for teams</div>
+    <div class="cat-row-title" style="font-size:17px" title="Codex now offers more flexible pricing for teams">Codex now offers more flexible pricing for teams</div>
+    
     
     <span class="cat-row-link">openai.com/index/codex-flexible-pricing-f… →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/introducing-gradio-server">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Any Custom Frontend with Gradio&#39;s Backend</div>
+    <div class="cat-row-title" style="font-size:15px" title="Any Custom Frontend with Gradio&#39;s Backend">Any Custom Frontend with Gradio&#39;s Backend</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/introducing-gradio-se… →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/trl-v1">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">TRL v1.0: Post-Training Library Built to Move with the Field</div>
+    <div class="cat-row-title" style="font-size:15px" title="TRL v1.0: Post-Training Library Built to Move with the Field">TRL v1.0: Post-Training Library Built to Move with the Field</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/trl-v1 →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

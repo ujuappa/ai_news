@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/gpt-5-3-codex-system-card">
   <span class="cat-score" style="font-size:34px">.80</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">GPT-5.3-Codex System Card</div>
+    <div class="cat-row-title" style="font-size:34px" title="GPT-5.3-Codex System Card">GPT-5.3-Codex System Card</div>
     <div class="cat-row-dek">GPT-5.3-Codex has been released as an advanced agentic coding model, integrating the frontier-level performance of GPT-5.2-Codex with improved professional knowledge and reasoning capabilities. It is positioned as the most capable model in its class for software development.</div>
+    
     <span class="cat-row-link">openai.com/index/gpt-5-3-codex-system-card →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/claude-opus-4-6">
   <span class="cat-score" style="font-size:28px">.80</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Claude Opus 4.6</div>
+    <div class="cat-row-title" style="font-size:28px" title="Claude Opus 4.6">Claude Opus 4.6</div>
     <div class="cat-row-dek">Claude Opus 4.6 brings improved coding, debugging, and agentic task management to the Opus model family. A notable addition is the beta release of a 1M token context window, significantly enhancing the model&#39;s ability to handle large codebases.</div>
+    
     <span class="cat-row-link">anthropic.com/news/claude-opus-4-6 →</span>
   </div>
   <div class="cat-row-side">
@@ -212,7 +219,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">2 of 2 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">2 of 2 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Model releases in earlier weeks →</a>
 </div>
 </div>

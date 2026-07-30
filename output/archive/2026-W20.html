@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,60 +162,62 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://deepmind.google/blog/gemini-3-5-frontier-intelligence-with-action/">Gemini 3.5: frontier intelligence with action</a>
+      <a class="week-lead-title" href="https://deepmind.google/blog/gemini-3-5-frontier-intelligence-with-action/" title="Gemini 3.5: frontier intelligence with action">Gemini 3.5: frontier intelligence with action</a>
       <p class="week-lead-dek">Google has announced Gemini 3.5, a model optimized for performing complex, agentic workflows and real-time task execution.</p>
+      
       <div class="week-lead-byline">Google DeepMind Blog · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/gates-foundation-partnership">Anthropic partners with the Gates Foundation</a>
+      <a class="week-sec-title" href="https://www.anthropic.com/news/gates-foundation-partnership" title="Anthropic partners with the Gates Foundation">Anthropic partners with the Gates Foundation</a>
       <p class="week-sec-dek">Anthropic is partnering with the Gates Foundation to provide $200 million in grant funding, technical support, and Claude usage credits over the next four years. The program targets advancements in education, global health, life sciences, and economic mobility.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/databricks"><span class="week-rest-num">03</span><span class="week-rest-title">Databricks brings GPT-5.5 to enterprise agent workflows</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/databricks" title="Databricks brings GPT-5.5 to enterprise agent workflows"><span class="week-rest-num">03</span><span class="week-rest-title">Databricks brings GPT-5.5 to enterprise agent workflows</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/pwc-expanded-partnership"><span class="week-rest-num">04</span><span class="week-rest-title">PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/pwc-expanded-partnership" title="PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients"><span class="week-rest-num">04</span><span class="week-rest-title">PwC is deploying Claude to build technology, execute deals, and reinvent enterprise functions for clients</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/co-scientist-a-multi-agent-ai-partner-to-accelerate-research/"><span class="week-rest-num">05</span><span class="week-rest-title">Co-Scientist: A multi-agent AI partner to accelerate research</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/co-scientist-a-multi-agent-ai-partner-to-accelerate-research/" title="Co-Scientist: A multi-agent AI partner to accelerate research"><span class="week-rest-num">05</span><span class="week-rest-title">Co-Scientist: A multi-agent AI partner to accelerate research</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-launches-the-deployment-company"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI launches DeployCo to help businesses build around intelligence</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-launches-the-deployment-company" title="OpenAI launches DeployCo to help businesses build around intelligence"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI launches DeployCo to help businesses build around intelligence</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemini-omni/"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing Gemini Omni</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemini-omni/" title="Introducing Gemini Omni"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing Gemini Omni</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack"><span class="week-rest-num">08</span><span class="week-rest-title">Our response to the TanStack npm supply chain attack</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack" title="Our response to the TanStack npm supply chain attack"><span class="week-rest-num">08</span><span class="week-rest-title">Our response to the TanStack npm supply chain attack</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-google-antigravity-2-0/"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Google Antigravity 2.0</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-google-antigravity-2-0/" title="Introducing Google Antigravity 2.0"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Google Antigravity 2.0</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/strengthening-singapores-ai-future-a-new-national-partnership/"><span class="week-rest-num">10</span><span class="week-rest-title">Strengthening Singapore’s AI Future: A New National Partnership</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/strengthening-singapores-ai-future-a-new-national-partnership/" title="Strengthening Singapore’s AI Future: A New National Partnership"><span class="week-rest-num">10</span><span class="week-rest-title">Strengthening Singapore’s AI Future: A New National Partnership</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-small-business"><span class="week-rest-num">11</span><span class="week-rest-title">Introducing Claude for Small Business</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-small-business" title="Introducing Claude for Small Business"><span class="week-rest-num">11</span><span class="week-rest-title">Introducing Claude for Small Business</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/simulate-real-world-places-with-project-genie-and-street-view/"><span class="week-rest-num">12</span><span class="week-rest-title">Simulate real-world places with Project Genie and Street View</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/simulate-real-world-places-with-project-genie-and-street-view/" title="Simulate real-world places with Project Genie and Street View"><span class="week-rest-num">12</span><span class="week-rest-title">Simulate real-world places with Project Genie and Street View</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-for-science-ai-experiments-and-tools-for-a-new-era-of-discovery/"><span class="week-rest-num">13</span><span class="week-rest-title">Gemini for Science: AI experiments and tools for a new era of discovery</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-for-science-ai-experiments-and-tools-for-a-new-era-of-discovery/" title="Gemini for Science: AI experiments and tools for a new era of discovery"><span class="week-rest-num">13</span><span class="week-rest-title">Gemini for Science: AI experiments and tools for a new era of discovery</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/finding-the-molecular-switches-behind-new-infectious-diseases/"><span class="week-rest-num">14</span><span class="week-rest-title">Finding the molecular switches behind new infectious diseases</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/finding-the-molecular-switches-behind-new-infectious-diseases/" title="Finding the molecular switches behind new infectious diseases"><span class="week-rest-num">14</span><span class="week-rest-title">Finding the molecular switches behind new infectious diseases</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/opening-new-paths-in-aging-research/"><span class="week-rest-num">15</span><span class="week-rest-title">Opening new paths in aging research</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/opening-new-paths-in-aging-research/" title="Opening new paths in aging research"><span class="week-rest-num">15</span><span class="week-rest-title">Opening new paths in aging research</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-discovery-of-liver-disease-mechanisms/"><span class="week-rest-num">16</span><span class="week-rest-title">Accelerating discovery of liver disease mechanisms</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-discovery-of-liver-disease-mechanisms/" title="Accelerating discovery of liver disease mechanisms"><span class="week-rest-num">16</span><span class="week-rest-title">Accelerating discovery of liver disease mechanisms</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/uniting-biological-toolkits-for-a-new-approach-to-als/"><span class="week-rest-num">17</span><span class="week-rest-title">Uniting biological toolkits for a new approach to ALS</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/uniting-biological-toolkits-for-a-new-approach-to-als/" title="Uniting biological toolkits for a new approach to ALS"><span class="week-rest-num">17</span><span class="week-rest-title">Uniting biological toolkits for a new approach to ALS</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/uncovering-repurposed-medicines-to-fight-liver-fibrosis/"><span class="week-rest-num">18</span><span class="week-rest-title">Uncovering repurposed medicines to fight liver fibrosis</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/uncovering-repurposed-medicines-to-fight-liver-fibrosis/" title="Uncovering repurposed medicines to fight liver fibrosis"><span class="week-rest-num">18</span><span class="week-rest-title">Uncovering repurposed medicines to fight liver fibrosis</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/how-weathernext-helped-the-national-hurricane-center-better-predict-hurricane-melissas-historic-landfall-in-jamaica/"><span class="week-rest-num">19</span><span class="week-rest-title">How WeatherNext helped the National Hurricane Center better predict Hurricane Melissa’s historic landfall in Jamaica</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/how-weathernext-helped-the-national-hurricane-center-better-predict-hurricane-melissas-historic-landfall-in-jamaica/" title="How WeatherNext helped the National Hurricane Center better predict Hurricane Melissa’s historic landfall in Jamaica"><span class="week-rest-num">19</span><span class="week-rest-title">How WeatherNext helped the National Hurricane Center better predict Hurricane Melissa’s historic landfall in Jamaica</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/malta-chatgpt-plus-partnership"><span class="week-rest-num">20</span><span class="week-rest-title">OpenAI and Malta partner to bring ChatGPT Plus to all citizens</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/malta-chatgpt-plus-partnership" title="OpenAI and Malta partner to bring ChatGPT Plus to all citizens"><span class="week-rest-num">20</span><span class="week-rest-title">OpenAI and Malta partner to bring ChatGPT Plus to all citizens</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/personal-finance-chatgpt"><span class="week-rest-num">21</span><span class="week-rest-title">A new personal finance experience in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/personal-finance-chatgpt" title="A new personal finance experience in ChatGPT"><span class="week-rest-num">21</span><span class="week-rest-title">A new personal finance experience in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/sea-david-chen"><span class="week-rest-num">22</span><span class="week-rest-title">Sea&#39;s View on the Future of Agentic Software Development with Codex</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/sea-david-chen" title="Sea&#39;s View on the Future of Agentic Software Development with Codex"><span class="week-rest-num">22</span><span class="week-rest-title">Sea&#39;s View on the Future of Agentic Software Development with Codex</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-embedding-multilingual-r2"><span class="week-rest-num">23</span><span class="week-rest-title">Granite Embedding Multilingual R2: Open Apache 2.0 Multilingual Embeddings with 32K Context — Best Sub-100M Retrieval Quality</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-embedding-multilingual-r2" title="Granite Embedding Multilingual R2: Open Apache 2.0 Multilingual Embeddings with 32K Context — Best Sub-100M Retrieval Quality"><span class="week-rest-num">23</span><span class="week-rest-title">Granite Embedding Multilingual R2: Open Apache 2.0 Multilingual Embeddings with 32K Context — Best Sub-100M Retrieval Quality</span></a>
       
     </div>
   </div>

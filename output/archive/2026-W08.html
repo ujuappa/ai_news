@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,46 +162,48 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-sonnet-4-6">Introducing Sonnet 4.6</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-sonnet-4-6" title="Introducing Sonnet 4.6">Introducing Sonnet 4.6</a>
       <p class="week-lead-dek">Anthropic has released Claude Sonnet 4.6, an upgraded model featuring improved reasoning, coding, and agent planning capabilities. It also introduces a 1M token context window currently in beta.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases · major</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/">Gemini 3.1 Pro: A smarter model for your most complex tasks</a>
+      <a class="week-sec-title" href="https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/" title="Gemini 3.1 Pro: A smarter model for your most complex tasks">Gemini 3.1 Pro: A smarter model for your most complex tasks</a>
       <p class="week-sec-dek">Google DeepMind has introduced Gemini 3.1 Pro, a new model optimized for tackling highly complex tasks. The release focuses on enhancing the reasoning and problem-solving capabilities of the Gemini line.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/meta-nvidia-announce-long-term-infrastructure-partnership/"><span class="week-rest-num">03</span><span class="week-rest-title">Meta and NVIDIA Announce Long-Term Infrastructure Partnership</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/meta-nvidia-announce-long-term-infrastructure-partnership/" title="Meta and NVIDIA Announce Long-Term Infrastructure Partnership"><span class="week-rest-num">03</span><span class="week-rest-title">Meta and NVIDIA Announce Long-Term Infrastructure Partnership</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-independent-research-ai-alignment"><span class="week-rest-num">04</span><span class="week-rest-title">Advancing independent research on AI alignment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-independent-research-ai-alignment" title="Advancing independent research on AI alignment"><span class="week-rest-num">04</span><span class="week-rest-title">Advancing independent research on AI alignment</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-rwanda-mou"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic and the Government of Rwanda sign MOU for AI in health and education</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-rwanda-mou" title="Anthropic and the Government of Rwanda sign MOU for AI in health and education"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic and the Government of Rwanda sign MOU for AI in health and education</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/first-proof-submissions"><span class="week-rest-num">06</span><span class="week-rest-title">Our First Proof submissions</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/first-proof-submissions" title="Our First Proof submissions"><span class="week-rest-num">06</span><span class="week-rest-title">Our First Proof submissions</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-code-security"><span class="week-rest-num">07</span><span class="week-rest-title">Making frontier cybersecurity capabilities available to defenders</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-code-security" title="Making frontier cybersecurity capabilities available to defenders"><span class="week-rest-num">07</span><span class="week-rest-title">Making frontier cybersecurity capabilities available to defenders</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-evmbench"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing EVMbench</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-evmbench" title="Introducing EVMbench"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing EVMbench</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-infosys"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic and Infosys collaborate to build AI agents for telecommunications and other regulated industries</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-infosys" title="Anthropic and Infosys collaborate to build AI agents for telecommunications and other regulated industries"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic and Infosys collaborate to build AI agents for telecommunications and other regulated industries</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ggml-joins-hf"><span class="week-rest-num">10</span><span class="week-rest-title">GGML and llama.cpp join HF to ensure the long-term progress of Local AI</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ggml-joins-hf" title="GGML and llama.cpp join HF to ensure the long-term progress of Local AI"><span class="week-rest-num">10</span><span class="week-rest-title">GGML and llama.cpp join HF to ensure the long-term progress of Local AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-for-india"><span class="week-rest-num">11</span><span class="week-rest-title">Introducing OpenAI for India</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-for-india" title="Introducing OpenAI for India"><span class="week-rest-num">11</span><span class="week-rest-title">Introducing OpenAI for India</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/itbenchandmast"><span class="week-rest-num">12</span><span class="week-rest-title">IBM and UC Berkeley Diagnose Why Enterprise Agents Fail Using IT-Bench and MAST</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/itbenchandmast" title="IBM and UC Berkeley Diagnose Why Enterprise Agents Fail Using IT-Bench and MAST"><span class="week-rest-num">12</span><span class="week-rest-title">IBM and UC Berkeley Diagnose Why Enterprise Agents Fail Using IT-Bench and MAST</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/a-new-way-to-express-yourself-gemini-can-now-create-music/"><span class="week-rest-num">13</span><span class="week-rest-title">A new way to express yourself: Gemini can now create music</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/a-new-way-to-express-yourself-gemini-can-now-create-music/" title="A new way to express yourself: Gemini can now create music"><span class="week-rest-num">13</span><span class="week-rest-title">A new way to express yourself: Gemini can now create music</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-discovery-in-india-through-ai-powered-science-and-education/"><span class="week-rest-num">14</span><span class="week-rest-title">Accelerating discovery in India through AI-powered science and education</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-discovery-in-india-through-ai-powered-science-and-education/" title="Accelerating discovery in India through AI-powered science and education"><span class="week-rest-num">14</span><span class="week-rest-title">Accelerating discovery in India through AI-powered science and education</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/unsloth-jobs"><span class="week-rest-num">15</span><span class="week-rest-title">Train AI models with Unsloth and Hugging Face Jobs for FREE</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/unsloth-jobs" title="Train AI models with Unsloth and Hugging Face Jobs for FREE"><span class="week-rest-num">15</span><span class="week-rest-title">Train AI models with Unsloth and Hugging Face Jobs for FREE</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/gradio-html-one-shot-apps"><span class="week-rest-num">16</span><span class="week-rest-title">One-Shot Any Web App with Gradio&#39;s gr.HTML</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/gradio-html-one-shot-apps" title="One-Shot Any Web App with Gradio&#39;s gr.HTML"><span class="week-rest-num">16</span><span class="week-rest-title">One-Shot Any Web App with Gradio&#39;s gr.HTML</span></a>
       
     </div>
   </div>

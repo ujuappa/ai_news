@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,8 +162,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/frontier-threats-red-teaming-for-ai-safety">Frontier threats red teaming for AI safety</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/frontier-threats-red-teaming-for-ai-safety" title="Frontier threats red teaming for AI safety">Frontier threats red teaming for AI safety</a>
       <p class="week-lead-dek">Anthropic is formalizing its red teaming protocols to address potential national security risks posed by advanced AI systems. This initiative aligns with commitments made to the White House on July 21, focusing on rigorous internal and external safety testing.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
     </div>

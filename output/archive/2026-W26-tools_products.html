@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">OpenAI and Broadcom unveil LLM-optimized inference chip</div>
+    <div class="cat-row-title" style="font-size:34px" title="OpenAI and Broadcom unveil LLM-optimized inference chip">OpenAI and Broadcom unveil LLM-optimized inference chip</div>
     <div class="cat-row-dek">OpenAI and Broadcom have announced &#39;Jalapeño&#39;, a custom inference chip specifically designed to optimize efficiency and performance for large language models.</div>
+    
     <span class="cat-row-link">openai.com/index/openai-broadcom-jalapeno… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/daybreak-securing-the-world">
   <span class="cat-score" style="font-size:28px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Daybreak: Tools for securing every organization in the world</div>
+    <div class="cat-row-title" style="font-size:28px" title="Daybreak: Tools for securing every organization in the world">Daybreak: Tools for securing every organization in the world</div>
     <div class="cat-row-dek">OpenAI has launched &#39;Daybreak&#39;, a suite of security tools including Codex Security and GPT-5.5-Cyber, aimed at helping organizations identify and patch vulnerabilities at scale.</div>
+    
     <span class="cat-row-link">openai.com/index/daybreak-securing-the-wo… →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel">
   <span class="cat-score" style="font-size:22px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel</div>
+    <div class="cat-row-title" style="font-size:22px" title="Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel">Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/nvidia/accelerating-f… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/PaddlePaddle/pp-ocrv6">
   <span class="cat-score" style="font-size:17px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters</div>
+    <div class="cat-row-title" style="font-size:17px" title="PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters">PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/PaddlePaddle/pp-ocrv6 →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/vllm-jobs">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Run a vLLM Server on HF Jobs in One Command</div>
+    <div class="cat-row-title" style="font-size:15px" title="Run a vLLM Server on HF Jobs in One Command">Run a vLLM Server on HF Jobs in One Command</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/vllm-jobs →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/ffasr-leaderboard">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World</div>
+    <div class="cat-row-title" style="font-size:15px" title="Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World">Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/ffasr-leaderboard →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

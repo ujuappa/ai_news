@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,42 +162,44 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-partner-network">Anthropic invests $100 million into the Claude Partner Network</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-partner-network" title="Anthropic invests $100 million into the Claude Partner Network">Anthropic invests $100 million into the Claude Partner Network</a>
       <p class="week-lead-dek">Anthropic has launched the Claude Partner Network with an initial investment of $100 million. The program provides partner organizations with technical certification, support, and investment opportunities to accelerate enterprise AI adoption.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-promptfoo">OpenAI to acquire Promptfoo</a>
+      <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-promptfoo" title="OpenAI to acquire Promptfoo">OpenAI to acquire Promptfoo</a>
       <p class="week-sec-dek">OpenAI is acquiring Promptfoo, a security platform specializing in vulnerability assessment for AI systems. The move is intended to bolster enterprise AI development security.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/expanding-metas-custom-silicon-to-power-our-ai-workloads/"><span class="week-rest-num">03</span><span class="week-rest-title">Expanding Meta’s Custom Silicon to Power Our AI Workloads</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/expanding-metas-custom-silicon-to-power-our-ai-workloads/" title="Expanding Meta’s Custom Silicon to Power Our AI Workloads"><span class="week-rest-num">03</span><span class="week-rest-title">Expanding Meta’s Custom Silicon to Power Our AI Workloads</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/instruction-hierarchy-challenge"><span class="week-rest-num">04</span><span class="week-rest-title">Improving instruction hierarchy in frontier LLMs</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/instruction-hierarchy-challenge" title="Improving instruction hierarchy in frontier LLMs"><span class="week-rest-num">04</span><span class="week-rest-title">Improving instruction hierarchy in frontier LLMs</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/designing-agents-to-resist-prompt-injection"><span class="week-rest-num">05</span><span class="week-rest-title">Designing AI agents to resist prompt injection</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/designing-agents-to-resist-prompt-injection" title="Designing AI agents to resist prompt injection"><span class="week-rest-num">05</span><span class="week-rest-title">Designing AI agents to resist prompt injection</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/equip-responses-api-computer-environment"><span class="week-rest-num">06</span><span class="week-rest-title">From model to agent: Equipping the Responses API with a computer environment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/equip-responses-api-computer-environment" title="From model to agent: Equipping the Responses API with a computer environment"><span class="week-rest-num">06</span><span class="week-rest-title">From model to agent: Equipping the Responses API with a computer environment</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ulysses-sp"><span class="week-rest-num">07</span><span class="week-rest-title">Ulysses Sequence Parallelism: Training with Million-Token Contexts</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ulysses-sp" title="Ulysses Sequence Parallelism: Training with Million-Token Contexts"><span class="week-rest-num">07</span><span class="week-rest-title">Ulysses Sequence Parallelism: Training with Million-Token Contexts</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/"><span class="week-rest-num">08</span><span class="week-rest-title">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/" title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier"><span class="week-rest-num">08</span><span class="week-rest-title">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/wayfair"><span class="week-rest-num">09</span><span class="week-rest-title">Wayfair boosts catalog accuracy and support speed with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/wayfair" title="Wayfair boosts catalog accuracy and support speed with OpenAI"><span class="week-rest-num">09</span><span class="week-rest-title">Wayfair boosts catalog accuracy and support speed with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt"><span class="week-rest-num">10</span><span class="week-rest-title">New ways to learn math and science in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt" title="New ways to learn math and science in ChatGPT"><span class="week-rest-num">10</span><span class="week-rest-title">New ways to learn math and science in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/async-rl-training-landscape"><span class="week-rest-num">11</span><span class="week-rest-title">Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/async-rl-training-landscape" title="Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries"><span class="week-rest-num">11</span><span class="week-rest-title">Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/storage-buckets"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Storage Buckets on the Hugging Face Hub</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/storage-buckets" title="Introducing Storage Buckets on the Hugging Face Hub"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Storage Buckets on the Hugging Face Hub</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/sydney-fourth-office-asia-pacific"><span class="week-rest-num">13</span><span class="week-rest-title">Sydney will become Anthropic’s fourth office in Asia-Pacific</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/sydney-fourth-office-asia-pacific" title="Sydney will become Anthropic’s fourth office in Asia-Pacific"><span class="week-rest-num">13</span><span class="week-rest-title">Sydney will become Anthropic’s fourth office in Asia-Pacific</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/lerobot-release-v050"><span class="week-rest-num">14</span><span class="week-rest-title">LeRobot v0.5.0: Scaling Every Dimension</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/lerobot-release-v050" title="LeRobot v0.5.0: Scaling Every Dimension"><span class="week-rest-num">14</span><span class="week-rest-title">LeRobot v0.5.0: Scaling Every Dimension</span></a>
       
     </div>
   </div>

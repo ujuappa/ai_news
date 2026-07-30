@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,34 +162,36 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-opus-4-7">Introducing Claude Opus 4.7</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-opus-4-7" title="Introducing Claude Opus 4.7">Introducing Claude Opus 4.7</a>
       <p class="week-lead-dek">Anthropic has announced the general availability of Claude Opus 4.7. This update serves as the latest iteration of their flagship frontier model.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/accelerating-cyber-defense-ecosystem">Accelerating the cyber defense ecosystem that protects us all</a>
+      <a class="week-sec-title" href="https://openai.com/index/accelerating-cyber-defense-ecosystem" title="Accelerating the cyber defense ecosystem that protects us all">Accelerating the cyber defense ecosystem that protects us all</a>
       <p class="week-sec-dek">OpenAI launched the GPT-5.4-Cyber model alongside a $10M API grant program to bolster cybersecurity defenses. The initiative includes partnerships with major security firms to enhance global cyber threat response.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/narasimhan-board"><span class="week-rest-num">03</span><span class="week-rest-title">Anthropic’s Long-Term Benefit Trust appoints Vas Narasimhan to Board of Directors</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/narasimhan-board" title="Anthropic’s Long-Term Benefit Trust appoints Vas Narasimhan to Board of Directors"><span class="week-rest-num">03</span><span class="week-rest-title">Anthropic’s Long-Term Benefit Trust appoints Vas Narasimhan to Board of Directors</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-er-1-6/"><span class="week-rest-num">04</span><span class="week-rest-title">Gemini Robotics-ER 1.6: Powering real-world robotics tasks through enhanced embodied reasoning</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-er-1-6/" title="Gemini Robotics-ER 1.6: Powering real-world robotics tasks through enhanced embodied reasoning"><span class="week-rest-num">04</span><span class="week-rest-title">Gemini Robotics-ER 1.6: Powering real-world robotics tasks through enhanced embodied reasoning</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/codex-for-almost-everything"><span class="week-rest-num">05</span><span class="week-rest-title">Codex for (almost) everything</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/codex-for-almost-everything" title="Codex for (almost) everything"><span class="week-rest-num">05</span><span class="week-rest-title">Codex for (almost) everything</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-tts-the-next-generation-of-expressive-ai-speech/"><span class="week-rest-num">06</span><span class="week-rest-title">Gemini 3.1 Flash TTS: the next generation of expressive AI speech</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-tts-the-next-generation-of-expressive-ai-speech/" title="Gemini 3.1 Flash TTS: the next generation of expressive AI speech"><span class="week-rest-num">06</span><span class="week-rest-title">Gemini 3.1 Flash TTS: the next generation of expressive AI speech</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/cloudflare-openai-agent-cloud"><span class="week-rest-num">07</span><span class="week-rest-title">Enterprises power agentic workflows in Cloudflare Agent Cloud with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/cloudflare-openai-agent-cloud" title="Enterprises power agentic workflows in Cloudflare Agent Cloud with OpenAI"><span class="week-rest-num">07</span><span class="week-rest-title">Enterprises power agentic workflows in Cloudflare Agent Cloud with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-design-anthropic-labs"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing Claude Design by Anthropic Labs</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-design-anthropic-labs" title="Introducing Claude Design by Anthropic Labs"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing Claude Design by Anthropic Labs</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/vakra-benchmark-analysis"><span class="week-rest-num">09</span><span class="week-rest-title">Inside VAKRA: Reasoning, Tool Use, and Failure Modes of Agents</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/vakra-benchmark-analysis" title="Inside VAKRA: Reasoning, Tool Use, and Failure Modes of Agents"><span class="week-rest-num">09</span><span class="week-rest-title">Inside VAKRA: Reasoning, Tool Use, and Failure Modes of Agents</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/the-next-evolution-of-the-agents-sdk"><span class="week-rest-num">10</span><span class="week-rest-title">The next evolution of the Agents SDK</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/the-next-evolution-of-the-agents-sdk" title="The next evolution of the Agents SDK"><span class="week-rest-num">10</span><span class="week-rest-title">The next evolution of the Agents SDK</span></a>
       
     </div>
   </div>

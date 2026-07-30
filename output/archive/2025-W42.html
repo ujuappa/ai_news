@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,14 +162,16 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-haiku-4-5">Introducing Claude Haiku 4.5</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-haiku-4-5" title="Introducing Claude Haiku 4.5">Introducing Claude Haiku 4.5</a>
       <p class="week-lead-dek">Anthropic has released Claude Haiku 4.5, their latest small-scale language model. The model is now available for use by all customers across their platform.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Tools &amp; products</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/skills">Introducing Agent Skills | Claude by Anthropic</a>
+      <a class="week-sec-title" href="https://www.anthropic.com/news/skills" title="Introducing Agent Skills | Claude by Anthropic">Introducing Agent Skills | Claude by Anthropic</a>
       <p class="week-sec-dek">Anthropic has introduced organization-wide management for Agent Skills, including a new directory for partner-built tools. Additionally, they have published Agent Skills as an open standard to facilitate cross-platform portability as of December 18, 2025.</p>
+      
       
     </div>
     <div class="week-rest-col">

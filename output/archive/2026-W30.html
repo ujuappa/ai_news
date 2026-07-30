@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,48 +162,50 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-opus-5">Introducing Claude Opus 5</a>
+      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-opus-5" title="Introducing Claude Opus 5">Introducing Claude Opus 5</a>
       <p class="week-lead-dek">Anthropic has launched Claude Opus 5, a proactive model positioned as a competitor to Claude Fable 5. The new model is available starting today at half the cost of the flagship version.</p>
+      
       <div class="week-lead-byline">Anthropic News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases · major</span></div>
-      <a class="week-sec-title" href="https://about.fb.com/news/2026/07/meta-ai-muse-spark-doesnt-just-think-it-acts/">Meta AI Doesn’t Just Think, It Acts</a>
+      <a class="week-sec-title" href="https://about.fb.com/news/2026/07/meta-ai-muse-spark-doesnt-just-think-it-acts/" title="Meta AI Doesn’t Just Think, It Acts">Meta AI Doesn’t Just Think, It Acts</a>
       <p class="week-sec-dek">Meta AI has received an update powered by Muse Spark 1.1, enabling the model to perform multi-step planning and autonomous task execution. These upgrades allow the AI to complete projects from inception to final output.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/economic-futures-research-fund-agenda"><span class="week-rest-num">03</span><span class="week-rest-title">Supporting ambitious external research through the Anthropic Economic Futures Research Fund</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/economic-futures-research-fund-agenda" title="Supporting ambitious external research through the Anthropic Economic Futures Research Fund"><span class="week-rest-num">03</span><span class="week-rest-title">Supporting ambitious external research through the Anthropic Economic Futures Research Fund</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemini-3-6-flash-3-5-flash-lite-and-3-5-flash-cyber/"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemini-3-6-flash-3-5-flash-lite-and-3-5-flash-cyber/" title="Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-the-frontiers-of-scientific-discovery-googles-40m-commitment-to-the-genesis-mission/"><span class="week-rest-num">05</span><span class="week-rest-title">Accelerating the frontiers of scientific discovery: Google’s $40M commitment to the Genesis Mission</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-the-frontiers-of-scientific-discovery-googles-40m-commitment-to-the-genesis-mission/" title="Accelerating the frontiers of scientific discovery: Google’s $40M commitment to the Genesis Mission"><span class="week-rest-num">05</span><span class="week-rest-title">Accelerating the frontiers of scientific discovery: Google’s $40M commitment to the Genesis Mission</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-the-next-era-of-national-science"><span class="week-rest-num">06</span><span class="week-rest-title">Advancing the next era of national science</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-the-next-era-of-national-science" title="Advancing the next era of national science"><span class="week-rest-num">06</span><span class="week-rest-title">Advancing the next era of national science</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/safety-alignment-long-horizon-models"><span class="week-rest-num">07</span><span class="week-rest-title">Safety and alignment in an era of long-horizon models</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/safety-alignment-long-horizon-models" title="Safety and alignment in an era of long-horizon models"><span class="week-rest-num">07</span><span class="week-rest-title">Safety and alignment in an era of long-horizon models</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/building-ai-infrastructure-with-the-effingham-county-community"><span class="week-rest-num">08</span><span class="week-rest-title">Building AI infrastructure with the Effingham County community</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/building-ai-infrastructure-with-the-effingham-county-community" title="Building AI infrastructure with the Effingham County community"><span class="week-rest-num">08</span><span class="week-rest-title">Building AI infrastructure with the Effingham County community</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-presence"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing OpenAI Presence</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-presence" title="Introducing OpenAI Presence"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing OpenAI Presence</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/hugging-face-model-evaluation-security-incident"><span class="week-rest-num">10</span><span class="week-rest-title">OpenAI and Hugging Face partner to address security incident during model evaluation</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/hugging-face-model-evaluation-security-incident" title="OpenAI and Hugging Face partner to address security incident during model evaluation"><span class="week-rest-num">10</span><span class="week-rest-title">OpenAI and Hugging Face partner to address security incident during model evaluation</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/donation-public-first-action"><span class="week-rest-num">11</span><span class="week-rest-title">Donating another $20 million to Public First Action</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/donation-public-first-action" title="Donating another $20 million to Public First Action"><span class="week-rest-num">11</span><span class="week-rest-title">Donating another $20 million to Public First Action</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/health-in-chatgpt"><span class="week-rest-num">12</span><span class="week-rest-title">Launching Health in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/health-in-chatgpt" title="Launching Health in ChatGPT"><span class="week-rest-num">12</span><span class="week-rest-title">Launching Health in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nunchaku-diffusers"><span class="week-rest-num">13</span><span class="week-rest-title">Bringing Nunchaku 4-bit Diffusion Inference to Diffusers</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nunchaku-diffusers" title="Bringing Nunchaku 4-bit Diffusion Inference to Diffusers"><span class="week-rest-num">13</span><span class="week-rest-title">Bringing Nunchaku 4-bit Diffusion Inference to Diffusers</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-economic-index-connector"><span class="week-rest-num">14</span><span class="week-rest-title">The Anthropic Economic Index connector</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-economic-index-connector" title="The Anthropic Economic Index connector"><span class="week-rest-num">14</span><span class="week-rest-title">The Anthropic Economic Index connector</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-chatgpt-small-business-program"><span class="week-rest-num">15</span><span class="week-rest-title">Introducing the ChatGPT for small business program</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-chatgpt-small-business-program" title="Introducing the ChatGPT for small business program"><span class="week-rest-num">15</span><span class="week-rest-title">Introducing the ChatGPT for small business program</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/grabette"><span class="week-rest-num">16</span><span class="week-rest-title">Grabette: an open system to record robot-manipulation data</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/grabette" title="Grabette: an open system to record robot-manipulation data"><span class="week-rest-num">16</span><span class="week-rest-title">Grabette: an open system to record robot-manipulation data</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/rare-disease-research-grants"><span class="week-rest-num">17</span><span class="week-rest-title">Apply for Anthropic’s AI for Science rare disease research grants</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/rare-disease-research-grants" title="Apply for Anthropic’s AI for Science rare disease research grants"><span class="week-rest-num">17</span><span class="week-rest-title">Apply for Anthropic’s AI for Science rare disease research grants</span></a>
       
     </div>
   </div>

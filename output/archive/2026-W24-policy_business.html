@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/fable-mythos-access">
   <span class="cat-score" style="font-size:34px">.90</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Statement on the US government directive to suspend access to Fable 5 and Mythos 5</div>
+    <div class="cat-row-title" style="font-size:34px" title="Statement on the US government directive to suspend access to Fable 5 and Mythos 5">Statement on the US government directive to suspend access to Fable 5 and Mythos 5</div>
     <div class="cat-row-dek">Due to a U.S. government export control directive, Anthropic has been forced to suspend all access to Claude Fable 5 and Mythos 5 models globally.</div>
+    
     <span class="cat-row-link">anthropic.com/news/fable-mythos-access →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/openai-submits-confidential-s-1">
   <span class="cat-score" style="font-size:28px">.90</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Confidential submission of draft S-1 to the SEC</div>
+    <div class="cat-row-title" style="font-size:28px" title="Confidential submission of draft S-1 to the SEC">Confidential submission of draft S-1 to the SEC</div>
     <div class="cat-row-dek">OpenAI has confirmed the confidential submission of a draft S-1 filing to the SEC, marking a formal step toward a potential public offering.</div>
+    
     <span class="cat-row-link">openai.com/index/openai-submits-confident… →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/introducing-openai-partner-network">
   <span class="cat-score" style="font-size:22px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Introducing the OpenAI Partner Network</div>
+    <div class="cat-row-title" style="font-size:22px" title="Introducing the OpenAI Partner Network">Introducing the OpenAI Partner Network</div>
+    
     
     <span class="cat-row-link">openai.com/index/introducing-openai-partn… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/openai-to-acquire-ona">
   <span class="cat-score" style="font-size:17px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">OpenAI to acquire Ona</div>
+    <div class="cat-row-title" style="font-size:17px" title="OpenAI to acquire Ona">OpenAI to acquire Ona</div>
+    
     
     <span class="cat-row-link">openai.com/index/openai-to-acquire-ona →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/tcs-anthropic-partnership">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">TCS and Anthropic bring Claude to regulated industries</div>
+    <div class="cat-row-title" style="font-size:15px" title="TCS and Anthropic bring Claude to regulated industries">TCS and Anthropic bring Claude to regulated industries</div>
+    
     
     <span class="cat-row-link">anthropic.com/news/tcs-anthropic-partners… →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/supporting-eu-trustworthy-ai-ecosystem">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Supporting Europe’s work in ensuring a trustworthy AI ecosystem</div>
+    <div class="cat-row-title" style="font-size:15px" title="Supporting Europe’s work in ensuring a trustworthy AI ecosystem">Supporting Europe’s work in ensuring a trustworthy AI ecosystem</div>
+    
     
     <span class="cat-row-link">openai.com/index/supporting-eu-trustworth… →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
 </div>

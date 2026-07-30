@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.darpa.mil/news/2026/darpa-us-air-force-fly-ai-controlled-f-16">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">DARPA, U.S. Air Force fly AI-controlled F-16</div>
+    <div class="cat-row-title" style="font-size:34px" title="DARPA, U.S. Air Force fly AI-controlled F-16">DARPA, U.S. Air Force fly AI-controlled F-16</div>
     <div class="cat-row-dek">DARPA and the U.S. Air Force successfully flew an F-16 fighter jet controlled by AI. This milestone demonstrates significant progress in autonomous combat systems and the integration of AI into critical defense technologies.</div>
+    
     <span class="cat-row-link">darpa.mil/news/2026/darpa-us-air-force-fl… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://arxiv.org/abs/2607.21596">
   <span class="cat-score" style="font-size:28px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">FlowEvo: Self-Evolving Agents through the Co-Evolution of Workflows and Executable Skills</div>
+    <div class="cat-row-title" style="font-size:28px" title="FlowEvo: Self-Evolving Agents through the Co-Evolution of Workflows and Executable Skills">FlowEvo: Self-Evolving Agents through the Co-Evolution of Workflows and Executable Skills</div>
     <div class="cat-row-dek">FlowEvo is a training-free framework enabling self-evolving AI agents by co-evolving workflows and executable skills. It compiles successful task traces into reusable skill records, persisting them in a skill bank for future systematic benefit.</div>
+    
     <span class="cat-row-link">arxiv.org/abs/2607.21596 →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://arxiv.org/abs/2607.21600">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Securing Multimodal AI through Internal Information Decomposition</div>
+    <div class="cat-row-title" style="font-size:22px" title="Securing Multimodal AI through Internal Information Decomposition">Securing Multimodal AI through Internal Information Decomposition</div>
+    
     
     <span class="cat-row-link">arxiv.org/abs/2607.21600 →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://arxiv.org/abs/2607.21604">
   <span class="cat-score" style="font-size:17px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">AgentKVShift: Efficient KV Cache Reuse for Agentic Memory Systems</div>
+    <div class="cat-row-title" style="font-size:17px" title="AgentKVShift: Efficient KV Cache Reuse for Agentic Memory Systems">AgentKVShift: Efficient KV Cache Reuse for Agentic Memory Systems</div>
+    
     
     <span class="cat-row-link">arxiv.org/abs/2607.21604 →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://arxiv.org/abs/2607.21606">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">TILT: Improving Compositional Generation in Diffusion Models with a Model-Intrinsic Reward</div>
+    <div class="cat-row-title" style="font-size:15px" title="TILT: Improving Compositional Generation in Diffusion Models with a Model-Intrinsic Reward">TILT: Improving Compositional Generation in Diffusion Models with a Model-Intrinsic Reward</div>
+    
     
     <span class="cat-row-link">arxiv.org/abs/2607.21606 →</span>
   </div>
@@ -251,7 +261,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">5 of 5 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">5 of 5 shown · category cap 6 · min significance 0.55</span>
   <a class="cat-footer-link" href="index.html">Research in earlier weeks →</a>
 </div>
 </div>

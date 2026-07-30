@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/anthropic-acquires-stainless">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Anthropic acquires Stainless</div>
+    <div class="cat-row-title" style="font-size:34px" title="Anthropic acquires Stainless">Anthropic acquires Stainless</div>
     <div class="cat-row-dek">Anthropic has acquired Stainless, a firm specializing in SDKs and MCP server tooling. This acquisition is intended to improve Anthropic&#39;s agentic capabilities by allowing models to interact with more external systems.</div>
+    
     <span class="cat-row-link">anthropic.com/news/anthropic-acquires-sta… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/anthropic-kpmg">
   <span class="cat-score" style="font-size:28px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance</div>
+    <div class="cat-row-title" style="font-size:28px" title="KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance">KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance</div>
     <div class="cat-row-dek">KPMG has formed a global alliance with Anthropic to integrate Claude into its internal operations. This deployment will impact a workforce of over 276,000 employees across 138 countries and territories.</div>
+    
     <span class="cat-row-link">anthropic.com/news/anthropic-kpmg →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/introducing-openai-for-singapore">
   <span class="cat-score" style="font-size:22px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Introducing OpenAI for Singapore</div>
+    <div class="cat-row-title" style="font-size:22px" title="Introducing OpenAI for Singapore">Introducing OpenAI for Singapore</div>
+    
     
     <span class="cat-row-link">openai.com/index/introducing-openai-for-s… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/dell-codex-enterprise-partnership">
   <span class="cat-score" style="font-size:17px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments</div>
+    <div class="cat-row-title" style="font-size:17px" title="OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments">OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments</div>
+    
     
     <span class="cat-row-link">openai.com/index/dell-codex-enterprise-pa… →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks/">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks</div>
+    <div class="cat-row-title" style="font-size:15px" title="We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks">We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks</div>
+    
     
     <span class="cat-row-link">deepmind.google/blog/were-launching-the-g… →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/the-next-phase-of-education-for-countries">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">The next phase of OpenAI’s Education for Countries</div>
+    <div class="cat-row-title" style="font-size:15px" title="The next phase of OpenAI’s Education for Countries">The next phase of OpenAI’s Education for Countries</div>
+    
     
     <span class="cat-row-link">openai.com/index/the-next-phase-of-educat… →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
 </div>

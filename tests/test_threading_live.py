@@ -128,6 +128,8 @@ def test_above_band_pairs_are_not_threaded(snapshot, name, a, b, measured):
     assert sim >= s.thread_max_similarity, (
         f"{name}: cos={sim:.4f} 가 상한 {s.thread_max_similarity} 아래로 내려옴 "
         f"(2026-07-30 실측 {measured}) — 이제 연결 가능하니 결정을 재검토할 것")
+
+
 def test_same_day_siblings_are_never_linked(snapshot, live):
     """Gemini Robotics 2 / ER 2 는 cos 0.824 로 구간 안이지만 같은 날 다른 모델이다.
     embeddings_before 가 같은 날짜를 빼주므로 후보에조차 안 들어와야 한다."""

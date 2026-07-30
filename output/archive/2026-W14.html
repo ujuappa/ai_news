@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,42 +162,44 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/accelerating-the-next-phase-ai">Accelerating the next phase of AI</a>
+      <a class="week-lead-title" href="https://openai.com/index/accelerating-the-next-phase-ai" title="Accelerating the next phase of AI">Accelerating the next phase of AI</a>
       <p class="week-lead-dek">OpenAI has raised $122 billion in new funding to support global expansion and infrastructure development. These funds are designated for advancing next-generation compute and meeting rising enterprise demand for their AI suite.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/">Gemma 4: Byte for byte, the most capable open models</a>
+      <a class="week-sec-title" href="https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/" title="Gemma 4: Byte for byte, the most capable open models">Gemma 4: Byte for byte, the most capable open models</a>
       <p class="week-sec-dek">Google DeepMind has unveiled Gemma 4, their most capable open models to date. These models are specifically engineered to excel at advanced reasoning and agentic tasks.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/gemma4"><span class="week-rest-num">03</span><span class="week-rest-title">Welcome Gemma 4: Frontier multimodal intelligence on device</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/gemma4" title="Welcome Gemma 4: Frontier multimodal intelligence on device"><span class="week-rest-num">03</span><span class="week-rest-title">Welcome Gemma 4: Frontier multimodal intelligence on device</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/australia-MOU"><span class="week-rest-num">04</span><span class="week-rest-title">Australian government and Anthropic sign MOU for AI safety and research</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/australia-MOU" title="Australian government and Anthropic sign MOU for AI safety and research"><span class="week-rest-num">04</span><span class="week-rest-title">Australian government and Anthropic sign MOU for AI safety and research</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gradient-labs"><span class="week-rest-num">05</span><span class="week-rest-title">Gradient Labs gives every bank customer an AI account manager</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gradient-labs" title="Gradient Labs gives every bank customer an AI account manager"><span class="week-rest-num">05</span><span class="week-rest-title">Gradient Labs gives every bank customer an AI account manager</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-vision"><span class="week-rest-num">06</span><span class="week-rest-title">Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-vision" title="Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents"><span class="week-rest-num">06</span><span class="week-rest-title">Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/OpenMed/training-mrna-models-25-species"><span class="week-rest-num">07</span><span class="week-rest-title">Training mRNA Language Models Across 25 Species for $165</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/OpenMed/training-mrna-models-25-species" title="Training mRNA Language Models Across 25 Species for $165"><span class="week-rest-num">07</span><span class="week-rest-title">Training mRNA Language Models Across 25 Species for $165</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-acquires-tbpn"><span class="week-rest-num">08</span><span class="week-rest-title">OpenAI acquires TBPN</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-acquires-tbpn" title="OpenAI acquires TBPN"><span class="week-rest-num">08</span><span class="week-rest-title">OpenAI acquires TBPN</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/tiiuae/falcon-perception"><span class="week-rest-num">09</span><span class="week-rest-title">Falcon Perception</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/tiiuae/falcon-perception" title="Falcon Perception"><span class="week-rest-num">09</span><span class="week-rest-title">Falcon Perception</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/how-ai-is-ushering-in-the-next-era-of-risk-review-at-meta/"><span class="week-rest-num">10</span><span class="week-rest-title">How AI Is Ushering in the Next Era of Risk Review at Meta</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/how-ai-is-ushering-in-the-next-era-of-risk-review-at-meta/" title="How AI Is Ushering in the Next Era of Risk Review at Meta"><span class="week-rest-num">10</span><span class="week-rest-title">How AI Is Ushering in the Next Era of Risk Review at Meta</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/components-of-a-coding-agent"><span class="week-rest-num">11</span><span class="week-rest-title">Components of A Coding Agent</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/components-of-a-coding-agent" title="Components of A Coding Agent"><span class="week-rest-num">11</span><span class="week-rest-title">Components of A Coding Agent</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/codex-flexible-pricing-for-teams"><span class="week-rest-num">12</span><span class="week-rest-title">Codex now offers more flexible pricing for teams</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/codex-flexible-pricing-for-teams" title="Codex now offers more flexible pricing for teams"><span class="week-rest-num">12</span><span class="week-rest-title">Codex now offers more flexible pricing for teams</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/introducing-gradio-server"><span class="week-rest-num">13</span><span class="week-rest-title">Any Custom Frontend with Gradio&#39;s Backend</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/introducing-gradio-server" title="Any Custom Frontend with Gradio&#39;s Backend"><span class="week-rest-num">13</span><span class="week-rest-title">Any Custom Frontend with Gradio&#39;s Backend</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/trl-v1"><span class="week-rest-num">14</span><span class="week-rest-title">TRL v1.0: Post-Training Library Built to Move with the Field</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/trl-v1" title="TRL v1.0: Post-Training Library Built to Move with the Field"><span class="week-rest-num">14</span><span class="week-rest-title">TRL v1.0: Post-Training Library Built to Move with the Field</span></a>
       
     </div>
   </div>

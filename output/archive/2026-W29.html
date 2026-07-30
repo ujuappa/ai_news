@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,34 +162,36 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/">Introducing Gemini 3.5 Flash Cyber</a>
+      <a class="week-lead-title" href="https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/" title="Introducing Gemini 3.5 Flash Cyber">Introducing Gemini 3.5 Flash Cyber</a>
       <p class="week-lead-dek">Google has released Gemini 3.5 Flash Cyber, a specialized lightweight model. It is designed to assist in identifying and patching security vulnerabilities.</p>
+      
       <div class="week-lead-byline">Google DeepMind Blog · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/canadian-ai-research">Anthropic commits $10 million to Canadian AI research</a>
+      <a class="week-sec-title" href="https://www.anthropic.com/news/canadian-ai-research" title="Anthropic commits $10 million to Canadian AI research">Anthropic commits $10 million to Canadian AI research</a>
       <p class="week-sec-dek">Anthropic has committed $10 million to support Canadian AI research. The investment recognizes Canada&#39;s historical role in pioneering deep neural networks and reinforcement learning.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/unlocking-self-improvement-gpt-red"><span class="week-rest-num">03</span><span class="week-rest-title">GPT-Red: Unlocking Self-Improvement for Robustness</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/unlocking-self-improvement-gpt-red" title="GPT-Red: Unlocking Self-Improvement for Robustness"><span class="week-rest-num">03</span><span class="week-rest-title">GPT-Red: Unlocking Self-Improvement for Robustness</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/security-incident-july-2026"><span class="week-rest-num">04</span><span class="week-rest-title">Security incident disclosure — July 2026</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/security-incident-july-2026" title="Security incident disclosure — July 2026"><span class="week-rest-num">04</span><span class="week-rest-title">Security incident disclosure — July 2026</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-ai-safety-through-state-and-federal-action"><span class="week-rest-num">05</span><span class="week-rest-title">The US is advancing AI safety through state and federal action</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-ai-safety-through-state-and-federal-action" title="The US is advancing AI safety through state and federal action"><span class="week-rest-num">05</span><span class="week-rest-title">The US is advancing AI safety through state and federal action</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/teachers-local-businesses-win-as-meta-expands-louisiana-data-center/"><span class="week-rest-num">06</span><span class="week-rest-title">Teachers and Local Businesses Win as Meta Expands Louisiana Data Center</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/teachers-local-businesses-win-as-meta-expands-louisiana-data-center/" title="Teachers and Local Businesses Win as Meta Expands Louisiana Data Center"><span class="week-rest-num">06</span><span class="week-rest-title">Teachers and Local Businesses Win as Meta Expands Louisiana Data Center</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/controlling-reasoning-effort-in-llms"><span class="week-rest-num">07</span><span class="week-rest-title">Controlling Reasoning Effort in LLMs</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/controlling-reasoning-effort-in-llms" title="Controlling Reasoning Effort in LLMs"><span class="week-rest-num">07</span><span class="week-rest-title">Controlling Reasoning Effort in LLMs</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/our-approach-to-bioresilience/"><span class="week-rest-num">08</span><span class="week-rest-title">Our approach to bioresilience</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/our-approach-to-bioresilience/" title="Our approach to bioresilience"><span class="week-rest-num">08</span><span class="week-rest-title">Our approach to bioresilience</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/real-world-voiceeq"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Real World VoiceEQ: Measuring the human quality of voice AI</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/real-world-voiceeq" title="Introducing Real World VoiceEQ: Measuring the human quality of voice AI"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Real World VoiceEQ: Measuring the human quality of voice AI</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-teachers"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing Claude for Teachers</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-teachers" title="Introducing Claude for Teachers"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing Claude for Teachers</span></a>
       
     </div>
   </div>

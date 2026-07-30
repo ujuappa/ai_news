@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/scaling-ai-for-everyone">
   <span class="cat-score" style="font-size:34px">1.00</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Scaling AI for everyone</div>
+    <div class="cat-row-title" style="font-size:34px" title="Scaling AI for everyone">Scaling AI for everyone</div>
     <div class="cat-row-dek">OpenAI announced a massive $110B capital injection at a $730B pre-money valuation. The funding includes significant commitments of $30B each from SoftBank and NVIDIA, along with $50B from Amazon.</div>
+    
     <span class="cat-row-link">openai.com/index/scaling-ai-for-everyone →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/amazon-partnership">
   <span class="cat-score" style="font-size:28px">.90</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">OpenAI and Amazon announce strategic partnership</div>
+    <div class="cat-row-title" style="font-size:28px" title="OpenAI and Amazon announce strategic partnership">OpenAI and Amazon announce strategic partnership</div>
     <div class="cat-row-dek">OpenAI and Amazon have entered a strategic partnership to bring the OpenAI Frontier platform to AWS. This collaboration focuses on expanding AI infrastructure, custom model development, and enterprise agent deployment.</div>
+    
     <span class="cat-row-link">openai.com/index/amazon-partnership →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/statement-comments-secretary-war">
   <span class="cat-score" style="font-size:22px">.90</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Statement on the comments from Secretary of War Pete Hegseth</div>
+    <div class="cat-row-title" style="font-size:22px" title="Statement on the comments from Secretary of War Pete Hegseth">Statement on the comments from Secretary of War Pete Hegseth</div>
+    
     
     <span class="cat-row-link">anthropic.com/news/statement-comments-sec… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/our-agreement-with-the-department-of-war">
   <span class="cat-score" style="font-size:17px">.80</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Our agreement with the Department of War</div>
+    <div class="cat-row-title" style="font-size:17px" title="Our agreement with the Department of War">Our agreement with the Department of War</div>
+    
     
     <span class="cat-row-link">openai.com/index/our-agreement-with-the-d… →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://about.fb.com/news/2026/02/meta-amd-partner-longterm-ai-infrastructure-agreement/">
   <span class="cat-score" style="font-size:15px">.80</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Meta and AMD Partner for Longterm AI Infrastructure Agreement</div>
+    <div class="cat-row-title" style="font-size:15px" title="Meta and AMD Partner for Longterm AI Infrastructure Agreement">Meta and AMD Partner for Longterm AI Infrastructure Agreement</div>
+    
     
     <span class="cat-row-link">about.fb.com/news/2026/02/meta-amd-partne… →</span>
   </div>
@@ -252,7 +262,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/acquires-vercept">
   <span class="cat-score" style="font-size:15px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities</div>
+    <div class="cat-row-title" style="font-size:15px" title="Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities">Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities</div>
+    
     
     <span class="cat-row-link">anthropic.com/news/acquires-vercept →</span>
   </div>
@@ -264,7 +275,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">6 of 6 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
 </div>

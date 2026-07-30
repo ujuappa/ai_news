@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware">
   <span class="cat-score" style="font-size:34px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</div>
+    <div class="cat-row-title" style="font-size:34px" title="From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</div>
     <div class="cat-row-dek">New integrations have been released for the Hugging Face Hub, connecting model workflows to robotics hardware. The project uses Strands Agents and LeRobot to bridge the gap between AI software and physical robotic platforms.</div>
+    
     <span class="cat-row-link">huggingface.co/blog/amazon/strands-lerobo… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/ServiceNow/mosaicleaks">
   <span class="cat-score" style="font-size:28px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">MosaicLeaks: Can your research agent keep a secret?</div>
+    <div class="cat-row-title" style="font-size:28px" title="MosaicLeaks: Can your research agent keep a secret?">MosaicLeaks: Can your research agent keep a secret?</div>
     <div class="cat-row-dek">Hugging Face explored the security of research agents through &#39;MosaicLeaks&#39;. The analysis investigates how effectively these agents protect sensitive information during task execution.</div>
+    
     <span class="cat-row-link">huggingface.co/blog/ServiceNow/mosaicleaks →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/chatgpt-enterprise-spend-controls">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">New usage analytics and updated spend controls for enterprises</div>
+    <div class="cat-row-title" style="font-size:22px" title="New usage analytics and updated spend controls for enterprises">New usage analytics and updated spend controls for enterprises</div>
+    
     
     <span class="cat-row-link">openai.com/index/chatgpt-enterprise-spend… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/is-it-agentic-enough">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Is it agentic enough? Benchmarking open models on your own tooling</div>
+    <div class="cat-row-title" style="font-size:17px" title="Is it agentic enough? Benchmarking open models on your own tooling">Is it agentic enough? Benchmarking open models on your own tooling</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/is-it-agentic-enough →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/agentic-resource-discovery-launch">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Agentic Resource Discovery: Let agents search</div>
+    <div class="cat-row-title" style="font-size:15px" title="Agentic Resource Discovery: Let agents search">Agentic Resource Discovery: Let agents search</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/agentic-resource-disc… →</span>
   </div>
@@ -251,7 +261,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">5 of 5 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">5 of 5 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

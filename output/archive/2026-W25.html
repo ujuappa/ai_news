@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,46 +162,48 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/improving-health-intelligence-in-chatgpt">Improving health intelligence in ChatGPT</a>
+      <a class="week-lead-title" href="https://openai.com/index/improving-health-intelligence-in-chatgpt" title="Improving health intelligence in ChatGPT">Improving health intelligence in ChatGPT</a>
       <p class="week-lead-dek">The new GPT-5.5 Instant model enhances ChatGPT&#39;s health and wellness capabilities. It features improved reasoning, better contextual awareness, and physician-informed evaluations to provide more accurate medical information.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Research</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/diagnose-rare-childhood-diseases">Using AI to help physicians diagnose rare genetic diseases affecting children</a>
+      <a class="week-sec-title" href="https://openai.com/index/diagnose-rare-childhood-diseases" title="Using AI to help physicians diagnose rare genetic diseases affecting children">Using AI to help physicians diagnose rare genetic diseases affecting children</a>
       <p class="week-sec-dek">Researchers utilized an OpenAI reasoning model to assist in diagnosing rare genetic diseases in children. The effort successfully identified 18 new diagnoses in clinical cases that previously remained unsolved.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/ai-chemist-improves-reaction"><span class="week-rest-num">03</span><span class="week-rest-title">A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/ai-chemist-improves-reaction" title="A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry"><span class="week-rest-num">03</span><span class="week-rest-title">A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/samsung-electronics-chatgpt-codex-deployment"><span class="week-rest-num">04</span><span class="week-rest-title">Samsung Electronics brings ChatGPT and Codex to employees</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/samsung-electronics-chatgpt-codex-deployment" title="Samsung Electronics brings ChatGPT and Codex to employees"><span class="week-rest-num">04</span><span class="week-rest-title">Samsung Electronics brings ChatGPT and Codex to employees</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic opens Seoul office</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem" title="Anthropic opens Seoul office"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic opens Seoul office</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/deployment-simulation"><span class="week-rest-num">06</span><span class="week-rest-title">Predicting model behavior before release by simulating deployment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/deployment-simulation" title="Predicting model behavior before release by simulating deployment"><span class="week-rest-num">06</span><span class="week-rest-title">Predicting model behavior before release by simulating deployment</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-life-sci-bench"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing LifeSciBench</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-life-sci-bench" title="Introducing LifeSciBench"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing LifeSciBench</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/unlocking-uk-house-building-with-ai-accelerated-planning/"><span class="week-rest-num">08</span><span class="week-rest-title">Unlocking UK house-building with AI-accelerated planning</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/unlocking-uk-house-building-with-ai-accelerated-planning/" title="Unlocking UK house-building with AI-accelerated planning"><span class="week-rest-num">08</span><span class="week-rest-title">Unlocking UK house-building with AI-accelerated planning</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/securing-the-future-of-ai-agents/"><span class="week-rest-num">09</span><span class="week-rest-title">Securing the future of AI agents</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/securing-the-future-of-ai-agents/" title="Securing the future of AI agents"><span class="week-rest-num">09</span><span class="week-rest-title">Securing the future of AI agents</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware"><span class="week-rest-num">10</span><span class="week-rest-title">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware" title="From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot"><span class="week-rest-num">10</span><span class="week-rest-title">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/zai-org/glm-52-blog"><span class="week-rest-num">11</span><span class="week-rest-title">GLM-5.2: Built for Long-Horizon Tasks</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/zai-org/glm-52-blog" title="GLM-5.2: Built for Long-Horizon Tasks"><span class="week-rest-num">11</span><span class="week-rest-title">GLM-5.2: Built for Long-Horizon Tasks</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow/mosaicleaks"><span class="week-rest-num">12</span><span class="week-rest-title">MosaicLeaks: Can your research agent keep a secret?</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow/mosaicleaks" title="MosaicLeaks: Can your research agent keep a secret?"><span class="week-rest-num">12</span><span class="week-rest-title">MosaicLeaks: Can your research agent keep a secret?</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-enterprise-spend-controls"><span class="week-rest-num">13</span><span class="week-rest-title">New usage analytics and updated spend controls for enterprises</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-enterprise-spend-controls" title="New usage analytics and updated spend controls for enterprises"><span class="week-rest-num">13</span><span class="week-rest-title">New usage analytics and updated spend controls for enterprises</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/peft-beyond-lora"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond LoRA: Can you beat the most popular fine-tuning technique?</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/peft-beyond-lora" title="Beyond LoRA: Can you beat the most popular fine-tuning technique?"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond LoRA: Can you beat the most popular fine-tuning technique?</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/is-it-agentic-enough"><span class="week-rest-num">15</span><span class="week-rest-title">Is it agentic enough? Benchmarking open models on your own tooling</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/is-it-agentic-enough" title="Is it agentic enough? Benchmarking open models on your own tooling"><span class="week-rest-num">15</span><span class="week-rest-title">Is it agentic enough? Benchmarking open models on your own tooling</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/agentic-resource-discovery-launch"><span class="week-rest-num">16</span><span class="week-rest-title">Agentic Resource Discovery: Let agents search</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/agentic-resource-discovery-launch" title="Agentic Resource Discovery: Let agents search"><span class="week-rest-num">16</span><span class="week-rest-title">Agentic Resource Discovery: Let agents search</span></a>
       
     </div>
   </div>

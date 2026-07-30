@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,42 +162,44 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-5">Introducing GPT-5.5</a>
+      <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-5" title="Introducing GPT-5.5">Introducing GPT-5.5</a>
       <p class="week-lead-dek">OpenAI has introduced GPT-5.5, its most advanced model to date. It is designed for higher speed and enhanced performance in complex workflows involving coding, research, and data analysis.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/anthropic-amazon-compute">Anthropic and Amazon expand collaboration for up to 5 gigawatts of new compute</a>
+      <a class="week-sec-title" href="https://www.anthropic.com/news/anthropic-amazon-compute" title="Anthropic and Amazon expand collaboration for up to 5 gigawatts of new compute">Anthropic and Amazon expand collaboration for up to 5 gigawatts of new compute</a>
       <p class="week-sec-dek">Anthropic and Amazon have expanded their partnership to secure up to 5 gigawatts of compute capacity for training and deploying Claude. The agreement includes significant allocations of Trainium2 and Trainium3 hardware through the end of 2026.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/meta-partners-with-aws-on-graviton-chips-to-power-agentic-ai/"><span class="week-rest-num">03</span><span class="week-rest-title">Meta Partners With AWS on Graviton Chips to Power Agentic AI</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/meta-partners-with-aws-on-graviton-chips-to-power-agentic-ai/" title="Meta Partners With AWS on Graviton Chips to Power Agentic AI"><span class="week-rest-num">03</span><span class="week-rest-title">Meta Partners With AWS on Graviton Chips to Power Agentic AI</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/deepseekv4"><span class="week-rest-num">04</span><span class="week-rest-title">DeepSeek-V4: a million-token context that agents can actually use</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/deepseekv4" title="DeepSeek-V4: a million-token context that agents can actually use"><span class="week-rest-num">04</span><span class="week-rest-title">DeepSeek-V4: a million-token context that agents can actually use</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-chatgpt-images-2-0"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing ChatGPT Images 2.0</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-chatgpt-images-2-0" title="Introducing ChatGPT Images 2.0"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing ChatGPT Images 2.0</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/scaling-codex-to-enterprises-worldwide"><span class="week-rest-num">06</span><span class="week-rest-title">Scaling Codex to enterprises worldwide</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/scaling-codex-to-enterprises-worldwide" title="Scaling Codex to enterprises worldwide"><span class="week-rest-num">06</span><span class="week-rest-title">Scaling Codex to enterprises worldwide</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/modeling-ai-jobs-transition"><span class="week-rest-num">07</span><span class="week-rest-title">Modeling an AI jobs transition</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/modeling-ai-jobs-transition" title="Modeling an AI jobs transition"><span class="week-rest-num">07</span><span class="week-rest-title">Modeling an AI jobs transition</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-privacy-filter"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing OpenAI Privacy Filter</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-privacy-filter" title="Introducing OpenAI Privacy Filter"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing OpenAI Privacy Filter</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-nec"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic and NEC partner to build AI-native engineering at scale in Japan</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-nec" title="Anthropic and NEC partner to build AI-native engineering at scale in Japan"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic and NEC partner to build AI-native engineering at scale in Japan</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/helping-parents-understand-conversations-their-teens-are-having-with-ai/"><span class="week-rest-num">10</span><span class="week-rest-title">Helping Parents Understand the Conversations Their Teens Are Having With AI</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/helping-parents-understand-conversations-their-teens-are-having-with-ai/" title="Helping Parents Understand the Conversations Their Teens Are Having With AI"><span class="week-rest-num">10</span><span class="week-rest-title">Helping Parents Understand the Conversations Their Teens Are Having With AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/making-chatgpt-better-for-clinicians"><span class="week-rest-num">11</span><span class="week-rest-title">Making ChatGPT better for clinicians</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/making-chatgpt-better-for-clinicians" title="Making ChatGPT better for clinicians"><span class="week-rest-num">11</span><span class="week-rest-title">Making ChatGPT better for clinicians</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-workspace-agents-in-chatgpt"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing workspace agents in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-workspace-agents-in-chatgpt" title="Introducing workspace agents in ChatGPT"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing workspace agents in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/speeding-up-agentic-workflows-with-websockets"><span class="week-rest-num">13</span><span class="week-rest-title">Speeding up agentic workflows with WebSockets in the Responses API</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/speeding-up-agentic-workflows-with-websockets" title="Speeding up agentic workflows with WebSockets in the Responses API"><span class="week-rest-num">13</span><span class="week-rest-title">Speeding up agentic workflows with WebSockets in the Responses API</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/breaking-ground-new-ai-optimized-data-center-tulsa-oklahoma/"><span class="week-rest-num">14</span><span class="week-rest-title">Breaking Ground on a New AI-Optimized Data Center in Tulsa, Oklahoma</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/breaking-ground-new-ai-optimized-data-center-tulsa-oklahoma/" title="Breaking Ground on a New AI-Optimized Data Center in Tulsa, Oklahoma"><span class="week-rest-num">14</span><span class="week-rest-title">Breaking Ground on a New AI-Optimized Data Center in Tulsa, Oklahoma</span></a>
       
     </div>
   </div>

@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://www.anthropic.com/news/claude-code-security">
   <span class="cat-score" style="font-size:34px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Making frontier cybersecurity capabilities available to defenders</div>
+    <div class="cat-row-title" style="font-size:34px" title="Making frontier cybersecurity capabilities available to defenders">Making frontier cybersecurity capabilities available to defenders</div>
     <div class="cat-row-dek">Anthropic introduced a research preview of Claude Code Security, which helps automate the detection and patching of software vulnerabilities. This tool aims to assist security teams by identifying complex issues that standard scanners might miss.</div>
+    
     <span class="cat-row-link">anthropic.com/news/claude-code-security →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/ggml-joins-hf">
   <span class="cat-score" style="font-size:28px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">GGML and llama.cpp join HF to ensure the long-term progress of Local AI</div>
+    <div class="cat-row-title" style="font-size:28px" title="GGML and llama.cpp join HF to ensure the long-term progress of Local AI">GGML and llama.cpp join HF to ensure the long-term progress of Local AI</div>
     <div class="cat-row-dek">GGML and llama.cpp have joined Hugging Face to ensure the continued development of local AI infrastructure. This collaboration aims to stabilize the ecosystem for running large models on consumer hardware.</div>
+    
     <span class="cat-row-link">huggingface.co/blog/ggml-joins-hf →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/unsloth-jobs">
   <span class="cat-score" style="font-size:22px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Train AI models with Unsloth and Hugging Face Jobs for FREE</div>
+    <div class="cat-row-title" style="font-size:22px" title="Train AI models with Unsloth and Hugging Face Jobs for FREE">Train AI models with Unsloth and Hugging Face Jobs for FREE</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/unsloth-jobs →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://huggingface.co/blog/gradio-html-one-shot-apps">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">One-Shot Any Web App with Gradio&#39;s gr.HTML</div>
+    <div class="cat-row-title" style="font-size:17px" title="One-Shot Any Web App with Gradio&#39;s gr.HTML">One-Shot Any Web App with Gradio&#39;s gr.HTML</div>
+    
     
     <span class="cat-row-link">huggingface.co/blog/gradio-html-one-shot-… →</span>
   </div>
@@ -238,7 +247,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">4 of 4 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">4 of 4 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

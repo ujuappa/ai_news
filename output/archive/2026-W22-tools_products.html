@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/cisco">
   <span class="cat-score" style="font-size:34px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Cisco and OpenAI redefine enterprise engineering with Codex</div>
+    <div class="cat-row-title" style="font-size:34px" title="Cisco and OpenAI redefine enterprise engineering with Codex">Cisco and OpenAI redefine enterprise engineering with Codex</div>
     <div class="cat-row-dek">Cisco and OpenAI are collaborating to scale AI-native development and automate defect remediation. The partnership aims to enhance Cisco&#39;s enterprise engineering and AI Defense capabilities using Codex.</div>
+    
     <span class="cat-row-link">openai.com/index/cisco →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/boston-childrens-hospital">
   <span class="cat-score" style="font-size:28px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Boston Children’s uses AI to unlock new diagnoses</div>
+    <div class="cat-row-title" style="font-size:28px" title="Boston Children’s uses AI to unlock new diagnoses">Boston Children’s uses AI to unlock new diagnoses</div>
     <div class="cat-row-dek">Boston Children’s Hospital is leveraging OpenAI&#39;s technology to streamline clinical operations and aid in the diagnosis of over 40 rare disease cases. This implementation highlights the growing impact of AI in specialized medical diagnostics.</div>
+    
     <span class="cat-row-link">openai.com/index/boston-childrens-hospital →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/endava">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">How Endava builds an agentic organization with Codex</div>
+    <div class="cat-row-title" style="font-size:22px" title="How Endava builds an agentic organization with Codex">How Endava builds an agentic organization with Codex</div>
+    
     
     <span class="cat-row-link">openai.com/index/endava →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/building-self-improving-tax-agents-with-codex">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Building self-improving tax agents with Codex</div>
+    <div class="cat-row-title" style="font-size:17px" title="Building self-improving tax agents with Codex">Building self-improving tax agents with Codex</div>
+    
     
     <span class="cat-row-link">openai.com/index/building-self-improving-… →</span>
   </div>
@@ -238,7 +247,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">4 of 4 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">4 of 4 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
 </div>

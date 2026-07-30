@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,44 +162,46 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/gpt-5-6">GPT-5.6: Frontier intelligence that scales with your ambition</a>
+      <a class="week-lead-title" href="https://openai.com/index/gpt-5-6" title="GPT-5.6: Frontier intelligence that scales with your ambition">GPT-5.6: Frontier intelligence that scales with your ambition</a>
       <p class="week-lead-dek">GPT-5.6 has been released, promising higher intelligence and improved performance efficiency per dollar. The model is positioned to handle more demanding enterprise and individual workloads.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/gpt-5-6-preferred-model-microsoft-365-copilot">GPT-5.6 is now the preferred model in Microsoft 365 Copilot</a>
+      <a class="week-sec-title" href="https://openai.com/index/gpt-5-6-preferred-model-microsoft-365-copilot" title="GPT-5.6 is now the preferred model in Microsoft 365 Copilot">GPT-5.6 is now the preferred model in Microsoft 365 Copilot</a>
       <p class="week-sec-dek">OpenAI has integrated GPT-5.6 as the core intelligence powering Microsoft 365 Copilot. The update aims to provide enhanced performance for tasks within Word, Excel, PowerPoint, and broader chat functionality.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-your-most-ambitious-work"><span class="week-rest-num">03</span><span class="week-rest-title">ChatGPT is now a partner for your most ambitious work</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-your-most-ambitious-work" title="ChatGPT is now a partner for your most ambitious work"><span class="week-rest-num">03</span><span class="week-rest-title">ChatGPT is now a partner for your most ambitious work</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/breaking-ground-on-metas-first-data-center-in-canada/"><span class="week-rest-num">04</span><span class="week-rest-title">Breaking Ground on Meta’s First Data Center in Canada</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/breaking-ground-on-metas-first-data-center-in-canada/" title="Breaking Ground on Meta’s First Data Center in Canada"><span class="week-rest-num">04</span><span class="week-rest-title">Breaking Ground on Meta’s First Data Center in Canada</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-gpt-live"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing GPT-Live</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-gpt-live" title="Introducing GPT-Live"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing GPT-Live</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/ben-bernanke"><span class="week-rest-num">06</span><span class="week-rest-title">Ben Bernanke appointed to Anthropic’s Long-Term Benefit Trust</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/ben-bernanke" title="Ben Bernanke appointed to Anthropic’s Long-Term Benefit Trust"><span class="week-rest-num">06</span><span class="week-rest-title">Ben Bernanke appointed to Anthropic’s Long-Term Benefit Trust</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/government-national-security-partnerships"><span class="week-rest-num">07</span><span class="week-rest-title">Our approach to government and national security partnerships</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/government-national-security-partnerships" title="Our approach to government and national security partnerships"><span class="week-rest-num">07</span><span class="week-rest-title">Our approach to government and national security partnerships</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/introducing-muse-image-meta-ai/"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing Muse Image: Image Generation Built for Your World</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/introducing-muse-image-meta-ai/" title="Introducing Muse Image: Image Generation Built for Your World"><span class="week-rest-num">08</span><span class="week-rest-title">Introducing Muse Image: Image Generation Built for Your World</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/alberta-government-claude-cybersecurity"><span class="week-rest-num">09</span><span class="week-rest-title">Government of Alberta uses Claude to find and fix cybersecurity vulnerabilities</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/alberta-government-claude-cybersecurity" title="Government of Alberta uses Claude to find and fix cybersecurity vulnerabilities"><span class="week-rest-num">09</span><span class="week-rest-title">Government of Alberta uses Claude to find and fix cybersecurity vulnerabilities</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/deutsche-telekom"><span class="week-rest-num">10</span><span class="week-rest-title">How Deutsche Telekom is rewiring telecommunications with AI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/deutsche-telekom" title="How Deutsche Telekom is rewiring telecommunications with AI"><span class="week-rest-num">10</span><span class="week-rest-title">How Deutsche Telekom is rewiring telecommunications with AI</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/ust-claude"><span class="week-rest-num">11</span><span class="week-rest-title">UST is bringing Claude to physical AI</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/ust-claude" title="UST is bringing Claude to physical AI"><span class="week-rest-num">11</span><span class="week-rest-title">UST is bringing Claude to physical AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/mufg"><span class="week-rest-num">12</span><span class="week-rest-title">MUFG aims to become AI-native with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/mufg" title="MUFG aims to become AI-native with OpenAI"><span class="week-rest-num">12</span><span class="week-rest-title">MUFG aims to become AI-native with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/bio-bug-bounty"><span class="week-rest-num">13</span><span class="week-rest-title">GPT-5.5 Bio Bug Bounty</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/bio-bug-bounty" title="GPT-5.5 Bio Bug Bounty"><span class="week-rest-num">13</span><span class="week-rest-title">GPT-5.5 Bio Bug Bounty</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/separating-signal-from-noise-coding-evaluations"><span class="week-rest-num">14</span><span class="week-rest-title">Separating signal from noise in coding evaluations</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/separating-signal-from-noise-coding-evaluations" title="Separating signal from noise in coding evaluations"><span class="week-rest-num">14</span><span class="week-rest-title">Separating signal from noise in coding evaluations</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/australian-payments-plus"><span class="week-rest-num">15</span><span class="week-rest-title">Australian Payments Plus moves faster with ChatGPT and Codex</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/australian-payments-plus" title="Australian Payments Plus moves faster with ChatGPT and Codex"><span class="week-rest-num">15</span><span class="week-rest-title">Australian Payments Plus moves faster with ChatGPT and Codex</span></a>
       
     </div>
   </div>

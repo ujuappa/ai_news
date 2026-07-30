@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,42 +162,44 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/scaling-ai-for-everyone">Scaling AI for everyone</a>
+      <a class="week-lead-title" href="https://openai.com/index/scaling-ai-for-everyone" title="Scaling AI for everyone">Scaling AI for everyone</a>
       <p class="week-lead-dek">OpenAI announced a massive $110B capital injection at a $730B pre-money valuation. The funding includes significant commitments of $30B each from SoftBank and NVIDIA, along with $50B from Amazon.</p>
+      
       <div class="week-lead-byline">OpenAI News · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/amazon-partnership">OpenAI and Amazon announce strategic partnership</a>
+      <a class="week-sec-title" href="https://openai.com/index/amazon-partnership" title="OpenAI and Amazon announce strategic partnership">OpenAI and Amazon announce strategic partnership</a>
       <p class="week-sec-dek">OpenAI and Amazon have entered a strategic partnership to bring the OpenAI Frontier platform to AWS. This collaboration focuses on expanding AI infrastructure, custom model development, and enterprise agent deployment.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/statement-comments-secretary-war"><span class="week-rest-num">03</span><span class="week-rest-title">Statement on the comments from Secretary of War Pete Hegseth</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/statement-comments-secretary-war" title="Statement on the comments from Secretary of War Pete Hegseth"><span class="week-rest-num">03</span><span class="week-rest-title">Statement on the comments from Secretary of War Pete Hegseth</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/our-agreement-with-the-department-of-war"><span class="week-rest-num">04</span><span class="week-rest-title">Our agreement with the Department of War</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/our-agreement-with-the-department-of-war" title="Our agreement with the Department of War"><span class="week-rest-num">04</span><span class="week-rest-title">Our agreement with the Department of War</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/meta-amd-partner-longterm-ai-infrastructure-agreement/"><span class="week-rest-num">05</span><span class="week-rest-title">Meta and AMD Partner for Longterm AI Infrastructure Agreement</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/meta-amd-partner-longterm-ai-infrastructure-agreement/" title="Meta and AMD Partner for Longterm AI Infrastructure Agreement"><span class="week-rest-num">05</span><span class="week-rest-title">Meta and AMD Partner for Longterm AI Infrastructure Agreement</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/acquires-vercept"><span class="week-rest-num">06</span><span class="week-rest-title">Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/acquires-vercept" title="Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities"><span class="week-rest-num">06</span><span class="week-rest-title">Anthropic acquires Vercept to advance Claude&#39;s computer use capabilities</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-the-stateful-runtime-environment-for-agents-in-amazon-bedrock"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing the Stateful Runtime Environment for Agents in Amazon Bedrock</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-the-stateful-runtime-environment-for-agents-in-amazon-bedrock" title="Introducing the Stateful Runtime Environment for Agents in Amazon Bedrock"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing the Stateful Runtime Environment for Agents in Amazon Bedrock</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/nano-banana-2-combining-pro-capabilities-with-lightning-fast-speed/"><span class="week-rest-num">08</span><span class="week-rest-title">Nano Banana 2: Combining Pro capabilities with lightning-fast speed</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/nano-banana-2-combining-pro-capabilities-with-lightning-fast-speed/" title="Nano Banana 2: Combining Pro capabilities with lightning-fast speed"><span class="week-rest-num">08</span><span class="week-rest-title">Nano Banana 2: Combining Pro capabilities with lightning-fast speed</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/pacific-northwest-national-laboratory"><span class="week-rest-num">09</span><span class="week-rest-title">Pacific Northwest National Laboratory and OpenAI partner to accelerate federal permitting</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/pacific-northwest-national-laboratory" title="Pacific Northwest National Laboratory and OpenAI partner to accelerate federal permitting"><span class="week-rest-num">09</span><span class="week-rest-title">Pacific Northwest National Laboratory and OpenAI partner to accelerate federal permitting</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/disrupting-malicious-ai-uses"><span class="week-rest-num">10</span><span class="week-rest-title">Disrupting malicious uses of AI | February 2026</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/disrupting-malicious-ai-uses" title="Disrupting malicious uses of AI | February 2026"><span class="week-rest-num">10</span><span class="week-rest-title">Disrupting malicious uses of AI | February 2026</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/frontier-alliance-partners"><span class="week-rest-num">11</span><span class="week-rest-title">OpenAI announces Frontier Alliance Partners</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/frontier-alliance-partners" title="OpenAI announces Frontier Alliance Partners"><span class="week-rest-num">11</span><span class="week-rest-title">OpenAI announces Frontier Alliance Partners</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/figma-partnership"><span class="week-rest-num">12</span><span class="week-rest-title">OpenAI Codex and Figma launch seamless code-to-design experience</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/figma-partnership" title="OpenAI Codex and Figma launch seamless code-to-design experience"><span class="week-rest-num">12</span><span class="week-rest-title">OpenAI Codex and Figma launch seamless code-to-design experience</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/a-dream-of-spring-for-open-weight"><span class="week-rest-num">13</span><span class="week-rest-title">A Dream of Spring for Open-Weight LLMs: 10 Architectures from Jan-Feb 2026</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/a-dream-of-spring-for-open-weight" title="A Dream of Spring for Open-Weight LLMs: 10 Architectures from Jan-Feb 2026"><span class="week-rest-num">13</span><span class="week-rest-title">A Dream of Spring for Open-Weight LLMs: 10 Architectures from Jan-Feb 2026</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/moe-transformers"><span class="week-rest-num">14</span><span class="week-rest-title">Mixture of Experts (MoEs) in Transformers</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/moe-transformers" title="Mixture of Experts (MoEs) in Transformers"><span class="week-rest-num">14</span><span class="week-rest-title">Mixture of Experts (MoEs) in Transformers</span></a>
       
     </div>
   </div>

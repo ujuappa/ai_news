@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/">
   <span class="cat-score" style="font-size:34px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Measuring progress toward AGI: A cognitive framework</div>
+    <div class="cat-row-title" style="font-size:34px" title="Measuring progress toward AGI: A cognitive framework">Measuring progress toward AGI: A cognitive framework</div>
     <div class="cat-row-dek">Google DeepMind has proposed a new cognitive framework to measure advancements toward AGI. To support this, they are launching a Kaggle hackathon focused on developing relevant evaluation metrics.</div>
+    
     <span class="cat-row-link">deepmind.google/blog/measuring-progress-t… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment">
   <span class="cat-score" style="font-size:28px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">How we monitor internal coding agents for misalignment</div>
+    <div class="cat-row-title" style="font-size:28px" title="How we monitor internal coding agents for misalignment">How we monitor internal coding agents for misalignment</div>
     <div class="cat-row-dek">OpenAI is utilizing chain-of-thought monitoring on internal coding agents to better understand and mitigate misalignment risks. This analysis focuses on real-world deployments to improve overall AI safety protocols.</div>
+    
     <span class="cat-row-link">openai.com/index/how-we-monitor-internal-… →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://magazine.sebastianraschka.com/p/visual-attention-variants">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">A Visual Guide to Attention Variants in Modern LLMs</div>
+    <div class="cat-row-title" style="font-size:22px" title="A Visual Guide to Attention Variants in Modern LLMs">A Visual Guide to Attention Variants in Modern LLMs</div>
+    
     
     <span class="cat-row-link">magazine.sebastianraschka.com/p/visual-at… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/why-codex-security-doesnt-include-sast">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Why Codex Security Doesn’t Include a SAST Report</div>
+    <div class="cat-row-title" style="font-size:17px" title="Why Codex Security Doesn’t Include a SAST Report">Why Codex Security Doesn’t Include a SAST Report</div>
+    
     
     <span class="cat-row-link">openai.com/index/why-codex-security-doesn… →</span>
   </div>
@@ -238,7 +247,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">4 of 4 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">4 of 4 shown · category cap 6 · min significance 0.55</span>
   <a class="cat-footer-link" href="index.html">Research in earlier weeks →</a>
 </div>
 </div>

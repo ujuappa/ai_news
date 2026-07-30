@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
 .week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
@@ -157,32 +162,34 @@ footer.site-footer nav a:hover { color:var(--ink); }
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://about.fb.com/news/2026/07/meta-announces-new-venture-with-blackrock-to-develop-data-center-in-el-paso/">Meta Announces New Strategic Venture With BlackRock to Develop Data Center in El Paso</a>
+      <a class="week-lead-title" href="https://about.fb.com/news/2026/07/meta-announces-new-venture-with-blackrock-to-develop-data-center-in-el-paso/" title="Meta Announces New Strategic Venture With BlackRock to Develop Data Center in El Paso">Meta Announces New Strategic Venture With BlackRock to Develop Data Center in El Paso</a>
       <p class="week-lead-dek">Meta and BlackRock have announced a strategic venture to finance and develop a new data center campus in El Paso, Texas. This infrastructure expansion supports Meta&#39;s growing compute requirements.</p>
+      
       <div class="week-lead-byline">Meta AI Blog · tier major</div>
       
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/position-open-weights-models">Our position on open-weights models</a>
+      <a class="week-sec-title" href="https://www.anthropic.com/news/position-open-weights-models" title="Our position on open-weights models">Our position on open-weights models</a>
       <p class="week-sec-dek">Anthropic has formally clarified its stance, stating it does not advocate for a ban on open-weights models. This statement comes amid industry-wide debate and concerns that US officials might restrict access to foreign open-weights technology.</p>
+      
       
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/cosmos-h-dreams"><span class="week-rest-num">03</span><span class="week-rest-title">NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/cosmos-h-dreams" title="NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics"><span class="week-rest-num">03</span><span class="week-rest-title">NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/agent-intrusion-technical-timeline"><span class="week-rest-num">04</span><span class="week-rest-title">Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/agent-intrusion-technical-timeline" title="Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident"><span class="week-rest-num">04</span><span class="week-rest-title">Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/cognizant-anthropic"><span class="week-rest-num">05</span><span class="week-rest-title">Expanding our partnership with Cognizant | Anthropic</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/cognizant-anthropic" title="Expanding our partnership with Cognizant | Anthropic"><span class="week-rest-num">05</span><span class="week-rest-title">Expanding our partnership with Cognizant | Anthropic</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/scientific-computing-agentic-ai"><span class="week-rest-num">06</span><span class="week-rest-title">Scientific computing in the age of agentic AI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/scientific-computing-agentic-ai" title="Scientific computing in the age of agentic AI"><span class="week-rest-num">06</span><span class="week-rest-title">Scientific computing in the age of agentic AI</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/olmoearth-infrastructure"><span class="week-rest-num">07</span><span class="week-rest-title">The OlmoEarth Platform: Geospatial inference at planetary scale</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/olmoearth-infrastructure" title="The OlmoEarth Platform: Geospatial inference at planetary scale"><span class="week-rest-num">07</span><span class="week-rest-title">The OlmoEarth Platform: Geospatial inference at planetary scale</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/LiquidAI/lfm2-5-encoders"><span class="week-rest-num">08</span><span class="week-rest-title">LFM2.5-Encoders for Fast Long-Context Inference on CPU</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/LiquidAI/lfm2-5-encoders" title="LFM2.5-Encoders for Fast Long-Context Inference on CPU"><span class="week-rest-num">08</span><span class="week-rest-title">LFM2.5-Encoders for Fast Long-Context Inference on CPU</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/how-ai-is-expanding-what-people-do-at-work"><span class="week-rest-num">09</span><span class="week-rest-title">How AI is expanding what people do at work</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/how-ai-is-expanding-what-people-do-at-work" title="How AI is expanding what people do at work"><span class="week-rest-num">09</span><span class="week-rest-title">How AI is expanding what people do at work</span></a>
       
     </div>
   </div>

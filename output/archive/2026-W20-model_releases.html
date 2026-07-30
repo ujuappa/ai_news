@@ -60,6 +60,11 @@ footer.site-footer { max-width:1280px; margin:0 auto; padding:20px 44px; border-
 footer.site-footer nav a { color:rgba(var(--inkrgb),.6); font:700 11px Archivo,sans-serif; letter-spacing:.08em;
                             text-transform:uppercase; text-decoration:none; }
 footer.site-footer nav a:hover { color:var(--ink); }
+.thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
+               border-left:2px solid rgba(var(--inkrgb),.25);
+               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em;
+               color:rgba(var(--inkrgb),.5); }
+a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 .cat-body { background:var(--g); padding:32px 44px 40px; }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
@@ -104,7 +109,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
           <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
         </div>
       </form>
-      <span class="records-chip">415 records</span>
+      <span class="records-chip">422 records</span>
       
       <div class="theme-picker">
   
@@ -164,7 +169,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
     </a>
     
     <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">415</span>
+      <span class="tab-label">Archive</span><span class="tab-count">422</span>
     </a>
   </nav>
 </header>
@@ -187,8 +192,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/gemini-3-5-frontier-intelligence-with-action/">
   <span class="cat-score" style="font-size:34px">.90</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px">Gemini 3.5: frontier intelligence with action</div>
+    <div class="cat-row-title" style="font-size:34px" title="Gemini 3.5: frontier intelligence with action">Gemini 3.5: frontier intelligence with action</div>
     <div class="cat-row-dek">Google has announced Gemini 3.5, a model optimized for performing complex, agentic workflows and real-time task execution.</div>
+    
     <span class="cat-row-link">deepmind.google/blog/gemini-3-5-frontier-… →</span>
   </div>
   <div class="cat-row-side">
@@ -200,8 +206,9 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://openai.com/index/databricks">
   <span class="cat-score" style="font-size:28px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px">Databricks brings GPT-5.5 to enterprise agent workflows</div>
+    <div class="cat-row-title" style="font-size:28px" title="Databricks brings GPT-5.5 to enterprise agent workflows">Databricks brings GPT-5.5 to enterprise agent workflows</div>
     <div class="cat-row-dek">Databricks is integrating the GPT-5.5 model into its enterprise agent workflows. This follows the model&#39;s achievement of a new state-of-the-art result on the OfficeQA Pro benchmark.</div>
+    
     <span class="cat-row-link">openai.com/index/databricks →</span>
   </div>
   <div class="cat-row-side">
@@ -213,7 +220,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/co-scientist-a-multi-agent-ai-partner-to-accelerate-research/">
   <span class="cat-score" style="font-size:22px">.70</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px">Co-Scientist: A multi-agent AI partner to accelerate research</div>
+    <div class="cat-row-title" style="font-size:22px" title="Co-Scientist: A multi-agent AI partner to accelerate research">Co-Scientist: A multi-agent AI partner to accelerate research</div>
+    
     
     <span class="cat-row-link">deepmind.google/blog/co-scientist-a-multi… →</span>
   </div>
@@ -226,7 +234,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/introducing-gemini-omni/">
   <span class="cat-score" style="font-size:17px">.60</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px">Introducing Gemini Omni</div>
+    <div class="cat-row-title" style="font-size:17px" title="Introducing Gemini Omni">Introducing Gemini Omni</div>
+    
     
     <span class="cat-row-link">deepmind.google/blog/introducing-gemini-o… →</span>
   </div>
@@ -239,7 +248,8 @@ footer.site-footer nav a:hover { color:var(--ink); }
 <a class="cat-row" href="https://deepmind.google/blog/introducing-google-antigravity-2-0/">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px">Introducing Google Antigravity 2.0</div>
+    <div class="cat-row-title" style="font-size:15px" title="Introducing Google Antigravity 2.0">Introducing Google Antigravity 2.0</div>
+    
     
     <span class="cat-row-link">deepmind.google/blog/introducing-google-a… →</span>
   </div>
@@ -251,7 +261,7 @@ footer.site-footer nav a:hover { color:var(--ink); }
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">5 of 5 shown · category cap 6 · min significance 0.25</span>
+  <span class="cat-footer-note">5 of 5 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Model releases in earlier weeks →</a>
 </div>
 </div>
