@@ -51,6 +51,15 @@ def test_category_row_shows_thread_without_nesting_an_anchor(tmp_path):
     assert '<span class="thread-line">' in html
 
 
+def test_archive_digest_links_to_parent_inside_archive(tmp_path):
+    groups = [("policy_business", [_item(thread_parent=_PARENT)])]
+    render.render_archive_digest("2026-W22", groups, tmp_path, total_records=1)
+    html = (tmp_path / "archive" / "2026-W22.html").read_text(encoding="utf-8")
+    assert "Earlier: Anthropic raises $30B Series G (2026-W07)" in html
+    assert 'href="2026-W07.html"' in html
+    assert 'href="../archive/2026-W07.html"' not in html
+
+
 def test_no_thread_line_when_absent(tmp_path):
     groups = [("policy_business", [_item()])]
     render.render_digest("2026-07-30", groups, [], tmp_path, total_records=1)

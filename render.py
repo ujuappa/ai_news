@@ -750,18 +750,20 @@ _ARCHIVE_WEEK_TMPL = """
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">{{ labels[lead.category] }}{{ ' · major' if lead.is_major else '' }}</span></div>
       <a class="week-lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
       <p class="week-lead-dek">{{ lead.summary }}</p>
+      {% if lead.thread %}<a class="thread-line" href="{{ prefix }}{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
       <div class="week-lead-byline">{{ lead.source_name }} · tier {{ lead.tier_label }}</div>
       {% if second %}
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">{{ labels[second.category] }}{{ ' · major' if second.is_major else '' }}</span></div>
       <a class="week-sec-title" href="{{ second.url }}" title="{{ second.title }}">{{ second.display_title }}</a>
       <p class="week-sec-dek">{{ second.summary }}</p>
+      {% if second.thread %}<a class="thread-line" href="{{ prefix }}{{ second.thread.date }}.html">Earlier: {{ second.thread.display }} ({{ second.thread.date }})</a>{% endif %}
       {% endif %}
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the {{ period_word }}</div>
       {% for it in rest %}
-      <a class="week-rest-row" href="{{ it.url }}" title="{{ it.title }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.display_title }}</span></a>
+      <a class="week-rest-row" href="{{ it.url }}" title="{{ it.title }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.display_title }}{% if it.thread %}<span class="thread-line">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</span>{% endif %}</span></a>
       {% endfor %}
     </div>
   </div>
@@ -958,7 +960,7 @@ def render_archive_digest(label: str, groups: list[tuple[str, list[dict]]],
         total=total, peak_sig=peak_sig, model_release_count=model_release_count,
         dollar_committed=recap.get("dollar_committed"),
         lead=flat[0] if flat else None, second=flat[1] if len(flat) > 1 else None, rest=flat[2:],
-        prev_label=None,
+        prev_label=None, prefix="",
     )
     (archive_dir / f"{label}.html").write_text(html, encoding="utf-8")
     return archive_dir / f"{label}.html"
