@@ -122,6 +122,33 @@ def _as_float(value, default: float = 0.0) -> float:
     return min(1.0, max(0.0, f))
 
 
+def _clean_headline(value, fallback_title: str, limit: int = 70) -> str:
+    """표시용 짧은 제목. 모델이 비우거나 이상한 걸 주면 원제목으로 폴백.
+
+    limit 을 넘기면 단어 경계에서 자른다 — 제목의 42%가 60자를 넘고 최대 150자라
+    (2026-07-30 측정) 그대로 두면 .lead-title(최대 62px)에서 레이아웃이 깨진다.
+    프롬프트로 60자를 요구하지만 모델이 넘길 때가 있어 저장 전에 여기서 막는다."""
+    text = _clean_str(value).rstrip(".")
+    if not text:
+        return fallback_title
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "\u2026"
+
+
+def _merge_row(it: dict, row: dict) -> None:
+    """모델 응답 한 줄을 아이템에 반영. enrich 의 배치 루프에서 분리해 둔 이유는
+    이 병합 규칙이 테스트 가능한 유일한 지점이기 때문(배치 호출은 네트워크가 필요)."""
+    cat = row.get("category")
+    if cat in CATEGORY_LABELS:
+        it["category"] = cat
+    it["summary"] = (row.get("summary") or it.get("summary_raw") or "")[:600]
+    it["significance"] = _as_float(row.get("significance"))
+    it["is_major"] = bool(row.get("is_major", False))
+    it["headline"] = _clean_headline(row.get("headline"), it["title"])
+    it["_enriched"] = True
+
+
 def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
     """배치 하나를 호출 + 파싱. 일시적 실패(레이트리밋/5xx/JSON 깨짐)는 지수 백오프로
     재시도하고, 마지막 시도까지 실패하면 그대로 raise (호출자가 배치 단위로 격리)."""
