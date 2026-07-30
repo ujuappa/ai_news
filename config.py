@@ -107,6 +107,6 @@ def load(path: Path = SOURCES_FILE) -> Config:
 # 환경변수
 # 인증은 genai.Client() 가 .env 의 GOOGLE_GENAI_USE_VERTEXAI/GOOGLE_CLOUD_PROJECT/
 # GOOGLE_CLOUD_LOCATION/GOOGLE_APPLICATION_CREDENTIALS 로 자동 처리 (Vertex AI 모드)
-MODEL = os.environ.get("DIGEST_MODEL", "gemini-2.5-flash")  # 고볼륨이면 gemini-2.5-flash-lite 로 비용 절감
+MODEL = os.environ.get("DIGEST_MODEL", "gemini-3.1-pro-preview")  # thinking 기본 ON. 비용 부담되면 gemini-2.5-flash
 OUTPUT_DIR = ROOT / "output"
 DB_PATH = ROOT / "digest.db"

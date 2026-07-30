@@ -159,7 +159,7 @@ git commit -m "feat(llm): headline 정제 + 행 병합 헬퍼 분리 (+pytest �
 - Consumes: `llm._merge_row` from Task 1.
 - Produces: every item returned by `llm.enrich` carries a non-empty `headline`. Tasks 3 and 4 depend on that key always existing.
 
-- [ ] **Step 1: Add the headline instruction to the prompt**
+- [x] **Step 1: Add the headline instruction to the prompt**
 
 In `llm.py`, replace the `SYSTEM` constant (lines 24-37) with:
 
@@ -186,7 +186,7 @@ significance. Return ONLY a JSON array, no prose, no markdown fences. Each eleme
  "headline": "..."}"""
 ```
 
-- [ ] **Step 2: Use the shared merge helper in the batch loop**
+- [x] **Step 2: Use the shared merge helper in the batch loop**
 
 In `llm.py` `enrich`, replace lines 172-189 (the `for row in rows:` block and the fallback loop) with:
 
@@ -206,7 +206,7 @@ In `llm.py` `enrich`, replace lines 172-189 (the `for row in rows:` block and th
         it.setdefault("_enriched", False)
 ```
 
-- [ ] **Step 3: Verify against the live API**
+- [x] **Step 3: Verify against the live API**
 
 Run:
 
@@ -226,12 +226,12 @@ for it in out:
 
 Expected: two lines, each headline non-empty and ≤ 70 characters. The second must still contain `$52M` — the numbers-verbatim rule. If a number is dropped, strengthen the prompt example and re-run before continuing.
 
-- [ ] **Step 4: Run the unit tests again**
+- [x] **Step 4: Run the unit tests again**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 7 passed (Task 1 tests still green after the refactor)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add llm.py

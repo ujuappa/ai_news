@@ -166,7 +166,8 @@ def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM,
                     max_output_tokens=16000,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),  # 분류/요약은 추론 불필요, thinking 끄면 출력 토큰 잘림 방지
+                    # Gemini 3.1 Pro 는 thinking 끌 수 없음(budget=0 거부). thinking_level 로 깊이만 조절.
+                    thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.HIGH),
                     response_mime_type="application/json",
                 ),
             )
@@ -268,8 +269,8 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
         contents=payload,
         config=types.GenerateContentConfig(
             system_instruction=RECAP_SYSTEM,
-            max_output_tokens=4000,
-            thinking_config=types.ThinkingConfig(thinking_budget=0),
+            max_output_tokens=8000,  # thinking 토큰이 출력 예산에 잡히므로 여유를 둠
+            thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.HIGH),
             response_mime_type="application/json",
         ),
     )

@@ -68,7 +68,7 @@ python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, 
 - **가벼운 dedup**: torch 가 부담이면 `dedup.embed()` 를 `TfidfVectorizer` 로 교체 (그 외 코드 불변).
   별도 `requirements-lite.txt` 는 **없다** — `sentence-transformers` 만 빼면 `embed()` 가 임포트에서
   죽으므로, 코드를 먼저 갈아끼운 다음 의존성을 줄이는 순서로만 가능하다
-- **모델 비용**: 고볼륨이면 `DIGEST_MODEL=gemini-2.5-flash-lite` 로
+- **모델 비용**: 기본 `gemini-3.1-pro-preview`(thinking HIGH). 고볼륨이면 `DIGEST_MODEL=gemini-2.5-flash` 로
 - **no_feed 소스**(Anthropic/Meta/Mistral): RSSHub 경로나 자체 파서를 `fetch.py` 에 추가
 
 ## 다음 스텝 (PROJECT_MEMO 파킹 아이디어)
