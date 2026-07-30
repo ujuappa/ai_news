@@ -33,7 +33,13 @@ settings:
 
   dedup:
     method: embedding_cosine
-    threshold: 0.83                  # 실제 출력 보고 튜닝
+    threshold: 0.83                  # 실제 출력 보고 튜닝. 0.80 은 오병합 확인됨(2026-07-29)
+    grounding_threshold: 0.78        # grounding 아이템의 "신규성" 판정만 이 값으로 (더 엄격).
+                                     # 비대칭인 이유: 본 코퍼스에서 임계값을 낮추면 서로 다른
+                                     # 스토리가 병합되는 오류(복구 불가)지만, grounding 은
+                                     # "이미 있는 것 같으면 안 넣는다"라서 최악이 보조 1건 누락.
+                                     # 2026-07-30 실측: 같은 스토리를 다르게 쓴 라운드업 2건이
+                                     # cos 0.8116 이라 0.83 을 통과해 중복 게재됨.
     cross_day: true
     seen_store_retention_days: 14
 

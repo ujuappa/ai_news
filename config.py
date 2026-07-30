@@ -52,6 +52,7 @@ class Settings:
     min_significance: float = 0.25
     max_item_age_days: int = 7
     dedup_threshold: float = 0.83
+    grounding_dedup_threshold: float = 0.78   # grounding 전용(더 엄격한 신규성 기준)
     dedup_cross_day: bool = True
     seen_store_retention_days: int = 14
     ranking_rubric: list[str] = field(default_factory=list)
@@ -78,6 +79,7 @@ def load(path: Path = SOURCES_FILE) -> Config:
         min_significance=s.get("min_significance", 0.25),
         max_item_age_days=s.get("max_item_age_days", 7),
         dedup_threshold=dedup.get("threshold", 0.83),
+        grounding_dedup_threshold=dedup.get("grounding_threshold", 0.78),
         dedup_cross_day=dedup.get("cross_day", True),
         seen_store_retention_days=dedup.get("seen_store_retention_days", 14),
         ranking_rubric=s.get("ranking_rubric", []),

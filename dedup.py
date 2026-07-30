@@ -78,6 +78,18 @@ def drop_cross_day(items: list[dict], store: Store, threshold: float,
     return fresh
 
 
+def drop_similar_to(items: list[dict], others: list[dict], threshold: float) -> list[dict]:
+    """others 중 하나와 사실상 같은 항목을 제외. 양쪽 다 `_emb` 가 채워져 있어야 한다.
+
+    `drop_cross_day` 가 DB(seen)를 상대한다면 이건 **같은 실행 안의 다른 리스트**를 상대한다.
+    grounding 처럼 `dedup_batch` 를 이미 지나간 뒤에 합류하는 아이템을 걸러내는 용도."""
+    other_embs = [o["_emb"] for o in others if o.get("_emb") is not None]
+    if not other_embs:
+        return items
+    return [it for it in items
+            if not any(_cos(it["_emb"], oe) >= threshold for oe in other_embs)]
+
+
 def commit_seen(items: list[dict], store: Store):
     for it in items:
         store.add_seen(it["id"], it["title"], it["url"], it.get("_emb"))

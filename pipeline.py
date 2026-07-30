@@ -21,7 +21,7 @@ from store import Store
 
 
 def _todays_pool(store: Store, clustered: list[dict], today: str,
-                 id_to_name: dict[str, str]) -> list[dict]:
+                 id_to_name: dict[str, str], disabled_ids: set[str] | None = None) -> list[dict]:
     """오늘의 후보 풀 = DB 에 저장된 오늘자 아이템(게재분+탈락분) + 이번 실행분.
     id 가 겹치면 이번 실행분이 이김(판정이 더 최신).
 
@@ -29,8 +29,15 @@ def _todays_pool(store: Store, clustered: list[dict], today: str,
     (보통 1~2건)으로 잘라먹는다 — cross-day dedup 이 오전에 이미 실은 항목을 '본 것'으로
     걸러내서 clustered 가 거의 비기 때문. DB 를 하루치의 단일 진실로 삼고 매 실행이
     누적 전체를 다시 랭킹한다."""
+    # 소스를 낮에 끄면 그 전에 수집돼 DB 에 들어간 항목이 남는다. 풀은 매 실행 DB 를 다시
+    # 읽으므로, 걸러주지 않으면 끈 소스의 항목이 계속 재랭킹돼 올라온다 — 2026-07-30 에
+    # gnews 를 끈 뒤에도 그날 아침에 들어온 25건이 남아 그중 1건이 실제로 게재됐다.
+    # sources.yaml 에 없는 source_id(예: gemini_grounding)는 판단 대상이 아니므로 통과.
+    disabled_ids = disabled_ids or set()
     pool: dict[str, dict] = {}
     for it in store.items_for_digest(today) + store.dropped_items(today):
+        if it["source_id"] in disabled_ids:
+            continue
         it["_enriched"] = it.get("drop_reason") != "enrich_failed"
         it["is_major"] = bool(it["is_major"])
         it.setdefault("cluster_sources", [])
@@ -61,20 +68,37 @@ def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str
     return buckets
 
 
-def _grounding_items(clustered: list[dict]) -> list[dict]:
+def _grounding_items(clustered: list[dict], store: Store, settings) -> list[dict]:
     """Google Search grounding 으로 피드가 놓친 주요 뉴스를 줍는다. 보조 경로이므로
     **어떤 실패도 하루치 실행을 죽이지 못한다** — 실패하면 경고만 찍고 0건 반환.
 
     `llm.enrich` 는 전량 실패 시 RuntimeError 를 던지는 게 정상 동작(조용한 빈
     다이제스트 방지)인데, grounding 은 보통 2~3건이라 배치가 하나뿐이다. 즉 여기서
     enrich 를 그대로 쓰면 '보조 배치 한 번 실패'가 '본 강화는 이미 성공했는데도 전체
-    실행 실패'로 번진다. 본 경로의 시끄러운 실패는 유지하고 이 경로만 감싸는 이유."""
+    실행 실패'로 번진다. 본 경로의 시끄러운 실패는 유지하고 이 경로만 감싸는 이유.
+
+    dedup 3단은 **enrich 앞**에 둔다. 중복이면 LLM 호출 자체가 낭비이기도 하고,
+    무엇보다 이 단계를 건너뛰면 grounding 아이템에 `_emb` 가 안 생겨서 seen 에 임베딩
+    NULL 로 쌓이고 cross-day 보호가 URL 완전일치로 퇴화한다. 2026-07-30 에 실제로
+    같은 스토리가 제목만 다르게 하루 두 번(15:52, 16:35) 실렸다.
+
+    임계값은 본 코퍼스(0.83)가 아니라 `grounding_threshold`(0.78) — 위 사고의 두 건이
+    cos 0.8116 이라 0.83 으로는 못 잡는다. 낮춰도 안전한 이유는 sources.yaml 주석 참고."""
     print("      Gemini Grounding (놓친 뉴스 확인)")
     try:
         missed = llm.catch_missed_news([it["title"] for it in clustered])
         if not missed:
             return []
-        print(f"      놓친 뉴스 {len(missed)}건 추가 발견, 강화 시작")
+        found = len(missed)
+        thr = settings.grounding_dedup_threshold
+        missed = dedup.dedup_batch(missed, thr)                    # _emb 부여 + 자체 중복
+        missed = dedup.drop_similar_to(missed, clustered, thr)     # 이번 실행분과
+        missed = dedup.drop_cross_day(missed, store, thr,
+                                      settings.seen_store_retention_days)   # 최근 14일과
+        if not missed:
+            print(f"      놓친 뉴스 {found}건 전부 기존 항목과 중복 — 추가 없음")
+            return []
+        print(f"      놓친 뉴스 {found}건 중 신규 {len(missed)}건, 강화 시작")
         for it in missed:
             it["summary_raw"] = fetch.extract_full_text(it["url"], it.get("summary_raw", ""))
         return llm.enrich(missed)
@@ -127,10 +151,11 @@ def run(dry_run: bool = False):
     else:
         print(f"[3/5] LLM 강화 — model={config.MODEL}")
         clustered = llm.enrich(clustered)
-        clustered.extend(_grounding_items(clustered))
+        clustered.extend(_grounding_items(clustered, store, settings))
 
     id_to_name = {s.id: s.name for s in cfg.sources}
-    pool = _todays_pool(store, clustered, today, id_to_name)
+    disabled_ids = {s.id for s in cfg.sources if not s.enabled}
+    pool = _todays_pool(store, clustered, today, id_to_name, disabled_ids)
     ranked_pool = [it for it in pool if it["significance"] >= settings.min_significance]
     dropped = len(pool) - len(ranked_pool)
 
