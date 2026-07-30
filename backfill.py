@@ -82,7 +82,8 @@ def fetch_backfill_items(sources, since_dt: datetime) -> list[dict]:
         elif src.id == "meta_ai":
             got = fetch.fetch_paginated_feed(src, since=since_iso)
         else:
-            got = fetch.fetch_source(src, max_entries=1000)
+            # full_text=False 고정: max_entries=1000 이라 본문 추출을 켜면 소스당 수천 건 요청.
+            got = fetch.fetch_source(src, max_entries=1000, full_text=False)
             got = [it for it in got if (dt := _parse_dt(it["published"])) and dt >= since_dt]
         print(f"  {src.id:20s} {len(got):4d} items")
         items.extend(got)

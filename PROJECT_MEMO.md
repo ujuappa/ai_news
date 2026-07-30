@@ -647,12 +647,55 @@
     (예: "Academic Orthopaedic Surgeons Prefer Peer-Reviewed Guidelines"). 매일 25건을 LLM 에
     태우는 비용 대비 효용은 며칠 관찰 후 재평가할 것.
 
+- 2026-07-30: **본문 추출 순서 수정 + `full_text` 옵트인 + 그라운딩을 비치명 경로로 격리**.
+  어제 확장(`d3afe61`)에서 `_extract_full_text` 가 `fetch_source_counted` 의 엔트리 루프 안,
+  즉 **신선도 컷 앞**에 있었음 → 소스 12개 x 25건이면 매 실행 최대 300건을 받아서 대부분 몇 초 뒤
+  폐기. 실측으로 수집 단계만 **92초**였음.
+  - `fetch.py` 를 수집 -> `_apply_cutoff` -> `_fill_full_text` 순으로 재배치. 컷 로직은
+    `_apply_cutoff` 로 빼서 중복 제거. 추출 호출부가 4곳에 흩어져 있던 것을 한 곳으로 모음.
+  - **`full_text` 플래그 신설**(`config.Source`, `sources.yaml`, 기본 false). 지금은
+    `techcrunch_ai` 만 true — 피드가 앞 몇 문장만 잘라 주는 소스라 효용이 확실. arXiv 는 RSS 에
+    초록 전문이 이미 있어 이득 없고, `hn_ai` 는 링크 대상이 임의의 외부 사이트라 결과가 들쭉날쭉.
+    (부수 효과로 `summary_raw` 800->3000자 = LLM 입력 토큰 약 3.75배도 소스 1개로 한정됨)
+  - `backfill.py` 는 `full_text=False` 고정 — `max_entries=1000` 이라 켜져 있으면 소스당 수천 건 요청.
+  - **`_extract_full_text` -> `extract_full_text`(공개)**. `pipeline.py` 가 남의 모듈 private 함수를
+    호출하고 있었음.
+  - **그라운딩을 `_grounding_items()` 로 분리하고 전체를 try/except 로 감쌈**. 기존 코드는 보조
+    경로인 grounding 아이템에 `llm.enrich` 를 그대로 재사용했는데, `enrich` 는 **전량 실패 시
+    RuntimeError** 를 던지는 게 정상 동작이다(조용한 빈 다이제스트 방지). grounding 은 보통 2~3건
+    = 배치 1개라, 그 배치 한 번 실패가 "본 강화는 이미 성공했는데 하루치 전체 실패"로 번질 수 있었음.
+    본 경로의 시끄러운 실패는 그대로 두고 보조 경로만 격리.
+  - **검증**: `--dry-run` 이 **26.2초**(수집 92초 -> 전체 26초), 수집 아이템 수는 111건으로 동일
+    (재배치로 잃은 항목 없음). `git status` 는 소스 파일만 변경, `digest.db` 무변경.
+  - **오늘 cron 실패 원인은 특정 못 함**: `gh` 미설치 + 프라이빗 레포라 Actions 로그를 못 봄.
+    로컬에서 검증 가능한 것은 전부 정상이었음 — 의존성 해석(`pip check`), 수집 11소스 111건,
+    API 키 헬스체크, `catch_missed_news` 실제 호출(2건 반환), 커밋 대상 경로(`digest.db`/`output/`)가
+    tracked 이고 gitignore 에 안 걸림. 위 grounding 격리가 가장 유력한 후보였으므로 그것을 고쳤고,
+    다음 실행이 또 실패하면 Actions 로그의 실패 스텝을 봐야 함.
+- 2026-07-30: **`gnews_ai` 비활성 + 정리**. gnews 는 (1) RFC 822 날짜를 `_norm_date` 가 못 읽어
+  `published=""` → 7일 컷을 통째로 우회, (2) `news.google.com` 리다이렉트 URL 이 그대로 저장되는
+  두 버그가 남아 있어 `enabled: false`. 로컬 `NetworkError` 는 **gnews 버그가 아니라** CA 인증서
+  문제였다는 07-29 결론을 `sources.yaml` 주석에 명시해 뒀음(오진 방지).
+  - 삭제: `boncom-ai-skills-main/`(916K), `__pycache__/`(188K), `.DS_Store`,
+    그리고 `digests` 행이 없는 고아 HTML 6개(`2026-07-27.html`, `2026-W05.html` + W05 카테고리 4개).
+    아카이브 인덱스에서 도달 불가였던 파일들. 228 -> 222개.
+  - **문서 드리프트 정리**: `requirements-lite.txt` 는 존재하지 않는데 README/CLAUDE.md 가 참조하고
+    있었음. `dedup.embed()` 가 `sentence-transformers` 를 하드 의존해서 그 패키지만 빼면 임포트에서
+    죽으므로, 파일을 만드는 대신 언급을 없애고 "코드를 먼저 갈아끼운 다음 의존성을 줄이는 순서"라고
+    README '확장 포인트' 에 명시. README 배포 절차의 스테일 시크릿(`GCP_SERVICE_ACCOUNT_KEY` 등
+    Vertex AI 방식)도 `GEMINI_API_KEY` 하나로 정정 — 워크플로는 이미 그것만 쓴다.
+  - **계획서의 `digests.item_count` 오류 건은 실제로는 정상**이었음. 2026-07-28 은 이미
+    `item_count=15` 이고 `items` 의 `is_published=1` 개수도 15. 45행 전수 대조에서 불일치 0건이라
+    수정할 게 없었음(계획 작성 시점의 오측정으로 보임).
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:
 
 - **Full-Text Extraction**: 단순 RSS Snippet(TechCrunch 등)의 한계를 극복하기 위해 `trafilatura` 를 도입. `<description>` 대신 기사 본문 전체를 긁어와(3000자 제한) LLM이 더 풍부한 요약을 생성하도록 개선.
+  → **2026-07-30 수정**: 전 소스 무조건 추출이 아니라 `full_text: true` 옵트인 + 신선도 컷 통과분 한정으로 바뀜(현재 `techcrunch_ai` 만). 위 변경로그 참고.
 - **GNews 통합**: `gnews` 라이브러리를 추가하여, `sources.yaml` 에 `parse: gnews` 로 키워드(예: "Artificial Intelligence OR Large Language Models") 기반 뉴스 검색이 가능해짐.
+  → **2026-07-30: `enabled: false`** (날짜 파싱/리다이렉트 URL 버그 2건 미해결). `sources.yaml` 주석에 재활성화 조건 기록.
 - **Gemini Search Grounding**: `llm.py` 에 `catch_missed_news()` 를 추가, Gemini 의 네이티브 Google Search (Grounding) 도구를 사용해 기존 파이프라인이 놓친 주요 뉴스를 찾아와 보강함.
 
 ### Phase 2b: Expanded Curated Sources (보류됨)

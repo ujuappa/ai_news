@@ -23,7 +23,7 @@ PROJECT_MEMO 변경로그 최신 항목 참고.
 # Python 3.12 필요 (CI 도 3.12). 3.9 는 fromisoformat 이 엄격해서 일부 날짜 형식을
 # 조용히 버림 → backfill 은 아이템 드롭/오분류. 백필·재백필은 반드시 3.12 에서.
 python3.12 -m venv .venv && source .venv/bin/activate && python -V
-pip install -r requirements.txt          # torch 포함. 가벼운 건 requirements-lite.txt
+pip install -r requirements.txt          # torch 포함(무거움). 가벼운 경로는 README '확장 포인트'
 echo "GEMINI_API_KEY=..." > .env         # 개인 키 (aistudio.google.com). .env 는 .gitignore 처리, 채팅에 붙여넣지 말 것
 python pipeline.py --dry-run             # LLM 없이 수집/dedup (DB 미변경)
 python pipeline.py                       # 전체

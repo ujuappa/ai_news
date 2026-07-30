@@ -39,6 +39,7 @@ class Source:
     parse: str = "easy"
     status: str = "verify"
     enabled: bool = True
+    full_text: bool = False   # 기사 본문 추출(trafilatura) 여부. 기본 off — 비용/시간이 붙는다
     notes: str = ""
 
 
@@ -94,6 +95,7 @@ def load(path: Path = SOURCES_FILE) -> Config:
                     parse=row.get("parse", "easy"),
                     status=row.get("status", "verify"),
                     enabled=bool(row.get("enabled", True)),
+                    full_text=bool(row.get("full_text", False)),
                     notes=row.get("notes", ""),
                 )
             )

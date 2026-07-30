@@ -61,6 +61,28 @@ def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str
     return buckets
 
 
+def _grounding_items(clustered: list[dict]) -> list[dict]:
+    """Google Search grounding 으로 피드가 놓친 주요 뉴스를 줍는다. 보조 경로이므로
+    **어떤 실패도 하루치 실행을 죽이지 못한다** — 실패하면 경고만 찍고 0건 반환.
+
+    `llm.enrich` 는 전량 실패 시 RuntimeError 를 던지는 게 정상 동작(조용한 빈
+    다이제스트 방지)인데, grounding 은 보통 2~3건이라 배치가 하나뿐이다. 즉 여기서
+    enrich 를 그대로 쓰면 '보조 배치 한 번 실패'가 '본 강화는 이미 성공했는데도 전체
+    실행 실패'로 번진다. 본 경로의 시끄러운 실패는 유지하고 이 경로만 감싸는 이유."""
+    print("      Gemini Grounding (놓친 뉴스 확인)")
+    try:
+        missed = llm.catch_missed_news([it["title"] for it in clustered])
+        if not missed:
+            return []
+        print(f"      놓친 뉴스 {len(missed)}건 추가 발견, 강화 시작")
+        for it in missed:
+            it["summary_raw"] = fetch.extract_full_text(it["url"], it.get("summary_raw", ""))
+        return llm.enrich(missed)
+    except Exception as e:  # noqa: BLE001
+        print(f"      [!] grounding 건너뜀 ({type(e).__name__}: {e}) — 피드 수집분으로 계속")
+        return []
+
+
 def _health_warnings(health: dict[str, tuple[int, int]], sources) -> list[str]:
     """피드 자체가 안 잡히는 소스만 경고(raw==0 — 죽었거나 파싱 실패).
 
@@ -105,16 +127,7 @@ def run(dry_run: bool = False):
     else:
         print(f"[3/5] LLM 강화 — model={config.MODEL}")
         clustered = llm.enrich(clustered)
-        
-        print("      Gemini Grounding (놓친 뉴스 확인)")
-        existing_titles = [it["title"] for it in clustered]
-        missed = llm.catch_missed_news(existing_titles)
-        if missed:
-            print(f"      놓친 뉴스 {len(missed)}건 추가 발견, 강화 시작")
-            for it in missed:
-                it["summary_raw"] = fetch._extract_full_text(it["url"], it.get("summary_raw", ""))
-            missed_enriched = llm.enrich(missed)
-            clustered.extend(missed_enriched)
+        clustered.extend(_grounding_items(clustered))
 
     id_to_name = {s.id: s.name for s in cfg.sources}
     pool = _todays_pool(store, clustered, today, id_to_name)

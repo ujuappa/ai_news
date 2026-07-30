@@ -47,18 +47,43 @@ def _clean(text: str, limit: int = 800) -> str:
     return text[:limit]
 
 
-def _extract_full_text(url: str, fallback_snippet: str, limit: int = 3000) -> str:
-    """Uses trafilatura to extract the main article text from the URL.
-    Returns the extracted text (truncated to limit) if successful; otherwise, returns the fallback_snippet."""
+def extract_full_text(url: str, fallback_snippet: str, limit: int = 3000) -> str:
+    """기사 URL 을 받아 trafilatura 로 본문을 뽑아 반환. 실패하면 fallback_snippet 그대로.
+
+    피드 발췌가 잘려 오는 소스(TechCrunch 등)의 요약 품질을 올리는 용도. 기사 1건마다
+    HTTP 요청이 붙고(측정 ~0.35s/건) `summary_raw` 가 800 -> 3000자로 커져 LLM 입력 토큰도
+    약 3.75배가 되므로, **소스별 `full_text: true` 옵트인 + 신선도 컷 통과분에만** 적용한다
+    (`_fill_full_text` 참고). 파이프라인/그라운딩 양쪽에서 쓰므로 공개 이름."""
     try:
         downloaded = trafilatura.fetch_url(url)
         if downloaded:
             extracted = trafilatura.extract(downloaded, include_links=False, include_images=False, include_tables=False)
             if extracted:
                 return _clean(extracted, limit=limit)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"  [!] trafilatura fetch 실패 ({url}): {type(e).__name__}: {e}")
     return fallback_snippet
+
+
+def _fill_full_text(items: list[dict], enabled: bool) -> None:
+    """enabled 면 아이템의 summary_raw 를 본문 추출로 교체(제자리 수정).
+
+    **반드시 신선도 컷/`since` 필터 뒤에 호출할 것.** 앞에서 부르면 곧바로 버릴 항목까지
+    긁는다 — 소스 12개 x 25건이면 매 실행 최대 300건을 받아서 대부분 몇 초 뒤 폐기했다."""
+    if not enabled:
+        return
+    for it in items:
+        it["summary_raw"] = extract_full_text(it["url"], it["summary_raw"])
+        time.sleep(0.15)  # 기사마다 페이지 요청 -> 서버 매너
+
+
+def _apply_cutoff(items: list[dict], max_age_days: int | None) -> list[dict]:
+    """max_age_days 보다 오래된 항목 드롭. 발행일 파싱 실패 항목은 통과시킨다
+    (날짜 메타데이터가 없는 소스를 과도하게 걸러내지 않으려는 의도)."""
+    if max_age_days is None:
+        return items
+    cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
+    return [it for it in items if (_parse_dt(it["published"]) or cutoff) >= cutoff]
 
 
 def resolve_url(url: str, timeout: int = 15) -> str:
@@ -214,7 +239,6 @@ def fetch_sitemap_source(source: Source, max_entries: int = 25,
             continue
         # 실제 발행일 우선. 못 찾으면 lastmod 로 폴백하지만 그건 리빌드 시각일 수 있음.
         published = page_published or _norm_date(lastmod)
-        summary_full = _extract_full_text(url, summary_raw)
         items.append(
             {
                 "id": _hash(url, title),
@@ -223,11 +247,14 @@ def fetch_sitemap_source(source: Source, max_entries: int = 25,
                 "category": source.category,
                 "title": title,
                 "url": url,
-                "summary_raw": summary_full,
+                "summary_raw": summary_raw,
                 "published": published,
             }
         )
         time.sleep(0.15)  # 기사마다 페이지 요청 -> 서버 매너
+    # 본문 추출은 여기서 하지 않는다 — 일간 경로는 fetch_source_counted 가 신선도 컷 뒤에
+    # 처리하고, 백필(since 직접 호출)은 스크레이프한 첫 문단으로 충분(6개월치에 본문 추출을
+    # 붙이면 수천 건 요청이 된다).
     return items
 
 
@@ -271,8 +298,6 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
                 oldest_on_page = dt
             if dt and since_dt and dt < since_dt:
                 continue
-            summary_raw = _clean(getattr(entry, "summary", "") or getattr(entry, "description", ""))
-            summary_full = _extract_full_text(entry_url, summary_raw)
             items.append(
                 {
                     "id": _hash(entry_url, title),
@@ -281,13 +306,15 @@ def fetch_paginated_feed(source: Source, since: str, max_pages: int = 30) -> lis
                     "category": source.category,
                     "title": title,
                     "url": entry_url,
-                    "summary_raw": summary_full,
+                    "summary_raw": _clean(getattr(entry, "summary", "")
+                                          or getattr(entry, "description", "")),
                     "published": published,
                 }
             )
         if oldest_on_page and since_dt and oldest_on_page < since_dt:
             break
         time.sleep(0.2)
+    _fill_full_text(items, source.full_text)  # since 필터를 통과한 것만
     return items
 
 
@@ -337,9 +364,6 @@ def fetch_gnews_source(source: Source, max_entries: int = 25, max_age_days: int 
             continue
 
         published_str = article.get("published date", "")
-        summary_raw = _clean(article.get("description", ""))
-        summary_full = _extract_full_text(url, summary_raw)
-        
         publisher = article.get("publisher", {}).get("title")
         source_name = f"{source.name} ({publisher})" if publisher else source.name
 
@@ -350,29 +374,31 @@ def fetch_gnews_source(source: Source, max_entries: int = 25, max_age_days: int 
             "category": source.category,
             "title": title,
             "url": url,
-            "summary_raw": summary_full,
+            "summary_raw": _clean(article.get("description", "")),
             "published": _norm_date(published_str),
         })
-        time.sleep(0.15)
     return items
 
 
-def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
+def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None,
+                 full_text: bool | None = None) -> list[dict]:
     """단일 소스 수집(신선도 컷 적용분만). backfill.py 등 개수 통계가 필요 없는 호출부용."""
-    fresh, _raw = fetch_source_counted(source, max_entries, max_age_days)
+    fresh, _raw = fetch_source_counted(source, max_entries, max_age_days, full_text)
     return fresh
 
 
 def fetch_source_counted(source: Source, max_entries: int = 25,
-                         max_age_days: int | None = None) -> tuple[list[dict], int]:
+                         max_age_days: int | None = None,
+                         full_text: bool | None = None) -> tuple[list[dict], int]:
     """(신선도 컷 통과분, 컷 적용 전 수집 개수) 반환. 실패해도 예외 대신 ([], 0).
 
     raw 개수를 따로 돌려주는 이유: "피드가 죽었다"(raw==0)와 "저빈도 소스라 이번 주 발행이
     없다"(raw>0, fresh==0)는 완전히 다른 상태인데, 컷 적용 후 개수만 보면 구분이 안 돼서
     월간 발행 소스(Ahead of AI 등)에 가짜 ⚠️ 배지가 붙었다.
 
-    max_age_days 지정 시 그보다 오래된 항목은 드롭. 발행일 파싱 실패 항목은 드롭하지 않음
-    (날짜 메타데이터가 없는 소스까지 과도하게 걸러내지 않으려는 의도)."""
+    순서가 중요하다: 수집 -> 신선도 컷 -> 본문 추출. 추출을 먼저 하면 버릴 항목까지 긁는다.
+    full_text 로 소스 설정을 덮어쓸 수 있다(백필은 False 고정 — max_entries=1000 이라
+    켜져 있으면 수천 건을 받는다)."""
     if source.parse == "sitemap":
         items = fetch_sitemap_source(source, max_entries)
     elif source.parse == "gnews":
@@ -390,8 +416,6 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
             title = _clean(getattr(entry, "title", ""), 300)
             if not title:
                 continue
-            summary_raw = _clean(getattr(entry, "summary", "") or getattr(entry, "description", ""))
-            summary_full = _extract_full_text(url, summary_raw)
             items.append(
                 {
                     "id": _hash(url, title),
@@ -400,15 +424,15 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
                     "category": source.category,
                     "title": title,
                     "url": url,
-                    "summary_raw": summary_full,
+                    "summary_raw": _clean(getattr(entry, "summary", "")
+                                          or getattr(entry, "description", "")),
                     "published": _published(entry),
                 }
             )
 
     raw_count = len(items)
-    if max_age_days is not None:
-        cutoff = datetime.now(timezone.utc) - timedelta(days=max_age_days)
-        items = [it for it in items if (_parse_dt(it["published"]) or cutoff) >= cutoff]
+    items = _apply_cutoff(items, max_age_days)
+    _fill_full_text(items, source.full_text if full_text is None else full_text)
     return items, raw_count
 
 

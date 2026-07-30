@@ -29,7 +29,7 @@ pipeline.py    오케스트레이터 (엔트리포인트)
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
 python -V                                # Python 3.12.x 확인
-pip install -r requirements.txt           # torch 포함. 가벼운 건 requirements-lite.txt
+pip install -r requirements.txt           # torch 포함(무거움). 줄이려면 아래 '확장 포인트' 의 가벼운 dedup 참고
 
 # 비밀값은 .env 에만 (gitignore 처리됨). 채팅/커밋에 붙여넣지 말 것.
 # 키는 aistudio.google.com 에서 발급 — 별도 터미널에서 직접 작성:
@@ -46,9 +46,10 @@ python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, 
 
 ## 배포 (GitHub Pages)
 
-1. 저장소 Settings → Secrets 에 `GCP_SERVICE_ACCOUNT_KEY`(서비스 계정 JSON 파일 전체 내용),
-   `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION` 추가 (`daily.yml` 이 이 시크릿을
-   파일로 써서 `GOOGLE_APPLICATION_CREDENTIALS` 로 가리키게 이미 구성돼 있음)
+1. 저장소 Settings → Secrets 에 **`GEMINI_API_KEY`** 하나만 추가 (aistudio.google.com 발급).
+   `daily.yml` 이 그걸 env 로 넘기고 `llm.py` 의 `genai.Client()` 가 자동으로 집어간다.
+   (Vertex AI 서비스계정 방식 — `GCP_SERVICE_ACCOUNT_KEY` 등 — 은 2026-07-28 에 철회됨.
+   `403 API_KEY_SERVICE_BLOCKED` 때문. PROJECT_MEMO 변경로그 참고)
 2. Settings → Pages → branch=main, folder=`/output`
 3. `.github/workflows/daily.yml` 이 매일 돌면서 `output/` 를 커밋 → Pages 갱신
    (cron 시각 `0 14 * * *` UTC 는 취향대로 조정)
@@ -64,7 +65,9 @@ python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, 
 
 ## 확장 포인트
 
-- **가벼운 dedup**: torch 가 부담이면 `dedup.embed()` 를 `TfidfVectorizer` 로 교체 (그 외 코드 불변)
+- **가벼운 dedup**: torch 가 부담이면 `dedup.embed()` 를 `TfidfVectorizer` 로 교체 (그 외 코드 불변).
+  별도 `requirements-lite.txt` 는 **없다** — `sentence-transformers` 만 빼면 `embed()` 가 임포트에서
+  죽으므로, 코드를 먼저 갈아끼운 다음 의존성을 줄이는 순서로만 가능하다
 - **모델 비용**: 고볼륨이면 `DIGEST_MODEL=gemini-2.5-flash-lite` 로
 - **no_feed 소스**(Anthropic/Meta/Mistral): RSSHub 경로나 자체 파서를 `fetch.py` 에 추가
 
