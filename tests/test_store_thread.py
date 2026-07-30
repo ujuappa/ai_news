@@ -19,6 +19,15 @@ def test_thread_parent_id_roundtrip(tmp_path):
     store.close()
 
 
+def test_dropped_item_preserves_thread_parent_id(tmp_path):
+    store = Store(tmp_path / "t.db")
+    store.save_items([_item(id="parent")], "2026-W07")
+    store.save_items([_item(id="child", thread_parent_id="parent")], "2026-W22",
+                     is_published=False, drop_reason="category_cap")
+    assert store.dropped_items("2026-W22")[0]["thread_parent_id"] == "parent"
+    store.close()
+
+
 def test_thread_parent_info_prefers_headline(tmp_path):
     store = Store(tmp_path / "t.db")
     store.save_items([_item(id="p1", headline="Anthropic raises $30B Series G")], "2026-W07")

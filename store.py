@@ -323,7 +323,7 @@ class Store:
         "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""
         sql = """SELECT id, source_id, category, title, headline, url, summary, significance,
                         is_major, published, digest_date, drop_reason,
-                        cluster_sources, cluster_size FROM items
+                        cluster_sources, cluster_size, thread_parent_id FROM items
                  WHERE is_published=0"""
         params: tuple = ()
         if digest_date is not None:
