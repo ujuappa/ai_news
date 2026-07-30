@@ -28,7 +28,7 @@ def run():
 
     print(f"{len(todo)}건 임베딩 생성 (기존 {len(have)}건 건너뜀) — 로컬 모델, API 비용 없음")
     embs = dedup.embed([f"{it['title']}. {it.get('summary') or ''}" for it in todo])
-    for it, e in zip(todo, embs):
+    for it, e in zip(todo, embs, strict=True):
         it["_emb"] = e
 
     by_date: dict[str, list[dict]] = {}
