@@ -894,7 +894,7 @@ git commit -m "feat(pipeline): 카테고리별 규칙 적용 + category_floor �
 - Consumes: everything above.
 - Produces: nothing consumed by later tasks.
 
-- [ ] **Step 1: Replay today's stored pool against the new rules**
+- [x] **Step 1: Replay today's stored pool against the new rules**
 
 Run:
 
@@ -926,18 +926,18 @@ That is 22 against the 19 currently live. Two of the three added items come from
 
 If any number differs, the rules are not being applied correctly — revisit Task 6 before continuing.
 
-- [ ] **Step 2: Run a dry-run and confirm nothing is written**
+- [x] **Step 2: Run a dry-run and confirm nothing is written**
 
 Run: `.venv/bin/python pipeline.py --dry-run`
 
 Expected: completes in roughly 30 seconds; the `[4/5]` line lists drop reasons including `category_floor`. Dry-run assigns a flat significance of 0.5 to every item, so `research` (floor 0.60) will be empty — that is correct behaviour for dry-run, not a bug.
 
-- [ ] **Step 3: Restore the working tree**
+- [x] **Step 3: Restore the working tree**
 
 Run: `git checkout -- output/ && git clean -fd output/ && git status --porcelain`
 Expected: only `PROJECT_MEMO.md` and `README.md` modified; `digest.db` untouched.
 
-- [ ] **Step 4: Document in PROJECT_MEMO.md**
+- [x] **Step 4: Document in PROJECT_MEMO.md**
 
 Insert this entry immediately before the `## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)` heading:
 
@@ -961,7 +961,7 @@ Insert this entry immediately before the `## 11. 소스 확장 및 AI 그라운�
   - pytest 도입(`requirements-dev.txt`, `tests/`). CI 는 다이제스트 생성 전용이라 안 붙임.
 ```
 
-- [ ] **Step 5: Document the dev setup in README.md**
+- [x] **Step 5: Document the dev setup in README.md**
 
 After the `pip install -r requirements.txt` line in the setup block, add:
 
@@ -970,7 +970,7 @@ pip install -r requirements-dev.txt   # 테스트용 (pytest). 파이프라인 �
 pytest                                 # 단위 테스트
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add PROJECT_MEMO.md README.md
