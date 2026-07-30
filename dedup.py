@@ -90,6 +90,27 @@ def drop_similar_to(items: list[dict], others: list[dict], threshold: float) -> 
             if not any(_cos(it["_emb"], oe) >= threshold for oe in other_embs)]
 
 
+def find_thread_parent(emb: np.ndarray, candidates: list[dict],
+                       lo: float, hi: float) -> dict | None:
+    """`emb` 와 [lo, hi) 유사도 구간에서 가장 가까운 후보 하나. 없으면 None.
+
+    구간의 위를 여는(hi 미만) 게 설계의 핵심이다. hi 이상은 '같은 스토리'라 이어붙일 게
+    아니라 dedup 이 합쳐야 하는 값이고, lo 미만은 그냥 남남. 그 사이 —
+    "Series G 투자" -> "Series H 투자" 같은 후속편 — 만 링크 대상이다.
+
+    후보를 **이전 날짜로만** 한정하는 책임은 호출부(store.embeddings_before)에 있다.
+    여기서 날짜를 안 보는 이유는 이 함수가 순수 벡터 연산이라 테스트가 쉬워지기 때문."""
+    best, best_sim = None, -1.0
+    for c in candidates:
+        ce = c.get("embedding")
+        if ce is None:
+            continue
+        sim = _cos(emb, ce)
+        if lo <= sim < hi and sim > best_sim:
+            best, best_sim = c, sim
+    return best
+
+
 def commit_seen(items: list[dict], store: Store):
     for it in items:
         store.add_seen(it["id"], it["title"], it["url"], it.get("_emb"))
