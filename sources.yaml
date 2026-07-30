@@ -31,6 +31,19 @@ settings:
                             # (2026-07-28 발견: 5개월 전 펀딩 뉴스가 리드로 뜬 사고). backfill.py 는
                             # since 파라미터로 직접 호출해서 이 값과 무관.
 
+  # 카테고리별 상한 + 하한. 전역 max_items_per_category/min_significance 는 여기 없는
+  # 카테고리의 폴백으로 남는다. 2026-07-30 측정 근거:
+  #   research 후보 51건 중 29건이 0.40 에 몰린 일반 arXiv -> 하한 0.55 로 그 덩어리를 걷어내면
+  #     10건이 남고 캡 6 이 실제로 작동한다. 하한을 0.60 으로 올리면 통과가 딱 6건이라
+  #     캡이 무의미해지고, 점수가 조금만 내려가도 카테고리가 통째로 비어버린다.
+  #   policy_business 는 15건 전부 0.50 이상이라 하한은 형식적 -> 10 까지 열어 캡으로 자른다
+  #   model_releases(5건)/tools_products(2건)는 공급 부족이라 캡이 안 걸린다 -> 소스가 늘 때를 대비해 10
+  categories:
+    model_releases:  { max_items: 10, min_significance: 0.30 }
+    research:        { max_items: 6,  min_significance: 0.55 }
+    tools_products:  { max_items: 10, min_significance: 0.30 }
+    policy_business: { max_items: 10, min_significance: 0.40 }
+
   dedup:
     method: embedding_cosine
     threshold: 0.83                  # 실제 출력 보고 튜닝. 0.80 은 오병합 확인됨(2026-07-29)

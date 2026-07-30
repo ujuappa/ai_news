@@ -44,6 +44,16 @@ class Source:
 
 
 @dataclass
+class CategoryRule:
+    """카테고리별 게재 규칙. max_items 는 상한, min_significance 는 하한.
+
+    전역 하나로는 안 되는 이유: research 는 arXiv 때문에 후보가 50건씩 쌓이는데 7위 아래는
+    일반 논문이고, tools_products 는 애초에 2건이라 캡이 의미가 없다(2026-07-30 측정)."""
+    max_items: int
+    min_significance: float
+
+
+@dataclass
 class Settings:
     max_items_per_category: int = 6
     min_items_fallback: bool = True
@@ -56,6 +66,14 @@ class Settings:
     dedup_cross_day: bool = True
     seen_store_retention_days: int = 14
     ranking_rubric: list[str] = field(default_factory=list)
+    category_rules: dict[str, CategoryRule] = field(default_factory=dict)
+
+    def rule_for(self, category: str) -> CategoryRule:
+        """설정에 없는 카테고리는 전역값으로 폴백 — 새 카테고리를 추가해도 안 죽는다."""
+        return self.category_rules.get(
+            category,
+            CategoryRule(self.max_items_per_category, self.min_significance),
+        )
 
 
 @dataclass
@@ -71,6 +89,13 @@ def load(path: Path = SOURCES_FILE) -> Config:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     s = data.get("settings", {})
     dedup = s.get("dedup", {})
+    rules = {
+        cat: CategoryRule(
+            max_items=int(row.get("max_items", s.get("max_items_per_category", 6))),
+            min_significance=float(row.get("min_significance", s.get("min_significance", 0.25))),
+        )
+        for cat, row in (s.get("categories") or {}).items()
+    }
     settings = Settings(
         max_items_per_category=s.get("max_items_per_category", 6),
         min_items_fallback=s.get("min_items_fallback", True),
@@ -83,6 +108,7 @@ def load(path: Path = SOURCES_FILE) -> Config:
         dedup_cross_day=dedup.get("cross_day", True),
         seen_store_retention_days=dedup.get("seen_store_retention_days", 14),
         ranking_rubric=s.get("ranking_rubric", []),
+        category_rules=rules,
     )
 
     sources: list[Source] = []
