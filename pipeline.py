@@ -2,7 +2,7 @@
 
     python pipeline.py            # 정상 실행
     python pipeline.py --dry-run  # LLM 호출 없이 수집/dedup 까지만 (원문 발췌로 렌더, DB 미변경)
-    python pipeline.py --reset      # seen 테이블만 비움 (items/digests/recaps 보존)
+    python pipeline.py --reset      # seen + item_emb 비움 (items/digests/recaps 보존)
     python pipeline.py --purge-all  # digest.db 파일 통째 삭제 (확인 프롬프트, --yes 로 생략)
                                     # 재백필 전에 반드시 선행
 """
@@ -269,7 +269,7 @@ def run(dry_run: bool = False):
 
 
 def reset_db():
-    """seen-store 초기화 — `seen` 테이블만 비우고 items/digests/recaps 는 보존.
+    """dedup 임베딩 초기화 — `seen`/`item_emb`만 비우고 items/digests/recaps 는 보존.
 
     예전엔 digest.db 를 통째로 지웠는데 그러면 아카이브 히스토리까지 날아갔음
     (백필 27주치를 그렇게 잃음). 전체 삭제가 필요하면 --purge-all."""
@@ -278,11 +278,13 @@ def reset_db():
         return
     store = Store(config.DB_PATH)
     c = store.counts()
-    n = store.clear_seen()
+    seen_n = store.clear_seen()
+    emb_n = store.clear_embeddings()
     store.close()
-    print(f"✅ seen-store 초기화 완료 — {n}건 삭제 "
+    print(f"✅ dedup 임베딩 초기화 완료 — seen {seen_n}건 / item_emb {emb_n}건 삭제 "
           f"(items {c['items']} / digests {c['digests']} / recaps {c['recaps']} 보존)")
-    print("   다음 실행에서 모든 아이템이 '신규'로 잡힘. 전체 삭제는 --purge-all")
+    print("   다음 실행에서 모든 아이템이 '신규'로 잡힘. item_emb 는 backfill_embeddings.py 로 재생성."
+          " 전체 삭제는 --purge-all")
 
 
 def purge_all(assume_yes: bool = False):

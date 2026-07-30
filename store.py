@@ -166,6 +166,13 @@ class Store:
         self.conn.commit()
         return n
 
+    def clear_embeddings(self) -> int:
+        """재생성 가능한 장기 임베딩 전체 비우기 (백엔드 교체 뒤 폭 불일치 방지용)."""
+        n = self.conn.execute("SELECT COUNT(*) FROM item_emb").fetchone()[0]
+        self.conn.execute("DELETE FROM item_emb")
+        self.conn.commit()
+        return n
+
     # ---- item_emb (장기 임베딩 — story threading 용) ----
     def save_embeddings(self, items: list[dict], digest_date: str):
         """게재분의 임베딩을 장기 보관. seen-store 와 따로 두는 이유는 보존 기간이 달라서다 —

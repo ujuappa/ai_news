@@ -27,7 +27,7 @@ pip install -r requirements.txt          # torch 포함(무거움). 가벼운 �
 echo "GEMINI_API_KEY=..." > .env         # 개인 키 (aistudio.google.com). .env 는 .gitignore 처리, 채팅에 붙여넣지 말 것
 python pipeline.py --dry-run             # LLM 없이 수집/dedup (DB 미변경)
 python pipeline.py                       # 전체
-python pipeline.py --reset               # seen 테이블만 비움 (items/digests/recaps 보존)
+python pipeline.py --reset               # seen + item_emb 비움 (items/digests/recaps 보존)
 python pipeline.py --purge-all           # digest.db 통째 삭제. 재백필 전 선행 (--yes 로 확인 생략)
 open output/index.html
 ```
@@ -47,7 +47,8 @@ open output/index.html
 ## 규칙 · 주의
 - 요약은 2~3문장 자기 말로. **단 숫자(벤치·파라미터·금액·%)는 원문 그대로 보존.**
 - signal > volume: 카테고리당 상한(기본 6). `community_takes` 는 v1 에서 OFF.
-- cross-day dedup 은 seen-store(최근 14일 임베딩) 기반. 백엔드 바꾸면 `--reset` 으로 seen-store 초기화 필요.
+- cross-day dedup 은 seen-store(최근 14일 임베딩) 기반. 백엔드 바꾸면 `--reset` 으로
+  seen-store와 item_emb를 함께 비운 뒤 `backfill_embeddings.py`로 장기 임베딩을 재생성할 것.
 - `sources.yaml` 의 `status: verify` 는 첫 fetch 때 검증 필요. Mistral 만 아직 `no_feed`(v1.5 비활성이라 보류).
   Anthropic(sitemap 스크레이프)·Meta(Newsroom 태그 피드)는 대체 완료했지만 여전히 사이트 구조/피드
   변경에 죽을 수 있음 → source-health 배지로 계속 감시.

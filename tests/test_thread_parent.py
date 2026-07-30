@@ -57,3 +57,11 @@ def test_returns_none_without_candidates():
 def test_skips_candidates_with_no_embedding():
     cands = [{"id": "null", "embedding": None, "digest_date": "2026-W07"}, _c("ok", 0.80)]
     assert dedup.find_thread_parent(X, cands, 0.75, 0.83)["id"] == "ok"
+
+
+def test_skips_wrong_width_candidates_and_keeps_valid_parent():
+    cands = [
+        {"id": "corrupt", "embedding": np.array([1.0, 0.0, 0.0]), "digest_date": "2026-W07"},
+        _c("ok", 0.80),
+    ]
+    assert dedup.find_thread_parent(X, cands, 0.75, 0.83)["id"] == "ok"

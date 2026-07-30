@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 import numpy as np
 
 from store import Store
@@ -43,8 +45,10 @@ def test_skips_items_without_embedding(tmp_path):
 
 def test_purge_drops_only_stale_rows(tmp_path):
     store = Store(tmp_path / "t.db")
-    store.save_embeddings([{"id": "old", "_emb": _emb(0.1)}], "2020-01-01")
-    store.save_embeddings([{"id": "new", "_emb": _emb(0.2)}], "2026-07-29")
+    old = (date.today() - timedelta(days=181)).isoformat()
+    new = (date.today() - timedelta(days=179)).isoformat()
+    store.save_embeddings([{"id": "old", "_emb": _emb(0.1)}], old)
+    store.save_embeddings([{"id": "new", "_emb": _emb(0.2)}], new)
     assert store.purge_old_embeddings(180) == 1
-    assert [g["id"] for g in store.embeddings_before("2026-07-30")] == ["new"]
+    assert [g["id"] for g in store.embeddings_before(date.today().isoformat())] == ["new"]
     store.close()

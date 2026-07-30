@@ -103,7 +103,7 @@ def find_thread_parent(emb: np.ndarray, candidates: list[dict],
     best, best_sim = None, -float("inf")
     for c in candidates:
         ce = c.get("embedding")
-        if ce is None:
+        if ce is None or ce.shape != emb.shape:
             continue
         sim = _cos(emb, ce)
         if lo <= sim < hi and sim > best_sim:
