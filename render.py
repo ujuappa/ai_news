@@ -433,7 +433,7 @@ _HOME_TMPL = """
       <span class="tag tag-ink">{{ labels[lead.category]|upper }}</span>
       {% if lead.is_major %}<span class="tag tag-acc">MAJOR · {{ '%.2f'|format(lead.significance) }}</span>{% endif %}
     </div>
-    <a class="lead-title" href="{{ lead.url }}">{{ lead.title }}</a>
+    <a class="lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
     <p class="lead-dek">{{ lead.summary }}</p>
     <div class="byline-row">
       <a class="byline-link" href="{{ lead.url }}">{{ lead.domain_path }} →</a>
@@ -452,7 +452,7 @@ _HOME_TMPL = """
   <div class="grid3-col">
     <div class="rank-row"><span class="rank-num">{{ '%02d'|format(it.rank) }}</span>
       <span class="rank-cat {{ 'is-lead-cat' if loop.index == 1 else '' }}">{{ labels[it.category] }}</span></div>
-    <a class="item-h3" href="{{ it.url }}">{{ it.title }}</a>
+    <a class="item-h3" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="item-dek">{{ it.summary }}</p>
     <a class="item-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
     <div class="item-source">{{ it.source_name }}</div>
@@ -471,7 +471,7 @@ _HOME_TMPL = """
       <span class="wk-num">{{ '%02d'|format(it.rank) }}</span>
       <div>
         <div class="wk-cat">{{ labels[it.category] }}</div>
-        <a class="wk-title" href="{{ it.url }}">{{ it.title }}</a>
+        <a class="wk-title" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
         <div class="wk-dek">{{ it.summary }}</div>
         <a class="wk-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
       </div>
@@ -483,7 +483,7 @@ _HOME_TMPL = """
     {% for it in brief %}
     <a class="brief-row" href="{{ it.url }}">
       <span class="brief-num">{{ '%02d'|format(it.rank) }}</span>
-      <div><span class="brief-title">{{ it.title }}</span><span class="brief-link">{{ it.domain_path }} →</span></div>
+      <div><span class="brief-title" title="{{ it.title }}">{{ it.display_title }}</span><span class="brief-link">{{ it.domain_path }} →</span></div>
       <span class="brief-cat">{{ short_labels[it.category] }}</span>
     </a>
     {% endfor %}
@@ -550,7 +550,7 @@ _CATEGORY_TMPL = """
 <a class="cat-row" href="{{ it.url }}">
   <span class="cat-score" style="font-size:{{ it.row_size }}px">{{ '%.2f'|format(it.significance)|replace('0.', '.') }}</span>
   <div>
-    <div class="cat-row-title" style="font-size:{{ it.row_size }}px">{{ it.title }}</div>
+    <div class="cat-row-title" style="font-size:{{ it.row_size }}px" title="{{ it.title }}">{{ it.display_title }}</div>
     {% if it.show_dek %}<div class="cat-row-dek">{{ it.summary }}</div>{% endif %}
     <span class="cat-row-link">{{ it.domain_path }} →</span>
   </div>
@@ -736,20 +736,20 @@ _ARCHIVE_WEEK_TMPL = """
   <div class="week-split">
     <div class="week-lead-col">
       <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">{{ labels[lead.category] }}{{ ' · major' if lead.is_major else '' }}</span></div>
-      <a class="week-lead-title" href="{{ lead.url }}">{{ lead.title }}</a>
+      <a class="week-lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
       <p class="week-lead-dek">{{ lead.summary }}</p>
       <div class="week-lead-byline">{{ lead.source_name }} · tier {{ lead.tier_label }}</div>
       {% if second %}
       <div class="hr2" style="margin:0 0 18px"></div>
       <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">{{ labels[second.category] }}{{ ' · major' if second.is_major else '' }}</span></div>
-      <a class="week-sec-title" href="{{ second.url }}">{{ second.title }}</a>
+      <a class="week-sec-title" href="{{ second.url }}" title="{{ second.title }}">{{ second.display_title }}</a>
       <p class="week-sec-dek">{{ second.summary }}</p>
       {% endif %}
     </div>
     <div class="week-rest-col">
       <div class="week-rest-h">Rest of the {{ period_word }}</div>
       {% for it in rest %}
-      <a class="week-rest-row" href="{{ it.url }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.title }}</span></a>
+      <a class="week-rest-row" href="{{ it.url }}" title="{{ it.title }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.display_title }}</span></a>
       {% endfor %}
     </div>
   </div>
@@ -816,6 +816,9 @@ def _annotate(it: dict, rank: int | None = None) -> None:
     it["domain_path"] = _domain_path(it["url"])
     it["tier_label"] = _tier(it.get("significance", 0.0))
     it["source_name"] = _source_line_name(it)
+    # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
+    # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
+    it["display_title"] = (it.get("headline") or "").strip() or it["title"]
     if rank is not None:
         it["rank"] = rank
 
