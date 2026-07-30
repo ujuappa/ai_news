@@ -392,7 +392,7 @@ git commit -m "feat(store): items.headline 컬럼 + 멱등 마이그레이션"
 - Consumes: items with a `headline` key (possibly empty) from Task 3.
 - Produces: `it["display_title"]` set by `_annotate`. No later task depends on it.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/test_render_headline.py`:
 
@@ -436,12 +436,12 @@ def test_home_page_shows_headline_and_keeps_full_title(tmp_path):
     assert 'title="A very long original title"' in html
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_render_headline.py -v`
 Expected: FAIL with `KeyError: 'display_title'`
 
-- [ ] **Step 3: Compute `display_title` in `_annotate`**
+- [x] **Step 3: Compute `display_title` in `_annotate`**
 
 In `render.py`, replace `_annotate` (lines 815-820) with:
 
@@ -457,7 +457,7 @@ def _annotate(it: dict, rank: int | None = None) -> None:
         it["rank"] = rank
 ```
 
-- [ ] **Step 4: Point the templates at `display_title`**
+- [x] **Step 4: Point the templates at `display_title`**
 
 Make these eight replacements. Each keeps the full title as a hover tooltip.
 
@@ -486,12 +486,12 @@ line 752: <a class="week-rest-row" href="{{ it.url }}" title="{{ it.title }}"><s
 
 Leave the search index (`"t": it["title"]`, line 1007) on the full title — search recall is better against the complete text — and leave `archive_index` `top_title`, which comes from SQL.
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 13 passed
 
-- [ ] **Step 6: Confirm the archive still renders unchanged**
+- [x] **Step 6: Confirm the archive still renders unchanged**
 
 Run: `.venv/bin/python rerender.py && git diff --stat output/ | tail -3`
 
@@ -503,7 +503,7 @@ git diff output/archive/2026-W31.html | head -20
 
 Then restore: `git checkout -- output/`
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add render.py tests/test_render_headline.py
