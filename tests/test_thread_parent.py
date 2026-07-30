@@ -19,10 +19,21 @@ def test_picks_highest_similarity_in_band():
     assert dedup.find_thread_parent(X, cands, 0.75, 0.83)["id"] == "strong"
 
 
-def test_ignores_duplicates_at_or_above_upper_bound():
+def test_ignores_duplicates_well_above_upper_bound():
     """0.83 이상은 '중복'이라 이어붙일 게 아니라 dedup 이 합쳤어야 하는 값."""
     assert dedup.find_thread_parent(X, [_c("dup", 0.90)], 0.75, 0.83) is None
-    assert dedup.find_thread_parent(X, [_c("edge", 0.83)], 0.75, 0.83) is None
+
+
+def test_upper_bound_is_exclusive():
+    """경계가 '미만'인지 확인. float32 는 0.83 을 정확히 표현하지 못해서
+    (_v(0.83) 의 실측 코사인은 0.8299999833) 상수로는 경계를 짚을 수 없다 —
+    실측치를 그대로 hi 로 넘겨 '< hi' 가 '<= hi' 로 새지 않는지 본다."""
+    v = _v(0.80)
+    exact = float(np.dot(X, v))
+    cand = [{"id": "edge", "embedding": v, "digest_date": "2026-W07"}]
+    assert dedup.find_thread_parent(X, cand, 0.75, exact) is None
+    # 대조군: hi 를 아주 조금만 올리면 같은 후보가 잡혀야 한다(구간이 실제로 도는지 확인).
+    assert dedup.find_thread_parent(X, cand, 0.75, exact + 1e-6)["id"] == "edge"
 
 
 def test_ignores_unrelated_below_lower_bound():
