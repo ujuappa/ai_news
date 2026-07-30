@@ -100,7 +100,7 @@ def find_thread_parent(emb: np.ndarray, candidates: list[dict],
 
     후보를 **이전 날짜로만** 한정하는 책임은 호출부(store.embeddings_before)에 있다.
     여기서 날짜를 안 보는 이유는 이 함수가 순수 벡터 연산이라 테스트가 쉬워지기 때문."""
-    best, best_sim = None, -1.0
+    best, best_sim = None, -float("inf")
     for c in candidates:
         ce = c.get("embedding")
         if ce is None:

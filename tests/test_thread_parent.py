@@ -36,6 +36,16 @@ def test_upper_bound_is_exclusive():
     assert dedup.find_thread_parent(X, cand, 0.75, exact + 1e-6)["id"] == "edge"
 
 
+def test_lower_bound_is_inclusive():
+    """lo 는 '이상'. 상한과 마찬가지로 실측 코사인을 그대로 lo 로 넘겨서 확인한다."""
+    v = _v(0.80)
+    exact = float(np.dot(X, v))
+    cand = [{"id": "edge", "embedding": v, "digest_date": "2026-W07"}]
+    assert dedup.find_thread_parent(X, cand, exact, 0.90)["id"] == "edge"
+    # 대조군: lo 를 조금만 올리면 같은 후보가 떨어져야 한다.
+    assert dedup.find_thread_parent(X, cand, exact + 1e-6, 0.90) is None
+
+
 def test_ignores_unrelated_below_lower_bound():
     assert dedup.find_thread_parent(X, [_c("far", 0.40)], 0.75, 0.83) is None
 
