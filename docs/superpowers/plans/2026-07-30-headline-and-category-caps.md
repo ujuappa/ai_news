@@ -644,7 +644,7 @@ git commit -m "feat(config): 카테고리별 상한/하한(CategoryRule) — 전
 - Consumes: `config.CategoryRule` and `Settings.rule_for` from Task 5.
 - Produces: `render.group_by_category(items, settings=None)` — when `settings` is `None` it only sorts (used by `rerender.py`, whose DB rows are already capped); when given a `Settings` it applies each category's floor then ceiling. Task 7 calls it with settings.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `tests/test_group_rules.py`:
 
@@ -687,12 +687,12 @@ def test_no_settings_means_sort_only():
     assert len(groups["research"]) == 50
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_group_rules.py -v`
 Expected: FAIL with `TypeError: group_by_category() got an unexpected keyword argument 'settings'`
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 In `render.py`, replace `group_by_category` (lines 21-38) with:
 
@@ -720,12 +720,12 @@ def group_by_category(items: list[dict], settings=None) -> list[tuple[str, list[
     return groups
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `.venv/bin/python -m pytest tests/ -v`
 Expected: PASS, 20 passed
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add render.py tests/test_group_rules.py
