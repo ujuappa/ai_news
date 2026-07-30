@@ -32,7 +32,7 @@
 - Consumes: nothing from earlier tasks.
 - Produces: `llm._clean_headline(value, fallback_title: str, limit: int = 70) -> str` and `llm._merge_row(it: dict, row: dict) -> None`. Task 2 relies on `_merge_row` being the single place a model row is applied to an item. Task 3 relies on items carrying a `headline` key.
 
-- [ ] **Step 1: Create the dev dependency file**
+- [x] **Step 1: Create the dev dependency file**
 
 `requirements-dev.txt`:
 
@@ -41,7 +41,7 @@
 pytest>=8.0
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 `tests/__init__.py` is an empty file. `tests/test_llm_headline.py`:
 
@@ -97,14 +97,14 @@ def test_merge_row_headline_falls_back_to_title():
     assert it["headline"] == "Original title"
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `.venv/bin/python -m pytest tests/test_llm_headline.py -v`
 Expected: FAIL with `AttributeError: module 'llm' has no attribute '_clean_headline'`
 
 If pytest is missing, install first: `.venv/bin/pip install -r requirements-dev.txt`
 
-- [ ] **Step 4: Write the implementation**
+- [x] **Step 4: Write the implementation**
 
 In `llm.py`, insert after `_as_float` (which ends at line 122):
 
@@ -136,12 +136,12 @@ def _merge_row(it: dict, row: dict) -> None:
     it["_enriched"] = True
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `.venv/bin/python -m pytest tests/test_llm_headline.py -v`
 Expected: PASS, 7 passed
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add requirements-dev.txt tests/ llm.py
