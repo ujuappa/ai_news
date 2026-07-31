@@ -327,6 +327,35 @@ class Store:
         ).fetchall()
         return {r["category"]: dict(r) for r in rows}
 
+    def unpublish(self, ids: list[str], reason: str) -> int:
+        """이미 게재된 아이템을 내린다(`is_published=0` + `drop_reason`). 반환값은 실제 변경 행 수.
+
+        **행을 지우지 않는다** — 왜 내렸는지가 `drop_reason` 으로 남아야 나중에 근거를 볼 수 있고
+        (`store.dropped_items()`), cross-day dedup 의 `seen` 기록과도 어긋나지 않는다.
+        이미 내려간 아이템은 다시 세지 않으므로 여러 번 돌려도 안전하다."""
+        if not ids:
+            return 0
+        marks = ",".join("?" * len(ids))
+        cur = self.conn.execute(
+            f"UPDATE items SET is_published=0, drop_reason=? "
+            f"WHERE id IN ({marks}) AND is_published=1",
+            (reason, *ids),
+        )
+        self.conn.commit()
+        return cur.rowcount
+
+    def recount_digest(self, label: str) -> int:
+        """`digests.item_count` 를 실제 게재 수로 다시 계산한다. 반환값은 새 개수.
+
+        아이템을 내리면 이 값이 낡는다 — 아카이브 인덱스의 행/막대와 푸터 숫자가 여기서 나오므로
+        (`list_digests`), 내린 뒤 반드시 불러야 표시가 실제와 맞는다."""
+        n = self.conn.execute(
+            "SELECT COUNT(*) FROM items WHERE digest_date=? AND is_published=1", (label,)
+        ).fetchone()[0]
+        self.conn.execute("UPDATE digests SET item_count=? WHERE date=?", (n, label))
+        self.conn.commit()
+        return n
+
     def recent_digest_entries(self, limit: int = 20) -> list[dict]:
         """RSS 피드용: 최근 `limit` 개 다이제스트를 최신순으로, 각 다이제스트의 게재 항목까지.
 

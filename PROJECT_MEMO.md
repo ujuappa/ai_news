@@ -1141,10 +1141,23 @@
   - **`hn_ai` 1건 — `learnvector.ai/`(맨 도메인)인데 이건 정상이다.** Show HN 류는 제품
     홈페이지를 링크하는 게 맞다. → **맨 도메인 규칙을 전역으로 올리면 안 된다는 근거.**
     현재 grounding 경로에만 걸려 있어서 문제없다. 나중에 "일반화하면 좋겠다"고 옮기지 말 것.
-  - **정리 여부는 사용자 결정 사항**(아카이브 데이터를 되쓰는 일이라 임의로 안 함).
-    선택지: (a) 5건 `is_published=0` + `drop_reason='source_quality'` 로 내리고 재렌더 —
-    07-30/31 아카이브에서 사라진다, (b) 그대로 둔다(과거 기록), (c) 피드에서만 뺀다 —
-    **(c)는 권하지 않는다**: 사이트와 피드가 달라져서 나중에 더 헷갈린다.
+  - **→ (a) 로 처리 완료 (사용자 결정, 2026-07-31).** 5건을 `is_published=0` +
+    `drop_reason='source_quality'` 로 내리고 재렌더. 게시 총계 **445 → 440**,
+    `digests.item_count` 는 07-30 26→25 · 07-31 22→18 로 재계산.
+    검증: 238개 HTML·`feed.xml` 어디에도 팜 도메인 문자열이 남지 않음, 피드 `bozo=False`,
+    `digests.item_count` 가 실제 게재 수와 일치, **`learnvector.ai`(hn_ai)는 그대로 게재**.
+    - **행을 지우지 않았다** — `drop_reason` 이 남아야 근거를 볼 수 있고(`dropped_items()`),
+      `seen` 기록과도 어긋나지 않는다.
+    - **`recheck_grounding_urls.py` 로 남겼다**(일회성 스크립트 아님). `sources.yaml` 에
+      새 팜 도메인을 추가할 때마다 같은 상황(이미 게재된 건이 남는다)이 생긴다.
+      기본은 보고만, `--apply` 로 실행. **`gemini_grounding` 소스에만 적용** — 스코프를
+      넓히지 말 것(맨 도메인 규칙은 hn 계열에서 오탐이다, 위 learnvector 참고).
+    - `store.unpublish()` / `store.recount_digest()` 신설. **내린 뒤 재계산이 필수** —
+      아카이브 인덱스의 행·막대·푸터 숫자가 `digests.item_count` 에서 나오므로 안 하면 어긋난다.
+      테스트 8건(`test_store_unpublish.py`: 행 보존 · 멱등 · 빈 리스트 · 지정 id 만 ·
+      재계산 · 0건 다이제스트 · 검색 인덱스 이탈 · 피드 이탈). 전체 **205 passed**.
+    - 부수 수정: `.gitignore` 의 `*.db.bak` → `*.db.bak*`. 타임스탬프 붙인 백업
+      (`digest.db.bak-before-unpublish-...`)이 패턴에 안 걸려서 2MB DB 가 커밋될 뻔했다.
   - 참고: **크로스소스 클러스터가 2건으로 늘었다**(07-31). BBC+TechCrunch, 그리고
     Google News(AP)+Guardian. **둘 다 `category_cap` 에 걸려 안 실렸다.**
     corroboration 은 저장만 되고 **significance 에 전혀 반영되지 않는다** — 두 매체가 독립적으로

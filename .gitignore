@@ -7,4 +7,5 @@ service-account.json
 .claude/settings.local.json
 .cursor/
 boncom-ai-skills-main/
-*.db.bak
+*.db.bak*
+
