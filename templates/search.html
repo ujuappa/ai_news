@@ -1,0 +1,86 @@
+{% import "macros.html" as m %}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts() }}
+<title>AI Digest — Search</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap search-page-body">
+<header class="search-hero">
+  <div class="search-hero-row">
+    <a class="wordmark" href="index.html">AI Digest</a>
+    <form class="search-form" style="flex:1;max-width:340px" action="search.html" method="get">
+      <div class="search-field">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--acclt)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input id="q" type="search" placeholder="Search…" autofocus>
+        <span id="hitcount"></span>
+      </div>
+    </form>
+    {{ m.theme_picker() }}
+  </div>
+  <nav class="nav" style="border-top:1px solid rgba(var(--grgb),.18)">
+    <a href="index.html"><span class="tab-label">Home</span></a>
+  </nav>
+</header>
+<div class="results-body">
+  <div class="results-meta" id="meta">{{ total }}건의 기록에서 검색 (제목·요약·소스)</div>
+  <div class="results-hr"></div>
+  <div id="results"></div>
+</div>
+</div>
+<script id="search-data" type="application/json">{{ data_json|safe }}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('search-data').textContent);
+  var input = document.getElementById('q');
+  var results = document.getElementById('results');
+  var meta = document.getElementById('meta');
+  var hitcount = document.getElementById('hitcount');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function highlight(text, q) {
+    var idx = text.toLowerCase().indexOf(q);
+    if (idx === -1) return esc(text);
+    return esc(text.slice(0, idx)) + '<mark>' + esc(text.slice(idx, idx + q.length)) + '</mark>'
+      + esc(text.slice(idx + q.length));
+  }
+  function render(raw) {
+    var q = raw.trim().toLowerCase();
+    if (!q) {
+      hitcount.textContent = '';
+      meta.textContent = '{{ total }}건의 기록에서 검색 (제목·요약·소스)';
+      results.innerHTML = '';
+      return;
+    }
+    var matches = DATA.filter(function (it) {
+      return it.t.toLowerCase().indexOf(q) !== -1
+        || it.sm.toLowerCase().indexOf(q) !== -1
+        || it.s.toLowerCase().indexOf(q) !== -1;
+    });
+    matches.sort(function (a, b) { return b.sig - a.sig; });
+    hitcount.textContent = matches.length + ' hits';
+    meta.textContent = matches.length + ' results for "' + raw.trim() + '" · searched {{ total }} records';
+    if (!matches.length) {
+      results.innerHTML = '<p class="empty">결과 없음</p>';
+      return;
+    }
+    results.innerHTML = matches.slice(0, 100).map(function (it, idx) {
+      var topCls = idx === 0 ? ' top-hit' : '';
+      return '<a class="result-row' + topCls + '" href="' + esc(it.u) + '">'
+        + '<span class="result-score">' + it.sig.toFixed(2).replace(/^0\./, '.') + '</span>'
+        + '<div><div class="result-title">' + highlight(it.t, q) + '</div>'
+        + '<div class="result-byline">' + esc(it.d) + ' · ' + esc(it.s) + '</div></div>'
+        + '</a>';
+    }).join('');
+  }
+  input.addEventListener('input', function () { render(input.value); });
+  var initial = new URLSearchParams(location.search).get('q') || '';
+  input.value = initial;
+  render(initial);
+})();
+</script>
+</body></html>

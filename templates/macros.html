@@ -1,0 +1,64 @@
+{#
+  head 안에 들어가는 스크립트/폰트. 5개 페이지 템플릿이 같은 걸 반복하던 걸 매크로로 모았다.
+
+  저장된 팔레트(localStorage)를 **첫 페인트 전에** 적용해서 깜빡임을 막는다 -> 반드시 <head>
+  초반, CSS link 앞에 온다. 스위처 버튼의 aria-pressed 동기화도 여기서 한다.
+
+  `palettes_json|safe` 가 필요한 이유: autoescape 가 켜져 있어서 그냥 쓰면 JSON 의 `"` 가
+  `&quot;` 로 변해 스크립트가 깨진다. 팔레트 이름은 우리가 정하는 값이라 안전하다(§render.PALETTES).
+#}
+{% macro head_scripts() -%}
+<script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';var stored=parseInt(localStorage.getItem(KEY),10);var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){localStorage.setItem(KEY,idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+{%- endmacro %}
+
+{% macro theme_picker() -%}
+<div class="theme-picker">
+  {% for p in palettes %}
+  <button type="button" class="theme-swatch" data-theme-btn="{{ loop.index0 }}"
+          aria-pressed="{{ 'true' if loop.index0 == default_theme else 'false' }}"
+          onclick="__aiDigestSetTheme({{ loop.index0 }})" title="{{ p.name }}">
+    <span style="background:{{ p.g }}"></span><span style="background:{{ p.acc }}"></span><span style="background:{{ p.bar }}"></span>
+  </button>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro masthead(period_meta, total_records, nav_links, archive_link, search_href, show_search=true) -%}
+<header class="masthead">
+  <div class="masthead-row1">
+    <div class="masthead-id">
+      <a class="wordmark" href="{{ archive_link.home_href }}">AI Digest</a>
+      <span class="period-meta">{{ period_meta }}</span>
+    </div>
+    <div class="masthead-tools">
+      {% if show_search %}
+      <form class="search-form" action="{{ search_href }}" method="get">
+        <div class="search-field">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--grgb),.6)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
+        </div>
+      </form>
+      <span class="records-chip">{{ total_records }} records</span>
+      {% endif %}
+      {{ theme_picker() }}
+    </div>
+  </div>
+  <nav class="nav">
+    {% for link in nav_links %}
+    <a href="{{ link.href }}" class="{{ 'active' if link.active else '' }}">
+      <span class="tab-label">{{ link.label }}</span><span class="tab-count">{{ link.count }}</span>
+    </a>
+    {% endfor %}
+    <a href="{{ archive_link.href }}" class="archive-link">
+      <span class="tab-label">Archive</span><span class="tab-count">{{ archive_link.count }}</span>
+    </a>
+  </nav>
+</header>
+{%- endmacro %}
+
+{% macro site_footer(archive_href, total, status='ok') -%}
+<footer class="site-footer">
+  <span class="term-line">digest --items {{ total }} --status {{ status }}</span>
+  <nav><a href="{{ archive_href }}">Archive index</a></nav>
+</footer>
+{%- endmacro %}

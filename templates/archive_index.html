@@ -1,0 +1,40 @@
+{% import "macros.html" as m %}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts() }}
+<title>AI Digest — Archive</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap">
+<header class="simple-header">
+  <div class="simple-header-id">
+    <a class="wordmark" href="../index.html">AI Digest</a>
+    <span class="simple-header-sub">Archive</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px">
+    {{ m.theme_picker() }}
+    <a href="../index.html" class="accent" style="font:700 11px Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);text-decoration:none">Latest →</a>
+  </div>
+</header>
+<div class="archive-body">
+<div class="archive-top">
+  <h1 class="archive-title">{{ digests|length }} weeks<br>of signal</h1>
+  <div class="archive-bars-label">Items per digest, oldest → newest</div>
+  <div class="archive-bars">
+    {% for b in bars %}<span style="height:{{ b.pct }}%;background:{{ b.color }}"></span>{% endfor %}
+  </div>
+</div>
+<div class="archive-table-head"><span>Digest</span><span>Volume</span><span>Top story</span><span>Items</span></div>
+{% for d in recent %}
+<a class="archive-row {{ 'latest' if loop.index == 1 else '' }}" href="{{ d.date }}.html">
+  <span class="archive-row-date">{{ d.date }}</span>
+  <span class="archive-row-bar" style="width:{{ d.bar_px }}px;background:{{ d.bar_color }}"></span>
+  <span class="archive-row-top">{{ d.top_title or '—' }}</span>
+  <span class="archive-row-count">{{ d.item_count }}</span>
+</a>
+{% endfor %}
+{% if more_count %}<div class="archive-more">+ {{ more_count }} earlier digests</div>{% endif %}
+</div>
+</div>
+{{ m.site_footer('index.html', digests|length, status='archive') }}
+</body></html>

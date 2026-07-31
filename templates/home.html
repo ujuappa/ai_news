@@ -1,0 +1,110 @@
+{% import "macros.html" as m %}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts() }}
+<title>AI Digest — {{ period_meta }}</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap">
+{{ m.masthead(period_meta, total_records, nav_links, archive_link, search_href, true) }}
+<div class="body-grid">
+<div class="main-col">
+
+{% if lead %}
+<div class="kicker-row">
+  <span class="kicker">Lead story</span><span class="kicker-sub">Highest significance of the {{ period_word }}</span>
+</div>
+<div class="lead-grid">
+  <div class="lead-num">01</div>
+  <div>
+    <div class="tag-row">
+      <span class="tag tag-ink">{{ labels[lead.category]|upper }}</span>
+      {% if lead.is_major %}<span class="tag tag-acc">MAJOR · {{ '%.2f'|format(lead.significance) }}</span>{% endif %}
+    </div>
+    <a class="lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
+    <p class="lead-dek">{{ lead.summary }}</p>
+    {% if lead.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
+    <div class="byline-row">
+      <a class="byline-link" href="{{ lead.url }}">{{ lead.domain_path }} →</a>
+      <span class="byline-source">{{ lead.source_name }}</span>
+    </div>
+  </div>
+</div>
+{% else %}
+<p class="empty-note">오늘은 새 항목이 없습니다.</p>
+{% endif %}
+
+{% if grid3 %}
+<div class="hr2"></div>
+<div class="grid3">
+  {% for it in grid3 %}
+  <div class="grid3-col">
+    <div class="rank-row"><span class="rank-num">{{ '%02d'|format(it.rank) }}</span>
+      <span class="rank-cat {{ 'is-lead-cat' if loop.index == 1 else '' }}">{{ labels[it.category] }}</span></div>
+    <a class="item-h3" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
+    <p class="item-dek">{{ it.summary }}</p>
+    {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
+    <a class="item-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
+    <div class="item-source">{{ it.source_name }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if worth or brief %}
+<div class="hr2"></div>
+<div class="split2">
+  <div>
+    <div class="split2-h">Worth knowing</div>
+    {% for it in worth %}
+    <div class="wk-row">
+      <span class="wk-num">{{ '%02d'|format(it.rank) }}</span>
+      <div>
+        <div class="wk-cat">{{ labels[it.category] }}</div>
+        <a class="wk-title" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
+        <div class="wk-dek">{{ it.summary }}</div>
+        {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
+        <a class="wk-link" href="{{ it.url }}">{{ it.domain_path }} →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div>
+    <div class="split2-h dim">In brief{% if brief %} — {{ brief|length }} more{% endif %}</div>
+    {% for it in brief %}
+    <a class="brief-row" href="{{ it.url }}">
+      <span class="brief-num">{{ '%02d'|format(it.rank) }}</span>
+      <div><span class="brief-title" title="{{ it.title }}">{{ it.display_title }}</span><span class="brief-link">{{ it.domain_path }} →</span></div>
+      <span class="brief-cat">{{ short_labels[it.category] }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+</div>
+<aside class="aside">
+  <div class="aside-h">Signal index</div>
+  <div class="aside-sub">All {{ total }} stories by significance band. 0.60 and up is major.</div>
+  <div>
+    {% for b in bands %}
+    <div class="band-row">
+      <div class="band-top">
+        <span class="band-score">{{ b.score }} <span class="band-tier">{{ b.tier }}</span></span>
+        <span class="band-count">{{ b.count }}</span>
+      </div>
+      <div class="band-bar" style="background:{{ b.color }};width:{{ b.pct }}%"></div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if warnings %}
+  <div class="source-alert">
+    <div class="source-alert-h">Source alert</div>
+    <div class="source-alert-body">No working feed for <b>{{ warnings|join(', ') }}</b> — 0 items collected.</div>
+  </div>
+  {% endif %}
+</aside>
+</div>
+</div>
+{{ m.site_footer(archive_link.href, total) }}
+</body></html>
