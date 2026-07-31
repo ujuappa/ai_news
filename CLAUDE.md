@@ -32,7 +32,14 @@ python pipeline.py --purge-all           # digest.db 통째 삭제. 재백필 �
 open output/index.html
 ```
 
-## 지금 우선순위 (자세한 건 PROJECT_MEMO 섹션 9)
+## 지금 우선순위 → **PROJECT_MEMO §13 을 먼저 읽을 것** (2026-07-31 정리)
+
+**소스 확장은 종료됐다(16소스 188건에서 동결). 고비용/유료 API 는 다음 주 논의로 연기.
+남은 건 렌더링뿐** — §13 에 "완성 정의 4개"와 작업 순서(T0 → T2.1 → T3.1 → T3.2 → T3.3)가 있다.
+아래는 그 이전 히스토리(대부분 완료).
+
+<details><summary>이전 P0/P1 기록</summary>
+
 - **P0**: ✅ 완료 — `--dry-run` 은 이제 `save_items`/`commit_seen`/`purge_old_seen`/`record_digest` 를 스킵(DB 미변경).
   `--reset` 은 2026-07-29 부터 `seen` 테이블만 비움(아카이브 히스토리 보존), DB 전체 삭제는 `--purge-all`
   로 분리. 오염됐던 기존 DB도 초기화 완료.
@@ -43,6 +50,7 @@ open output/index.html
   2026-07-29 부터 탈락 아이템이 `items.is_published=0` + `drop_reason` 으로 쌓이므로
   `store.dropped_items()` 로 근거 데이터를 볼 수 있음.
 - **자동화**: 개인 GitHub 레포 + Actions cron + Pages.
+</details>
 
 ## 규칙 · 주의
 - 요약은 2~3문장 자기 말로. **단 숫자(벤치·파라미터·금액·%)는 원문 그대로 보존.**
