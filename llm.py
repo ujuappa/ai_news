@@ -262,11 +262,21 @@ Return ONLY JSON, no prose, no markdown fences:
 {"headline": "...", "dollar_committed": "$XXXM" or null, "category_one_liners": {"model_releases": "...", ...}}"""
 
 
+def _empty_recap() -> dict:
+    return {"headline": "", "dollar_committed": None, "category_one_liners": {}}
+
+
 def generate_recap(items: list[dict], model: str | None = None) -> dict:
     """전체 다이제스트용 편집 헤드라인 + $ 집계(최선 추정) + 카테고리별 한 줄 요약.
-    개수 통계(항목 수/최고 significance/카테고리별 개수)는 DB 데이터로 직접 계산하므로 여기 없음."""
+    개수 통계(항목 수/최고 significance/카테고리별 개수)는 DB 데이터로 직접 계산하므로 여기 없음.
+
+    **실패해도 예외를 올리지 않는다.** 리캡은 장식이고(없으면 헤드라인·한 줄 요약만 빠진다),
+    무엇보다 이 호출은 enrich 가 전부 끝난 **뒤**에 온다. 여기서 터지면 그날 쓴 LLM 비용을
+    통째로 버리고 렌더도 못 한다 — 실제로 2026-07-31 실행이 모델의 JSON 오타(콤마 누락) 하나로
+    6분 45초치 작업을 날렸다. 그래서 다른 LLM 경로(`_call_batch`/`catch_missed_news`)와 같은
+    재시도 + 로그 후 빈 값 반환 계약으로 맞춘다."""
     if not items:
-        return {"headline": "", "dollar_committed": None, "category_one_liners": {}}
+        return _empty_recap()
     client = genai.Client()  # .env 로 자동 인증 (Developer API 키 또는 Vertex AI)
     payload = json.dumps(
         [
@@ -277,29 +287,43 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
         ensure_ascii=False,
     )
     model_name = model or config.MODEL
-    resp = client.models.generate_content(
-        model=model_name,
-        contents=payload,
-        config=types.GenerateContentConfig(
-            system_instruction=RECAP_SYSTEM,
-            max_output_tokens=8000,  # thinking 토큰이 출력 예산에 잡히므로 여유를 둠
-            thinking_config=_thinking_config(model_name),
-            response_mime_type="application/json",
-        ),
-    )
-    text = (resp.text or "").strip()
-    if text.startswith("```"):
-        text = text.split("```", 2)[1].lstrip("json").strip()
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError:
-        start, end = text.find("{"), text.rfind("}")
-        data = json.loads(text[start : end + 1]) if start != -1 and end != -1 else {}
-    return {
-        "headline": data.get("headline", ""),
-        "dollar_committed": data.get("dollar_committed"),
-        "category_one_liners": data.get("category_one_liners", {}),
-    }
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            resp = client.models.generate_content(
+                model=model_name,
+                contents=payload,
+                config=types.GenerateContentConfig(
+                    system_instruction=RECAP_SYSTEM,
+                    max_output_tokens=8000,  # thinking 토큰이 출력 예산에 잡히므로 여유를 둠
+                    thinking_config=_thinking_config(model_name),
+                    response_mime_type="application/json",
+                ),
+            )
+            text = (resp.text or "").strip()
+            if text.startswith("```"):
+                text = text.split("```", 2)[1].lstrip("json").strip()
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError:
+                # 중괄호 구간만 잘라 재시도. 이것도 실패하면 except 로 떨어져 재시도/포기.
+                start, end = text.find("{"), text.rfind("}")
+                if start == -1 or end == -1:
+                    raise
+                data = json.loads(text[start : end + 1])
+            if not isinstance(data, dict):
+                raise ValueError(f"dict 가 아닌 응답: {type(data).__name__}")
+            one_liners = data.get("category_one_liners")
+            return {
+                "headline": _clean_str(data.get("headline")),
+                "dollar_committed": data.get("dollar_committed"),
+                "category_one_liners": one_liners if isinstance(one_liners, dict) else {},
+            }
+        except Exception as e:  # noqa: BLE001 — 장식 기능이라 파이프라인을 죽이지 않는다
+            if attempt == MAX_RETRIES:
+                print(f"      [!] 리캡 생성 실패, 헤드라인 없이 계속: {type(e).__name__}: {e}")
+                return _empty_recap()
+            time.sleep(BACKOFF_BASE**attempt)
+    return _empty_recap()
 
 
 def catch_missed_news(existing_titles: list[str], model: str | None = None) -> list[dict]:
