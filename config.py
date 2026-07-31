@@ -75,6 +75,10 @@ class Settings:
     embedding_retention_days: int = 180
     ranking_rubric: list[str] = field(default_factory=list)
     category_rules: dict[str, CategoryRule] = field(default_factory=dict)
+    # grounding 소스 품질 게이트. None = llm.py 모듈 기본값 사용, [] = 필터 끄기.
+    # (YAML 에 키가 없을 때 조용히 필터가 꺼지면 안 되므로 None 이 기본값이다)
+    grounding_blocked_domains: list[str] | None = None
+    grounding_blocked_url_patterns: list[str] | None = None
 
     def rule_for(self, category: str) -> CategoryRule:
         """설정에 없는 카테고리는 전역값으로 폴백 — 새 카테고리를 추가해도 안 죽는다."""
@@ -97,6 +101,7 @@ def load(path: Path = SOURCES_FILE) -> Config:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     s = data.get("settings", {})
     dedup = s.get("dedup", {})
+    grounding = s.get("grounding") or {}
     rules = {
         cat: CategoryRule(
             max_items=int(row.get("max_items", s.get("max_items_per_category", 6))),
@@ -120,6 +125,11 @@ def load(path: Path = SOURCES_FILE) -> Config:
         embedding_retention_days=dedup.get("embedding_retention_days", 180),
         ranking_rubric=s.get("ranking_rubric", []),
         category_rules=rules,
+        # 키가 아예 없으면 None(=모듈 기본값). 빈 리스트로 명시하면 "필터 끄기"로 존중한다.
+        grounding_blocked_domains=(list(grounding["blocked_domains"])
+                                   if "blocked_domains" in grounding else None),
+        grounding_blocked_url_patterns=(list(grounding["blocked_url_patterns"])
+                                        if "blocked_url_patterns" in grounding else None),
     )
 
     sources: list[Source] = []

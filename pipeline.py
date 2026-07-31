@@ -88,7 +88,11 @@ def _grounding_items(clustered: list[dict], store: Store, settings) -> list[dict
     cos 0.8116 이라 0.83 으로는 못 잡는다. 낮춰도 안전한 이유는 sources.yaml 주석 참고."""
     print("      Gemini Grounding (놓친 뉴스 확인)")
     try:
-        missed = llm.catch_missed_news([it["title"] for it in clustered])
+        missed = llm.catch_missed_news(
+            [it["title"] for it in clustered],
+            blocked_domains=settings.grounding_blocked_domains,
+            blocked_url_patterns=settings.grounding_blocked_url_patterns,
+        )
         if not missed:
             return []
         found = len(missed)

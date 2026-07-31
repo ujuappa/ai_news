@@ -10,6 +10,7 @@ import json
 import math
 import time
 from datetime import datetime, timezone
+from urllib.parse import urlsplit
 
 from google import genai
 from google.genai import types
@@ -20,6 +21,61 @@ from config import CATEGORY_LABELS
 
 MAX_RETRIES = 3     # 배치당 총 시도 횟수
 BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
+
+# ── grounding 소스 품질 게이트 ────────────────────────────────────────────────
+# 근거(2026-07-31 실측, digest.db): grounding 은 이틀간 10건 중 8건이 게시됐는데
+# **07-31 에 게시된 4건이 전부 라운드업/집계 페이지였다** — aiweekly.co/ ·
+# buildfastwithai.com/blogs/ai-news-today-july-30-2026 · ai.economictimes.com/ ·
+# buttondown.com/ai-tldr/archive/aitldr-daily-digest-july-30-2026/.
+# significance 0.7~0.9 를 받아서 하한·캡으로는 안 걸린다(LLM 은 "AI 뉴스 모음"을 중요한
+# 뉴스로 읽는다). 그래서 **수집 단계에서 구조로 막는다.**
+#
+# 세 겹으로 막는 이유 — 블록리스트 하나로는 내일 생기는 새 콘텐츠팜을 못 잡는다:
+#   1) 맨 도메인(경로 없음)  = 홈페이지/섹션 인덱스. 기사가 아니다. **도메인과 무관하게 항상 유효.**
+#   2) 도메인 블록리스트    = 이미 관측된 팜/뉴스레터 플랫폼.
+#   3) URL 슬러그 패턴      = 'ai-news-today', 'daily-digest' 류. 새 도메인에도 걸린다.
+# 실제 설정값은 sources.yaml `settings.grounding` 이고, 아래는 그게 없을 때의 폴백이다
+# (직접 호출/테스트 경로). 빈 리스트([])를 넘기면 "필터 끄기"로 동작한다 — None 과 구분됨.
+GROUNDING_BLOCKED_DOMAINS = (
+    "buildfastwithai.com",   # 2026-07-30·31 양일 통과. "AI news today" 일일 라운드업 팜
+    "ainewstoday.com",       # 2026-07-31 (캡에 걸려 우연히 안 실림)
+    "aiweekly.co",           # 2026-07-31 게시됨. 뉴스레터 아카이브
+    "crescendo.ai",          # 2026-07-31 (하한에 걸려 우연히 안 실림)
+    "unrot.co",              # 2026-07-30 리뷰에서 관측된 라운드업
+    "buttondown.com",        # 뉴스레터 호스팅 플랫폼 — 원문이 있을 수 없다
+)
+GROUNDING_BLOCKED_URL_PATTERNS = (
+    "ai-news-today", "news-roundup", "daily-digest", "weekly-digest",
+    "this-week-in", "ai-news-", "/newsletter/", "/digest/",
+)
+
+
+def _url_domain(url: str) -> str:
+    """호스트만 소문자로. `www.` 와 포트는 뗀다."""
+    host = (urlsplit(url).hostname or "").lower()
+    return host[4:] if host.startswith("www.") else host
+
+
+def _grounding_reject_reason(url: str,
+                             blocked_domains: tuple[str, ...] | list[str],
+                             blocked_patterns: tuple[str, ...] | list[str]) -> str:
+    """grounding URL 을 버릴 이유. 실으면 안 될 이유가 없으면 ''.
+
+    맨 도메인 검사를 **가장 먼저** 두는 이유: 리스트 관리가 필요 없는 유일한 규칙이고,
+    07-31 에 실린 4건 중 3건이 여기서 잡힌다."""
+    parts = urlsplit(url)
+    if not _url_domain(url):
+        return "invalid"
+    if parts.path in ("", "/") and not parts.query:
+        # 홈페이지/섹션 인덱스. resolve_url 은 통과시킨다(200 이니까) — 여기서 잡아야 한다.
+        return "bare_domain"
+    domain = _url_domain(url)
+    if any(domain == b or domain.endswith("." + b) for b in blocked_domains):
+        return "blocked_domain"
+    low = url.lower()
+    if any(p in low for p in blocked_patterns):
+        return "roundup_pattern"
+    return ""
 
 SYSTEM = """You curate a personal daily AI-news digest. Items are pre-deduplicated.
 For EACH item, decide:
@@ -326,7 +382,9 @@ def generate_recap(items: list[dict], model: str | None = None) -> dict:
     return _empty_recap()
 
 
-def catch_missed_news(existing_titles: list[str], model: str | None = None) -> list[dict]:
+def catch_missed_news(existing_titles: list[str], model: str | None = None,
+                      blocked_domains: list[str] | None = None,
+                      blocked_url_patterns: list[str] | None = None) -> list[dict]:
     """Gemini 의 Google Search grounding 으로 우리가 놓친 주요 AI 뉴스를 찾는다.
 
     `response_mime_type="application/json"` 을 쓰지 않는다 — 툴 사용과 함께 지정하면
@@ -334,14 +392,29 @@ def catch_missed_news(existing_titles: list[str], model: str | None = None) -> l
     (2026-07-29 확인. 그 전까지 이 함수는 매번 400 을 맞고 조용히 빈 리스트를 반환하고 있었음).
     대신 프롬프트로 JSON 만 요구하고 `_parse` 가 앞뒤 산문/코드펜스를 걷어낸다.
 
+    **소스 품질 게이트**(2026-07-31 추가): 프롬프트로 primary source 를 요구하고,
+    그걸 안 지킬 때를 대비해 코드에서 라운드업/맨 도메인을 버린다. 프롬프트만으로는 부족하다 —
+    07-31 실행에서 게시된 grounding 4건이 전부 라운드업이었고 significance 0.7~0.9 를 받아서
+    하한·캡을 그냥 통과했다. `blocked_*` 를 `None` 으로 두면 모듈 기본값, `[]` 로 주면 필터 없음.
+
     실패해도 예외를 올리지 않는다 — 보조 경로라 여기서 파이프라인을 죽일 이유가 없다."""
     client = genai.Client()
+    doms = GROUNDING_BLOCKED_DOMAINS if blocked_domains is None else blocked_domains
+    pats = GROUNDING_BLOCKED_URL_PATTERNS if blocked_url_patterns is None else blocked_url_patterns
 
     prompt = (
         "Search the web for the top 3 major Artificial Intelligence announcements or news from the last 24 hours. "
         "Do NOT include any of the following stories, as we already have them:\n"
         + "\n".join(f"- {t}" for t in existing_titles) +
-        "\n\nReturn ONLY a JSON array of the missed stories — no prose, no markdown fences. Each element:\n"
+        "\n\nSource requirements — these matter as much as the story choice:\n"
+        "- Prefer the PRIMARY source: the company or lab's own announcement, the regulator's or "
+        "government's own release, the paper itself, or an established news outlet reporting "
+        "original reporting.\n"
+        "- NEVER return a news roundup, link digest, newsletter, or aggregator page "
+        "(anything like 'AI news today', 'daily digest', 'this week in AI'). Those are "
+        "collections of other people's reporting, not a story.\n"
+        "- Each url must link DIRECTLY to one article. Never a site homepage or a section index.\n"
+        "\nReturn ONLY a JSON array of the missed stories — no prose, no markdown fences. Each element:\n"
         '{"title": "...", "url": "...", "summary_raw": "...", '
         '"category": "model_releases" (or research, tools_products, policy_business), "source_name": "..."}'
     )
@@ -368,6 +441,7 @@ def catch_missed_news(existing_titles: list[str], model: str | None = None) -> l
             time.sleep(BACKOFF_BASE**attempt)
 
     items, unreachable = [], 0
+    rejected: list[tuple[str, str]] = []
     for it in data or []:
         title = _clean_str(it.get("title"))
         raw_url = _clean_str(it.get("url"))
@@ -378,6 +452,12 @@ def catch_missed_news(existing_titles: list[str], model: str | None = None) -> l
         url = fetch.resolve_url(raw_url)
         if not url:
             unreachable += 1
+            continue
+        # 품질 게이트는 **resolve 뒤**에 본다. grounding 이 주는 raw_url 은 리다이렉트
+        # 래퍼일 때가 많아서 도메인/슬러그를 봐도 의미가 없다. 하루 3건이라 요청 낭비도 무의미.
+        reason = _grounding_reject_reason(url, doms, pats)
+        if reason:
+            rejected.append((reason, url))
             continue
         cat = it.get("category")
         items.append({
@@ -394,4 +474,8 @@ def catch_missed_news(existing_titles: list[str], model: str | None = None) -> l
         })
     if unreachable:
         print(f"      [!] grounding URL {unreachable}건 도달 불가(404/환각) — 제외")
+    for reason, url in rejected:
+        # 조용히 버리지 않는다 — 프롬프트가 안 먹히는지, 블록리스트에 새 팜을 넣어야 하는지는
+        # 실행 로그에서만 보인다(grounding 은 drop_reason 이 남는 경로를 안 탄다).
+        print(f"      [!] grounding 소스 품질 제외({reason}): {url}")
     return items

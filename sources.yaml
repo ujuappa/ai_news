@@ -63,6 +63,35 @@ settings:
     embedding_retention_days: 180    # seen(14일)과 별개 창. Series G(W07) -> Series H(W22) 처럼
                                      # 몇 달 걸쳐 이어지는 스토리를 잡으려면 이만큼 필요.
 
+  # Gemini Search Grounding 소스 품질 게이트 (2026-07-31 신설).
+  # 왜: grounding 은 이틀 10건 중 8건 게시인데, **07-31 게시분 4건이 전부 라운드업**이었다 —
+  #   aiweekly.co/ · buildfastwithai.com/blogs/ai-news-today-july-30-2026 ·
+  #   ai.economictimes.com/ · buttondown.com/ai-tldr/archive/aitldr-daily-digest-july-30-2026/
+  # significance 0.7~0.9 를 받아서(LLM 이 "AI 뉴스 모음"을 중요한 뉴스로 읽는다) 하한 0.40·캡 10
+  # 으로는 안 걸린다. 프롬프트에 primary-source 규칙도 넣었지만 프롬프트는 지켜지지 않을 수 있어서
+  # 코드 게이트가 최종 방어선이다(llm._grounding_reject_reason).
+  #
+  # ⚠️ 맨 도메인(경로 없는 홈페이지)은 이 리스트와 무관하게 항상 버린다 — 07-31 게시 4건 중
+  #    3건이 그 경우였고, 새 콘텐츠팜에도 그대로 통하는 유일한 규칙이다.
+  # 키를 지우면 llm.py 모듈 기본값이 쓰이고, 빈 리스트([])로 두면 필터가 꺼진다.
+  grounding:
+    blocked_domains:
+      - buildfastwithai.com   # 07-30·31 양일 통과한 "AI news today" 일일 라운드업 팜
+      - ainewstoday.com       # 07-31 (캡에 걸려 우연히 안 실림)
+      - aiweekly.co           # 07-31 게시됨. 뉴스레터 아카이브
+      - crescendo.ai          # 07-31 (하한에 걸려 우연히 안 실림)
+      - unrot.co              # 07-30 리뷰에서 관측
+      - buttondown.com        # 뉴스레터 호스팅 플랫폼 — 여기 원문이 있을 수 없다
+    blocked_url_patterns:     # 새 도메인에도 걸리도록 슬러그로 잡는다
+      - ai-news-today
+      - news-roundup
+      - daily-digest
+      - weekly-digest
+      - this-week-in
+      - ai-news-
+      - /newsletter/
+      - /digest/
+
   ranking_rubric:
     - frontier_model_release
     - major_funding_or_acquisition
