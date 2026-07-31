@@ -220,26 +220,33 @@ tools_products:
 # ============================================================
 policy_business:
   - id: gnews_ai
-    name: Google News (AI)
-    feed_url: "Artificial Intelligence OR Large Language Models"
+    name: Google News
+    # URL 이 아니라 **검색 질의**. site: 로 좁힌 갭필러 — 공식 피드가 없는 곳만 담당한다.
+    #   AP  : index.rss 가 401(유료 라이선스), hub RSS 404 (2026-07-30 실측)
+    #   WaPo: tech 피드가 HTTP 200 인데 항목 0건 — 공개 RSS 사실상 폐지
+    # Reuters 도 피드가 404 라 후보였지만, 넣으면 100건 중 75건을 Reuters 가 차지해
+    # AP/WaPo 를 밀어낸다(2026-07-31 실측) -> 보류.
+    feed_url: '(AI OR "artificial intelligence") (site:apnews.com OR site:washingtonpost.com)'
     parse: gnews
-    status: verify            # 피드 자체는 살아있음(아래 3번) — CI 에서 검증한 적은 없음
-    enabled: false            # 2026-07-30 비활성. 켜기 전에 (1)(2) 는 반드시 고칠 것
+    status: verified          # 2026-07-31 재검증: 100건, 발행처 AP 69 / WaPo 31
+    enabled: true             # 2026-07-30 비활성 -> 2026-07-31 아래 (1)(2) 수정 후 재활성화
+    max_entries: 10           # 항목당 URL 디코딩 비용(~567KB GET + POST)이 커서 25 대신 10
     notes: >-
-      2026-07-30 비활성 —
-      (1) [버그] 날짜: GNews 는 RFC 822("Wed, 29 Jul 2026 07:00:00 GMT")를 주는데 fetch._norm_date 가
-          파싱 못 해서 published="" 가 된다. 파싱 실패는 신선도 컷을 통과시키는 설계라
-          이 소스만 7일 컷을 전부 우회하고 아카이브에 날짜 없이 박힌다(07-28 "5개월 전 리드"와 동종 버그).
-          -> email.utils.parsedate_to_datetime 을 _norm_date 폴백으로 추가.
-      (2) [버그] URL: article["url"] 이 news.google.com/rss/articles/... 리다이렉트라 저장 URL 이
-          불투명하고 trafilatura 본문 추출도 대개 실패. -> 기존 fetch.resolve_url() 을 통과시킬 것.
-      (3) [버그 아님] 로컬에서 "object has no attribute 'status'" NetworkError 로 0건이 되는 건
-          gnews 가 내부적으로 feedparser.parse(url) 을 쓰는데 python.org 파이썬에 CA 인증서가
-          없어서 생기는 것. SSL_CERT_FILE 을 certifi 로 지정하면 25건 정상 수집되고 CI(Linux)는
-          애초에 무영향(2026-07-29 확인). 이걸 gnews 버그로 오인하지 말 것.
-      (4) [효용] 키워드가 넓어 노이즈가 많다("Academic Orthopaedic Surgeons Prefer Peer-Reviewed
-          Guidelines" 류). 매일 25건을 LLM 에 태우는 비용 대비 효용이 의심스러움 -> 재활성화 시엔
-          광범위 검색 대신 "공식 피드가 없는 조직" 한정 갭필러로 좁힐 것.
+      2026-07-30 에 껐던 두 버그를 2026-07-31 에 고치고 다시 켬:
+      (1) [해결] 날짜: RFC 822("Thu, 30 Jul 2026 10:01:00 GMT")를 못 읽어 published="" 가 되고,
+          파싱 실패는 신선도 컷을 통과시키는 설계라 이 소스만 7일 컷을 통째로 우회했었다.
+          이제 RSS 를 직접 파싱하므로 feedparser 가 발행일을 알아서 읽는다(_published).
+          보험으로 _norm_date 에 parsedate_to_datetime 폴백도 추가.
+      (2) [해결] URL: news.google.com 링크는 리다이렉트가 아니라서 resolve_url() 로는 못 푼다
+          (실측 4/4 가 같은 주소 반환). fetch.decode_google_news_url() 이 비공개 batchexecute
+          RPC 로 실제 기사 URL 을 얻는다. **디코딩 실패 시 아이템을 버린다** — 불투명 링크를
+          DB 에 저장하면 본문 추출도 안 되고 사이트에 영구히 남기 때문(2026-07-30 실제 사고).
+      (3) [해결] 로컬 NetworkError 는 gnews 라이브러리가 feedparser.parse(url) 을 써서 CA 인증서
+          부재에 걸린 것이었음. 이제 라이브러리를 안 쓰고 _parse_feed 를 타므로 무관해짐
+          (requirements.txt 에서 gnews 제거).
+      (4) [해결] 넓은 키워드의 노이즈 -> site: 두 곳으로 한정.
+      ⚠️ (2)의 RPC 는 문서화되지 않은 내부 엔드포인트다. Google 이 바꾸면 조용히 0건이 된다 —
+      source-health 배지(raw==0)로 감시하고, 디코딩 실패 건수는 실행 로그에 찍힌다.
 
   - id: import_ai
     name: Import AI (Jack Clark)

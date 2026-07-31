@@ -42,6 +42,9 @@ class Source:
     full_text: bool = False   # 기사 본문 추출(trafilatura) 여부. 기본 off — 비용/시간이 붙는다
     # parse: sitemap 전용. sitemap.xml 에서 긁어올 경로들. 기본은 뉴스만.
     sitemap_paths: list[str] = field(default_factory=lambda: ["/news/"])
+    # 소스별 수집 상한. None 이면 fetch 기본값(25). 항목당 비용이 유별난 소스를 따로 조인다
+    # (gnews 는 URL 디코딩에 항목당 ~567KB 가 붙어서 25 로 두면 매 실행 14MB·16초).
+    max_entries: int | None = None
     notes: str = ""
 
 
@@ -133,6 +136,8 @@ def load(path: Path = SOURCES_FILE) -> Config:
                     enabled=bool(row.get("enabled", True)),
                     full_text=bool(row.get("full_text", False)),
                     sitemap_paths=list(row.get("sitemap_paths") or ["/news/"]),
+                    max_entries=(int(row["max_entries"])
+                                 if row.get("max_entries") is not None else None),
                     notes=row.get("notes", ""),
                 )
             )

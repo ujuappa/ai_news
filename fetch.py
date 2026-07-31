@@ -7,16 +7,18 @@ from __future__ import annotations
 import calendar
 import hashlib
 import html
+import json
 import re
 import time
 from collections.abc import Sequence
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
+from urllib.parse import quote, urlencode
 from xml.etree import ElementTree
 
 import feedparser
 import requests
 import trafilatura
-from gnews import GNews
 
 from config import Source
 
@@ -170,7 +172,12 @@ def _first_paragraph(html: str, min_len: int = 40) -> str:
 
 
 def _norm_date(text: str) -> str:
-    """'Nov 24, 2025' 같은 표기나 ISO 문자열 -> tz-aware ISO(UTC). 실패 시 ''."""
+    """'Nov 24, 2025' 같은 표기나 ISO/RFC 822 문자열 -> tz-aware ISO(UTC). 실패 시 ''.
+
+    RFC 822 폴백('Thu, 30 Jul 2026 10:01:00 GMT')이 마지막에 붙어 있는 이유: 파싱 실패는
+    `_apply_cutoff` 를 **통과**시키는 설계라(날짜 없는 소스를 과도하게 거르지 않으려고),
+    날짜를 못 읽는 소스는 신선도 컷을 통째로 우회한다. Google News 가 정확히 그래서
+    2026-07-30 에 비활성됐다. 순서를 마지막에 둔 건 기존 ISO/산문 경로의 동작을 안 건드리려고."""
     text = (text or "").strip()
     if not text:
         return ""
@@ -182,6 +189,13 @@ def _norm_date(text: str) -> str:
                 break
             except ValueError:
                 continue
+    if dt is None:
+        try:
+            dt = parsedate_to_datetime(text)
+        except (TypeError, ValueError):
+            dt = None
+        if dt is not None and dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
     return dt.isoformat() if dt else ""
 
 
@@ -353,37 +367,135 @@ def _parse_feed(feed_url: str):
     raise last  # type: ignore[misc]
 
 
-def fetch_gnews_source(source: Source, max_entries: int = 25, max_age_days: int | None = None) -> list[dict]:
-    period = f"{max_age_days}d" if max_age_days else "7d"
-    google_news = GNews(period=period, max_results=max_entries)
+_GNEWS_SEARCH = "https://news.google.com/rss/search"
+_GNEWS_BATCH = "https://news.google.com/_/DotsSplashUi/data/batchexecute"
+_GNEWS_ID_RE = re.compile(r"/rss/articles/([^?/]+)")
+_GNEWS_SIG_RE = re.compile(r'data-n-a-sg="([^"]+)"')
+_GNEWS_TS_RE = re.compile(r'data-n-a-ts="([^"]+)"')
+# 이 UA 여야 c-wiz 마크업(서명/타임스탬프)이 들어온다. 브라우저 UA 로는 다른 페이지가 온다.
+_GNEWS_UA = {
+    "User-Agent": "python-requests/2.32.3",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+}
+_GNEWS_TITLE_SUFFIX_RE = re.compile(r"\s+-\s+[^-]{2,40}$")
+
+
+def decode_google_news_url(url: str, session: requests.Session | None = None,
+                           timeout: int = 20) -> str:
+    """`news.google.com/rss/articles/...` -> 실제 기사 URL. 실패하면 ''.
+
+    **왜 이게 필요한가**: Google News 피드의 링크는 불투명하다. 리다이렉트가 아니라서
+    `resolve_url()` 로는 못 푼다(2026-07-30 실측: 4/4 가 같은 주소를 그대로 반환 — Google 이
+    클라이언트 사이드로 넘긴다). id 의 base64 도 URL 이 아니라 protobuf 블롭이다.
+    유일하게 동작하는 경로가 이 비공개 RPC 다(`ma2za/google-news-api` 가 쓰는 방식,
+    2026-07-30 실측 AP 3/3 성공).
+
+    **주의**: 문서화되지 않은 내부 엔드포인트라 Google 이 언제든 바꿀 수 있다. 페이로드
+    배열의 원소 개수가 하나만 틀려도 조용히 `[3]` 에러를 준다(처음 시도가 그래서 실패했다).
+    그래서 실패를 예외가 아니라 ''로 돌려주고, 호출부가 아이템을 버리도록 한다 —
+    불투명 URL 을 그대로 저장하면 본문 추출도 안 되고 사이트에 영구히 남는다.
+
+    비용이 싸지 않다: 기사 페이지 GET(실측 ~567KB) + POST 1회. 반드시 신선도 컷 뒤에 부를 것."""
+    m = _GNEWS_ID_RE.search(url)
+    if not m:
+        return ""
+    article_id = m.group(1)
+    http = session or requests
     try:
-        articles = google_news.get_news(source.feed_url)
-    except Exception as e:
-        print(f"  [!] {source.id} gnews 실패: {type(e).__name__}: {e}")
+        page = http.get(f"https://news.google.com/rss/articles/{article_id}",
+                        params={"hl": "en-US", "gl": "US", "ceid": "US:en"},
+                        headers=_GNEWS_UA, timeout=timeout)
+        page.raise_for_status()
+        sig = _GNEWS_SIG_RE.search(page.text)
+        ts = _GNEWS_TS_RE.search(page.text)
+        if not (sig and ts):
+            return ""
+        payload = [
+            "Fbv4je",
+            ('["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,null,'
+             'null,null,null,null,0,1],"X","X",1,[1,1,1],1,1,null,0,0,null,0],'
+             f'"{article_id}",{ts.group(1)},"{sig.group(1)}"]'),
+        ]
+        resp = http.post(
+            _GNEWS_BATCH,
+            headers={"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+            data=f"f.req={quote(json.dumps([[payload]]))}",
+            timeout=timeout,
+        )
+        resp.raise_for_status()
+        # 응답은 ")]}'\n\n<len>\n[[...]]" 형태. 두 번째 청크가 실제 JSON.
+        decoded = json.loads(json.loads(resp.text.split("\n\n")[1])[:-2][0][2])[1]
+        return decoded if isinstance(decoded, str) and decoded.startswith("http") else ""
+    except Exception:  # noqa: BLE001 — 보조 경로. 실패는 호출부가 건수로만 보고한다
+        return ""
+
+
+def fetch_gnews_source(source: Source, max_entries: int = 25,
+                       max_age_days: int | None = None) -> list[dict]:
+    """Google News 검색 피드. `source.feed_url` 은 URL 이 아니라 **검색 질의**다.
+
+    `gnews` 라이브러리 대신 RSS 를 직접 친다. 이유 세 가지: (1) 라이브러리가 내부적으로
+    `feedparser.parse(url)` 을 써서 python.org 파이썬의 CA 인증서 부재에 걸린다(2026-07-29
+    로컬 전 소스 0건 사고와 같은 원인), (2) `_parse_feed` 를 타면 타임아웃·재시도·UA 가 다른
+    소스와 같아진다, (3) feedparser 가 RFC 822 발행일을 직접 파싱해줘서 날짜 버그가 사라진다.
+
+    수집 -> 신선도 컷 -> URL 디코딩 순서를 지킨다. 디코딩이 항목당 ~567KB 라
+    컷 앞에서 돌리면 곧바로 버릴 기사까지 받아온다(2026-07-30 full_text 와 같은 실수)."""
+    query = source.feed_url.strip()
+    if max_age_days:
+        query = f"{query} when:{max_age_days}d"
+    url = f"{_GNEWS_SEARCH}?{urlencode({'q': query, 'hl': 'en-US', 'gl': 'US', 'ceid': 'US:en'})}"
+    try:
+        parsed = _parse_feed(url)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [!] {source.id} fetch 실패: {type(e).__name__}: {e}")
         return []
 
-    items = []
-    for article in articles:
-        url = article.get("url", "")
-        title = _clean(article.get("title", ""), 300)
-        if not title or not url:
+    items: list[dict] = []
+    for entry in parsed.entries:
+        title = _clean(getattr(entry, "title", ""), 300)
+        link = _item_url(entry)
+        if not title or not link:
             continue
+        publisher = (getattr(entry, "source", {}) or {}).get("title", "")
+        # GNews 는 제목 끝에 " - AP News" 를 붙인다. 발행처는 source_name 으로 따로 들고
+        # 제목에서는 뗀다 — llm 의 headline 규칙도 이 접미사를 지우라고 되어 있다.
+        if publisher and title.endswith(f" - {publisher}"):
+            title = title[: -len(f" - {publisher}")].strip()
+        items.append(
+            {
+                "id": _hash(link, title),
+                "source_id": source.id,
+                "source_name": f"{source.name} ({publisher})" if publisher else source.name,
+                "category": source.category,
+                "title": title,
+                "url": link,
+                "summary_raw": _clean(getattr(entry, "summary", "")
+                                      or getattr(entry, "description", "")),
+                "published": _published(entry) or _norm_date(getattr(entry, "published", "")),
+            }
+        )
 
-        published_str = article.get("published date", "")
-        publisher = article.get("publisher", {}).get("title")
-        source_name = f"{source.name} ({publisher})" if publisher else source.name
+    items = _apply_cutoff(items, max_age_days)[:max_entries]
 
-        items.append({
-            "id": _hash(url, title),
-            "source_id": source.id,
-            "source_name": source_name,
-            "category": source.category,
-            "title": title,
-            "url": url,
-            "summary_raw": _clean(article.get("description", "")),
-            "published": _norm_date(published_str),
-        })
-    return items
+    resolved: list[dict] = []
+    dropped = 0
+    session = requests.Session()
+    for it in items:
+        real_url = decode_google_news_url(it["url"], session=session)
+        if not real_url:
+            dropped += 1
+            continue
+        it["url"] = real_url
+        it["id"] = _hash(real_url, it["title"])  # id 는 최종 URL 기준 — cross-day 안정성
+        resolved.append(it)
+        time.sleep(0.15)  # 기사마다 요청 -> 서버 매너
+    if dropped:
+        print(f"      {source.id}: URL 디코딩 실패 {dropped}건 드롭 "
+              f"(불투명 링크를 저장하지 않기 위해 의도적으로 버림)")
+    return resolved
 
 
 HF_PAPERS_API = "https://huggingface.co/api/daily_papers"
@@ -522,7 +634,8 @@ def fetch_all(sources: list[Source],
     all_items: list[dict] = []
     health: dict[str, tuple[int, int]] = {}
     for src in sources:
-        got, raw = fetch_source_counted(src, max_age_days=max_age_days)
+        got, raw = fetch_source_counted(src, max_entries=src.max_entries or 25,
+                                        max_age_days=max_age_days)
         health[src.id] = (len(got), raw)
         aged_out = f"  (피드 {raw}건 중 {raw - len(got)}건 기간 밖)" if raw > len(got) else ""
         print(f"  {src.id:22s} {len(got):3d} items  ({src.status}){aged_out}")
