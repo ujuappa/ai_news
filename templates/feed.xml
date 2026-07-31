@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+{#
+  RSS 2.0 피드. **다이제스트 1개 = <item> 1개** (기사 1개 = item 1개가 아니다).
+
+  왜 다이제스트 단위인가: 이건 "데일리 다이제스트"라는 제품이고, 랭킹·큐레이션 자체가
+  산출물이다. 기사 단위로 쪼개면 (1) 하루 20건이 리더에 쏟아지고 (2) 원본 피드를 그대로
+  다시 뿌리는 셈이 되며 (3) 순위 정보가 사라진다. 대신 본문에 순위대로 링크를 담아
+  리더 안에서 그날 다이제스트를 그대로 읽을 수 있게 한다(§5 의 "리더/이메일 연동" 목적).
+
+  autoescape 가 켜져 있으므로 `entry.body_html` 은 자동으로 이스케이프된다 —
+  RSS 의 description 은 **이스케이프된 HTML** 을 담는 게 규약이라 이게 맞다(|safe 쓰면 안 됨).
+#}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI Digest</title>
+    <link>{{ site_url }}/index.html</link>
+    <atom:link href="{{ site_url }}/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>매일 AI 뉴스를 수집·중복제거·요약·랭킹한 개인용 데일리 다이제스트.</description>
+    <language>ko</language>
+    <generator>ai-digest</generator>
+    {% if build_date %}<lastBuildDate>{{ build_date }}</lastBuildDate>{% endif %}
+    {% for entry in entries %}
+    <item>
+      <title>{{ entry.title }}</title>
+      <link>{{ site_url }}/archive/{{ entry.label }}.html</link>
+      <guid isPermaLink="false">ai-digest:{{ entry.label }}</guid>
+      {% if entry.pub_date %}<pubDate>{{ entry.pub_date }}</pubDate>{% endif %}
+      <description>{{ entry.body_html }}</description>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

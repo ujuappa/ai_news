@@ -71,6 +71,8 @@ def run():
 
     render.render_archive_index(store.list_digests(), config.OUTPUT_DIR)
     render.render_search_page(all_items, config.OUTPUT_DIR)
+    render.render_feed(store.recent_digest_entries(settings.feed_max_digests),
+                       config.OUTPUT_DIR, settings.site_url)
 
     store.close()
     print("재렌더 완료")

@@ -63,6 +63,13 @@ settings:
     embedding_retention_days: 180    # seen(14일)과 별개 창. Series G(W07) -> Series H(W22) 처럼
                                      # 몇 달 걸쳐 이어지는 스토리를 잡으려면 이만큼 필요.
 
+  # ⚠️ RSS 피드(output/feed.xml)의 기준 URL. **실제 배포 주소로 맞는지 확인할 것** —
+  # RSS 는 상대경로를 허용하지 않아서 이 값이 틀리면 리더에서 모든 링크가 깨진다.
+  # 아래는 GitHub Pages 프로젝트 사이트의 기본 형태(레포 ujuappa/ai_news)로 넣어둔 추정값이다.
+  # 커스텀 도메인이나 user-site(ujuappa.github.io)면 반드시 바꿀 것. 비우면 피드 생성을 건너뛴다.
+  site_url: https://ujuappa.github.io/ai_news
+  feed_max_digests: 20      # 피드에 담을 최근 다이제스트 수. 리더는 보통 이 정도면 충분하다
+
   # Gemini Search Grounding 소스 품질 게이트 (2026-07-31 신설).
   # 왜: grounding 은 이틀 10건 중 8건 게시인데, **07-31 게시분 4건이 전부 라운드업**이었다 —
   #   aiweekly.co/ · buildfastwithai.com/blogs/ai-news-today-july-30-2026 ·

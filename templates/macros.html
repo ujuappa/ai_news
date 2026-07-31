@@ -7,7 +7,9 @@
   `palettes_json|safe` 가 필요한 이유: autoescape 가 켜져 있어서 그냥 쓰면 JSON 의 `"` 가
   `&quot;` 로 변해 스크립트가 깨진다. 팔레트 이름은 우리가 정하는 값이라 안전하다(§render.PALETTES).
 #}
-{% macro head_scripts() -%}
+{% macro head_scripts(asset_prefix='') -%}
+<link rel="alternate" type="application/rss+xml" title="AI Digest" href="{{ asset_prefix }}feed.xml">
+
 <script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';var stored=parseInt(localStorage.getItem(KEY),10);var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){localStorage.setItem(KEY,idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 {%- endmacro %}
 

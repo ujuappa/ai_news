@@ -47,6 +47,11 @@ python pipeline.py --purge-all  # digest.db 통째 삭제 (확인 프롬프트, 
 첫 실행 시 `sentence-transformers` 가 임베딩 모델(all-MiniLM-L6-v2)을 내려받음.
 결과는 `output/index.html`.
 
+RSS 피드도 같이 나온다 — `output/feed.xml` (**다이제스트 1개 = 항목 1개**, 최근 20개).
+리더에 사이트 주소를 붙여넣으면 `<link rel="alternate">` 로 자동 검색된다.
+⚠️ `sources.yaml` 의 `settings.site_url` 이 **실제 배포 주소와 같아야 한다** — RSS 는 상대경로를
+허용하지 않아서 틀리면 리더에서 모든 링크가 깨진다(비워두면 피드 생성을 건너뜀).
+
 ## 배포 (GitHub Pages)
 
 1. 저장소 Settings → Secrets 에 **`GEMINI_API_KEY`** 하나만 추가 (aistudio.google.com 발급).

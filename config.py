@@ -73,6 +73,10 @@ class Settings:
     thread_min_similarity: float = 0.75       # 이 아래는 남남
     thread_max_similarity: float = 0.83       # 이 위는 중복(=dedup 이 합칠 것)
     embedding_retention_days: int = 180
+    # RSS 피드용 사이트 기준 URL. RSS 는 상대경로를 허용하지 않아서 이게 없으면 피드를 만들 수
+    # 없다(리더가 링크를 못 따라간다). 비어 있으면 render_feed 가 경고하고 건너뛴다.
+    site_url: str = ""
+    feed_max_digests: int = 20
     ranking_rubric: list[str] = field(default_factory=list)
     category_rules: dict[str, CategoryRule] = field(default_factory=dict)
     # grounding 소스 품질 게이트. None = llm.py 모듈 기본값 사용, [] = 필터 끄기.
@@ -123,6 +127,8 @@ def load(path: Path = SOURCES_FILE) -> Config:
         thread_min_similarity=dedup.get("thread_min", 0.75),
         thread_max_similarity=dedup.get("thread_max", 0.83),
         embedding_retention_days=dedup.get("embedding_retention_days", 180),
+        site_url=str(s.get("site_url") or "").strip(),
+        feed_max_digests=int(s.get("feed_max_digests", 20)),
         ranking_rubric=s.get("ranking_rubric", []),
         category_rules=rules,
         # 키가 아예 없으면 None(=모듈 기본값). 빈 리스트로 명시하면 "필터 끄기"로 존중한다.

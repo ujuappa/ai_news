@@ -66,3 +66,33 @@ def test_top_title_picks_the_highest_significance_item(tmp_path):
     top = {d["date"]: d["top_title"] for d in store.list_digests()}
     assert top["2026-07-31"] == "High headline"
     store.close()
+
+
+# ── recent_digest_entries — RSS 피드용 (2026-07-31, §13 T3.4) ─────────────────
+
+def test_recent_digest_entries_newest_first_and_limited(tmp_path):
+    store = Store(tmp_path / "t.db")
+    for label in ["2026-07-29", "2026-07-30", "2026-07-31", "2026-W20"]:
+        _publish(store, label, f"t {label}", f"H {label}", 0.5)
+    got = store.recent_digest_entries(limit=3)
+    assert [e["label"] for e in got] == ["2026-07-31", "2026-07-30", "2026-07-29"]
+    store.close()
+
+
+def test_recent_digest_entries_sorts_items_by_significance(tmp_path):
+    """피드 본문 순서가 사이트 랭킹과 같아야 한다."""
+    store = Store(tmp_path / "t.db")
+    _publish(store, "2026-07-31", "low", "Low", 0.3)
+    _publish(store, "2026-07-31", "high", "High", 0.95)
+    _publish(store, "2026-07-31", "mid", "Mid", 0.6)
+    entry = store.recent_digest_entries()[0]
+    assert [it["headline"] for it in entry["items"]] == ["High", "Mid", "Low"]
+    store.close()
+
+
+def test_recent_digest_entries_tolerates_a_missing_recap(tmp_path):
+    """리캡 생성이 실패한 날도 있다(2026-07-31 크래시) — headline 은 빈 문자열이어야 한다."""
+    store = Store(tmp_path / "t.db")
+    _publish(store, "2026-07-31", "t", "H", 0.5)
+    assert store.recent_digest_entries()[0]["headline"] == ""
+    store.close()

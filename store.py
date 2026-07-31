@@ -327,6 +327,29 @@ class Store:
         ).fetchall()
         return {r["category"]: dict(r) for r in rows}
 
+    def recent_digest_entries(self, limit: int = 20) -> list[dict]:
+        """RSS 피드용: 최근 `limit` 개 다이제스트를 최신순으로, 각 다이제스트의 게재 항목까지.
+
+        렌더가 store 를 몰라야 해서(§13 T3.1 이후 render.py 는 데이터 가공만 한다) 여기서
+        평평한 dict 로 만들어 준다. 항목은 significance 내림차순 — 피드 본문의 순서가
+        사이트의 랭킹과 같아야 한다.
+
+        `headline` 은 recaps 의 편집 헤드라인(없으면 빈 문자열). 리캡 생성이 실패한 날도
+        있으므로(2026-07-31 사고) 비어 있는 걸 정상으로 다뤄야 한다."""
+        out: list[dict] = []
+        for d in self.list_digests()[:limit]:
+            label = d["date"]
+            items = sorted(self.items_for_digest(label),
+                           key=lambda it: it.get("significance") or 0.0, reverse=True)
+            whole = self.recaps_for(label).get("", {})
+            out.append({
+                "label": label,
+                "headline": (whole.get("headline") or "").strip(),
+                "item_count": d["item_count"],
+                "items": items,
+            })
+        return out
+
     def all_items(self) -> list[dict]:
         """검색 인덱스용: 게재된 전체 아이템 (최신순). 탈락분은 제외 — 사이트에 없는 글이
         검색 결과에 뜨면 안 됨. source_name 매핑은 호출부 책임(config.py 참고)."""

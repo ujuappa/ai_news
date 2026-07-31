@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import date as _date, timedelta as _timedelta
+from datetime import date as _date, datetime, timedelta as _timedelta, timezone
+from email.utils import format_datetime
+from html import escape
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -369,6 +371,78 @@ def render_search_page(items: list[dict], output_dir: Path):
     tmpl = _env.get_template("search.html")
     html = tmpl.render(total=len(data), data_json=data_json, asset_prefix="")
     (output_dir / "search.html").write_text(html, encoding="utf-8")
+
+
+def _feed_pub_date(label: str) -> str:
+    """다이제스트 라벨 -> RSS 의 RFC 822 pubDate. 파싱 못 하면 ''(그러면 템플릿이 생략한다).
+
+    주간 라벨('2026-W31')은 `label_sort_key` 가 그 주 월요일 ISO 날짜를 주므로 그걸 쓴다 —
+    일간/주간이 한 피드에 섞여도 리더에서 시간순이 맞는다."""
+    iso = label_sort_key(label)
+    try:
+        d = _date.fromisoformat(iso)
+    except ValueError:
+        return ""
+    return format_datetime(datetime(d.year, d.month, d.day, tzinfo=timezone.utc))
+
+
+def _feed_body_html(entry: dict) -> str:
+    """피드 본문: 그날 항목을 랭킹 순서대로 <ol>. 리더 안에서 다이제스트를 그대로 읽게 한다.
+
+    템플릿의 autoescape 가 이 문자열을 이스케이프해서 description 에 넣는다(RSS 규약).
+    그래서 여기서는 **평범한 HTML 을 만들면 되고, 직접 이스케이프하지 않는다** — 단
+    항목 제목/요약은 원문이라 여기서 escape() 를 걸어야 한다(이중 이스케이프가 아니다:
+    이 함수의 출력 전체가 description 안에서 한 번 더 이스케이프되는 구조).
+    """
+    parts: list[str] = []
+    if entry.get("headline"):
+        parts.append(f"<p><strong>{escape(entry['headline'])}</strong></p>")
+    parts.append("<ol>")
+    for it in entry.get("items", []):
+        title = escape((it.get("headline") or "").strip() or it.get("title") or "")
+        url = escape(it.get("url") or "", quote=True)
+        summary = escape(it.get("summary") or "")
+        label = escape(CATEGORY_LABELS.get(it.get("category", ""), ""))
+        major = " <em>(major)</em>" if it.get("is_major") else ""
+        parts.append(
+            f'<li><a href="{url}">{title}</a>{major}<br>'
+            f"<small>{label}</small>"
+            f"{'<br>' + summary if summary else ''}</li>"
+        )
+    parts.append("</ol>")
+    return "".join(parts)
+
+
+def render_feed(entries: list[dict], output_dir: Path, site_url: str,
+                build_date: str | None = None) -> Path | None:
+    """`output/feed.xml` (RSS 2.0). **다이제스트 1개 = item 1개.**
+
+    `site_url` 이 비어 있으면 **만들지 않고 None 을 반환한다** — RSS 는 상대경로를 허용하지
+    않아서, 기준 URL 없이 쓰면 리더에서 전 링크가 깨진 피드가 배포된다. 조용히 깨진 걸
+    내보내는 것보다 없는 게 낫다(sources.yaml settings.site_url 참고).
+
+    `build_date` 는 테스트에서 고정하기 위한 것 — 안 주면 지금 시각."""
+    if not site_url:
+        print("      [!] settings.site_url 이 비어 있어 RSS 피드를 건너뜀 "
+              "(RSS 는 상대경로 불가 — sources.yaml 에 배포 주소를 넣을 것)")
+        return None
+    base = site_url.rstrip("/")
+    payload = [
+        {
+            "label": e["label"],
+            "title": e.get("headline") or f"AI Digest — {e['label']}",
+            "pub_date": _feed_pub_date(e["label"]),
+            "body_html": _feed_body_html(e),
+        }
+        for e in entries
+    ]
+    tmpl = _env.get_template("feed.xml")
+    xml = tmpl.render(site_url=base, entries=payload,
+                      build_date=build_date or format_datetime(datetime.now(timezone.utc)))
+    output_dir.mkdir(parents=True, exist_ok=True)
+    out = output_dir / "feed.xml"
+    out.write_text(xml, encoding="utf-8")
+    return out
 
 
 def render_archive_index(digests: list[dict], output_dir: Path):

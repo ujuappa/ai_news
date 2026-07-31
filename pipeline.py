@@ -262,6 +262,8 @@ def run(dry_run: bool = False):
         store.record_digest(today, len(flat), f"archive/{today}.html")
     render.render_archive_index(store.list_digests(), config.OUTPUT_DIR)
     render.render_search_page(all_items, config.OUTPUT_DIR)
+    render.render_feed(store.recent_digest_entries(settings.feed_max_digests),
+                       config.OUTPUT_DIR, settings.site_url)
 
     n_major = sum(1 for it in flat if it.get("is_major"))
     print(f"완료 → {config.OUTPUT_DIR/'index.html'}  ({len(flat)} items, {n_major} major)")
