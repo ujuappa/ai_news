@@ -233,7 +233,12 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .archive-table-head span:last-child { text-align:right; }
 .archive-row { display:grid; grid-template-columns:110px 90px 1fr 60px; gap:0; padding:14px 0;
                border-bottom:1px solid rgba(var(--inkrgb),.16); text-decoration:none; align-items:center; }
-.archive-row.latest { background:var(--acclt2, rgba(var(--grgb),.6)); }
+/* 2026-07-31 수정: 원래 `var(--acclt2, rgba(var(--grgb),.6))` 였는데 **--acclt2 는 팔레트에
+   없는 변수**라(render.PALETTES 키: g·g2·bar·ink·ink2·muted·n1·n2·acc·accd·acclt·grgb·inkrgb)
+   항상 폴백을 탔다. 그 폴백이 `rgba(배경색,.6)` 을 배경 위에 올리는 것이라 5개 팔레트 전부에서
+   **계산상 배경과 완전히 동일** = 하이라이트가 보이지 않았다(07-27 디자인 포팅 때부터).
+   --g2 는 모든 팔레트에서 --g 와 다른 '보조 표면' 색이라 실제로 구분된다. */
+.archive-row.latest { background:var(--g2); }
 .archive-row-date { font:800 15px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-date { color:var(--accd); }
 .archive-row-bar { display:block; height:10px; }
@@ -254,7 +259,10 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
                 font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                 color:var(--ink); font-variant-numeric:tabular-nums; }
 .archive-year span:last-child { text-align:right; color:rgba(var(--inkrgb),.45); }
-.archive-year:first-of-type { margin-top:0; }   /* 표 머리 바로 아래엔 여백을 두지 않는다 */
+/* 표 머리 바로 아래 첫 연도 헤더엔 여백을 두지 않는다.
+   ⚠️ `:first-of-type` 으로 쓰면 안 된다 — .archive-body 의 첫 <div> 는 .archive-top 이라
+   그 셀렉터는 아무것도 안 맞는다(2026-07-31 에 그렇게 썼다가 발견). 인접 형제로 잡는다. */
+.archive-table-head + .archive-year { margin-top:0; }
 
 /* ==== archive_week ==== */
 

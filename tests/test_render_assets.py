@@ -37,6 +37,43 @@ def _groups(items=None):
 
 # ── 계약 3·4: 배포 CSS 조립 ────────────────────────────────────────────────────
 
+def _css_no_comments():
+    css = (render.STATIC_DIR / "digest.css").read_text(encoding="utf-8")
+    return re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+
+
+def test_every_css_variable_is_defined_by_the_palette():
+    """CSS 가 참조하는 `var(--x)` 는 전부 `render.PALETTES` 가 정의하는 키여야 한다.
+
+    이 테스트가 있는 이유(2026-07-31 실제 버그): `.archive-row.latest` 가
+    `var(--acclt2, rgba(var(--grgb),.6))` 였는데 **--acclt2 는 팔레트에 없는 변수**였다.
+    폴백이 있으니 CSS 는 조용히 동작했지만, 그 폴백이 `rgba(배경색,.6)` 을 같은 배경 위에
+    올리는 것이라 **5개 팔레트 전부에서 하이라이트가 계산상 보이지 않았다.**
+    폴백은 오타를 감춘다 — 그래서 폴백이 있든 없든 미정의 변수는 실패로 잡는다."""
+    keys = {k for p in render.PALETTES for k in p} - {"name"}
+    used = set(re.findall(r"var\(\s*--([\w-]+)", _css_no_comments()))
+    assert not (used - keys), f"팔레트에 없는 변수: {sorted(used - keys)}"
+
+
+def test_latest_archive_row_is_visually_distinct_from_the_page_background():
+    """하이라이트 색이 배경과 같으면 강조가 아니다 — 위 --acclt2 버그의 직접 회귀 가드."""
+    m = re.search(r"\.archive-row\.latest\s*\{[^}]*background:\s*var\(\s*--([\w-]+)",
+                  _css_no_comments())
+    assert m, ".archive-row.latest 의 background 선언을 찾지 못했다"
+    var = m.group(1)
+    for palette in render.PALETTES:
+        assert palette[var] != palette["g"], \
+            f'{palette["name"]}: --{var} 가 배경 --g 와 같다 ({palette[var]})'
+
+
+def test_first_year_header_margin_rule_actually_matches():
+    """`:first-of-type` 은 .archive-body 의 첫 div 가 .archive-top 이라 안 맞는다.
+    인접 형제(.archive-table-head + .archive-year)로 잡혀 있어야 한다."""
+    css = _css_no_comments()
+    assert ".archive-table-head + .archive-year" in css
+    assert ".archive-year:first-of-type" not in css
+
+
 def test_authored_css_has_no_palette_block():
     """저작 파일에 :root 를 넣으면 PALETTES(파이썬)와 갈라진다. 주석 언급은 허용."""
     body = re.sub(r"/\*.*?\*/", "", (render.STATIC_DIR / "digest.css").read_text(encoding="utf-8"),
