@@ -237,7 +237,13 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .archive-row-date { font:800 15px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-date { color:var(--accd); }
 .archive-row-bar { display:block; height:10px; }
-.archive-row-top { font:700 16px/1.3 Archivo,sans-serif; color:var(--ink); padding-right:20px; }
+/* 2줄에서 자른다(2026-07-31, §13 T3.3). 아카이브 414건은 `headline` 컬럼이 생기기 전
+   데이터라 원제목이 그대로 오고, 실측 최장 159자다(NIST 기사) — 자르지 않으면 행 높이가
+   제목 길이에 따라 들쭉날쭉해서 표를 훑을 수 없다. 전문은 title 속성으로 남긴다.
+   재엔리치(유료 배치)로 headline 을 채우는 대신 CSS 로 처리하기로 결정(사용자, 2026-07-31). */
+.archive-row-top { font:700 16px/1.3 Archivo,sans-serif; color:var(--ink); padding-right:20px;
+                   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+                   overflow:hidden; }
 .archive-row-count { font:700 14px Archivo,sans-serif; color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-count { color:var(--accd); }
 /* 연도 구분선 — 전체(47행)를 싣게 되면서 훑을 기준선이 필요해짐(2026-07-31, §13 T3.2).

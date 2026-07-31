@@ -267,10 +267,16 @@ class Store:
     def list_digests(self) -> list[dict]:
         """아카이브 인덱스용: 각 다이제스트의 최고 significance 항목 제목(top_title)도 함께 반환.
         정렬은 SQL 이 아니라 label_sort_key 로 — 일간/주간 라벨이 한 컬럼에 섞여 있어서
-        텍스트 정렬로는 시간순이 안 나옴."""
+        텍스트 정렬로는 시간순이 안 나옴.
+
+        `top_title` 은 `headline`(LLM 이 만든 60자 이하 표시용 제목)을 우선 쓰고 없으면 원제목으로
+        폴백한다 — 렌더의 `display_title` 과 같은 규칙이다(2026-07-31). 아카이브 414건은 headline
+        컬럼이 생기기 전 데이터라 폴백을 타고, 그쪽 긴 제목은 CSS 로 2줄에서 자른다(§13 T3.3).
+        재엔리치는 유료 배치라 하지 않기로 결정(사용자, 2026-07-31)."""
         rows = self.conn.execute(
             """SELECT d.date, d.item_count, d.html_path,
-                      (SELECT title FROM items WHERE digest_date = d.date AND is_published = 1
+                      (SELECT COALESCE(NULLIF(headline, ''), title) FROM items
+                       WHERE digest_date = d.date AND is_published = 1
                        ORDER BY significance DESC LIMIT 1) AS top_title
                FROM digests d"""
         ).fetchall()

@@ -36,7 +36,7 @@
 <a class="archive-row {{ 'latest' if d.is_latest else '' }}" href="{{ d.date }}.html">
   <span class="archive-row-date">{{ d.date }}</span>
   <span class="archive-row-bar" style="width:{{ d.bar_px }}px;background:{{ d.bar_color }}"></span>
-  <span class="archive-row-top">{{ d.top_title or '—' }}</span>
+  <span class="archive-row-top" title="{{ d.top_title or '' }}">{{ d.top_title or '—' }}</span>
   <span class="archive-row-count">{{ d.item_count }}</span>
 </a>
 {% endfor %}
