@@ -40,6 +40,8 @@ class Source:
     status: str = "verify"
     enabled: bool = True
     full_text: bool = False   # 기사 본문 추출(trafilatura) 여부. 기본 off — 비용/시간이 붙는다
+    # parse: sitemap 전용. sitemap.xml 에서 긁어올 경로들. 기본은 뉴스만.
+    sitemap_paths: list[str] = field(default_factory=lambda: ["/news/"])
     notes: str = ""
 
 
@@ -130,6 +132,7 @@ def load(path: Path = SOURCES_FILE) -> Config:
                     status=row.get("status", "verify"),
                     enabled=bool(row.get("enabled", True)),
                     full_text=bool(row.get("full_text", False)),
+                    sitemap_paths=list(row.get("sitemap_paths") or ["/news/"]),
                     notes=row.get("notes", ""),
                 )
             )

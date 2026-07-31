@@ -9,6 +9,7 @@ import hashlib
 import html
 import re
 import time
+from collections.abc import Sequence
 from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree
 
@@ -136,8 +137,12 @@ def _hash(url: str, title: str) -> str:
     return hashlib.sha1((url or title).encode("utf-8")).hexdigest()[:16]
 
 
-def _sitemap_news_urls(sitemap_url: str, path_filter: str = "/news/") -> list[tuple[str, str]]:
-    """sitemap.xml 에서 path_filter 를 포함하는 URL+lastmod 를 최신순으로 반환 (인덱스 페이지 자체는 제외)."""
+def _sitemap_news_urls(sitemap_url: str,
+                       path_filters: Sequence[str] = ("/news/",)) -> list[tuple[str, str]]:
+    """sitemap.xml 에서 path_filters 중 하나에 걸리는 URL+lastmod 를 최신순으로 반환.
+
+    각 경로의 인덱스 페이지 자체(`.../news`, `.../research`)는 제외한다 — 기사가 아니라 목록이라
+    스크레이프하면 제목만 있는 빈 항목이 된다."""
     resp = requests.get(sitemap_url, headers=_UA, timeout=15)
     resp.raise_for_status()
     root = ElementTree.fromstring(resp.content)
@@ -145,7 +150,8 @@ def _sitemap_news_urls(sitemap_url: str, path_filter: str = "/news/") -> list[tu
     for url_el in root.findall("sm:url", _SITEMAP_NS):
         loc = url_el.findtext("sm:loc", default="", namespaces=_SITEMAP_NS)
         lastmod = url_el.findtext("sm:lastmod", default="", namespaces=_SITEMAP_NS)
-        if path_filter in loc and not loc.rstrip("/").endswith(path_filter.rstrip("/")):
+        if any(pf in loc and not loc.rstrip("/").endswith(pf.rstrip("/"))
+               for pf in path_filters):
             out.append((loc, lastmod))
     out.sort(key=lambda x: x[1], reverse=True)
     return out
@@ -218,7 +224,7 @@ def fetch_sitemap_source(source: Source, max_entries: int = 25,
     각 페이지를 스크레이프. `since`(ISO 날짜) 지정 시 그 이후 lastmod 전부 수집(백필용),
     없으면 최신 max_entries 개만."""
     try:
-        candidates = _sitemap_news_urls(source.feed_url)
+        candidates = _sitemap_news_urls(source.feed_url, source.sitemap_paths)
     except Exception as e:  # noqa: BLE001
         print(f"  [!] {source.id} sitemap 실패: {e}")
         return []

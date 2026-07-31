@@ -752,6 +752,47 @@
     4. `_cos` 가 맨 `np.dot` 이라 임베딩 백엔드 폭이 바뀌면 `find_thread_parent` 가 `ValueError` 로 죽는다. 하필 `llm.enrich` 로 그날 API 비용을 다 쓴 뒤, `save_items` 전에 죽어서 페이지도 DB 기록도 없이 끝난다. README 가 권하는 TF-IDF 전환이 바로 이 경우라 가정이 아니다. 후보 shape 불일치는 건너뛰고(잘린 blob 도 같이 커버), `--reset` 이 `seen` 과 함께 `item_emb` 도 비우게 했다(CLAUDE.md 가 백엔드 교체 처방으로 `--reset` 을 안내하는데 실제로는 `item_emb` 가 살아남아 처방이 거짓이었다).
   - 남은 사실: `thread_parent_id` 는 아직 전 행이 비어 있다. threading 은 **신규 게재분**에만 걸리므로 Series G→H 처럼 양쪽이 아카이브인 쌍은 실제 링크를 만들지 않는다. 첫 실제 "Earlier:" 는 새 기사가 밴드에 들어오는 날 나타나며, 그날 페이지는 손으로 확인할 것.
 
+- 2026-07-30: **소스 후보 18종 실측 리뷰 + Stage 1 반영**. 사용자가 제안한 소스 목록(HN·Google News·
+  GitHub Trending·Axios·OpenAI Research·HuggingFace·Anthropic·TechCrunch·종합지 9개·Medium·
+  brunch·LinkedIn·YouTube)을 추측이 아니라 **실제 fetch 로** 검증(약 45개 엔드포인트, 5라운드).
+  - **추가함(Stage 1)**: `guardian_ai`(전용 AI 토픽 피드, 20건 중 17건 AI = 85%, 페이월 없음 —
+    종합지 중 유일하게 TechCrunch 90% 에 근접) · `bbc_tech`(21건, AI 6건이지만 영국·EU 규제 커버,
+    피드 요약이 99자뿐이라 `full_text: true`) · `hn_show` 활성화(20건, 요약 1492자).
+  - **Anthropic `/research` 추가**: 이미 매 실행 받고 있던 같은 sitemap 에 `/news 251` 외에
+    **`/research 149`, `/engineering 25`** 가 있었는데 `_sitemap_news_urls` 가 `/news/` 를
+    하드코딩해서 안 보였음. `Source.sitemap_paths`(기본 `["/news/"]`) 신설 + `_sitemap_news_urls`
+    가 다중 경로를 받도록 변경. 검증에서 "Discovering cryptographic weaknesses with Claude"(07-28),
+    "Project Pilot"(07-24) 2건이 실제로 새로 들어옴.
+  - ⚠️ **`/engineering/` 은 의도적으로 제외** — 페이지에 발행일이 **아예 없다**(실측: JSON-LD
+    `datePublished`·`<time>`·`datetime` 속성·산문 날짜 전부 0건). `_article_published` 가 항상 ''
+    을 반환해 lastmod 폴백만 남는데 그게 07-28 에 296일 오차를 만든 경로다. `/research/` 는 정상
+    (3건 모두 lastmod 와 1~2일 이내 일치). 사유를 `sources.yaml` 주석에 박아둠.
+  - **`resolve_url()` 로 Google News 를 못 고친다는 것 확인 → 하지만 디코딩 자체는 가능**.
+    `sources.yaml` 에 적혀 있던 처방(리다이렉트를 `resolve_url` 로 통과)은 **틀렸음** — 실측 4건
+    전부 같은 `news.google.com` URL 을 그대로 반환한다(Google 이 클라이언트 사이드로 넘김).
+    id 의 base64 도 URL 이 아니라 protobuf 블롭. **다만** `ma2za/google-news-api`(MIT, 2026-07-29
+    갱신)가 쓰는 `batchexecute`/`garturlreq` 페이로드를 그대로 태우면 **AP 3/3 디코딩 성공**
+    (`https://apnews.com/article/microsoft-earnings-results-ai-...`). 내가 처음 시도했을 때 실패한 건
+    내부 배열 원소 개수가 틀려서였음. 비용은 항목당 기사 페이지 GET(~567KB) + POST 1회.
+    라이브러리는 `httpx`+`selectolax` 의존이 붙으므로 **디코딩 30줄만 인라인**하는 쪽이 나아 보임.
+    이게 AP/WaPo/WSJ 로 가는 유일한 경로라 Stage 3 에서 재검토.
+  - **죽은 소스 확정**: AP(`index.rss` → `401 Invalid client credentials`, hub → 404) ·
+    WaPo(tech 피드가 HTTP 200 인데 항목 0건) · **WSJ(피드 3종 전부 2025-01-27 에 멈춤 — 18개월 방치)** ·
+    CBC(19건 중 1건만 AI) · NYT(피드는 살아있고 33건 중 16건 AI 지만 본문 추출이 페이월로 0자).
+  - **정책상 불가**: `brunch.co.kr` — RSS 자체가 없고(실제 작가 id 5개로 `/rss/@@{id}` 전부 200에
+    **0바이트**, `/rss/@{id}` 404, sitemap 404) `robots.txt` 가 GPTBot·**ClaudeBot**·anthropic-ai·
+    CCBot 등을 이름으로 지목해 `Disallow: /`. LinkedIn — 남의 포스트를 읽는 공개 API 가 없고
+    robots.txt 첫 줄이 자동 접근 금지 명시.
+  - **다음 후보(Stage 2~4)**: HuggingFace Daily Papers API(50건, 초록 전문 + **upvote 수** —
+    research 후보가 0.40 에 몰리는 문제의 직접적 해법) · OpenAI `entry.tags` 읽기(news RSS 1,056건
+    중 194건이 이미 `Research` 태그. `research/rss.xml` 은 404고 우리가 태그를 안 읽을 뿐) ·
+    Axios(피드에 본문 6,102자가 통째로 옴 → `full_text` 불필요. 단 섹션 피드 없음, 전 항목 태그가
+    `top` 하나뿐이라 키워드 게이트 필요, AI 비중 38%) · GitHub Trending(공식 API 없음. 미러는
+    **항목별 날짜가 없어** 신선도 컷을 우회하는 gnews 와 같은 함정. Search API 는 비인증 10req/h,
+    Actions 의 `GITHUB_TOKEN` 이면 해결) · YouTube(채널 RSS 는 공식·정상이나 자막이 아니라 ~500자
+    설명뿐이고, DeepMind 최신 영상이 블로그와 중복 — dedup 부담만 늘 수 있음).
+  - 리뷰 산출물은 캔버스 `news-source-review.canvas.tsx`(레포 밖, Cursor 프로젝트 폴더).
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:

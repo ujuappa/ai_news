@@ -89,9 +89,21 @@ model_releases:
     parse: sitemap           # RSS 미러(rsshub) 전부 403/timeout -> sitemap.xml + og:title/description 스크레이프로 대체
     status: verified          # 2026-07-27 확인: /news/ 250건, lastmod 2024-05 까지 -> 백필도 가능
     enabled: true
+    sitemap_paths:            # 2026-07-30 실측(같은 sitemap): /news 251 · /research 149 · /engineering 25
+      - /news/
+      - /research/
     notes: >-
-      공식 RSS 없음. fetch.py fetch_sitemap_source 가 sitemap.xml 의 /news/ 항목을
-      lastmod 순으로 스크레이프. 사이트 구조 바뀌면 og:title/description 셀렉터 깨질 수 있음 -> source-health 감시 유지
+      공식 RSS 없음. fetch.py fetch_sitemap_source 가 sitemap.xml 에서 sitemap_paths 에 해당하는
+      항목을 lastmod 순으로 스크레이프. 사이트 구조 바뀌면 og:title/description 셀렉터 깨질 수 있음
+      -> source-health 감시 유지.
+      제외한 경로와 이유:
+      (1) /engineering/ (25건) — 페이지에 발행일이 **아예 없다**(2026-07-30 실측: JSON-LD
+          datePublished·<time>·datetime 속성·산문 날짜 전부 0건). `_article_published` 가 항상 ''
+          을 반환해 lastmod(=리빌드 시각) 폴백만 남는데, 그게 07-28 에 296일 오차를 만든 그 경로다.
+          날짜 근거가 생기기 전엔 켜지 말 것.
+      (2) /legal/ · /responsible-scaling-policy 등 정책 문서 — 뉴스가 아니라 상시 문서라
+          갱신될 때마다 "신규"로 다시 뜬다.
+      /research/ 는 발행일 정상 추출 확인(실측 3건 모두 JSON-LD 로 lastmod 와 1~2일 이내 일치).
 
   - id: deepmind
     name: Google DeepMind Blog
@@ -178,7 +190,7 @@ tools_products:
     feed_url: https://hnrss.org/show?q=AI&points=50
     parse: easy
     status: verified
-    enabled: false           # v1.5: 제품 출시 잡기용
+    enabled: true            # 2026-07-30 활성화. 실측 20건/요약 1492자 — 제품 출시 잡기용
 
   - id: huggingface_blog
     name: Hugging Face Blog
@@ -229,6 +241,28 @@ policy_business:
     enabled: true
     full_text: true           # 피드가 앞 몇 문장만 잘라서 줌 -> 요약 품질이 눈에 띄게 갈림
     notes: 고볼륨(하루 20~40건)+본문 발췌만. 랭킹으로 강하게 눌러
+
+  - id: guardian_ai
+    name: The Guardian — AI
+    feed_url: https://www.theguardian.com/technology/artificialintelligenceai/rss
+    parse: easy
+    status: verified          # 2026-07-30 실측: 20건, 페이월 없음
+    enabled: true
+    full_text: false          # 피드 요약이 699자로 충분. TechCrunch(190자)와 달리 추출 이득이 작다
+    notes: >-
+      전용 AI 토픽 피드라 20건 중 17건이 AI(85%) — 종합지 중 유일하게 TechCrunch(90%)에 근접.
+      페이월 없어서 필요하면 본문 추출도 가능(실측 4329자).
+
+  - id: bbc_tech
+    name: BBC — Technology
+    feed_url: https://feeds.bbci.co.uk/news/technology/rss.xml
+    parse: easy
+    status: verified          # 2026-07-30 실측: 21건
+    enabled: true
+    full_text: true           # 피드 요약이 99자뿐 -> techcrunch 와 같은 이유로 추출 필요(실측 7581자)
+    notes: >-
+      AI 전용 피드가 아니라 기술 일반(21건 중 6건만 AI, 29%) -> 카테고리 캡/하한으로 눌러야 함.
+      영국·EU 규제 커버가 강해서 policy_business 보강용.
 
   - id: verge_ai
     name: The Verge — AI
