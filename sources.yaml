@@ -158,6 +158,22 @@ research:
     status: verified
     enabled: false           # 넘치면 추가
 
+  - id: hf_daily_papers
+    name: Hugging Face Daily Papers
+    feed_url: https://huggingface.co/api/daily_papers
+    parse: hf_papers
+    status: verified          # 2026-07-30 실측: 100건(약 17일치), 초록 평균 1499자, upvote 0~229
+    enabled: true
+    notes: >-
+      arXiv 보완용 — 사람이 고른 목록이고 upvote 가 있어서 수집 단계에서 상위만 남긴다
+      (fetch.fetch_hf_papers_source). arXiv 는 사전 품질 신호가 없어 research 후보가 0.40 에
+      무더기로 쌓이는데(arxiv_lg 50건 중 36건이 0.40 이하) 그 자리를 대체하는 게 목적.
+      upvote 는 후보 선별에만 쓰고 significance 에는 섞지 않음(랭킹 rubric 은 고정).
+      URL 은 huggingface.co/papers/{arxiv_id}. 같은 논문이 arXiv 소스와 양쪽에서 들어올 수 있는데
+      2026-07-31 실측으로는 arXiv id 기준 중복 0/25 — arXiv 피드는 "가장 최근 25건"을 주고 HF 는
+      하루이틀 지나 표가 모인 걸 고르기 때문에 실제로 안 겹친다. 겹치면 dedup 이 제목+초록
+      임베딩으로 잡아야 하므로, 중복 게재가 보이면 그때 arXiv id 기준 하드 dedup 을 검토할 것.
+
   - id: ahead_of_ai
     name: Ahead of AI (Sebastian Raschka)
     feed_url: https://magazine.sebastianraschka.com/feed

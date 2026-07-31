@@ -793,6 +793,31 @@
     설명뿐이고, DeepMind 최신 영상이 블로그와 중복 — dedup 부담만 늘 수 있음).
   - 리뷰 산출물은 캔버스 `news-source-review.canvas.tsx`(레포 밖, Cursor 프로젝트 폴더).
 
+- 2026-07-31: **Stage 2 — HF Daily Papers 추가. OpenAI 태그 라우팅은 불필요한 것으로 판명(코드 무변경)**.
+  - **OpenAI: 할 게 없었다.** 07-30 리뷰에서 "`fetch.py` 가 `entry.tags` 를 안 읽어서 Research 글이
+    research 카테고리로 못 간다"고 적었는데, **둘 다 사실이 아니었음**. (1) 카테고리는 `llm.enrich`
+    가 본문을 보고 직접 정한다 — 소스 카테고리는 `source_category_hint` 로 힌트만 준다. 실제 DB 에서
+    openai 아이템은 이미 policy_business 57 · tools_products 50 · **research 34** · model_releases 22
+    로 갈려 있다. (2) `parsed.entries[:25]` 슬라이스도 손실이 없다 — 최신 25건 중 14~19건이 7일 컷에
+    걸린다는 건 **7일 창이 25건 안에 다 들어온다**는 뜻이다. 태그를 읽어봐야 힌트 정확도가 조금
+    올라갈 뿐이라 코드 변경 없이 종료. (캔버스 리뷰의 해당 항목도 정정함.)
+  - **HF Daily Papers 추가**(`parse: hf_papers`, `fetch.fetch_hf_papers_source`). API 는
+    `huggingface.co/api/daily_papers?limit=100` (실측 100건 = 약 17일치, 초록 평균 1499자,
+    upvote 0~229). `publishedAt` 이 `2026-07-29T20:00:00.000Z` 라 기존 `_norm_date` 로 그대로 파싱됨.
+  - **설계: upvote 는 "수집 단계 선별"에만 쓴다.** significance 에 섞으면 랭킹 rubric(3장 고정)을
+    건드리는 셈이라 안 함. 대신 신선도 컷 뒤에 upvote 내림차순으로 정렬해 상위 `max_entries`(25)만
+    남긴다. **컷을 정렬보다 먼저** 하는 게 핵심 — 반대로 하면 "17일치 중 최고 인기"가 뽑혀 오래된
+    논문이 오늘 자리를 차지한다(테스트로 고정). 실측 결과 25건 전부 7일 이내, upvote 하한이 30 이라
+    arXiv 무필터 파이프와 질이 확연히 다름.
+  - **arXiv 와 중복 없음(실측 0/25)**: arXiv 피드는 "가장 최근 25건"을 주고 HF 는 하루이틀 지나
+    표가 모인 걸 고르기 때문에 arXiv id 기준으로 안 겹쳤다. 겹치기 시작하면 id 기준 하드 dedup 검토.
+  - **수집량**: 14소스 149건 → **15소스 178건**. dry-run 34.6초(변화 없음), `digest.db` 무변경.
+    ⚠️ dry-run 은 significance 가 0.5 고정이라 research 하한 0.55 에 전부 걸린다 — **research 구성
+    개선 효과는 실제 실행 후에 봐야 판단 가능**(dry-run 의 `category_floor` 63건은 그 아티팩트).
+  - 테스트 `tests/test_hf_papers.py` 11건 신설(필드 매핑 · upvote 정렬 · **컷이 정렬보다 먼저** ·
+    max_entries · `_upvotes` 가 밑줄 임시키인지 · 깨진 행/비배열 응답/네트워크 실패 · parse 디스패치 ·
+    `_as_int` 방어). 전체 80 passed.
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:

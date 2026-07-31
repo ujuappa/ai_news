@@ -386,6 +386,75 @@ def fetch_gnews_source(source: Source, max_entries: int = 25, max_age_days: int 
     return items
 
 
+HF_PAPERS_API = "https://huggingface.co/api/daily_papers"
+HF_PAPERS_FETCH_LIMIT = 100   # 신선도 컷 전에 넉넉히 받는다(실측: 100건 = 약 17일치)
+
+
+def _as_int(value) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def fetch_hf_papers_source(source: Source, max_entries: int = 25,
+                           max_age_days: int | None = None) -> list[dict]:
+    """Hugging Face Daily Papers (JSON API).
+
+    arXiv 원본 피드와 다른 점이 이 소스를 쓰는 이유다: **사람이 고른 목록**이고 `upvotes` 가 있다.
+    arXiv 는 볼륨이 커서 research 후보가 0.40 근처에 무더기로 쌓이는데(2026-07-30 측정:
+    arxiv_lg 50건 중 36건이 0.40 이하) 여기엔 사전 품질 신호가 없다.
+
+    그래서 **수집 단계에서 upvote 상위만 남긴다.** 랭킹 rubric(PROJECT_MEMO 3장)은 고정이라
+    significance 에 upvote 를 섞지 않는다 — 대신 LLM 에 태우기 전에 후보를 줄여서 토큰도 아낀다.
+    upvote 는 파이프라인 뒤쪽으로 넘기지 않는다(`_upvotes` 는 정렬용 임시 키).
+
+    신선도 컷을 이 함수 안에서 먼저 적용하는 이유: 밖에서 자르면 "17일치 중 최고 인기"가 뽑혀
+    오래된 논문이 오늘 자리를 차지한다. 컷 뒤에 정렬해야 "최근 N일 중 최고 인기"가 된다.
+    (그래도 7일 창 안에서는 어제 올라온 논문이 표를 덜 모아 불리하다 — 매일 도는 파이프라인이라
+    다음 날 다시 후보가 되고 cross-day dedup 이 재게재를 막는다.)"""
+    try:
+        resp = requests.get(HF_PAPERS_API, params={"limit": HF_PAPERS_FETCH_LIMIT},
+                            headers=_UA, timeout=FEED_TIMEOUT)
+        resp.raise_for_status()
+        rows = resp.json()
+    except Exception as e:  # noqa: BLE001
+        print(f"  [!] {source.id} fetch 실패: {type(e).__name__}: {e}")
+        return []
+    if not isinstance(rows, list):
+        print(f"  [!] {source.id} 예상과 다른 응답 형식: {type(rows).__name__}")
+        return []
+
+    items: list[dict] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        paper = row.get("paper") or {}
+        paper_id = str(paper.get("id") or "").strip()
+        title = _clean(row.get("title") or paper.get("title") or "", 300)
+        if not paper_id or not title:
+            continue
+        url = f"https://huggingface.co/papers/{paper_id}"
+        items.append(
+            {
+                "id": _hash(url, title),
+                "source_id": source.id,
+                "source_name": source.name,
+                "category": source.category,
+                "title": title,
+                "url": url,
+                "summary_raw": _clean(paper.get("summary") or row.get("summary") or ""),
+                "published": _norm_date(row.get("publishedAt")
+                                        or paper.get("publishedAt") or ""),
+                "_upvotes": _as_int(paper.get("upvotes")),
+            }
+        )
+
+    items = _apply_cutoff(items, max_age_days)
+    items.sort(key=lambda it: it["_upvotes"], reverse=True)
+    return items[:max_entries]
+
+
 def fetch_source(source: Source, max_entries: int = 25, max_age_days: int | None = None,
                  full_text: bool | None = None) -> list[dict]:
     """단일 소스 수집(신선도 컷 적용분만). backfill.py 등 개수 통계가 필요 없는 호출부용."""
@@ -409,6 +478,8 @@ def fetch_source_counted(source: Source, max_entries: int = 25,
         items = fetch_sitemap_source(source, max_entries)
     elif source.parse == "gnews":
         items = fetch_gnews_source(source, max_entries, max_age_days)
+    elif source.parse == "hf_papers":
+        items = fetch_hf_papers_source(source, max_entries, max_age_days)
     else:
         try:
             parsed = _parse_feed(source.feed_url)
