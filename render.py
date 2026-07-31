@@ -26,7 +26,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from config import CATEGORY_LABELS, CATEGORY_ORDER
-from store import label_sort_key
+from store import is_week_label, label_sort_key
 
 
 def group_by_category(items: list[dict], settings=None) -> list[tuple[str, list[dict]]]:
@@ -385,15 +385,29 @@ def render_archive_index(digests: list[dict], output_dir: Path):
                 ("var(--muted)" if pct >= 40 else "var(--n1)"))
         bars.append({"pct": pct, "color": color})
 
-    recent = digests[:6]
-    for i, d in enumerate(recent):
+    # 2026-07-31(§13 T3.2): 예전엔 `digests[:6]` 만 링크하고 나머지는 "+41 earlier digests"
+    # 라는 **죽은 텍스트**로 끝났다. 6개월 백필로 만든 43주치가 사이트 안에서 도달 불가였고
+    # (검색이나 URL 직접 입력 말고는 길이 없었다) 그건 아카이브가 있다고 할 수 없다.
+    # 47행은 페이지네이션이 필요한 양이 아니므로 전부 싣고, 연도로만 묶어 스캔을 돕는다.
+    for i, d in enumerate(digests):
         d["bar_px"] = max(6, round(d["item_count"] / max_count * 68))
         d["bar_color"] = "var(--acc)" if i == 0 else "var(--muted)"
-    more_count = max(0, len(digests) - len(recent))
+        d["is_latest"] = i == 0   # 강조 대상은 파이썬에서 표시한다(중첩 루프에서 판정하지 않기)
+
+    years: list[dict] = []
+    for d in digests:      # digests 는 store.list_digests() 가 label_sort_key 로 내림차순 정렬
+        year = label_sort_key(d["date"])[:4] or d["date"][:4]
+        if not years or years[-1]["year"] != year:
+            years.append({"year": year, "digests": []})
+        years[-1]["digests"].append(d)
+
+    # "47 weeks of signal" 은 틀린 문구였다 — 일간 4건이 섞여 있다(주간은 백필, 일간은 라이브).
+    weekly = sum(1 for d in digests if is_week_label(d["date"]))
+    daily = len(digests) - weekly
 
     (output_dir / "archive").mkdir(parents=True, exist_ok=True)
     write_assets(output_dir)
     tmpl = _env.get_template("archive_index.html")
-    html = tmpl.render(digests=digests, bars=bars, recent=recent, more_count=more_count,
-                       asset_prefix="../")
+    html = tmpl.render(digests=digests, bars=bars, years=years,
+                       weekly_count=weekly, daily_count=daily, asset_prefix="../")
     (output_dir / "archive" / "index.html").write_text(html, encoding="utf-8")

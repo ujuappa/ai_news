@@ -18,22 +18,29 @@
 </header>
 <div class="archive-body">
 <div class="archive-top">
-  <h1 class="archive-title">{{ digests|length }} weeks<br>of signal</h1>
-  <div class="archive-bars-label">Items per digest, oldest → newest</div>
+  <h1 class="archive-title">{{ digests|length }} digests<br>of signal</h1>
+  <div class="archive-bars-label">Items per digest, oldest → newest
+    · {{ weekly_count }} weekly{% if daily_count %} · {{ daily_count }} daily{% endif %}</div>
   <div class="archive-bars">
     {% for b in bars %}<span style="height:{{ b.pct }}%;background:{{ b.color }}"></span>{% endfor %}
   </div>
 </div>
 <div class="archive-table-head"><span>Digest</span><span>Volume</span><span>Top story</span><span>Items</span></div>
-{% for d in recent %}
-<a class="archive-row {{ 'latest' if loop.index == 1 else '' }}" href="{{ d.date }}.html">
+{#
+  전체를 싣는다. 2026-07-31 까지는 최근 6개만 링크하고 나머지는 죽은 텍스트여서, 백필한
+  43주치가 사이트에서 도달 불가였다(§13 T3.2). 연도 구분선은 47행을 훑기 위한 것.
+#}
+{% for group in years %}
+<div class="archive-year"><span>{{ group.year }}</span><span>{{ group.digests|length }}</span></div>
+{% for d in group.digests %}
+<a class="archive-row {{ 'latest' if d.is_latest else '' }}" href="{{ d.date }}.html">
   <span class="archive-row-date">{{ d.date }}</span>
   <span class="archive-row-bar" style="width:{{ d.bar_px }}px;background:{{ d.bar_color }}"></span>
   <span class="archive-row-top">{{ d.top_title or '—' }}</span>
   <span class="archive-row-count">{{ d.item_count }}</span>
 </a>
 {% endfor %}
-{% if more_count %}<div class="archive-more">+ {{ more_count }} earlier digests</div>{% endif %}
+{% endfor %}
 </div>
 </div>
 {{ m.site_footer('index.html', digests|length, status='archive') }}

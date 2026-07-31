@@ -240,7 +240,15 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .archive-row-top { font:700 16px/1.3 Archivo,sans-serif; color:var(--ink); padding-right:20px; }
 .archive-row-count { font:700 14px Archivo,sans-serif; color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-count { color:var(--accd); }
-.archive-more { padding:16px 0 0; font:600 12px Archivo,sans-serif; letter-spacing:.06em; color:rgba(var(--inkrgb),.5); }
+/* 연도 구분선 — 전체(47행)를 싣게 되면서 훑을 기준선이 필요해짐(2026-07-31, §13 T3.2).
+   sticky 라 긴 목록을 스크롤해도 지금 보는 해가 상단에 남는다. */
+.archive-year { position:sticky; top:0; z-index:1; display:grid;
+                grid-template-columns:110px 1fr; gap:0; padding:10px 0 8px; margin-top:22px;
+                background:var(--g); border-bottom:2px solid rgba(var(--inkrgb),.3);
+                font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+                color:var(--ink); font-variant-numeric:tabular-nums; }
+.archive-year span:last-child { text-align:right; color:rgba(var(--inkrgb),.45); }
+.archive-year:first-of-type { margin-top:0; }   /* 표 머리 바로 아래엔 여백을 두지 않는다 */
 
 /* ==== archive_week ==== */
 

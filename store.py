@@ -21,6 +21,14 @@ def label_sort_key(label: str) -> str:
         return date.fromisocalendar(int(m.group(1)), int(m.group(2)), 1).isoformat()
     return label or ""
 
+
+def is_week_label(label: str) -> bool:
+    """주간 라벨('2026-W31')인가. 일간('2026-07-31')이면 False.
+
+    라벨 형식을 아는 곳은 이 모듈 하나여야 한다 — 아카이브 인덱스가 "N weeks of signal" 처럼
+    개수를 세는 데 쓴다(주간은 백필 산출물, 일간은 라이브 실행분이라 성격이 다르다)."""
+    return bool(_WEEK_LABEL_RE.match(label or ""))
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS items (
     id           TEXT PRIMARY KEY,   -- url 해시
