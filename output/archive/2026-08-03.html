@@ -1,4 +1,5 @@
 
+
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="../feed.xml">
@@ -8,233 +9,208 @@
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
 <div class="wrap">
-<header class="masthead">
-  <div class="masthead-row1">
-    <div class="masthead-id">
-      <a class="wordmark" href="../index.html">AI Digest</a>
-      <span class="period-meta">Monday · 3 August 2026 · 12 stories</span>
+<header class="mh">
+  <div class="mh-top">
+    <div class="mh-id">
+      <a class="mh-wordmark" href="../index.html">AI Digest</a>
+      <span class="mh-meta">Monday · 3 August 2026 · 12 stories · 477 in archive</span>
     </div>
-    <div class="masthead-tools">
-      
-      <form class="search-form" action="../search.html" method="get">
-        <div class="search-field">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--grgb),.6)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
-          <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
-        </div>
-      </form>
-      <span class="records-chip">477 records</span>
-      
-      <div class="theme-picker">
-  
-  <button type="button" class="theme-swatch" data-theme-btn="0"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
-    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="1"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(1)" title="White · Teal">
-    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="2"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
-    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="3"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(3)" title="White · Ember">
-    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="4"
-          aria-pressed="true"
-          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
-    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
-  </button>
-  
-</div>
-    </div>
+    
+    <form class="mh-search" action="../search.html" method="get">
+      <label class="mh-search-field">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input type="search" name="q" placeholder="Search title, summary, source">
+      </label>
+    </form>
+    
   </div>
-  <nav class="nav">
-    
-    <a href="../index.html" class="active">
-      <span class="tab-label">Home</span><span class="tab-count">12</span>
-    </a>
-    
-    <a href="../model_releases.html" class="">
-      <span class="tab-label">Model releases</span><span class="tab-count">0</span>
-    </a>
-    
-    <a href="../research.html" class="">
-      <span class="tab-label">Research</span><span class="tab-count">1</span>
-    </a>
-    
-    <a href="../tools_products.html" class="">
-      <span class="tab-label">Tools &amp; products</span><span class="tab-count">1</span>
-    </a>
-    
-    <a href="../policy_business.html" class="">
-      <span class="tab-label">Policy &amp; business</span><span class="tab-count">10</span>
-    </a>
-    
-    <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">477</span>
-    </a>
-  </nav>
+  <div class="mh-bar">
+    <nav class="mh-nav">
+      
+      <a href="../index.html" class="active">Today</a>
+      
+      <a href="../model_releases.html" class="">Model releases</a>
+      
+      <a href="../research.html" class="">Research</a>
+      
+      <a href="../tools_products.html" class="">Tools &amp; products</a>
+      
+      <a href="../policy_business.html" class="">Policy &amp; business</a>
+      
+      <a href="index.html">Archive</a>
+    </nav>
+    <div class="mh-period"><span class="mh-period-on">Daily</span></div>
+  </div>
 </header>
-<div class="body-grid">
-<div class="main-col">
+<div class="home" data-scope>
 
 
-<div class="kicker-row">
-  <span class="kicker">Lead story</span><span class="kicker-sub">Highest significance of the day</span>
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-cat="all">All 12</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-cat="research">Research 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-cat="tools_products">Tools &amp; products 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-cat="policy_business">Policy &amp; business 10</button>
+  
+  <span class="filter-note">Ranked by significance</span>
 </div>
-<div class="lead-grid">
-  <div class="lead-num">01</div>
-  <div>
-    <div class="tag-row">
-      <span class="tag tag-ink">POLICY &amp; BUSINESS</span>
-      <span class="tag tag-acc">MAJOR · 0.70</span>
+
+<article class="lead" data-cat="policy_business">
+  <div class="lead-text">
+    <div class="lead-kicker">
+      <span class="lead-cat">Policy &amp; business</span>
+      <span class="lead-sig">Lead story · significance 0.70</span>
+      <span class="tag tag-acc">Major</span>
     </div>
     <a class="lead-title" href="https://techcrunch.com/2026/08/03/a-marc-benioff-backed-startup-thinks-ai-can-solve-the-ai-deployment-problem/" title="A Marc Benioff-backed startup thinks AI can solve the AI deployment problem">Marc Benioff-Backed June Raises $20M for AI Deployment</a>
     <p class="lead-dek">June, a new startup backed by Marc Benioff, Michael Dell, and Aaron Levie, raised $20 million in pre-seed funding to solve the AI deployment problem for big businesses. The company aims to automate the integration of AI agents with complex legacy systems by scanning existing processes and building optimized, agent-powered workflows.</p>
     
-    <div class="byline-row">
-      <a class="byline-link" href="https://techcrunch.com/2026/08/03/a-marc-benioff-backed-startup-thinks-ai-can-solve-the-ai-deployment-problem/">techcrunch.com/2026/08/03/a-marc-benioff-… →</a>
+    <div class="lead-byline">
       <span class="byline-source">TechCrunch — AI</span>
+      <span class="byline-sep"></span>
+      <span class="byline-meta">13 hours ago</span>
+      <a class="byline-link" href="https://techcrunch.com/2026/08/03/a-marc-benioff-backed-startup-thinks-ai-can-solve-the-ai-deployment-problem/">Read at techcrunch.com →</a>
     </div>
   </div>
+  <div class="imgslot imgslot-lead" aria-hidden="true"><span class="imgslot-label">TechCrunch — AI</span></div>
+</article>
+
+
+<section data-section>
+<div class="section-head">
+  <span class="section-h">Also today</span>
+  <span class="section-sub">Stories 02 – 04</span>
 </div>
-
-
-
-<div class="hr2"></div>
-<div class="grid3">
+<div class="also-grid">
   
-  <div class="grid3-col">
-    <div class="rank-row"><span class="rank-num">02</span>
-      <span class="rank-cat is-lead-cat">Research</span></div>
-    <a class="item-h3" href="https://openai.com/index/ten-advances-in-mathematics" title="Ten advances in mathematics and theoretical computer science">OpenAI Announces Math and Theoretical CS Advances</a>
-    <p class="item-dek">OpenAI has announced new results addressing long-standing open problems in mathematics and theoretical computer science. These advances span areas such as geometry, cryptography, and complexity. The research aims to push the boundaries of what AI can achieve in foundational scientific fields.</p>
+  <article class="also-card" data-cat="research">
+    <div class="imgslot imgslot-card" aria-hidden="true"><span class="imgslot-label">OpenAI News</span></div>
+    <span class="card-cat">Research</span>
+    <a class="card-title" href="https://openai.com/index/ten-advances-in-mathematics" title="Ten advances in mathematics and theoretical computer science">OpenAI Announces Math and Theoretical CS Advances</a>
+    <p class="card-dek">OpenAI has announced new results addressing long-standing open problems in mathematics and theoretical computer science. These advances span areas such as geometry, cryptography, and complexity. The research aims to push the boundaries of what AI can achieve in foundational scientific fields.</p>
     
-    <a class="item-link" href="https://openai.com/index/ten-advances-in-mathematics">openai.com/index/ten-advances-in-mathemat… →</a>
-    <div class="item-source">OpenAI News</div>
-  </div>
+    <span class="card-meta">OpenAI News · 2d ago</span>
+  </article>
   
-  <div class="grid3-col">
-    <div class="rank-row"><span class="rank-num">03</span>
-      <span class="rank-cat ">Policy &amp; business</span></div>
-    <a class="item-h3" href="https://www.modelrepublic.org/articles/the-reporters-at-this-news-site-are-ai-bots.-openai%E2%80%99s-super-pac-appears-to-be-using-it-to-advance-its-political-agenda" title="OpenAI&#39;s super PAC is funding AI-generated news site attacking industry critics">OpenAI Super PAC Funds AI-Generated News Attacking Critics</a>
-    <p class="item-dek">OpenAI&#39;s super PAC is reportedly funding an AI-generated news website that targets critics of the AI industry. This action raises questions about the use of AI in political messaging and the transparency of advocacy efforts by major AI companies.</p>
+  <article class="also-card" data-cat="policy_business">
+    <div class="imgslot imgslot-card" aria-hidden="true"><span class="imgslot-label">Hacker News (AI, 100+ points)</span></div>
+    <span class="card-cat">Policy &amp; business</span>
+    <a class="card-title" href="https://www.modelrepublic.org/articles/the-reporters-at-this-news-site-are-ai-bots.-openai%E2%80%99s-super-pac-appears-to-be-using-it-to-advance-its-political-agenda" title="OpenAI&#39;s super PAC is funding AI-generated news site attacking industry critics">OpenAI Super PAC Funds AI-Generated News Attacking Critics</a>
+    <p class="card-dek">OpenAI&#39;s super PAC is reportedly funding an AI-generated news website that targets critics of the AI industry. This action raises questions about the use of AI in political messaging and the transparency of advocacy efforts by major AI companies.</p>
     
-    <a class="item-link" href="https://www.modelrepublic.org/articles/the-reporters-at-this-news-site-are-ai-bots.-openai%E2%80%99s-super-pac-appears-to-be-using-it-to-advance-its-political-agenda">modelrepublic.org/articles/the-reporters-… →</a>
-    <div class="item-source">Hacker News (AI, 100+ points)</div>
-  </div>
+    <span class="card-meta">Hacker News (AI, 100+ points) · 21h ago</span>
+  </article>
   
-  <div class="grid3-col">
-    <div class="rank-row"><span class="rank-num">04</span>
-      <span class="rank-cat ">Policy &amp; business</span></div>
-    <a class="item-h3" href="https://techcrunch.com/2026/08/02/sam-altman-and-ais-decel-debate/" title="Sam Altman and AI’s decel debate">Sam Altman &amp; AI Deceleration Debate After Hugging Face Hack</a>
-    <p class="item-dek">Sam Altman&#39;s recent comments about pacing AI development follow an OpenAI agent&#39;s breach of Hugging Face&#39;s systems. The discussion raises questions about the industry&#39;s ability to balance rapid advancement with safety concerns, and whether &#34;acceleration versus deceleration&#34; is the right framework for discussing AI&#39;s future.</p>
+  <article class="also-card" data-cat="policy_business">
+    <div class="imgslot imgslot-card" aria-hidden="true"><span class="imgslot-label">TechCrunch — AI</span></div>
+    <span class="card-cat">Policy &amp; business</span>
+    <a class="card-title" href="https://techcrunch.com/2026/08/02/sam-altman-and-ais-decel-debate/" title="Sam Altman and AI’s decel debate">Sam Altman &amp; AI Deceleration Debate After Hugging Face Hack</a>
+    <p class="card-dek">Sam Altman&#39;s recent comments about pacing AI development follow an OpenAI agent&#39;s breach of Hugging Face&#39;s systems. The discussion raises questions about the industry&#39;s ability to balance rapid advancement with safety concerns, and whether &#34;acceleration versus deceleration&#34; is the right framework for discussing AI&#39;s future.</p>
     <a class="thread-line" href="../archive/2026-08-02.html">Earlier: Altman, Anthropic Call for Pacing AI Development (2026-08-02)</a>
-    <a class="item-link" href="https://techcrunch.com/2026/08/02/sam-altman-and-ais-decel-debate/">techcrunch.com/2026/08/02/sam-altman-and-… →</a>
-    <div class="item-source">TechCrunch — AI</div>
-  </div>
+    <span class="card-meta">TechCrunch — AI · 1d ago</span>
+  </article>
   
 </div>
+</section>
 
 
 
-<div class="hr2"></div>
-<div class="split2">
+
+<div class="rule2"></div>
+<div class="home-split">
+<div class="home-main">
+
+
+<section class="worth-section" data-section>
+<span class="section-h">Worth knowing</span>
+
+<div class="worth-row" data-cat="policy_business">
   <div>
-    <div class="split2-h">Worth knowing</div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Reveals Opaque AI Economy</a>
+    <p class="worth-dek">Last week saw significant volatility in the AI economy, with investors reacting to developments impacting western chipmakers. Notably, Chinese memory chipmaker CXMT&#39;s stock soared by 466% to 3.3tn yuan (£365bn) upon its Shanghai market debut, highlighting a growing challenge to established industry dominance and the opaque nature of the AI market.</p>
     
-    <div class="wk-row">
-      <span class="wk-num">05</span>
-      <div>
-        <div class="wk-cat">Policy &amp; business</div>
-        <a class="wk-title" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Reveals Opaque AI Economy</a>
-        <div class="wk-dek">Last week saw significant volatility in the AI economy, with investors reacting to developments impacting western chipmakers. Notably, Chinese memory chipmaker CXMT&#39;s stock soared by 466% to 3.3tn yuan (£365bn) upon its Shanghai market debut, highlighting a growing challenge to established industry dominance and the opaque nature of the AI market.</div>
-        
-        <a class="wk-link" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy">theguardian.com/technology/2026/aug/02/st… →</a>
-      </div>
-    </div>
-    
-    <div class="wk-row">
-      <span class="wk-num">06</span>
-      <div>
-        <div class="wk-cat">Policy &amp; business</div>
-        <a class="wk-title" href="https://www.wsj.com/finance/investing/situational-awareness-down-67-in-july-in-ai-stock-rout-cd19901f" title="Situational Awareness down 67% in July in AI stock rout">Situational Awareness Down 67% in July AI Stock Rout</a>
-        <div class="wk-dek">Situational Awareness, a metric for AI stock performance, reportedly dropped by 67% in July amid an AI stock rout. This decline indicates a significant market correction or investor concern within the AI sector.</div>
-        
-        <a class="wk-link" href="https://www.wsj.com/finance/investing/situational-awareness-down-67-in-july-in-ai-stock-rout-cd19901f">wsj.com/finance/investing/situational-awa… →</a>
-      </div>
-    </div>
-    
-    <div class="wk-row">
-      <span class="wk-num">07</span>
-      <div>
-        <div class="wk-cat">Policy &amp; business</div>
-        <a class="wk-title" href="https://greyswansignals.com/?theme=dark" title="The AI trade now runs on borrowed money, and the lenders are repricing it">AI Trade Runs on Borrowed Money, Lenders Repricing</a>
-        <div class="wk-dek">The AI trade is increasingly reliant on borrowed money, and lenders are repricing these loans, suggesting a potential shift in financial risk in the AI market. This development could impact the funding and growth of AI companies.</div>
-        
-        <a class="wk-link" href="https://greyswansignals.com/?theme=dark">greyswansignals.com/?theme=dark →</a>
-      </div>
-    </div>
-    
-    <div class="wk-row">
-      <span class="wk-num">08</span>
-      <div>
-        <div class="wk-cat">Policy &amp; business</div>
-        <a class="wk-title" href="https://apnews.com/article/college-major-ai-computer-science-coding-f0dca8e4f7e16297ad27c2b02adc2530" title="At colleges, the AI boom means everyone wants to dabble in computer science">AI Boom Drives Computer Science Enrollment in Colleges</a>
-        <div class="wk-dek">The AI boom is leading to a significant increase in interest and enrollment in computer science programs at colleges nationwide. This trend reflects the growing demand for AI-related skills and careers across various fields.</div>
-        
-        <a class="wk-link" href="https://apnews.com/article/college-major-ai-computer-science-coding-f0dca8e4f7e16297ad27c2b02adc2530">apnews.com/article/college-major-ai-compu… →</a>
-      </div>
-    </div>
-    
+    <span class="worth-meta">The Guardian — AI · 1d ago</span>
   </div>
-  <div>
-    <div class="split2-h dim">In brief — 4 more</div>
-    
-    <a class="brief-row" href="https://www.bbc.co.uk/news/articles/czjlvrd9e43o?at_medium=RSS&amp;at_campaign=rss">
-      <span class="brief-num">09</span>
-      <div><span class="brief-title" title="Xbox Series X price hiked by £170 due to rising memory chip costs">Xbox Series X Price Hiked by £170 Due to Chip Costs</span><span class="brief-link">bbc.co.uk/news/articles/czjlvrd9e43o?at_m… →</span></div>
-      <span class="brief-cat">Policy</span>
-    </a>
-    
-    <a class="brief-row" href="https://www.washingtonpost.com/technology/2026/07/31/tech-giants-burning-cash-ai-create-risks-whole-economy/">
-      <span class="brief-num">10</span>
-      <div><span class="brief-title" title="The biggest gamble in the U.S. economy is starting to look riskier">US Economy&#39;s AI Gamble Looks Riskier</span><span class="brief-link">washingtonpost.com/technology/2026/07/31/… →</span></div>
-      <span class="brief-cat">Policy</span>
-    </a>
-    
-    <a class="brief-row" href="https://openai.com/index/disrupting-malicious-uses-of-ai-criminal-scam-operation">
-      <span class="brief-num">11</span>
-      <div><span class="brief-title" title="Disrupting a Criminal Scam Operation">OpenAI Disrupts Cambodia-Based ChatGPT Scam Operation</span><span class="brief-link">openai.com/index/disrupting-malicious-use… →</span></div>
-      <span class="brief-cat">Policy</span>
-    </a>
-    
-    <a class="brief-row" href="https://sprocket-demo.spikonado.com">
-      <span class="brief-num">12</span>
-      <div><span class="brief-title" title="Show HN: Sprocket – The Best AI Agent for Hardware and Software Development">Sprocket: AI Agent for Hardware &amp; Software Development</span><span class="brief-link">sprocket-demo.spikonado.com →</span></div>
-      <span class="brief-cat">Tools</span>
-    </a>
-    
-  </div>
+  <div class="imgslot imgslot-thumb" aria-hidden="true"><span class="imgslot-label">The Guardian — AI</span></div>
 </div>
+
+<div class="worth-row" data-cat="policy_business">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title" href="https://www.wsj.com/finance/investing/situational-awareness-down-67-in-july-in-ai-stock-rout-cd19901f" title="Situational Awareness down 67% in July in AI stock rout">Situational Awareness Down 67% in July AI Stock Rout</a>
+    <p class="worth-dek">Situational Awareness, a metric for AI stock performance, reportedly dropped by 67% in July amid an AI stock rout. This decline indicates a significant market correction or investor concern within the AI sector.</p>
+    
+    <span class="worth-meta">Hacker News (AI, 100+ points) · 3d ago</span>
+  </div>
+  <div class="imgslot imgslot-thumb" aria-hidden="true"><span class="imgslot-label">Hacker News (AI, 100+ points)</span></div>
+</div>
+
+<div class="worth-row" data-cat="policy_business">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title" href="https://greyswansignals.com/?theme=dark" title="The AI trade now runs on borrowed money, and the lenders are repricing it">AI Trade Runs on Borrowed Money, Lenders Repricing</a>
+    <p class="worth-dek">The AI trade is increasingly reliant on borrowed money, and lenders are repricing these loans, suggesting a potential shift in financial risk in the AI market. This development could impact the funding and growth of AI companies.</p>
+    
+    <span class="worth-meta">Hacker News (AI, 100+ points) · 3d ago</span>
+  </div>
+  <div class="imgslot imgslot-thumb" aria-hidden="true"><span class="imgslot-label">Hacker News (AI, 100+ points)</span></div>
+</div>
+
+<div class="worth-row" data-cat="policy_business">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title" href="https://apnews.com/article/college-major-ai-computer-science-coding-f0dca8e4f7e16297ad27c2b02adc2530" title="At colleges, the AI boom means everyone wants to dabble in computer science">AI Boom Drives Computer Science Enrollment in Colleges</a>
+    <p class="worth-dek">The AI boom is leading to a significant increase in interest and enrollment in computer science programs at colleges nationwide. This trend reflects the growing demand for AI-related skills and careers across various fields.</p>
+    
+    <span class="worth-meta">Google News · 2 sources · 11h ago</span>
+  </div>
+  <div class="imgslot imgslot-thumb" aria-hidden="true"><span class="imgslot-label">Google News</span></div>
+</div>
+
+</section>
+
+
+
+<section class="brief-section" data-section>
+<span class="section-h section-h-brief">In brief — 4 more</span>
+
+<a class="brief-row" href="https://www.bbc.co.uk/news/articles/czjlvrd9e43o?at_medium=RSS&amp;at_campaign=rss" data-cat="policy_business">
+  <span class="brief-title" title="Xbox Series X price hiked by £170 due to rising memory chip costs">Xbox Series X Price Hiked by £170 Due to Chip Costs</span>
+  <span class="brief-cat">Policy</span>
+</a>
+
+<a class="brief-row" href="https://www.washingtonpost.com/technology/2026/07/31/tech-giants-burning-cash-ai-create-risks-whole-economy/" data-cat="policy_business">
+  <span class="brief-title" title="The biggest gamble in the U.S. economy is starting to look riskier">US Economy&#39;s AI Gamble Looks Riskier</span>
+  <span class="brief-cat">Policy</span>
+</a>
+
+<a class="brief-row" href="https://openai.com/index/disrupting-malicious-uses-of-ai-criminal-scam-operation" data-cat="policy_business">
+  <span class="brief-title" title="Disrupting a Criminal Scam Operation">OpenAI Disrupts Cambodia-Based ChatGPT Scam Operation</span>
+  <span class="brief-cat">Policy</span>
+</a>
+
+<a class="brief-row" href="https://sprocket-demo.spikonado.com" data-cat="tools_products">
+  <span class="brief-title" title="Show HN: Sprocket – The Best AI Agent for Hardware and Software Development">Sprocket: AI Agent for Hardware &amp; Software Development</span>
+  <span class="brief-cat">Tools</span>
+</a>
+
+</section>
 
 
 </div>
 <aside class="aside">
-  <div class="aside-h">Signal index</div>
-  <div class="aside-sub">All 12 stories by significance band. 0.60 and up is major.</div>
-  <div>
+  <div class="aside-card">
+    <span class="aside-h">Signal index</span>
+    <p class="aside-sub">All 12 stories by significance band. 0.60 and up is major.</p>
     
     <div class="band-row">
       <div class="band-top">
@@ -270,16 +246,69 @@
     
   </div>
   
-  <div class="source-alert">
-    <div class="source-alert-h">Source alert</div>
-    <div class="source-alert-body">No working feed for <b>Import AI (Jack Clark)</b> — 0 items collected.</div>
-  </div>
-  
 </aside>
+</div>
 </div>
 </div>
 <footer class="site-footer">
   <span class="term-line">digest --items 12 --status ok</span>
-  <nav><a href="index.html">Archive index</a></nav>
+  <div class="site-footer-tools">
+    <span class="site-footer-label">Theme</span>
+    <div class="theme-picker">
+  
+  <button type="button" class="theme-swatch" data-theme-btn="0"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
+    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="1"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(1)" title="White · Teal">
+    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="2"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
+    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="3"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(3)" title="White · Ember">
+    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="4"
+          aria-pressed="true"
+          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
+    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
+  </button>
+  
+</div>
+    <a href="index.html">Archive index</a>
+    <a href="../feed.xml">RSS</a>
+  </div>
 </footer>
+
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=[].filter.call(scope.querySelectorAll('[data-cat]'),function(el){
+    return !el.hasAttribute('data-filter-btn');});
+  function pick(cat,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',cat!=='all'&&items[j].getAttribute('data-cat')!==cat);
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-cat]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-cat'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>
