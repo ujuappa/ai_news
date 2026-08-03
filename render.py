@@ -10,6 +10,16 @@ CSS 6블록을 `templates/*.html` · `static/digest.css` 로 뺐다(1,069줄 -> 
 디자인 개편(T3.3)을 1,000줄짜리 파이썬 파일에 머지하지 않으려고. **렌더 결과는 바뀌지 않았다**
 (인라인 `<style>` 이 `<link rel=stylesheet>` 로 바뀐 것만. `tests/test_render_assets.py` 가 고정).
 
+**2026-08-03 디자인 2차 개편(Claude Design "AI Digest - Home" 캔버스)**: 홈이 신문 1면 레이아웃으로
+바뀌었다 — 라이트 마스트헤드(큰 워드마크 + 검색 + 탭 네비), 카테고리 필터 pill(클라이언트 사이드),
+이미지 슬롯이 있는 리드 스토리, "Also today" 3열 카드, "Worth knowing" 썸네일 행, "In brief" 목록,
+사이드바(Signal index + Source alert), 테마 스위처가 푸터로 이동. 사인인/주간/월간은 **미구현이라
+의도적으로 뺐다**(사용자 지시 2026-08-03) — 나중에 붙일 자리만 남겨둠.
+
+**이미지**: 캔버스 디자인은 회사별 소스 마크를 쓴다. 아직 이미지 파일이 없으므로 `static/img/`
+(`<source_id>.webp|jpg|jpeg|png|svg`)에 파일을 넣으면 자동으로 잡히고, 없으면 같은 크기의 빈
+플레이스홀더가 자리를 지킨다 -> 레이아웃이 나중에 흔들리지 않는다. `_image_for()` 참고.
+
 이제 이 파일은 **데이터 가공만** 한다: DB 행 -> 템플릿 변수. 마크업은 templates/, 스타일은 static/.
 
 경로 규칙: 템플릿은 `asset_prefix` 로 CSS 를 찾는다("" = 루트 페이지, "../" = archive/ 안).
@@ -20,6 +30,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from datetime import date as _date, datetime, timedelta as _timedelta, timezone
 from email.utils import format_datetime
 from html import escape
@@ -83,6 +94,9 @@ def _root_vars_css(palette: dict) -> str:
 
 TEMPLATES_DIR = Path(__file__).parent / "templates"
 STATIC_DIR = Path(__file__).parent / "static"
+IMG_DIR = STATIC_DIR / "img"
+# 디자인이 쓰는 소스 마크 이미지. 확장자 우선순위 = 이 순서(먼저 찾은 게 이긴다).
+IMG_EXTS = (".webp", ".jpg", ".jpeg", ".png", ".svg")
 
 _env = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=True)
 _env.globals.update(palettes=PALETTES, default_theme=DEFAULT_THEME, labels=CATEGORY_LABELS,
@@ -107,8 +121,35 @@ def write_assets(output_dir: Path) -> Path:
     authored = (STATIC_DIR / "digest.css").read_text(encoding="utf-8")
     css_path.parent.mkdir(parents=True, exist_ok=True)
     css_path.write_text(_root_vars_css(PALETTES[DEFAULT_THEME]) + authored, encoding="utf-8")
+    _copy_images(css_path.parent)
     _assets_written.add(css_path)
     return css_path
+
+
+def _copy_images(static_out: Path) -> None:
+    """`static/img/` 를 `output/static/img/` 로 복사. 폴더가 없으면 아무것도 안 한다.
+
+    이미지는 아직 준비 전이라(2026-08-03) 보통 빈 폴더다 — 나중에 파일만 떨어뜨리면
+    다음 렌더부터 자동으로 배포된다."""
+    if not IMG_DIR.is_dir():
+        return
+    files = [f for f in IMG_DIR.iterdir() if f.is_file() and f.suffix.lower() in IMG_EXTS]
+    if not files:
+        return
+    dest = static_out / "img"
+    dest.mkdir(parents=True, exist_ok=True)
+    for f in files:
+        shutil.copyfile(f, dest / f.name)
+
+
+def _image_for(source_id: str) -> str | None:
+    """소스별 이미지가 있으면 루트 기준 상대경로, 없으면 None(-> 템플릿이 빈 자리를 그린다)."""
+    if not source_id:
+        return None
+    for ext in IMG_EXTS:
+        if (IMG_DIR / f"{source_id}{ext}").is_file():
+            return f"static/img/{source_id}{ext}"
+    return None
 
 _SHORT_LABELS = {
     "model_releases": "Model", "research": "Research", "tools_products": "Tools",
@@ -126,6 +167,13 @@ def _domain_path(url: str, max_len: int = 42) -> str:
     if len(text) > max_len:
         text = text[: max_len - 1] + "…"
     return text
+
+
+def _domain(url: str) -> str:
+    """호스트만. 홈의 'Read at bbc.co.uk →' 용 — 여기에 경로까지 넣으면
+    `bbc.co.uk/news/articles/cr7k49xjzzeo?at_m…` 같은 쿼리스트링이 그대로 노출된다."""
+    m = _DOMAIN_RE.match(url or "")
+    return m.group(1) if m else (url or "")
 
 
 def _tier(sig: float) -> str:
@@ -150,10 +198,55 @@ def _source_line_name(it: dict) -> str:
     return f"{base} (+{len(others)} more)" if others else base
 
 
-def _annotate(it: dict, rank: int | None = None) -> None:
+def _digest_ref(label: str) -> datetime:
+    """상대시간("4h ago")의 기준 시각. **지금이 아니라 그 다이제스트의 시각이다.**
+
+    오늘자면 now, 과거 다이제스트면 그날 23:59 UTC. 기준을 항상 now 로 잡으면 rerender 할 때마다
+    아카이브 사본의 "4h ago" 가 "6d ago" 로 늘어나서 그날의 페이지가 아니게 된다."""
+    now = datetime.now(timezone.utc)
+    try:
+        d = _date.fromisoformat(label)
+    except ValueError:
+        return now
+    return min(now, datetime(d.year, d.month, d.day, 23, 59, 59, tzinfo=timezone.utc))
+
+
+_REL_UNITS = [(60, "m", "minute"), (24, "h", "hour"), (7, "d", "day"), (5, "w", "week")]
+
+
+def _relative_time(published: str | None, ref: datetime | None, long: bool = False) -> str:
+    """'9h ago' / '9 hours ago'. 파싱 불가·미래면 ''(템플릿이 통째로 생략한다)."""
+    if not published or ref is None:
+        return ""
+    try:
+        dt = datetime.fromisoformat(published)
+    except (TypeError, ValueError):
+        return ""
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    value = (ref - dt).total_seconds() / 60
+    if value < 0:
+        return ""
+    for limit, short, word in _REL_UNITS:
+        if value < limit:
+            n = max(1, int(value))
+            return f"{n} {word}{'s' if n != 1 else ''} ago" if long else f"{n}{short} ago"
+        value /= limit
+    return "older"
+
+
+def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) -> None:
     it["domain_path"] = _domain_path(it["url"])
+    it["domain"] = _domain(it["url"])
     it["tier_label"] = _tier(it.get("significance", 0.0))
     it["source_name"] = _source_line_name(it)
+    # 디자인의 바이라인은 "출처명 · N sources · 9h ago" 라서 접미사 없는 원본 이름과 소스 수가
+    # 따로 필요하다. source_name('X (+2 more)')은 카테고리 페이지가 계속 쓰므로 건드리지 않는다.
+    it["source_base"] = it["_source_base"]
+    it["source_count"] = len({it["_source_base"], *it.get("cluster_sources", [])})
+    it["rel_time"] = _relative_time(it.get("published"), ref)
+    it["rel_time_long"] = _relative_time(it.get("published"), ref, long=True)
+    it["image"] = _image_for(it.get("source_id", ""))
     # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
     # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
     it["display_title"] = (it.get("headline") or "").strip() or it["title"]
@@ -193,15 +286,24 @@ def _period_meta(label: str, total: int) -> tuple[str, str]:
 
 
 def _nav_links(groups: list[tuple[str, list[dict]]], active_key: str, home_href: str,
-              category_href_fn) -> list[dict]:
+              category_href_fn, home_label: str = "Today") -> list[dict]:
     total = sum(len(items) for _c, items in groups)
-    links = [{"key": "home", "label": "Home", "count": total, "href": home_href, "active": active_key == "home"}]
+    links = [{"key": "home", "label": home_label, "count": total, "href": home_href,
+              "active": active_key == "home"}]
     for cat, items in groups:
         links.append({
             "key": cat, "label": CATEGORY_LABELS[cat], "count": len(items),
             "href": category_href_fn(cat), "active": active_key == cat,
         })
     return links
+
+
+def _category_filters(groups: list[tuple[str, list[dict]]], total: int) -> list[dict]:
+    """홈 상단 필터 pill. 빈 카테고리는 넣지 않는다(누르면 아무것도 안 남는 버튼이라)."""
+    pills = [{"key": "all", "label": "All", "count": total}]
+    pills += [{"key": cat, "label": CATEGORY_LABELS[cat], "count": len(items)}
+              for cat, items in groups if items]
+    return pills
 
 
 _BAND_DEFS = [(0.6, "major", "acc"), (0.5, "high", "ink"), (0.4, "high", "muted"), (0.3, "mid", "n2")]
@@ -229,10 +331,14 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
     받기만 하고 쓰지 않았음. major 표시는 지금도 항목별 `it.is_major` 태그로 나감."""
     flat = _flatten_ranked(groups)
     total = len(flat)
+    ref = _digest_ref(date)
     for i, it in enumerate(flat, start=1):
-        _annotate(it, rank=i)
+        _annotate(it, rank=i, ref=ref)
     period_meta_txt, period_word = _period_meta(date, total)
     bands = _signal_bands(flat)
+    grid3, worth, brief = flat[1:4], flat[4:8], flat[8:]
+    # "Stories 02 – 04" — 카드가 몇 장이든 맞게(조용한 날엔 1~2장일 수 있다).
+    also_range = f"Stories 02 – {1 + len(grid3):02d}" if grid3 else ""
 
     output_dir.mkdir(parents=True, exist_ok=True)
     archive_dir = output_dir / "archive"
@@ -257,8 +363,9 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
             total=total, nav_links=nav_links, archive_link=archive_link,
             prefix=prefix, asset_prefix=("../" if in_archive else ""),
             search_href=("../search.html" if in_archive else "search.html"),
-            lead=flat[0] if flat else None, grid3=flat[1:4], worth=flat[4:8], brief=flat[8:],
+            lead=flat[0] if flat else None, grid3=grid3, worth=worth, brief=brief,
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
+            filters=_category_filters(groups, total), also_range=also_range,
         )
         out_path.write_text(html, encoding="utf-8")
     return archive_dir / f"{date}.html"
@@ -303,8 +410,9 @@ def render_category_page(period_label: str, category: str, groups: list[tuple[st
     # 페이지의 같은 점수 항목 순서가 갈린다.
     items = sorted(items, key=lambda it: (it["significance"], it.get("published") or ""), reverse=True)
     row_sizes = [34, 28, 22, 17, 15, 15]
+    ref = _digest_ref(period_label)
     for i, it in enumerate(items):
-        _annotate(it)
+        _annotate(it, ref=ref)
         it["row_size"] = row_sizes[i] if i < len(row_sizes) else row_sizes[-1]
         it["show_dek"] = i < 2
 
@@ -321,7 +429,8 @@ def render_category_page(period_label: str, category: str, groups: list[tuple[st
 
     home_href = (f"{period_label}.html" if in_archive else "index.html")
     cat_href_fn = (lambda c: f"{period_label}-{c}.html") if in_archive else (lambda c: f"{c}.html")
-    nav_links = _nav_links(groups, category, home_href, cat_href_fn)
+    nav_links = _nav_links(groups, category, home_href, cat_href_fn,
+                           home_label="Digest" if in_archive else "Today")
     archive_link = {
         "href": ("index.html" if in_archive else "archive/index.html"),
         "home_href": ("../index.html" if in_archive else "index.html"),

@@ -13,7 +13,6 @@
   </div>
   <nav>
     {% if prev_label %}<a href="{{ prev_label }}.html">← {{ prev_label }}</a>{% endif %}
-    {{ m.theme_picker() }}
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
@@ -54,5 +53,5 @@
   {% endif %}
 </div>
 </div>
-{{ m.site_footer('index.html', total, status='archive') }}
+{{ m.site_footer('index.html', total, status='archive', rss_href='../feed.xml') }}
 </body></html>

@@ -11,10 +11,7 @@
     <a class="wordmark" href="../index.html">AI Digest</a>
     <span class="simple-header-sub">Archive</span>
   </div>
-  <div style="display:flex;align-items:center;gap:18px">
-    {{ m.theme_picker() }}
-    <a href="../index.html" class="accent" style="font:700 11px Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);text-decoration:none">Latest →</a>
-  </div>
+  <nav><a href="../index.html" class="accent">Latest →</a></nav>
 </header>
 <div class="archive-body">
 <div class="archive-top">
@@ -43,5 +40,5 @@
 {% endfor %}
 </div>
 </div>
-{{ m.site_footer('index.html', digests|length, status='archive') }}
+{{ m.site_footer('index.html', digests|length, status='archive', rss_href='../feed.xml') }}
 </body></html>

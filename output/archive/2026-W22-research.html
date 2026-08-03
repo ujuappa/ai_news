@@ -8,83 +8,38 @@
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
 <div class="wrap">
-<header class="masthead">
-  <div class="masthead-row1">
-    <div class="masthead-id">
-      <a class="wordmark" href="../index.html">AI Digest</a>
-      <span class="period-meta">Week 22 · 25–31 May 2026 · 12 stories</span>
+<header class="mh">
+  <div class="mh-top">
+    <div class="mh-id">
+      <a class="mh-wordmark" href="../index.html">AI Digest</a>
+      <span class="mh-meta">Week 22 · 25–31 May 2026 · 12 stories · 440 in archive</span>
     </div>
-    <div class="masthead-tools">
-      
-      <form class="search-form" action="../search.html" method="get">
-        <div class="search-field">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--grgb),.6)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
-          <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
-        </div>
-      </form>
-      <span class="records-chip">440 records</span>
-      
-      <div class="theme-picker">
-  
-  <button type="button" class="theme-swatch" data-theme-btn="0"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
-    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="1"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(1)" title="White · Teal">
-    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="2"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
-    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="3"
-          aria-pressed="false"
-          onclick="__aiDigestSetTheme(3)" title="White · Ember">
-    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
-  </button>
-  
-  <button type="button" class="theme-swatch" data-theme-btn="4"
-          aria-pressed="true"
-          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
-    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
-  </button>
-  
-</div>
-    </div>
+    
+    <form class="mh-search" action="../search.html" method="get">
+      <label class="mh-search-field">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input type="search" name="q" placeholder="Search title, summary, source">
+      </label>
+    </form>
+    
   </div>
-  <nav class="nav">
-    
-    <a href="2026-W22.html" class="">
-      <span class="tab-label">Home</span><span class="tab-count">12</span>
-    </a>
-    
-    <a href="2026-W22-model_releases.html" class="">
-      <span class="tab-label">Model releases</span><span class="tab-count">0</span>
-    </a>
-    
-    <a href="2026-W22-research.html" class="active">
-      <span class="tab-label">Research</span><span class="tab-count">2</span>
-    </a>
-    
-    <a href="2026-W22-tools_products.html" class="">
-      <span class="tab-label">Tools &amp; products</span><span class="tab-count">4</span>
-    </a>
-    
-    <a href="2026-W22-policy_business.html" class="">
-      <span class="tab-label">Policy &amp; business</span><span class="tab-count">6</span>
-    </a>
-    
-    <a href="index.html" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">440</span>
-    </a>
-  </nav>
+  <div class="mh-bar">
+    <nav class="mh-nav">
+      
+      <a href="2026-W22.html" class="">Digest</a>
+      
+      <a href="2026-W22-model_releases.html" class="">Model releases</a>
+      
+      <a href="2026-W22-research.html" class="active">Research</a>
+      
+      <a href="2026-W22-tools_products.html" class="">Tools &amp; products</a>
+      
+      <a href="2026-W22-policy_business.html" class="">Policy &amp; business</a>
+      
+      <a href="index.html">Archive</a>
+    </nav>
+    <div class="mh-period"><span class="mh-period-on">Daily</span></div>
+  </div>
 </header>
 <div class="cat-body">
 <div class="cat-top">
@@ -139,6 +94,43 @@
 </div>
 <footer class="site-footer">
   <span class="term-line">digest --items 2 --status ok</span>
-  <nav><a href="index.html">Archive index</a></nav>
+  <div class="site-footer-tools">
+    <span class="site-footer-label">Theme</span>
+    <div class="theme-picker">
+  
+  <button type="button" class="theme-swatch" data-theme-btn="0"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
+    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="1"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(1)" title="White · Teal">
+    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="2"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
+    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="3"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(3)" title="White · Ember">
+    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="4"
+          aria-pressed="true"
+          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
+    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
+  </button>
+  
+</div>
+    <a href="index.html">Archive index</a>
+    <a href="../feed.xml">RSS</a>
+  </div>
 </footer>
 </body></html>

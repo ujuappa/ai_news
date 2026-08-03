@@ -12,11 +12,21 @@ Claude Code 는 세션 시작 시 이 파일을 자동으로 읽음.
 `rerender.py` 는 DB 데이터로 전체 페이지를 API 비용 없이 재생성(디자인만 바꿨을 때 사용).
 `generate_recaps.py` 는 recap(주간 헤드라인/$ 집계/카테고리 요약) 소급 생성용, 아직 미실행.
 
-## 디자인 (2026-07-27 전면 개편)
-Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인을 DesignSync MCP 로 가져와
-`render.py` 에 적용함(Archivo 폰트, radius 0, 5색 라이브 팔레트 피커, 카테고리 필터 페이지 신설,
-significance 플랫 랭킹 구조). 이전 "SIGNAL" 디자인은 폐기. 자세한 내용/미완료 항목(recap 소급 생성)은
-PROJECT_MEMO 변경로그 최신 항목 참고.
+## 디자인 (2026-07-27 전면 개편 → 2026-08-03 2차 개편)
+Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인을 DesignSync MCP 로 가져옴
+(Archivo 폰트, radius 0, 5색 라이브 팔레트 피커, 카테고리 필터 페이지, significance 플랫 랭킹).
+마크업은 `templates/*.html`, 스타일은 `static/digest.css`, `render.py` 는 데이터 가공만 한다.
+
+**2026-08-03 2차 개편**(캔버스 "AI Digest - Home"): 라이트 마스트헤드 + 밑줄 탭 네비, 홈 상단
+카테고리 필터 pill, 이미지 슬롯이 붙은 리드/카드/썸네일, 테마 스위처가 푸터로 이동.
+- **사인인 · Weekly · Monthly 는 의도적으로 없다** (미구현 → 죽은 버튼 방지). 붙일 자리는
+  `templates/macros.html` 주석 참고.
+- **이미지는 빈 슬롯이 자리만 잡고 있다.** `static/img/<source_id>.webp` 등을 넣으면 자동 반영 —
+  `static/img/README.md` 참고.
+- CSS 는 **팔레트 키(`--g --ink --acc --n1 --n2 …`)만** 쓸 수 있다. 캔버스의 `--color-*` 를
+  들여오면 `tests/test_render_assets.py` 가 잡는다(매핑표는 digest.css 헤더 주석).
+
+자세한 내용은 PROJECT_MEMO 변경로그 2026-08-03 항목 참고.
 
 ## 실행
 ```bash
@@ -35,8 +45,9 @@ open output/index.html
 ## 지금 우선순위 → **PROJECT_MEMO §13 을 먼저 읽을 것** (2026-07-31 정리)
 
 **소스 확장은 종료됐다(16소스 188건에서 동결). 고비용/유료 API 는 다음 주 논의로 연기.
-남은 건 렌더링뿐** — §13 에 "완성 정의 4개"와 작업 순서(T0 → T2.1 → T3.1 → T3.2 → T3.3)가 있다.
-아래는 그 이전 히스토리(대부분 완료).
+렌더링(T3.x)도 2026-08-03 에 끝났다 — §13 "완성 정의 4개" 전부 충족.**
+남은 건 §13.2 의 날짜에 걸린 판정 두 개뿐이다: **T1.1 논문 피드 3종 판정(~2026-08-04)
+→ 그 다음에 T1.2 research 하한(0.55) 튜닝.** 순서 고정. 아래는 그 이전 히스토리(대부분 완료).
 
 <details><summary>이전 P0/P1 기록</summary>
 

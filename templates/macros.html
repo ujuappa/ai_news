@@ -13,6 +13,18 @@
 <script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';var stored=parseInt(localStorage.getItem(KEY),10);var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){localStorage.setItem(KEY,idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 {%- endmacro %}
 
+{#
+  이미지 슬롯. 파일이 아직 없으므로(2026-08-03) 보통은 같은 크기의 빈 상자가 그려진다 —
+  나중에 `static/img/<source_id>.webp` 를 넣으면 레이아웃 변화 없이 그 자리에 들어간다.
+  비율/크기는 cls 로 정한다(render.py `_image_for` · digest.css `.imgslot-*` 참고).
+#}
+{% macro image_slot(it, cls, asset_prefix='') -%}
+<div class="imgslot {{ cls }}" aria-hidden="true">
+  {%- if it.image %}<img src="{{ asset_prefix }}{{ it.image }}" alt="">
+  {%- else %}<span class="imgslot-label">{{ it.source_base or it.source_name }}</span>{% endif -%}
+</div>
+{%- endmacro %}
+
 {% macro theme_picker() -%}
 <div class="theme-picker">
   {% for p in palettes %}
@@ -25,42 +37,53 @@
 </div>
 {%- endmacro %}
 
+{#
+  마스트헤드 (2026-08-03 "AI Digest - Home" 캔버스). 예전엔 --bar 배경의 다크 바였는데
+  캔버스 디자인은 지면 위에 그대로 얹힌 라이트 헤더 + 2px 밑줄이다.
+
+  기간 토글(Daily/Weekly/Monthly)의 Weekly·Monthly, 그리고 Sign in 은 **일부러 없다** —
+  아직 구현이 없어서 누르면 아무 일도 안 일어나는 버튼이 된다(사용자 지시 2026-08-03).
+  Daily 는 지금 보고 있는 기간 표시라 남긴다. 붙일 때는 이 자리에 형제 버튼으로 넣으면 된다.
+#}
 {% macro masthead(period_meta, total_records, nav_links, archive_link, search_href, show_search=true) -%}
-<header class="masthead">
-  <div class="masthead-row1">
-    <div class="masthead-id">
-      <a class="wordmark" href="{{ archive_link.home_href }}">AI Digest</a>
-      <span class="period-meta">{{ period_meta }}</span>
+<header class="mh">
+  <div class="mh-top">
+    <div class="mh-id">
+      <a class="mh-wordmark" href="{{ archive_link.home_href }}">AI Digest</a>
+      <span class="mh-meta">{{ period_meta }}{% if total_records %} · {{ total_records }} in archive{% endif %}</span>
     </div>
-    <div class="masthead-tools">
-      {% if show_search %}
-      <form class="search-form" action="{{ search_href }}" method="get">
-        <div class="search-field">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--grgb),.6)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
-          <input type="search" name="q" placeholder="Search by keyword — title, summary, source">
-        </div>
-      </form>
-      <span class="records-chip">{{ total_records }} records</span>
-      {% endif %}
-      {{ theme_picker() }}
-    </div>
+    {% if show_search %}
+    <form class="mh-search" action="{{ search_href }}" method="get">
+      <label class="mh-search-field">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input type="search" name="q" placeholder="Search title, summary, source">
+      </label>
+    </form>
+    {% endif %}
   </div>
-  <nav class="nav">
-    {% for link in nav_links %}
-    <a href="{{ link.href }}" class="{{ 'active' if link.active else '' }}">
-      <span class="tab-label">{{ link.label }}</span><span class="tab-count">{{ link.count }}</span>
-    </a>
-    {% endfor %}
-    <a href="{{ archive_link.href }}" class="archive-link">
-      <span class="tab-label">Archive</span><span class="tab-count">{{ archive_link.count }}</span>
-    </a>
-  </nav>
+  <div class="mh-bar">
+    <nav class="mh-nav">
+      {% for link in nav_links %}
+      <a href="{{ link.href }}" class="{{ 'active' if link.active else '' }}">{{ link.label }}</a>
+      {% endfor %}
+      <a href="{{ archive_link.href }}">Archive</a>
+    </nav>
+    <div class="mh-period"><span class="mh-period-on">Daily</span></div>
+  </div>
 </header>
 {%- endmacro %}
 
-{% macro site_footer(archive_href, total, status='ok') -%}
+{#
+  푸터. 테마 스위처가 헤더에서 여기로 내려왔다(캔버스 디자인) — 헤더 우측은 검색 전용.
+#}
+{% macro site_footer(archive_href, total, status='ok', rss_href='') -%}
 <footer class="site-footer">
   <span class="term-line">digest --items {{ total }} --status {{ status }}</span>
-  <nav><a href="{{ archive_href }}">Archive index</a></nav>
+  <div class="site-footer-tools">
+    <span class="site-footer-label">Theme</span>
+    {{ theme_picker() }}
+    <a href="{{ archive_href }}">Archive index</a>
+    {% if rss_href %}<a href="{{ rss_href }}">RSS</a>{% endif %}
+  </div>
 </footer>
 {%- endmacro %}
