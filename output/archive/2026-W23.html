@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 23 · 1–7 June 2026 · 16 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Moves Toward IPO as OpenAI Launches Massive Michigan Data Center</h1>
   <div class="stat-band">
@@ -28,51 +28,83 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 16</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 5</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/confidential-draft-s1-sec" title="Anthropic confidentially submits draft S-1 to the SEC">Anthropic confidentially submits draft S-1 to the SEC</a>
-      <p class="week-lead-dek">Anthropic has confidentially submitted a draft S-1 registration statement to the SEC, signaling an intent to pursue an initial public offering. The move is subject to SEC review and market conditions.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money government">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/confidential-draft-s1-sec" title="Anthropic confidentially submits draft S-1 to the SEC">Anthropic confidentially submits draft S-1 to the SEC</a>
+        <p class="week-lead-dek">Anthropic has confidentially submitted a draft S-1 registration statement to the SEC, signaling an intent to pursue an initial public offering. The move is subject to SEC review and market conditions.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/frontier-safety-blueprint" title="A blueprint for democratic governance of frontier AI">A blueprint for democratic governance of frontier AI</a>
-      <p class="week-sec-dek">OpenAI has released a framework for the democratic governance of frontier AI systems. The proposal suggests a federal structure in the U.S. to manage AI safety, national security, and operational resilience.</p>
-      
+      <div class="week-sec-item" data-topics="government security">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/frontier-safety-blueprint" title="A blueprint for democratic governance of frontier AI">A blueprint for democratic governance of frontier AI</a>
+        <p class="week-sec-dek">OpenAI has released a framework for the democratic governance of frontier AI systems. The proposal suggests a federal structure in the U.S. to manage AI safety, national security, and operational resilience.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/stargate-michigan-data-center" title="Building the infrastructure for the Intelligence Age in Michigan"><span class="week-rest-num">03</span><span class="week-rest-title">Building the infrastructure for the Intelligence Age in Michigan</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/stargate-michigan-data-center" title="Building the infrastructure for the Intelligence Age in Michigan" data-topics="chips"><span class="week-rest-num">03</span><span class="week-rest-title">Building the infrastructure for the Intelligence Age in Michigan</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-new-capabilities-to-gpt-rosalind" title="Introducing new capabilities to GPT-Rosalind"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing new capabilities to GPT-Rosalind</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-new-capabilities-to-gpt-rosalind" title="Introducing new capabilities to GPT-Rosalind" data-topics="science health"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing new capabilities to GPT-Rosalind</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/public-policy-agenda" title="OpenAI public policy agenda"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI public policy agenda</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/public-policy-agenda" title="OpenAI public policy agenda" data-topics="government"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI public policy agenda</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws" title="OpenAI frontier models and Codex are now available on AWS"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI frontier models and Codex are now available on AWS</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-frontier-models-and-codex-are-now-available-on-aws" title="OpenAI frontier models and Codex are now available on AWS" data-topics="code"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI frontier models and Codex are now available on AWS</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/biodefense-in-the-intelligence-age" title="Biodefense in the Intelligence Age"><span class="week-rest-num">07</span><span class="week-rest-title">Biodefense in the Intelligence Age</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/biodefense-in-the-intelligence-age" title="Biodefense in the Intelligence Age" data-topics="security science health"><span class="week-rest-num">07</span><span class="week-rest-title">Biodefense in the Intelligence Age</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-youth-safety-and-opportunity-through-global-leadership" title="Advancing youth safety and opportunity through global leadership"><span class="week-rest-num">08</span><span class="week-rest-title">Advancing youth safety and opportunity through global leadership</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-youth-safety-and-opportunity-through-global-leadership" title="Advancing youth safety and opportunity through global leadership" data-topics="government"><span class="week-rest-num">08</span><span class="week-rest-title">Advancing youth safety and opportunity through global leadership</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/expanding-project-glasswing" title="Expanding Project Glasswing"><span class="week-rest-num">09</span><span class="week-rest-title">Expanding Project Glasswing</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/expanding-project-glasswing" title="Expanding Project Glasswing" data-topics="code security"><span class="week-rest-num">09</span><span class="week-rest-title">Expanding Project Glasswing</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/nemotron-3-5-content-safety" title="Nemotron 3.5 Content Safety: Customizable Multimodal Safety for Global Enterprise AI"><span class="week-rest-num">10</span><span class="week-rest-title">Nemotron 3.5 Content Safety: Customizable Multimodal Safety for Global Enterprise AI</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/nemotron-3-5-content-safety" title="Nemotron 3.5 Content Safety: Customizable Multimodal Safety for Global Enterprise AI" data-topics="security"><span class="week-rest-num">10</span><span class="week-rest-title">Nemotron 3.5 Content Safety: Customizable Multimodal Safety for Global Enterprise AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-memory-dreaming" title="Dreaming: Better memory for a more helpful ChatGPT"><span class="week-rest-num">11</span><span class="week-rest-title">Dreaming: Better memory for a more helpful ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-memory-dreaming" title="Dreaming: Better memory for a more helpful ChatGPT" data-topics=""><span class="week-rest-num">11</span><span class="week-rest-title">Dreaming: Better memory for a more helpful ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/wasmer" title="How Wasmer used Codex to build a Node.js runtime for the edge"><span class="week-rest-num">12</span><span class="week-rest-title">How Wasmer used Codex to build a Node.js runtime for the edge</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/wasmer" title="How Wasmer used Codex to build a Node.js runtime for the edge" data-topics="code"><span class="week-rest-num">12</span><span class="week-rest-title">How Wasmer used Codex to build a Node.js runtime for the edge</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack" title="What we learned mapping a year’s worth of AI-enabled cyber threats"><span class="week-rest-num">13</span><span class="week-rest-title">What we learned mapping a year’s worth of AI-enabled cyber threats</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack" title="What we learned mapping a year’s worth of AI-enabled cyber threats" data-topics="security"><span class="week-rest-num">13</span><span class="week-rest-title">What we learned mapping a year’s worth of AI-enabled cyber threats</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/services-track-partner-hub" title="Introducing the Services Track and Partner Hub of the Claude Partner Network"><span class="week-rest-num">14</span><span class="week-rest-title">Introducing the Services Track and Partner Hub of the Claude Partner Network</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/services-track-partner-hub" title="Introducing the Services Track and Partner Hub of the Claude Partner Network" data-topics=""><span class="week-rest-num">14</span><span class="week-rest-title">Introducing the Services Track and Partner Hub of the Claude Partner Network</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/JetBrains/mellum2-launch" title="Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains"><span class="week-rest-num">15</span><span class="week-rest-title">Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/JetBrains/mellum2-launch" title="Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains" data-topics="code"><span class="week-rest-num">15</span><span class="week-rest-title">Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Dharma-AI/direct-preference-optimization-beyond-chatbots" title="Direct Preference Optimization Beyond Chatbots"><span class="week-rest-num">16</span><span class="week-rest-title">Direct Preference Optimization Beyond Chatbots</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Dharma-AI/direct-preference-optimization-beyond-chatbots" title="Direct Preference Optimization Beyond Chatbots" data-topics=""><span class="week-rest-num">16</span><span class="week-rest-title">Direct Preference Optimization Beyond Chatbots</span></a>
       
     </div>
   </div>
@@ -120,4 +152,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

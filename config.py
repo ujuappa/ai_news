@@ -29,6 +29,38 @@ CATEGORY_LABELS = {
     "community_takes": "Community takes",
 }
 
+# 토픽 = 카테고리와 **직교하는 두 번째 축**. 카테고리가 "어떤 종류의 사건인가"(모델 출시 ·
+# 연구 · 제품 · 정책)라면 토픽은 "무엇에 관한 이야기인가"(음악 · 정부 · 코드)다.
+# "AI 음악 스타트업이 5천만 달러를 유치" 는 policy_business 사건이면서 music 토픽이다.
+#
+# **CATEGORY_ORDER 와 절대 합치지 말 것.** 그 상수는 `sources.yaml` 의 최상위 소스 그룹 키를
+# 겸하고 있어서(config.load 참고), 여기에 토픽을 넣으면 곧바로 소스 버킷이 되어버린다.
+#
+# 홈 필터 pill 전용이다(2026-08-04, 사용자 지시: "상단 카테고리는 두고 필터만 교체").
+# 순서는 pill 동점일 때의 tie-break 로도 쓰이므로 아카이브 실측 빈도순으로 둔다.
+TOPIC_ORDER = [
+    "code", "money", "chips", "government", "security", "science",
+    "health", "art", "music", "video", "robotics", "cars", "education",
+]
+TOPIC_LABELS = {
+    "code": "Code",
+    "money": "Money & markets",
+    "chips": "Chips & datacenters",
+    "government": "Government & law",
+    "security": "Security",
+    "science": "Science",
+    "health": "Health",
+    "art": "Art & images",
+    "music": "Music & audio",
+    "video": "Video & film",
+    "robotics": "Robotics",
+    "cars": "Cars & driving",
+    "education": "Education",
+}
+# LLM 이 한 항목에 붙일 수 있는 토픽 수 상한. 이게 없으면 모델이 관대하게 5개씩 달아서
+# 모든 pill 이 모든 기사를 담게 되고 필터가 아무것도 구분하지 못한다.
+MAX_TOPICS_PER_ITEM = 3
+
 
 @dataclass
 class Source:

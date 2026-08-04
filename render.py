@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from datetime import date as _date, datetime, timedelta as _timedelta, timezone
 from email.utils import format_datetime
 from html import escape
@@ -38,7 +39,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 import images
-from config import CATEGORY_LABELS, CATEGORY_ORDER
+from config import CATEGORY_LABELS, CATEGORY_ORDER, TOPIC_LABELS, TOPIC_ORDER
 from store import DEAD_LINK_STATUSES, is_week_label, label_sort_key
 
 
@@ -214,6 +215,10 @@ def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) ->
     # 하지 않는다 — linkcheck.py 가 미리 찔러 본 결과(items.link_status)를 읽기만 한다.
     # 값이 없으면(미점검/구 DB) 살아있는 것으로 본다.
     it["url_dead"] = (it.get("link_status") or "") in DEAD_LINK_STATUSES
+    # 홈 필터용. 어휘에 없는 값은 여기서 떨군다 — 옛 DB 행이나 손으로 넣은 값이 섞이면
+    # 어떤 pill 에도 안 걸리는 유령 토픽이 DOM 에만 남는다.
+    it["topics"] = [t for t in TOPIC_ORDER if t in set(it.get("topics") or [])]
+    it["topic_attr"] = " ".join(it["topics"])
     it["tier_label"] = _tier(it.get("significance", 0.0))
     it["source_name"] = _source_line_name(it)
     # 디자인의 바이라인은 "출처명 · N sources · 9h ago" 라서 접미사 없는 원본 이름과 소스 수가
@@ -280,11 +285,27 @@ def _nav_links(groups: list[tuple[str, list[dict]]], active_key: str, home_href:
     return links
 
 
-def _category_filters(groups: list[tuple[str, list[dict]]], total: int) -> list[dict]:
-    """홈 상단 필터 pill. 빈 카테고리는 넣지 않는다(누르면 아무것도 안 남는 버튼이라)."""
+TOPIC_PILL_CAP = 6
+
+
+def _topic_filters(items: list[dict], total: int, cap: int = TOPIC_PILL_CAP) -> list[dict]:
+    """홈 상단 필터 pill — **카테고리가 아니라 토픽**이다(2026-08-04).
+
+    카테고리 pill 은 상단 네비게이션과 같은 4개를 그대로 반복해서 자리값을 못 했다.
+    토픽은 "무엇에 관한 이야기인가"라는 다른 축이라 필터로서 실제로 쓸모가 있다.
+
+    **상한이 필요한 이유**: 실측(2026-08-04)으로 하루치에 토픽이 8~9개 붙는데 대부분 1~2건짜리다.
+    한 건짜리 필터는 필터가 아니고 pill 줄도 넘친다 → 그날 많이 나온 순으로 top-N 만 남긴다.
+    나머지 토픽의 기사는 'All' 에서 계속 보인다(사라지지 않는다).
+
+    동점은 TOPIC_ORDER 순으로 깬다 — 안 그러면 같은 데이터로 재렌더할 때 pill 순서가 흔들린다.
+    빈 토픽은 애초에 counts 에 없으니 "눌러도 아무것도 안 남는 버튼"은 생기지 않는다."""
+    counts = Counter(t for it in items for t in (it.get("topics") or []))
+    order = {t: i for i, t in enumerate(TOPIC_ORDER)}
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], order.get(kv[0], len(order))))
     pills = [{"key": "all", "label": "All", "count": total}]
-    pills += [{"key": cat, "label": CATEGORY_LABELS[cat], "count": len(items)}
-              for cat, items in groups if items]
+    pills += [{"key": key, "label": TOPIC_LABELS.get(key, key), "count": n}
+              for key, n in ranked[:cap] if key in TOPIC_LABELS]
     return pills
 
 
@@ -347,7 +368,7 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
             search_href=("../search.html" if in_archive else "search.html"),
             lead=flat[0] if flat else None, grid3=grid3, worth=worth, brief=brief,
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
-            filters=_category_filters(groups, total), also_range=also_range,
+            filters=_topic_filters(flat, total), also_range=also_range,
         )
         out_path.write_text(html, encoding="utf-8")
     return archive_dir / f"{date}.html"
@@ -375,6 +396,8 @@ def render_archive_digest(label: str, groups: list[tuple[str, list[dict]]],
         total=total, peak_sig=peak_sig, model_release_count=model_release_count,
         dollar_committed=recap.get("dollar_committed"),
         lead=flat[0] if flat else None, second=flat[1] if len(flat) > 1 else None, rest=flat[2:],
+        # 홈과 같은 토픽 pill. 2026-08-04 이전엔 아카이브에 필터 줄이 아예 없었다.
+        filters=_topic_filters(flat, total),
         # prefix="" 는 "archive 디렉터리 기준"(스레드 링크가 아카이브 형제를 가리킨다).
         # asset_prefix 는 루트 기준이라 항상 "../" — 이 페이지는 archive/ 안에만 있다.
         prev_label=None, prefix="", asset_prefix="../",

@@ -45,39 +45,49 @@
 <div class="home" data-scope>
 
 
+
 <div class="filter-row">
   <span class="filter-label">Filter</span>
   
   <button type="button" class="filter-pill active"
-          data-filter-btn data-cat="all">All 18</button>
+          data-filter-btn data-topic="all">All 18</button>
   
   <button type="button" class="filter-pill "
-          data-filter-btn data-cat="model_releases">Model releases 1</button>
+          data-filter-btn data-topic="code">Code 5</button>
   
   <button type="button" class="filter-pill "
-          data-filter-btn data-cat="tools_products">Tools &amp; products 7</button>
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 5</button>
   
   <button type="button" class="filter-pill "
-          data-filter-btn data-cat="policy_business">Policy &amp; business 10</button>
+          data-filter-btn data-topic="government">Government &amp; law 5</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
   
   <span class="filter-note">Ranked by significance</span>
 </div>
 
-<article class="lead" data-cat="model_releases">
+<article class="lead" data-topics="government robotics">
   <div class="lead-text">
     <div class="lead-kicker">
-      <span class="lead-cat">Model releases</span>
-      <span class="lead-sig">Lead story · significance 0.80</span>
+      <span class="lead-cat">Tools &amp; products</span>
+      <span class="lead-sig">Lead story · significance 0.70</span>
       
     </div>
-    <a class="lead-title" href="https://www.futunn.com/404" title="Performance on par with Anthropic&#39;s Fable 5! Alibaba has launched Qwen3.8-MAX, featuring 2.4 trillion parameters and excelling in long-context autonomous programming.">Alibaba Launches Qwen3.8-MAX with 2.4 Trillion Parameters</a>
-    <p class="lead-dek">Alibaba has released Qwen3.8-MAX, an advanced AI model with 2.4 trillion parameters. This model reportedly offers performance on par with Anthropic&#39;s Claude 3.5 Sonnet, demonstrating strong capabilities in long-context autonomous programming.</p>
+    <a class="lead-title" href="https://news.lockheedmartin.com/2026-08-04-Skunk-Works-R-Advances-Sensor-Powered-AI-Fighter-Intercept" title="Skunk Works® Advances Sensor-Powered AI Fighter Intercept">Skunk Works Advances Sensor-Powered AI Fighter Intercept</a>
+    <p class="lead-dek">Lockheed Martin Skunk Works and the U.S. Air Force Test Pilot School demonstrated sensor-driven AI autonomy on an X-62 VISTA fighter jet. Across eight flights, an AI agent used real-time sensor data from a Legion Pod to execute 27 successful air intercepts against a live T-38 jet target. This project validated closing the sensor-to-action loop with AI in an operational combat aircraft and accelerated autonomy development, with full integration and ground testing occurring in just three months.</p>
     
     <div class="lead-byline">
       <span class="byline-source">gemini_grounding</span>
       <span class="byline-sep"></span>
-      <span class="byline-meta">2 sources · 19 minutes ago</span>
-      <a class="byline-link" href="https://www.futunn.com/404">Read at futunn.com →</a>
+      <span class="byline-meta">2 sources · 4 hours ago</span>
+      <a class="byline-link" href="https://news.lockheedmartin.com/2026-08-04-Skunk-Works-R-Advances-Sensor-Powered-AI-Fighter-Intercept">Read at news.lockheedmartin.com →</a>
     </div>
   </div>
   <div class="imgslot imgslot-lead has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
@@ -95,35 +105,35 @@
 </div>
 <div class="also-grid">
   
-  <article class="also-card" data-cat="tools_products">
-    <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
-  <circle cx="32" cy="32" r="24"/>
-  <path d="M8 32h48"/>
-  <path d="M32 8c8.5 8.5 8.5 39.5 0 48-8.5-8.5-8.5-39.5 0-48z"/>
-</svg></div>
-    <span class="card-cat">Tools &amp; products</span>
-    <a class="card-title" href="https://news.lockheedmartin.com/2026-08-04-Skunk-Works-R-Advances-Sensor-Powered-AI-Fighter-Intercept" title="Skunk Works® Advances Sensor-Powered AI Fighter Intercept">Skunk Works Advances Sensor-Powered AI Fighter Intercept</a>
-    <p class="card-dek">Lockheed Martin Skunk Works and the U.S. Air Force Test Pilot School demonstrated sensor-driven AI autonomy on an X-62 VISTA fighter jet. Across eight flights, an AI agent used real-time sensor data from a Legion Pod to execute 27 successful air intercepts against a live T-38 jet target. This project validated closing the sensor-to-action loop with AI in an operational combat aircraft and accelerated autonomy development, with full integration and ground testing occurring in just three months.</p>
-    
-    <span class="card-meta">gemini_grounding · 2 sources · 52m ago</span>
-  </article>
-  
-  <article class="also-card" data-cat="policy_business">
+  <article class="also-card" data-topics="chips government">
     <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/techcrunch_ai.png" alt="" decoding="async"></div>
     <span class="card-cat">Policy &amp; business</span>
     <a class="card-title" href="https://techcrunch.com/2026/08/04/texas-halts-new-data-centers-as-governor-calls-for-audits/" title="Texas halts new data centers as governor calls for audits">Texas Halts New Data Centers, Governor Calls Audits</a>
     <p class="card-dek">Texas Governor Greg Abbott has halted new data center projects and mandated audits by the Public Utility Commission of Texas (PUCT) and ERCOT, the state&#39;s grid operator. This move comes as interconnection requests for data centers and crypto mining facilities have swelled to 474 gigawatts, more than five times ERCOT&#39;s peak demand, raising concerns about overwhelming the state&#39;s power grid. The audits will collect detailed information on electricity and water demand, noise, light controls, and tax incentives.</p>
     
-    <span class="card-meta">TechCrunch — AI · 1h ago</span>
+    <span class="card-meta">TechCrunch — AI · 4h ago</span>
   </article>
   
-  <article class="also-card" data-cat="policy_business">
+  <article class="also-card" data-topics="government">
     <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/openai.webp" alt="" decoding="async"></div>
     <span class="card-cat">Policy &amp; business</span>
     <a class="card-title" href="https://openai.com/index/apple-is-getting-this-wrong" title="Apple is getting this wrong">OpenAI Addresses Apple’s Lawsuit</a>
     <p class="card-dek">OpenAI has publicly responded to Apple&#39;s lawsuit, refuting the claims and sharing internal communications to provide context regarding the situation. This exchange highlights an ongoing dispute between two major tech companies concerning AI practices and legal matters.</p>
     
-    <span class="card-meta">OpenAI News · 19h ago</span>
+    <span class="card-meta">OpenAI News · 22h ago</span>
+  </article>
+  
+  <article class="also-card" data-topics="money chips">
+    <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M6 25 32 9l26 16"/>
+  <path d="M13 25v22M25 25v22M39 25v22M51 25v22"/>
+  <path d="M7 55h50"/>
+</svg></div>
+    <span class="card-cat">Policy &amp; business</span>
+    <a class="card-title" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Over Opaque AI Economy</a>
+    <p class="card-dek">The stock market experienced volatility following a significant challenge to Western chipmaker dominance by Chinese memory chipmaker CXMT. CXMT&#39;s IPO on the Shanghai stock market saw its value surge by 466% to 3.3tn yuan (£365bn). This event highlights the opaque nature of the AI economy and investor uncertainty amid geopolitical shifts in the semiconductor industry.</p>
+    
+    <span class="card-meta">The Guardian — AI · 2d ago</span>
   </article>
   
 </div>
@@ -140,44 +150,29 @@
 <section class="worth-section" data-section>
 <span class="section-h">Worth knowing</span>
 
-<div class="worth-row" data-cat="policy_business">
-  <div>
-    <span class="worth-cat">Policy &amp; business</span>
-    <a class="worth-title" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Over Opaque AI Economy</a>
-    <p class="worth-dek">The stock market experienced volatility following a significant challenge to Western chipmaker dominance by Chinese memory chipmaker CXMT. CXMT&#39;s IPO on the Shanghai stock market saw its value surge by 466% to 3.3tn yuan (£365bn). This event highlights the opaque nature of the AI economy and investor uncertainty amid geopolitical shifts in the semiconductor industry.</p>
-    
-    <span class="worth-meta">The Guardian — AI · 2d ago</span>
-  </div>
-  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
-  <path d="M6 25 32 9l26 16"/>
-  <path d="M13 25v22M25 25v22M39 25v22M51 25v22"/>
-  <path d="M7 55h50"/>
-</svg></div>
-</div>
-
-<div class="worth-row" data-cat="policy_business">
+<div class="worth-row" data-topics="government">
   <div>
     <span class="worth-cat">Policy &amp; business</span>
     <a class="worth-title" href="https://techcrunch.com/2026/08/04/apple-says-more-ex-employees-may-have-taken-confidential-data-to-openai/" title="Apple says more ex-employees may have taken confidential data to OpenAI">Apple Claims More Ex-Employees Took Data to OpenAI</a>
     <p class="worth-dek">Apple is escalating its trade secrets lawsuit against OpenAI, seeking a preliminary injunction to halt development of products based on its technology. The company claims its ongoing investigation has identified 11 additional former employees who may have been involved in the alleged theft, expanding beyond the two originally named.</p>
     
-    <span class="worth-meta">TechCrunch — AI · 3h ago</span>
+    <span class="worth-meta">TechCrunch — AI · 6h ago</span>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/techcrunch_ai.png" alt="" decoding="async"></div>
 </div>
 
-<div class="worth-row" data-cat="policy_business">
+<div class="worth-row" data-topics="government security">
   <div>
     <span class="worth-cat">Policy &amp; business</span>
     <a class="worth-title" href="https://www.bbc.co.uk/news/articles/cvg0kk3ek2vo?at_medium=RSS&amp;at_campaign=rss" title="Apple issues new challenge against UK order for access to private user data">Apple Challenges UK Order for User Data Access</a>
     <p class="worth-dek">Apple has launched a new legal challenge against the UK government&#39;s demand for &#39;backdoor&#39; access to highly encrypted user data. The company, which previously withdrew its Advanced Data Protection feature for new UK users in February 2025, maintains it will never build master keys or backdoors into its products.</p>
     
-    <span class="worth-meta">BBC — Technology · 6h ago</span>
+    <span class="worth-meta">BBC — Technology · 9h ago</span>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/bbc_tech.png" alt="" decoding="async"></div>
 </div>
 
-<div class="worth-row" data-cat="policy_business">
+<div class="worth-row" data-topics="chips">
   <div>
     <span class="worth-cat">Policy &amp; business</span>
     <a class="worth-title" href="https://www.bbc.co.uk/news/articles/czjlvrd9e43o?at_medium=RSS&amp;at_campaign=rss" title="Xbox Series X price hiked by £170 due to rising memory chip costs">Xbox Series X Price Hiked by £170 Due to Chip Costs</a>
@@ -188,6 +183,17 @@
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/microsoft.png" alt="" decoding="async"></div>
 </div>
 
+<div class="worth-row" data-topics="money">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title" href="https://www.wsj.com/finance/investing/situational-awareness-down-67-in-july-in-ai-stock-rout-cd19901f" title="Situational Awareness down 67% in July in AI stock rout">Situational Awareness Down 67% in July in AI Stock Rout</a>
+    <p class="worth-dek">The &#39;Situational Awareness&#39; index, which tracks AI stock performance, saw a significant 67% decline in July. This indicates a notable downturn in the AI stock market, suggesting investor sentiment or market conditions shifted negatively during that period.</p>
+    
+    <span class="worth-meta">Hacker News (AI, 100+ points) · 4d ago</span>
+  </div>
+  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/hn_ai.webp" alt="" decoding="async"></div>
+</div>
+
 </section>
 
 
@@ -195,54 +201,54 @@
 <section class="brief-section" data-section>
 <span class="section-h section-h-brief">In brief — 10 more</span>
 
-<a class="brief-row" href="https://www.wsj.com/finance/investing/situational-awareness-down-67-in-july-in-ai-stock-rout-cd19901f" data-cat="policy_business">
-  <span class="brief-title" title="Situational Awareness down 67% in July in AI stock rout">Situational Awareness Down 67% in July in AI Stock Rout</span>
-  <span class="brief-cat">Policy</span>
-</a>
-
-<a class="brief-row" href="https://greyswansignals.com/?theme=dark" data-cat="policy_business">
+<a class="brief-row" href="https://greyswansignals.com/?theme=dark" data-topics="money">
   <span class="brief-title" title="The AI trade now runs on borrowed money, and the lenders are repricing it">AI Trade Now Runs on Borrowed Money, Lenders Reprice</span>
   <span class="brief-cat">Policy</span>
 </a>
 
-<a class="brief-row" href="https://openai.com/index/disrupting-malicious-uses-of-ai-criminal-scam-operation" data-cat="policy_business">
+<a class="brief-row" href="https://openai.com/index/disrupting-malicious-uses-of-ai-criminal-scam-operation" data-topics="security">
   <span class="brief-title" title="Disrupting a Criminal Scam Operation">OpenAI Disrupts Cambodia-Based Scam Operation</span>
   <span class="brief-cat">Policy</span>
 </a>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/04/spotify-adds-merlin-to-its-ai-music-remix-and-covers-effort/" data-cat="policy_business">
+<a class="brief-row" href="https://techcrunch.com/2026/08/04/spotify-adds-merlin-to-its-ai-music-remix-and-covers-effort/" data-topics="music">
   <span class="brief-title" title="Spotify expands AI remix and covers project with Merlin partnership">Spotify Expands AI Music Remixes with Merlin</span>
   <span class="brief-cat">Policy</span>
 </a>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/04/eon-wants-to-move-the-data-superhighway-from-ocean-fiber-to-space-lasers/" data-cat="tools_products">
+<a class="brief-row" href="https://techcrunch.com/2026/08/04/eon-wants-to-move-the-data-superhighway-from-ocean-fiber-to-space-lasers/" data-topics="money chips">
   <span class="brief-title" title="EON wants to move the data superhighway from ocean fiber to space lasers">EON Secures $10.75M for Space Laser Data Network</span>
   <span class="brief-cat">Tools</span>
 </a>
 
-<a class="brief-row" href="https://arxiv.org/abs/2608.00033" data-cat="tools_products">
+<a class="brief-row" href="https://arxiv.org/abs/2608.00033" data-topics="code security">
   <span class="brief-title" title="SIRIN: A Unified Toolkit for Detecting Contextual Hallucinations in Retrieval-Augmented and Memory-Grounded LLM Systems">SIRIN: Toolkit for Detecting LLM Hallucinations</span>
   <span class="brief-cat">Tools</span>
 </a>
 
-<a class="brief-row" href="https://arxiv.org/abs/2608.00198" data-cat="tools_products">
+<a class="brief-row" href="https://arxiv.org/abs/2608.00198" data-topics="code science">
   <span class="brief-title" title="AutoCause: A Python framework that automates expert decisions in environmental time-series causal discovery">AutoCause: Automated Causal Discovery for Time-Series</span>
   <span class="brief-cat">Tools</span>
 </a>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/04/is-the-future-of-data-centers-portable-runware-builds-a-pod-to-find-out/" data-cat="tools_products">
+<a class="brief-row" href="https://techcrunch.com/2026/08/04/is-the-future-of-data-centers-portable-runware-builds-a-pod-to-find-out/" data-topics="chips">
   <span class="brief-title" title="Is the future of data centers portable? Runware builds a pod to find out">Runware Launches Modular Sonic Inference Pod</span>
   <span class="brief-cat">Tools</span>
 </a>
 
-<a class="brief-row" href="https://openai.com/index/learn-teach-chatgpt-work-codex" data-cat="tools_products">
+<a class="brief-row" href="https://openai.com/index/learn-teach-chatgpt-work-codex" data-topics="code education">
   <span class="brief-title" title="New ways to learn and teach with ChatGPT Work and Codex">New ways to learn and teach with ChatGPT Work and Codex</span>
   <span class="brief-cat">Tools</span>
 </a>
 
-<a class="brief-row" href="https://openai.com/index/circles" data-cat="tools_products">
+<a class="brief-row" href="https://openai.com/index/circles" data-topics="code">
   <span class="brief-title" title="Circles powers telco personalization with OpenAI technology">Circles Boosts Telco Personalization with OpenAI API</span>
   <span class="brief-cat">Tools</span>
+</a>
+
+<a class="brief-row" data-topics="code">
+  <span class="brief-title" title="Performance on par with Anthropic&#39;s Fable 5! Alibaba has launched Qwen3.8-MAX, featuring 2.4 trillion parameters and excelling in long-context autonomous programming.">Alibaba Launches Qwen3.8-MAX with 2.4 Trillion Parameters</span>
+  <span class="brief-cat">Model</span>
 </a>
 
 </section>
@@ -286,11 +292,6 @@
       <div class="band-bar" style="background:var(--n2);width:50%"></div>
     </div>
     
-  </div>
-  
-  <div class="source-alert">
-    <span class="source-alert-h">Source alert</span>
-    <span class="source-alert-body">No working feed for <b>Import AI (Jack Clark)</b> — 0 items collected.</span>
   </div>
   
 </aside>
@@ -338,24 +339,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
-
 <script>(function(){
   var scope=document.querySelector('[data-scope]'); if(!scope) return;
   var pills=scope.querySelectorAll('[data-filter-btn]');
   var sections=scope.querySelectorAll('[data-section]');
-  var items=[].filter.call(scope.querySelectorAll('[data-cat]'),function(el){
-    return !el.hasAttribute('data-filter-btn');});
-  function pick(cat,btn){
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
     for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
     for(var j=0;j<items.length;j++)
-      items[j].classList.toggle('is-filtered',cat!=='all'&&items[j].getAttribute('data-cat')!==cat);
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
     for(var s=0;s<sections.length;s++){
-      var kept=sections[s].querySelectorAll('[data-cat]:not(.is-filtered)').length;
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
       sections[s].classList.toggle('is-filtered',kept===0);
     }
   }
   for(var k=0;k<pills.length;k++)(function(b){
-    b.addEventListener('click',function(){pick(b.getAttribute('data-cat'),b);});
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
   })(pills[k]);
 })();</script>
 </body></html>

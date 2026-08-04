@@ -16,7 +16,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">{{ period_meta }} · archived digest</div>
   <h1 class="week-headline">{{ headline }}</h1>
   <div class="stat-band">
@@ -26,25 +26,38 @@
     <div class="stat-col"><div class="stat-num">{{ dollar_committed or '—' }}</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   {% if lead %}
+  {#
+    아카이브에도 토픽 필터를 단다(2026-08-04). 홈에만 있어서 아카이브 251페이지는 필터가
+    아예 없었다 — 백필해 둔 토픽이 보이지 않던 이유.
+
+    리드/2위는 원래 kicker·제목·요약이 형제 요소로 흩어져 있었는데, 필터가 숨길 수 있으려면
+    한 덩어리여야 해서 래퍼로 감쌌다(.week-lead-item/.week-sec-item 은 순수 래퍼 —
+    week-lead-col 에 자식 선택자가 없어서 레이아웃에 영향이 없다).
+  #}
+  {{ m.filter_row(filters, note='') }}
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">{{ labels[lead.category] }}{{ ' · major' if lead.is_major else '' }}</span></div>
-      <a class="week-lead-title"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
-      <p class="week-lead-dek">{{ lead.summary }}</p>
-      {% if lead.thread %}<a class="thread-line" href="{{ prefix }}{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
-      <div class="week-lead-byline">{{ lead.source_name }} · tier {{ lead.tier_label }}</div>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="{{ lead.topic_attr }}">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">{{ labels[lead.category] }}{{ ' · major' if lead.is_major else '' }}</span></div>
+        <a class="week-lead-title"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
+        <p class="week-lead-dek">{{ lead.summary }}</p>
+        {% if lead.thread %}<a class="thread-line" href="{{ prefix }}{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
+        <div class="week-lead-byline">{{ lead.source_name }} · tier {{ lead.tier_label }}</div>
+      </div>
       {% if second %}
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">{{ labels[second.category] }}{{ ' · major' if second.is_major else '' }}</span></div>
-      <a class="week-sec-title"{{ m.href(second) }} title="{{ second.title }}">{{ second.display_title }}</a>
-      <p class="week-sec-dek">{{ second.summary }}</p>
-      {% if second.thread %}<a class="thread-line" href="{{ prefix }}{{ second.thread.date }}.html">Earlier: {{ second.thread.display }} ({{ second.thread.date }})</a>{% endif %}
+      <div class="week-sec-item" data-topics="{{ second.topic_attr }}">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">{{ labels[second.category] }}{{ ' · major' if second.is_major else '' }}</span></div>
+        <a class="week-sec-title"{{ m.href(second) }} title="{{ second.title }}">{{ second.display_title }}</a>
+        <p class="week-sec-dek">{{ second.summary }}</p>
+        {% if second.thread %}<a class="thread-line" href="{{ prefix }}{{ second.thread.date }}.html">Earlier: {{ second.thread.display }} ({{ second.thread.date }})</a>{% endif %}
+      </div>
       {% endif %}
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the {{ period_word }}</div>
       {% for it in rest %}
-      <a class="week-rest-row"{{ m.href(it) }} title="{{ it.title }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.display_title }}{% if it.thread %}<span class="thread-line">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</span>{% endif %}</span></a>
+      <a class="week-rest-row"{{ m.href(it) }} title="{{ it.title }}" data-topics="{{ it.topic_attr }}"><span class="week-rest-num">{{ '%02d'|format(it.rank) }}</span><span class="week-rest-title">{{ it.display_title }}{% if it.thread %}<span class="thread-line">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</span>{% endif %}</span></a>
       {% endfor %}
     </div>
   </div>
@@ -54,4 +67,5 @@
 </div>
 </div>
 {{ m.site_footer('index.html', total, status='archive', rss_href='../feed.xml') }}
+{{ m.topic_filter_script() }}
 </body></html>

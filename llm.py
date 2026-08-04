@@ -17,7 +17,7 @@ from google.genai import types
 
 import config
 import fetch
-from config import CATEGORY_LABELS
+from config import CATEGORY_LABELS, MAX_TOPICS_PER_ITEM, TOPIC_ORDER
 
 MAX_RETRIES = 3     # 배치당 총 시도 횟수
 BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
@@ -102,10 +102,37 @@ For EACH item, decide:
    Example: "Gemini Robotics ER 2: powering robotics with video understanding, task
    orchestration, and multi-robot collaboration" -> "Gemini Robotics ER 2"
 
+6. topics — 0 to 3 tags describing WHAT THE STORY IS ABOUT (its subject domain). This is a
+   DIFFERENT axis from `category`, which says what KIND of event it is. A funding round for an
+   AI music startup is category "policy_business" with topic "music".
+   Allowed values ONLY (copy exactly, never invent, never translate):
+{topics}
+   Return [] when none clearly applies — do NOT stretch to fill the list. Most items get 0-2.
+
 Prioritize signal over volume: if an item is minor or purely promotional, give it a low
 significance. Return ONLY a JSON array, no prose, no markdown fences. Each element:
-{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
- "headline": "..."}"""
+{{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
+ "headline": "...", "topics": ["..."]}}"""
+
+# 토픽 설명은 프롬프트에만 쓰는 것이라 config 가 아니라 여기 둔다(config.TOPIC_LABELS 는
+# 화면에 나가는 짧은 라벨이고, 모델에는 경계를 알려줄 문장이 필요하다).
+_TOPIC_GLOSS = {
+    "code": "software engineering, developer tools, programming",
+    "money": "funding, valuations, IPOs, acquisitions, stock moves",
+    "chips": "semiconductors, GPUs, datacenters, compute infrastructure",
+    "government": "regulation, legislation, courts, defense, the public sector",
+    "security": "cyberattacks, vulnerabilities, fraud, model misuse",
+    "science": "physics, chemistry, biology, mathematics, climate research",
+    "health": "medicine, clinical care, drug discovery, patients",
+    "art": "image generation, design, visual artists",
+    "music": "music generation, audio, voice",
+    "video": "video generation, film, animation",
+    "robotics": "robots, drones, embodied AI",
+    "cars": "autonomous driving, vehicles",
+    "education": "schools, students, teaching, training people",
+}
+SYSTEM = SYSTEM.format(topics="\n".join(
+    f"     {key} — {_TOPIC_GLOSS[key]}" for key in TOPIC_ORDER))
 
 # 이미지 카탈로그가 있을 때만 SYSTEM 뒤에 붙는 규칙. 별도 호출이 아니라 **같은 배치에 얹는다** —
 # 판정에 필요한 정보(제목/본문)가 이미 프롬프트에 있어서 추가 호출은 순수 낭비다.
@@ -113,7 +140,7 @@ significance. Return ONLY a JSON array, no prose, no markdown fences. Each eleme
 _IMAGE_RULES = """
 
 ADDITIONALLY, add one more field to every element:
-6. image_key — the brand mark to show beside the story. Rules:
+7. image_key — the brand mark to show beside the story. Rules:
    - Pick the mark of the story's SUBJECT (the company/lab/org the story is ABOUT), not the
      publisher that reported it. A TechCrunch story about OpenAI gets "openai", not
      "techcrunch_ai".
@@ -128,7 +155,7 @@ Catalog (key — what it depicts):
 
 So each element becomes:
 {{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
- "headline": "...", "image_key": "..." or null}}"""
+ "headline": "...", "topics": ["..."], "image_key": "..." or null}}"""
 
 
 def _system_instruction(image_catalog: dict[str, str] | None) -> str:
@@ -253,7 +280,64 @@ def _merge_row(it: dict, row: dict, image_catalog: dict[str, str] | None = None)
     # 그대로 저장하면 렌더가 매번 없는 파일을 찾는다 -> 여기서 걸러 소스/제네릭 폴백으로 보낸다.
     key = _clean_str(row.get("image_key")).lower()
     it["image_key"] = key if key in (image_catalog or {}) else ""
+    it["topics"] = clean_topics(row.get("topics"))
     it["_enriched"] = True
+
+
+def clean_topics(raw) -> list[str]:
+    """모델이 준 토픽을 어휘에 맞춰 정리. 모르는 값은 버리고, 중복 제거, 상한까지 자른다.
+
+    image_key 와 같은 이유로 검증한다 — 모델은 그럴듯한 값을 지어내고("ai_safety", "Music"),
+    그대로 저장하면 pill 에 없는 토픽이 붙은 아이템이 어떤 필터에도 안 걸린다.
+    상한(config.MAX_TOPICS_PER_ITEM)이 없으면 모델이 관대하게 5개씩 달아서
+    모든 pill 이 모든 기사를 담고 필터가 아무것도 구분하지 못한다.
+    순서는 TOPIC_ORDER 로 정규화한다 — 저장값이 모델의 나열 순서에 흔들리면
+    같은 아이템의 data-topics 가 실행마다 달라진다."""
+    if not isinstance(raw, list):
+        return []
+    picked = {t.strip().lower() for t in raw if isinstance(t, str)}
+    return [t for t in TOPIC_ORDER if t in picked][:MAX_TOPICS_PER_ITEM]
+
+
+# 토픽만 매기는 프롬프트(백필용). 요약/랭킹을 다시 시키지 않는 게 요점이다 —
+# 아카이브 497건은 이미 요약·significance 가 있고, 그걸 다시 생성하면 비싸질 뿐 아니라
+# 과거 다이제스트의 내용이 바뀐다(재렌더가 원본과 달라지면 안 된다).
+TOPIC_ONLY_SYSTEM = """You tag AI-news stories by subject domain.
+
+For EACH item return 0 to 3 topics describing WHAT THE STORY IS ABOUT.
+Allowed values ONLY (copy exactly, never invent, never translate):
+{topics}
+
+Return [] when none clearly applies — do NOT stretch to fill the list. Most items get 0-2.
+Return ONLY a JSON array, no prose, no markdown fences. Each element:
+{{"id": "...", "topics": ["..."]}}"""
+
+
+def classify_topics(items: list[dict], batch_size: int = 60,
+                    model: str | None = None) -> dict[str, list[str]]:
+    """{item_id: [토픽...]}. 실패한 배치는 건너뛴다 — 안 돌아온 id 는 그냥 빠지고,
+    호출부는 그걸 '아직 미분류'로 남겨 다음 실행에서 다시 시도한다(재개 가능)."""
+    if not items:
+        return {}
+    client = genai.Client()
+    model_name = model or config.MODEL
+    system = TOPIC_ONLY_SYSTEM.format(topics="\n".join(
+        f"  {key} — {_TOPIC_GLOSS[key]}" for key in TOPIC_ORDER))
+    out: dict[str, list[str]] = {}
+    batches = [items[i:i + batch_size] for i in range(0, len(items), batch_size)]
+    for n, chunk in enumerate(batches, 1):
+        try:
+            rows = _call_batch(client, model_name, chunk, system)
+        except Exception as e:  # noqa: BLE001
+            print(f"      ⚠️ 배치 {n}/{len(batches)} 실패 — {len(chunk)}건 건너뜀 "
+                  f"({type(e).__name__}: {e})")
+            continue
+        for row in rows:
+            item_id = row.get("id")
+            if item_id:
+                out[item_id] = clean_topics(row.get("topics"))
+        print(f"      배치 {n}/{len(batches)} 완료 (누적 {len(out)}건)")
+    return out
 
 
 def _thinking_config(model: str) -> types.ThinkingConfig:

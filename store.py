@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS items (
     thread_parent_id TEXT DEFAULT '',   -- 같은 스토리의 '앞 이야기' items.id (없으면 '')
     image_key    TEXT DEFAULT '',       -- LLM 이 고른 마크 키(images.catalog). 비면 소스/제네릭 폴백
     link_status  TEXT DEFAULT '',       -- linkcheck.py 사후 점검 결과. ''=미점검 (DEAD_LINK_STATUSES 참고)
-    link_checked_at TEXT DEFAULT ''     -- 마지막 점검 시각(ISO). ''=한 번도 안 봄
+    link_checked_at TEXT DEFAULT '',    -- 마지막 점검 시각(ISO). ''=한 번도 안 봄
+    topics       TEXT DEFAULT '[]'      -- 홈 필터용 토픽 키 (JSON 배열, config.TOPIC_ORDER)
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -102,6 +103,7 @@ _MIGRATIONS = [
     ("image_key", "ALTER TABLE items ADD COLUMN image_key TEXT DEFAULT ''"),
     ("link_status", "ALTER TABLE items ADD COLUMN link_status TEXT DEFAULT ''"),
     ("link_checked_at", "ALTER TABLE items ADD COLUMN link_checked_at TEXT DEFAULT ''"),
+    ("topics", "ALTER TABLE items ADD COLUMN topics TEXT DEFAULT '[]'"),
 ]
 
 # `linkcheck.py` 가 기록하는 값 중 **렌더에서 링크를 떼는** 것들.
@@ -257,8 +259,8 @@ class Store:
                 """INSERT OR REPLACE INTO items
                    (id, source_id, category, title, headline, url, summary, significance,
                     is_major, published, fetched_at, digest_date, is_published, drop_reason,
-                    cluster_sources, cluster_size, thread_parent_id, image_key)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    cluster_sources, cluster_size, thread_parent_id, image_key, topics)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     it["id"], it["source_id"], it["category"], it["title"],
                     it.get("headline", ""), it["url"],
@@ -270,6 +272,7 @@ class Store:
                     int(it.get("cluster_size", 1) or 1),
                     it.get("thread_parent_id") or "",
                     it.get("image_key") or "",
+                    json.dumps(it.get("topics") or [], ensure_ascii=False),
                 ),
             )
         self.conn.commit()
@@ -307,11 +310,15 @@ class Store:
         덮어썼음) all_items/dropped_items 는 원시 문자열을 그대로 흘려보냈다."""
         it = dict(row)
         it["is_major"] = bool(it.get("is_major", 0))
-        raw = it.get("cluster_sources")
-        try:
-            it["cluster_sources"] = json.loads(raw) if raw else []
-        except (json.JSONDecodeError, TypeError):
-            it["cluster_sources"] = []
+        for key in ("cluster_sources", "topics"):
+            if key not in it:
+                continue
+            raw = it.get(key)
+            try:
+                parsed = json.loads(raw) if raw else []
+            except (json.JSONDecodeError, TypeError):
+                parsed = []
+            it[key] = parsed if isinstance(parsed, list) else []
         it["cluster_size"] = int(it.get("cluster_size") or 1)
         return it
 
@@ -322,11 +329,30 @@ class Store:
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, cluster_sources, cluster_size, thread_parent_id,
-                      image_key, link_status
+                      image_key, link_status, topics
                FROM items WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
         return [self._row_to_item(r) for r in rows]
+
+    # ---- 토픽 백필 (backfill_topics.py) ----
+    def items_missing_topics(self, limit: int | None = None) -> list[dict]:
+        """토픽이 아직 안 붙은 게재분. `'[]'`/NULL 만 고르므로 중단 후 재개해도 안전하다."""
+        sql = ("SELECT id, title, headline, summary, category FROM items "
+               "WHERE is_published=1 AND (topics IS NULL OR topics='' OR topics='[]') "
+               "ORDER BY digest_date DESC")
+        if limit:
+            sql += f" LIMIT {int(limit)}"
+        return [dict(r) for r in self.conn.execute(sql)]
+
+    def record_topics(self, assignments: list[tuple[str, list[str]]]) -> int:
+        """[(item_id, [토픽...])] 기록. 검증은 호출부(llm) 책임 — 여기선 저장만 한다."""
+        for item_id, topics in assignments:
+            self.conn.execute(
+                "UPDATE items SET topics=? WHERE id=?",
+                (json.dumps(topics or [], ensure_ascii=False), item_id))
+        self.conn.commit()
+        return len(assignments)
 
     # ---- 링크 사후 점검 (linkcheck.py) ----
     def links_to_check(self, since: str = "", recheck_days: int | None = None) -> list[dict]:
@@ -452,7 +478,7 @@ class Store:
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, digest_date, cluster_sources, cluster_size,
-                      thread_parent_id, image_key, link_status FROM items
+                      thread_parent_id, image_key, link_status, topics FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()

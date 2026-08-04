@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 14 · 30 Mar – 05 Apr 2026 · 14 stories · archived digest</div>
   <h1 class="week-headline">OpenAI raises $122 billion as Google releases Gemma 4</h1>
   <div class="stat-band">
@@ -28,47 +28,79 @@
     <div class="stat-col"><div class="stat-num">$122B</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 14</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/accelerating-the-next-phase-ai" title="Accelerating the next phase of AI">Accelerating the next phase of AI</a>
-      <p class="week-lead-dek">OpenAI has raised $122 billion in new funding to support global expansion and infrastructure development. These funds are designated for advancing next-generation compute and meeting rising enterprise demand for their AI suite.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money chips">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/accelerating-the-next-phase-ai" title="Accelerating the next phase of AI">Accelerating the next phase of AI</a>
+        <p class="week-lead-dek">OpenAI has raised $122 billion in new funding to support global expansion and infrastructure development. These funds are designated for advancing next-generation compute and meeting rising enterprise demand for their AI suite.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/" title="Gemma 4: Byte for byte, the most capable open models">Gemma 4: Byte for byte, the most capable open models</a>
-      <p class="week-sec-dek">Google DeepMind has unveiled Gemma 4, their most capable open models to date. These models are specifically engineered to excel at advanced reasoning and agentic tasks.</p>
-      
+      <div class="week-sec-item" data-topics="">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
+        <a class="week-sec-title" href="https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/" title="Gemma 4: Byte for byte, the most capable open models">Gemma 4: Byte for byte, the most capable open models</a>
+        <p class="week-sec-dek">Google DeepMind has unveiled Gemma 4, their most capable open models to date. These models are specifically engineered to excel at advanced reasoning and agentic tasks.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/gemma4" title="Welcome Gemma 4: Frontier multimodal intelligence on device"><span class="week-rest-num">03</span><span class="week-rest-title">Welcome Gemma 4: Frontier multimodal intelligence on device</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/gemma4" title="Welcome Gemma 4: Frontier multimodal intelligence on device" data-topics=""><span class="week-rest-num">03</span><span class="week-rest-title">Welcome Gemma 4: Frontier multimodal intelligence on device</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/australia-MOU" title="Australian government and Anthropic sign MOU for AI safety and research"><span class="week-rest-num">04</span><span class="week-rest-title">Australian government and Anthropic sign MOU for AI safety and research</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/australia-MOU" title="Australian government and Anthropic sign MOU for AI safety and research" data-topics="government health education"><span class="week-rest-num">04</span><span class="week-rest-title">Australian government and Anthropic sign MOU for AI safety and research</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gradient-labs" title="Gradient Labs gives every bank customer an AI account manager"><span class="week-rest-num">05</span><span class="week-rest-title">Gradient Labs gives every bank customer an AI account manager</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gradient-labs" title="Gradient Labs gives every bank customer an AI account manager" data-topics=""><span class="week-rest-num">05</span><span class="week-rest-title">Gradient Labs gives every bank customer an AI account manager</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-vision" title="Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents"><span class="week-rest-num">06</span><span class="week-rest-title">Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-vision" title="Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents" data-topics=""><span class="week-rest-num">06</span><span class="week-rest-title">Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/OpenMed/training-mrna-models-25-species" title="Training mRNA Language Models Across 25 Species for $165"><span class="week-rest-num">07</span><span class="week-rest-title">Training mRNA Language Models Across 25 Species for $165</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/OpenMed/training-mrna-models-25-species" title="Training mRNA Language Models Across 25 Species for $165" data-topics="science health"><span class="week-rest-num">07</span><span class="week-rest-title">Training mRNA Language Models Across 25 Species for $165</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-acquires-tbpn" title="OpenAI acquires TBPN"><span class="week-rest-num">08</span><span class="week-rest-title">OpenAI acquires TBPN</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-acquires-tbpn" title="OpenAI acquires TBPN" data-topics="money"><span class="week-rest-num">08</span><span class="week-rest-title">OpenAI acquires TBPN</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/tiiuae/falcon-perception" title="Falcon Perception"><span class="week-rest-num">09</span><span class="week-rest-title">Falcon Perception</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/tiiuae/falcon-perception" title="Falcon Perception" data-topics=""><span class="week-rest-num">09</span><span class="week-rest-title">Falcon Perception</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/how-ai-is-ushering-in-the-next-era-of-risk-review-at-meta/" title="How AI Is Ushering in the Next Era of Risk Review at Meta"><span class="week-rest-num">10</span><span class="week-rest-title">How AI Is Ushering in the Next Era of Risk Review at Meta</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/how-ai-is-ushering-in-the-next-era-of-risk-review-at-meta/" title="How AI Is Ushering in the Next Era of Risk Review at Meta" data-topics="security"><span class="week-rest-num">10</span><span class="week-rest-title">How AI Is Ushering in the Next Era of Risk Review at Meta</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/components-of-a-coding-agent" title="Components of A Coding Agent"><span class="week-rest-num">11</span><span class="week-rest-title">Components of A Coding Agent</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/components-of-a-coding-agent" title="Components of A Coding Agent" data-topics="code"><span class="week-rest-num">11</span><span class="week-rest-title">Components of A Coding Agent</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/codex-flexible-pricing-for-teams" title="Codex now offers more flexible pricing for teams"><span class="week-rest-num">12</span><span class="week-rest-title">Codex now offers more flexible pricing for teams</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/codex-flexible-pricing-for-teams" title="Codex now offers more flexible pricing for teams" data-topics="code"><span class="week-rest-num">12</span><span class="week-rest-title">Codex now offers more flexible pricing for teams</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/introducing-gradio-server" title="Any Custom Frontend with Gradio&#39;s Backend"><span class="week-rest-num">13</span><span class="week-rest-title">Any Custom Frontend with Gradio&#39;s Backend</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/introducing-gradio-server" title="Any Custom Frontend with Gradio&#39;s Backend" data-topics="code"><span class="week-rest-num">13</span><span class="week-rest-title">Any Custom Frontend with Gradio&#39;s Backend</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/trl-v1" title="TRL v1.0: Post-Training Library Built to Move with the Field"><span class="week-rest-num">14</span><span class="week-rest-title">TRL v1.0: Post-Training Library Built to Move with the Field</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/trl-v1" title="TRL v1.0: Post-Training Library Built to Move with the Field" data-topics="code"><span class="week-rest-num">14</span><span class="week-rest-title">TRL v1.0: Post-Training Library Built to Move with the Field</span></a>
       
     </div>
   </div>
@@ -116,4 +148,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

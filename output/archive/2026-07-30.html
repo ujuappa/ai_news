@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Thursday · 30 July 2026 · 25 stories · archived digest</div>
   <h1 class="week-headline">EU Commits $11.4 Billion to AI Gigafactories, US Funds Chip R&amp;D</h1>
   <div class="stat-band">
@@ -28,69 +28,101 @@
     <div class="stat-col"><div class="stat-num">$3.1B</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 25</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 10</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 7</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 3</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.nist.gov/news-events/news/2026/07/department-commerce-announces-letters-intent-7-companies-874-million" title="Department of Commerce Announces Letters of Intent With 7 Companies for $874 Million to Accelerate Semiconductor R&amp;D for the Compute Supply Chain">Department of Commerce Announces Letters of Intent With 7 Companies for $874 Million to Accelerate Semiconductor R&amp;D for the Compute Supply Chain</a>
-      <p class="week-lead-dek">The Department of Commerce announced $874 million in federal incentives under the CHIPS and Science Act, distributed through letters of intent with 7 companies. These funds aim to accelerate semiconductor R&amp;D for the compute supply chain, fostering advanced computing and AI systems for various industries. The investments will support technologies like integrated photonics, compute architectures, advanced packaging, and memory to boost U.S. leadership in semiconductors.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money chips government">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.nist.gov/news-events/news/2026/07/department-commerce-announces-letters-intent-7-companies-874-million" title="Department of Commerce Announces Letters of Intent With 7 Companies for $874 Million to Accelerate Semiconductor R&amp;D for the Compute Supply Chain">Department of Commerce Announces Letters of Intent With 7 Companies for $874 Million to Accelerate Semiconductor R&amp;D for the Compute Supply Chain</a>
+        <p class="week-lead-dek">The Department of Commerce announced $874 million in federal incentives under the CHIPS and Science Act, distributed through letters of intent with 7 companies. These funds aim to accelerate semiconductor R&amp;D for the compute supply chain, fostering advanced computing and AI systems for various industries. The investments will support technologies like integrated photonics, compute architectures, advanced packaging, and memory to boost U.S. leadership in semiconductors.</p>
+        
+        <div class="week-lead-byline">gemini_grounding · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">gemini_grounding · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.courthousenews.com/eu-lays-out-11-4-billion-for-7-ai-gigafactories-as-it-aims-to-catch-up-with-us-and-china/" title="EU lays out $11.4 billion for 7 AI gigafactories as it aims to catch up with US and China">EU to Invest $11.4 Billion in 7 AI Gigafactories</a>
-      <p class="week-sec-dek">The European Union is investing $11.4 billion to establish seven AI gigafactories, aiming to boost its AI computing power and reduce reliance on foreign providers. These facilities are planned to house at least 100,000 cutting-edge AI chips each, quadrupling the EU&#39;s current data center capacity. This initiative seeks to attract an additional $22.8 billion in private investment to help Europe compete with the U.S. and China in AI development.</p>
-      
+      <div class="week-sec-item" data-topics="money chips government">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://www.courthousenews.com/eu-lays-out-11-4-billion-for-7-ai-gigafactories-as-it-aims-to-catch-up-with-us-and-china/" title="EU lays out $11.4 billion for 7 AI gigafactories as it aims to catch up with US and China">EU to Invest $11.4 Billion in 7 AI Gigafactories</a>
+        <p class="week-sec-dek">The European Union is investing $11.4 billion to establish seven AI gigafactories, aiming to boost its AI computing power and reduce reliance on foreign providers. These facilities are planned to house at least 100,000 cutting-edge AI chips each, quadrupling the EU&#39;s current data center capacity. This initiative seeks to attract an additional $22.8 billion in private investment to help Europe compete with the U.S. and China in AI development.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the day</div>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/" title="Gemini Robotics 2 brings whole body intelligence to robots"><span class="week-rest-num">03</span><span class="week-rest-title">Gemini Robotics 2 brings whole body intelligence to robots</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/" title="Gemini Robotics 2 brings whole body intelligence to robots" data-topics="robotics"><span class="week-rest-num">03</span><span class="week-rest-title">Gemini Robotics 2 brings whole body intelligence to robots</span></a>
       
-      <a class="week-rest-row" href="https://siliconangle.com/2026/07/23/databricks-microsoft-expand-azure-partnership-2030s/" title="Databricks and Microsoft expand Azure partnership into the 2030s"><span class="week-rest-num">04</span><span class="week-rest-title">Databricks and Microsoft Expand Azure Partnership into 2030s</span></a>
+      <a class="week-rest-row" href="https://siliconangle.com/2026/07/23/databricks-microsoft-expand-azure-partnership-2030s/" title="Databricks and Microsoft expand Azure partnership into the 2030s" data-topics="money chips"><span class="week-rest-num">04</span><span class="week-rest-title">Databricks and Microsoft Expand Azure Partnership into 2030s</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/nscale-buys-anyscale-as-it-seeks-to-own-more-of-the-ai-compute-stack/" title="Nscale buys Anyscale as it seeks to own more of the AI compute stack"><span class="week-rest-num">05</span><span class="week-rest-title">Nscale buys Anyscale as it seeks to own more of the AI compute stack</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/nscale-buys-anyscale-as-it-seeks-to-own-more-of-the-ai-compute-stack/" title="Nscale buys Anyscale as it seeks to own more of the AI compute stack" data-topics="code money"><span class="week-rest-num">05</span><span class="week-rest-title">Nscale buys Anyscale as it seeks to own more of the AI compute stack</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration/" title="Gemini Robotics ER 2: powering robotics with video understanding, task orchestration, and multi-robot collaboration"><span class="week-rest-num">06</span><span class="week-rest-title">Gemini Robotics ER 2: powering robotics with video understanding, task orchestration, and multi-robot collaboration</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration/" title="Gemini Robotics ER 2: powering robotics with video understanding, task orchestration, and multi-robot collaboration" data-topics="video robotics"><span class="week-rest-num">06</span><span class="week-rest-title">Gemini Robotics ER 2: powering robotics with video understanding, task orchestration, and multi-robot collaboration</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/29/mark-zuckerberg-predicts-that-billions-of-people-will-have-personal-ai-agents-in-five-years/" title="Mark Zuckerberg predicts that billions of people will have personal AI agents in five years"><span class="week-rest-num">07</span><span class="week-rest-title">Zuckerberg: Billions of People Will Have Personal AI Agents</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/29/mark-zuckerberg-predicts-that-billions-of-people-will-have-personal-ai-agents-in-five-years/" title="Mark Zuckerberg predicts that billions of people will have personal AI agents in five years" data-topics="money"><span class="week-rest-num">07</span><span class="week-rest-title">Zuckerberg: Billions of People Will Have Personal AI Agents</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores" title="How enabling two settings tripled our scores on the ARC-AGI-3 benchmark"><span class="week-rest-num">08</span><span class="week-rest-title">How enabling two settings tripled our scores on the ARC-AGI-3 benchmark</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores" title="How enabling two settings tripled our scores on the ARC-AGI-3 benchmark" data-topics="code"><span class="week-rest-num">08</span><span class="week-rest-title">How enabling two settings tripled our scores on the ARC-AGI-3 benchmark</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency" title="How GPT-5.6 fuses frontier intelligence with frontier efficiency"><span class="week-rest-num">09</span><span class="week-rest-title">How GPT-5.6 fuses frontier intelligence with frontier efficiency</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency" title="How GPT-5.6 fuses frontier intelligence with frontier efficiency" data-topics="code money"><span class="week-rest-num">09</span><span class="week-rest-title">How GPT-5.6 fuses frontier intelligence with frontier efficiency</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/okta-buys-ai-security-startup-permiso-source-says-for-about-200m/" title="Okta buys AI security startup Permiso; source says for about $200M"><span class="week-rest-num">10</span><span class="week-rest-title">Okta buys AI security startup Permiso; source says for about $200M</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/okta-buys-ai-security-startup-permiso-source-says-for-about-200m/" title="Okta buys AI security startup Permiso; source says for about $200M" data-topics="money security"><span class="week-rest-num">10</span><span class="week-rest-title">Okta buys AI security startup Permiso; source says for about $200M</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/forward-deployed-engineers-are-the-ai-industrys-latest-talent-obsession/" title="Forward-deployed engineers are the AI industry’s latest talent obsession"><span class="week-rest-num">11</span><span class="week-rest-title">Forward-Deployed Engineers: AI Industry&#39;s Talent Obsession</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/forward-deployed-engineers-are-the-ai-industrys-latest-talent-obsession/" title="Forward-deployed engineers are the AI industry’s latest talent obsession" data-topics="code"><span class="week-rest-num">11</span><span class="week-rest-title">Forward-Deployed Engineers: AI Industry&#39;s Talent Obsession</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/dili-raises-15-million-to-bring-ai-compliance-to-the-infrastructure-boom/" title="Dili raises $21.7M to bring AI compliance to the infrastructure boom"><span class="week-rest-num">12</span><span class="week-rest-title">Dili Raises $21.7M for AI Compliance in Infrastructure</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/dili-raises-15-million-to-bring-ai-compliance-to-the-infrastructure-boom/" title="Dili raises $21.7M to bring AI compliance to the infrastructure boom" data-topics="money government"><span class="week-rest-num">12</span><span class="week-rest-title">Dili Raises $21.7M for AI Compliance in Infrastructure</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-academic-researchers" title="Accelerating scientific discovery with ChatGPT for Academic Researchers"><span class="week-rest-num">13</span><span class="week-rest-title">Accelerating scientific discovery with ChatGPT for Academic Researchers</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-academic-researchers" title="Accelerating scientific discovery with ChatGPT for Academic Researchers" data-topics="science education"><span class="week-rest-num">13</span><span class="week-rest-title">Accelerating scientific discovery with ChatGPT for Academic Researchers</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control/" title="We’re launching Lyria 3.5 in Google Flow Music, with advances across musicality, lyrics, vocals, and creative control"><span class="week-rest-num">14</span><span class="week-rest-title">We’re launching Lyria 3.5 in Google Flow Music, with advances across musicality, lyrics, vocals, and creative control</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control/" title="We’re launching Lyria 3.5 in Google Flow Music, with advances across musicality, lyrics, vocals, and creative control" data-topics="music"><span class="week-rest-num">14</span><span class="week-rest-title">We’re launching Lyria 3.5 in Google Flow Music, with advances across musicality, lyrics, vocals, and creative control</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26119" title="Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models"><span class="week-rest-num">15</span><span class="week-rest-title">Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26119" title="Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models" data-topics="science"><span class="week-rest-num">15</span><span class="week-rest-title">Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26155" title="ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science"><span class="week-rest-num">16</span><span class="week-rest-title">ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26155" title="ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science" data-topics="code health"><span class="week-rest-num">16</span><span class="week-rest-title">ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26160" title="GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning"><span class="week-rest-num">17</span><span class="week-rest-title">GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26160" title="GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning" data-topics="health"><span class="week-rest-num">17</span><span class="week-rest-title">GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26490" title="EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks"><span class="week-rest-num">18</span><span class="week-rest-title">EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26490" title="EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks" data-topics="code science"><span class="week-rest-num">18</span><span class="week-rest-title">EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26946" title="Belief-Guided Decision Making with Uncertainty Gating in the Game of Go"><span class="week-rest-num">19</span><span class="week-rest-title">Belief-Guided Decision Making with Uncertainty Gating in the Game of Go</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26946" title="Belief-Guided Decision Making with Uncertainty Gating in the Game of Go" data-topics=""><span class="week-rest-num">19</span><span class="week-rest-title">Belief-Guided Decision Making with Uncertainty Gating in the Game of Go</span></a>
       
-      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26059" title="Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning"><span class="week-rest-num">20</span><span class="week-rest-title">Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning</span></a>
+      <a class="week-rest-row" href="https://arxiv.org/abs/2607.26059" title="Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning" data-topics=""><span class="week-rest-num">20</span><span class="week-rest-title">Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/29/the-hugging-face-ai-break-in-as-told-through-an-increasingly-committed-bear-metaphor/" title="The Hugging Face break-in explained"><span class="week-rest-num">21</span><span class="week-rest-title">The Hugging Face break-in explained</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/29/the-hugging-face-ai-break-in-as-told-through-an-increasingly-committed-bear-metaphor/" title="The Hugging Face break-in explained" data-topics="security"><span class="week-rest-num">21</span><span class="week-rest-title">The Hugging Face break-in explained</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/google-says-it-fixed-more-chrome-bugs-in-june-than-over-the-past-two-years-thanks-to-ai/" title="Google says it fixed more Chrome bugs in June than over the past two years, thanks to AI"><span class="week-rest-num">22</span><span class="week-rest-title">Google: AI Fixed More Chrome Bugs in June Than 2 Years</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/google-says-it-fixed-more-chrome-bugs-in-june-than-over-the-past-two-years-thanks-to-ai/" title="Google says it fixed more Chrome bugs in June than over the past two years, thanks to AI" data-topics="code security"><span class="week-rest-num">22</span><span class="week-rest-title">Google: AI Fixed More Chrome Bugs in June Than 2 Years</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6" title="Advancing the price-performance frontier with GPT-5.6"><span class="week-rest-num">23</span><span class="week-rest-title">OpenAI Lowers Pricing for GPT-5.6 Luna and Terra</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6" title="Advancing the price-performance frontier with GPT-5.6" data-topics="money"><span class="week-rest-num">23</span><span class="week-rest-title">OpenAI Lowers Pricing for GPT-5.6 Luna and Terra</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/linkedin-adds-a-button-to-report-ai-generated-slop/" title="LinkedIn adds a button to report AI-generated ‘slop’"><span class="week-rest-num">24</span><span class="week-rest-title">LinkedIn Adds &#39;AI Slop&#39; Report Button</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/linkedin-adds-a-button-to-report-ai-generated-slop/" title="LinkedIn adds a button to report AI-generated ‘slop’" data-topics=""><span class="week-rest-num">24</span><span class="week-rest-title">LinkedIn Adds &#39;AI Slop&#39; Report Button</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Dharma-AI/gpu-management" title="GPU Management: Why Idle GPUs Are the New Grounded Aircraft"><span class="week-rest-num">25</span><span class="week-rest-title">GPU Management: Idle GPUs Are New Grounded Aircraft</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Dharma-AI/gpu-management" title="GPU Management: Why Idle GPUs Are the New Grounded Aircraft" data-topics="money chips"><span class="week-rest-num">25</span><span class="week-rest-title">GPU Management: Idle GPUs Are New Grounded Aircraft</span></a>
       
     </div>
   </div>
@@ -138,4 +170,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

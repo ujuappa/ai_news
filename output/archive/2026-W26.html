@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 26 · 22–28 June 2026 · 13 stories · archived digest</div>
   <h1 class="week-headline">OpenAI Previews GPT-5.6 Sol and Debuts Custom Jalapeño Inference Chip</h1>
   <div class="stat-band">
@@ -28,45 +28,77 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 13</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 6</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/previewing-gpt-5-6-sol" title="Previewing GPT-5.6 Sol: a next-generation model">Previewing GPT-5.6 Sol: a next-generation model</a>
-      <p class="week-lead-dek">OpenAI has previewed GPT-5.6 Sol, a new frontier model focusing on improved performance in scientific research, cybersecurity, and advanced coding tasks.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code security science">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/previewing-gpt-5-6-sol" title="Previewing GPT-5.6 Sol: a next-generation model">Previewing GPT-5.6 Sol: a next-generation model</a>
+        <p class="week-lead-dek">OpenAI has previewed GPT-5.6 Sol, a new frontier model focusing on improved performance in scientific research, cybersecurity, and advanced coding tasks.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash/" title="Introducing computer use in Gemini 3.5 Flash">Introducing computer use in Gemini 3.5 Flash</a>
-      <p class="week-sec-dek">Google DeepMind has introduced new computer-use capabilities for the Gemini 3.5 Flash model, enabling the AI to interact with software interfaces.</p>
-      
+      <div class="week-sec-item" data-topics="">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
+        <a class="week-sec-title" href="https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash/" title="Introducing computer use in Gemini 3.5 Flash">Introducing computer use in Gemini 3.5 Flash</a>
+        <p class="week-sec-dek">Google DeepMind has introduced new computer-use capabilities for the Gemini 3.5 Flash model, enabling the AI to interact with software interfaces.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip" title="OpenAI and Broadcom unveil LLM-optimized inference chip"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI and Broadcom unveil LLM-optimized inference chip</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip" title="OpenAI and Broadcom unveil LLM-optimized inference chip" data-topics="chips"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI and Broadcom unveil LLM-optimized inference chip</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gpt-5-immunology-mystery" title="How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery"><span class="week-rest-num">04</span><span class="week-rest-title">How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gpt-5-immunology-mystery" title="How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery" data-topics="science health"><span class="week-rest-num">04</span><span class="week-rest-title">How GPT-5 helped immunologist Derya Unutmaz solve a 3-year-old mystery</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/daybreak-securing-the-world" title="Daybreak: Tools for securing every organization in the world"><span class="week-rest-num">05</span><span class="week-rest-title">Daybreak: Tools for securing every organization in the world</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/daybreak-securing-the-world" title="Daybreak: Tools for securing every organization in the world" data-topics="code security"><span class="week-rest-num">05</span><span class="week-rest-title">Daybreak: Tools for securing every organization in the world</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/how-agents-are-transforming-work" title="How agents are transforming work"><span class="week-rest-num">06</span><span class="week-rest-title">How agents are transforming work</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/how-agents-are-transforming-work" title="How agents are transforming work" data-topics=""><span class="week-rest-num">06</span><span class="week-rest-title">How agents are transforming work</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/helping-build-shared-standards-for-advanced-ai" title="Helping build shared standards for advanced AI"><span class="week-rest-num">07</span><span class="week-rest-title">Helping build shared standards for advanced AI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/helping-build-shared-standards-for-advanced-ai" title="Helping build shared standards for advanced AI" data-topics="government"><span class="week-rest-num">07</span><span class="week-rest-title">Helping build shared standards for advanced AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/hp-frontier-partnership" title="HP Inc. launches Frontier strategic partnership with OpenAI"><span class="week-rest-num">08</span><span class="week-rest-title">HP Inc. launches Frontier strategic partnership with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/hp-frontier-partnership" title="HP Inc. launches Frontier strategic partnership with OpenAI" data-topics="code"><span class="week-rest-num">08</span><span class="week-rest-title">HP Inc. launches Frontier strategic partnership with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/using-local-coding-agents" title="Using Local Coding Agents"><span class="week-rest-num">09</span><span class="week-rest-title">Using Local Coding Agents</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/using-local-coding-agents" title="Using Local Coding Agents" data-topics="code"><span class="week-rest-num">09</span><span class="week-rest-title">Using Local Coding Agents</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel" title="Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel"><span class="week-rest-num">10</span><span class="week-rest-title">Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel" title="Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel" data-topics="code"><span class="week-rest-num">10</span><span class="week-rest-title">Accelerating Transformers Fine-Tuning with NVIDIA NeMo AutoModel</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/PaddlePaddle/pp-ocrv6" title="PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters"><span class="week-rest-num">11</span><span class="week-rest-title">PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/PaddlePaddle/pp-ocrv6" title="PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters" data-topics=""><span class="week-rest-num">11</span><span class="week-rest-title">PP-OCRv6 on Hugging Face: 50-Language OCR from 1.5M to 34.5M Parameters</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/vllm-jobs" title="Run a vLLM Server on HF Jobs in One Command"><span class="week-rest-num">12</span><span class="week-rest-title">Run a vLLM Server on HF Jobs in One Command</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/vllm-jobs" title="Run a vLLM Server on HF Jobs in One Command" data-topics="code"><span class="week-rest-num">12</span><span class="week-rest-title">Run a vLLM Server on HF Jobs in One Command</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ffasr-leaderboard" title="Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World"><span class="week-rest-num">13</span><span class="week-rest-title">Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ffasr-leaderboard" title="Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World" data-topics="music"><span class="week-rest-num">13</span><span class="week-rest-title">Introducing the FFASR Leaderboard: Benchmarking ASR in the Real World</span></a>
       
     </div>
   </div>
@@ -114,4 +146,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

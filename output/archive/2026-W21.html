@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 21 · 18–24 May 2026 · 11 stories · archived digest</div>
   <h1 class="week-headline">OpenAI Solves 80-Year-Old Geometry Conjecture as Anthropic Expands Agentic Toolkit</h1>
   <div class="stat-band">
@@ -28,41 +28,73 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 11</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="education">Education 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/anthropic-acquires-stainless" title="Anthropic acquires Stainless">Anthropic acquires Stainless</a>
-      <p class="week-lead-dek">Anthropic has acquired Stainless, a firm specializing in SDKs and MCP server tooling. This acquisition is intended to improve Anthropic&#39;s agentic capabilities by allowing models to interact with more external systems.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code money">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/anthropic-acquires-stainless" title="Anthropic acquires Stainless">Anthropic acquires Stainless</a>
+        <p class="week-lead-dek">Anthropic has acquired Stainless, a firm specializing in SDKs and MCP server tooling. This acquisition is intended to improve Anthropic&#39;s agentic capabilities by allowing models to interact with more external systems.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Research</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/model-disproves-discrete-geometry-conjecture" title="An OpenAI model has disproved a central conjecture in discrete geometry">An OpenAI model has disproved a central conjecture in discrete geometry</a>
-      <p class="week-sec-dek">An OpenAI model has successfully solved the 80-year-old unit distance problem. This achievement represents a significant milestone in AI-driven mathematics by disproving a central conjecture in discrete geometry.</p>
-      
+      <div class="week-sec-item" data-topics="science">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Research</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/model-disproves-discrete-geometry-conjecture" title="An OpenAI model has disproved a central conjecture in discrete geometry">An OpenAI model has disproved a central conjecture in discrete geometry</a>
+        <p class="week-sec-dek">An OpenAI model has successfully solved the 80-year-old unit distance problem. This achievement represents a significant milestone in AI-driven mathematics by disproving a central conjecture in discrete geometry.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-kpmg" title="KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance"><span class="week-rest-num">03</span><span class="week-rest-title">KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-kpmg" title="KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance" data-topics=""><span class="week-rest-num">03</span><span class="week-rest-title">KPMG integrates Claude across its core business and workforce of more than 276,000 in strategic alliance</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/fast-tracking-genetic-leads-to-reverse-cellular-aging/" title="Fast-tracking genetic leads to reverse cellular aging"><span class="week-rest-num">04</span><span class="week-rest-title">Fast-tracking genetic leads to reverse cellular aging</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/fast-tracking-genetic-leads-to-reverse-cellular-aging/" title="Fast-tracking genetic leads to reverse cellular aging" data-topics="science health"><span class="week-rest-num">04</span><span class="week-rest-title">Fast-tracking genetic leads to reverse cellular aging</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-for-singapore" title="Introducing OpenAI for Singapore"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing OpenAI for Singapore</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-for-singapore" title="Introducing OpenAI for Singapore" data-topics="government"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing OpenAI for Singapore</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/dell-codex-enterprise-partnership" title="OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/dell-codex-enterprise-partnership" title="OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments" data-topics="code"><span class="week-rest-num">06</span><span class="week-rest-title">OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks/" title="We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks"><span class="week-rest-num">07</span><span class="week-rest-title">We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks/" title="We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks" data-topics="science"><span class="week-rest-num">07</span><span class="week-rest-title">We’re launching the Google DeepMind Accelerator program in Asia Pacific to tackle environmental risks</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/the-next-phase-of-education-for-countries" title="The next phase of OpenAI’s Education for Countries"><span class="week-rest-num">08</span><span class="week-rest-title">The next phase of OpenAI’s Education for Countries</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/the-next-phase-of-education-for-countries" title="The next phase of OpenAI’s Education for Countries" data-topics="education"><span class="week-rest-num">08</span><span class="week-rest-title">The next phase of OpenAI’s Education for Countries</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/olmoearth-v1-1" title="OlmoEarth v1.1: A more efficient family of Earth observation models"><span class="week-rest-num">09</span><span class="week-rest-title">OlmoEarth v1.1: A more efficient family of Earth observation models</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/olmoearth-v1-1" title="OlmoEarth v1.1: A more efficient family of Earth observation models" data-topics="science"><span class="week-rest-num">09</span><span class="week-rest-title">OlmoEarth v1.1: A more efficient family of Earth observation models</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ettin-reranker" title="Introducing the Ettin Reranker Family"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Ettin Reranker Family</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ettin-reranker" title="Introducing the Ettin Reranker Family" data-topics=""><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Ettin Reranker Family</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers" title="PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend"><span class="week-rest-num">11</span><span class="week-rest-title">PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers" title="PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend" data-topics=""><span class="week-rest-num">11</span><span class="week-rest-title">PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend</span></a>
       
     </div>
   </div>
@@ -110,4 +142,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

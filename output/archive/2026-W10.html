@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 10 · 2–8 March 2026 · 12 stories · archived digest</div>
   <h1 class="week-headline">OpenAI Launches GPT-5.4 While Anthropic Faces National Security Designation</h1>
   <div class="stat-band">
@@ -28,43 +28,75 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 12</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 6</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="art">Art &amp; images 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="robotics">Robotics 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-4" title="Introducing GPT-5.4">Introducing GPT-5.4</a>
-      <p class="week-lead-dek">OpenAI has announced GPT-5.4, a new frontier model optimized for professional tasks such as coding and tool-driven search. The model features a 1M-token context window and improved capabilities for autonomous computer use.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-4" title="Introducing GPT-5.4">Introducing GPT-5.4</a>
+        <p class="week-lead-dek">OpenAI has announced GPT-5.4, a new frontier model optimized for professional tasks such as coding and tool-driven search. The model features a 1M-token context window and improved capabilities for autonomous computer use.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/where-stand-department-war" title="Where things stand with the Department of War">Where things stand with the Department of War</a>
-      <p class="week-sec-dek">On March 4, Anthropic received notification from the Department of War that the company has been officially designated as a supply chain risk to U.S. national security. This represents a significant regulatory development regarding national security and AI.</p>
-      
+      <div class="week-sec-item" data-topics="government security">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://www.anthropic.com/news/where-stand-department-war" title="Where things stand with the Department of War">Where things stand with the Department of War</a>
+        <p class="week-sec-dek">On March 4, Anthropic received notification from the Department of War that the company has been officially designated as a supply chain risk to U.S. national security. This represents a significant regulatory development regarding national security and AI.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-lite-built-for-intelligence-at-scale/" title="Gemini 3.1 Flash-Lite: Built for intelligence at scale"><span class="week-rest-num">03</span><span class="week-rest-title">Gemini 3.1 Flash-Lite: Built for intelligence at scale</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-lite-built-for-intelligence-at-scale/" title="Gemini 3.1 Flash-Lite: Built for intelligence at scale" data-topics=""><span class="week-rest-num">03</span><span class="week-rest-title">Gemini 3.1 Flash-Lite: Built for intelligence at scale</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gpt-5-3-instant" title="GPT-5.3 Instant: Smoother, more useful everyday conversations"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5.3 Instant: Smoother, more useful everyday conversations</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gpt-5-3-instant" title="GPT-5.3 Instant: Smoother, more useful everyday conversations" data-topics=""><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5.3 Instant: Smoother, more useful everyday conversations</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/mozilla-firefox-security" title="Partnering with Mozilla to improve Firefox’s security"><span class="week-rest-num">05</span><span class="week-rest-title">Partnering with Mozilla to improve Firefox’s security</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/mozilla-firefox-security" title="Partnering with Mozilla to improve Firefox’s security" data-topics="code security"><span class="week-rest-num">05</span><span class="week-rest-title">Partnering with Mozilla to improve Firefox’s security</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/reasoning-models-chain-of-thought-controllability" title="Reasoning models struggle to control their chains of thought, and that’s good"><span class="week-rest-num">06</span><span class="week-rest-title">Reasoning models struggle to control their chains of thought, and that’s good</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/reasoning-models-chain-of-thought-controllability" title="Reasoning models struggle to control their chains of thought, and that’s good" data-topics="security"><span class="week-rest-num">06</span><span class="week-rest-title">Reasoning models struggle to control their chains of thought, and that’s good</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-excel" title="Introducing ChatGPT for Excel and new financial data integrations"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing ChatGPT for Excel and new financial data integrations</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-for-excel" title="Introducing ChatGPT for Excel and new financial data integrations" data-topics=""><span class="week-rest-num">07</span><span class="week-rest-title">Introducing ChatGPT for Excel and new financial data integrations</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/codex-security-now-in-research-preview" title="Codex Security: now in research preview"><span class="week-rest-num">08</span><span class="week-rest-title">Codex Security: now in research preview</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/codex-security-now-in-research-preview" title="Codex Security: now in research preview" data-topics="code security"><span class="week-rest-num">08</span><span class="week-rest-title">Codex Security: now in research preview</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/extending-single-minus-amplitudes-to-gravitons" title="Extending single-minus amplitudes to gravitons"><span class="week-rest-num">09</span><span class="week-rest-title">Extending single-minus amplitudes to gravitons</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/extending-single-minus-amplitudes-to-gravitons" title="Extending single-minus amplitudes to gravitons" data-topics="science"><span class="week-rest-num">09</span><span class="week-rest-title">Extending single-minus amplitudes to gravitons</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part3" title="PRX Part 3 — Training a Text-to-Image Model in 24h!"><span class="week-rest-num">10</span><span class="week-rest-title">PRX Part 3 — Training a Text-to-Image Model in 24h!</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part3" title="PRX Part 3 — Training a Text-to-Image Model in 24h!" data-topics="code art"><span class="week-rest-num">10</span><span class="week-rest-title">PRX Part 3 — Training a Text-to-Image Model in 24h!</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms" title="Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations"><span class="week-rest-num">11</span><span class="week-rest-title">Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms" title="Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations" data-topics="code robotics"><span class="week-rest-num">11</span><span class="week-rest-title">Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/modular-diffusers" title="Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/modular-diffusers" title="Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines" data-topics="code art"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Modular Diffusers - Composable Building Blocks for Diffusion Pipelines</span></a>
       
     </div>
   </div>
@@ -112,4 +144,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

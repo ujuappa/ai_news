@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Saturday · 1 August 2026 · 11 stories · archived digest</div>
   <h1 class="week-headline">Anthropic AI Solves 87-Year-Old Math Conjecture</h1>
   <div class="stat-band">
@@ -28,41 +28,73 @@
     <div class="stat-col"><div class="stat-num">$220B</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 11</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="robotics">Robotics 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Research</span></div>
-      <a class="week-lead-title" href="https://scitechdaily.com/ai-helps-crack-an-87-year-old-math-conjecture-with-one-tiny-formula/" title="AI Helps Crack an 87-Year-Old Math Conjecture With One Tiny Formula">AI Disproves 87-Year-Old Jacobian Conjecture</a>
-      <p class="week-lead-dek">An Anthropic mathematician, Levent Alpöge, used the Claude Fable 5 large language model to find a counterexample disproving the Jacobian conjecture for dimensions above two. This 87-year-old mathematical problem, previously a subject of many failed proofs, remains open only for its original two-dimensional form. This discovery highlights the growing role of AI in aiding complex mathematical research.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="science">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Research</span></div>
+        <a class="week-lead-title" href="https://scitechdaily.com/ai-helps-crack-an-87-year-old-math-conjecture-with-one-tiny-formula/" title="AI Helps Crack an 87-Year-Old Math Conjecture With One Tiny Formula">AI Disproves 87-Year-Old Jacobian Conjecture</a>
+        <p class="week-lead-dek">An Anthropic mathematician, Levent Alpöge, used the Claude Fable 5 large language model to find a counterexample disproving the Jacobian conjecture for dimensions above two. This 87-year-old mathematical problem, previously a subject of many failed proofs, remains open only for its original two-dimensional form. This discovery highlights the growing role of AI in aiding complex mathematical research.</p>
+        
+        <div class="week-lead-byline">gemini_grounding (+1 more) · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">gemini_grounding (+1 more) · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
-      <a class="week-sec-title" href="https://techcrunch.com/2026/07/30/investors-love-ai-as-long-as-youre-a-cloud-host/" title="Investors love AI, as long as you’re a cloud host">Amazon Q2 Earnings Beat; AWS Revenue Up 37%</a>
-      <p class="week-sec-dek">Amazon&#39;s Q2 earnings exceeded expectations, with net sales up 20% and AWS revenue growing 37% to $42 billion, causing its stock to rise nearly 10%. The company increased its 2026 capex forecast to $220 billion, demonstrating continued significant investment in data centers and AI infrastructure, including custom chips like Trainium and Graviton. Investors are showing strong support for cloud hosts in the AI economy, contrasting with skepticism towards AI labs without clear revenue streams.</p>
-      
+      <div class="week-sec-item" data-topics="money chips">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
+        <a class="week-sec-title" href="https://techcrunch.com/2026/07/30/investors-love-ai-as-long-as-youre-a-cloud-host/" title="Investors love AI, as long as you’re a cloud host">Amazon Q2 Earnings Beat; AWS Revenue Up 37%</a>
+        <p class="week-sec-dek">Amazon&#39;s Q2 earnings exceeded expectations, with net sales up 20% and AWS revenue growing 37% to $42 billion, causing its stock to rise nearly 10%. The company increased its 2026 capex forecast to $220 billion, demonstrating continued significant investment in data centers and AI infrastructure, including custom chips like Trainium and Graviton. Investors are showing strong support for cloud hosts in the AI economy, contrasting with skepticism towards AI labs without clear revenue streams.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the day</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/building-abundant-intelligence/" title="Building abundant intelligence"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI Reduces GPT-5.6 Model Pricing</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/building-abundant-intelligence/" title="Building abundant intelligence" data-topics=""><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI Reduces GPT-5.6 Model Pricing</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/31/india-is-starting-to-pay-for-apps-not-just-download-them/" title="India is starting to pay for apps, not just download them"><span class="week-rest-num">04</span><span class="week-rest-title">India&#39;s App Market Sees Record $345M Spending in Q2</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/31/india-is-starting-to-pay-for-apps-not-just-download-them/" title="India is starting to pay for apps, not just download them" data-topics=""><span class="week-rest-num">04</span><span class="week-rest-title">India&#39;s App Market Sees Record $345M Spending in Q2</span></a>
       
-      <a class="week-rest-row" href="https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&amp;at_campaign=rss" title="Amazon and Apple just told us more about their AI plans - here are three things we learned"><span class="week-rest-num">05</span><span class="week-rest-title">Amazon, Apple Unveil AI Plans; Investors Demand Results</span></a>
+      <a class="week-rest-row" href="https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&amp;at_campaign=rss" title="Amazon and Apple just told us more about their AI plans - here are three things we learned" data-topics="money chips"><span class="week-rest-num">05</span><span class="week-rest-title">Amazon, Apple Unveil AI Plans; Investors Demand Results</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/" title="Judge says Trump admin still lacks evidence for Anthropic ‘supply-chain risk’ label"><span class="week-rest-num">06</span><span class="week-rest-title">Judge: Trump Lacks Evidence for Anthropic Risk Label</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/" title="Judge says Trump admin still lacks evidence for Anthropic ‘supply-chain risk’ label" data-topics="government"><span class="week-rest-num">06</span><span class="week-rest-title">Judge: Trump Lacks Evidence for Anthropic Risk Label</span></a>
       
-      <a class="week-rest-row" href="https://www.bbc.co.uk/news/articles/c9q90q9qnn2o?at_medium=RSS&amp;at_campaign=rss" title="Data centres could pay hundreds of millions in deposits for power demands"><span class="week-rest-num">07</span><span class="week-rest-title">Ofgem Proposes Deposits for Data Center Power Demands</span></a>
+      <a class="week-rest-row" href="https://www.bbc.co.uk/news/articles/c9q90q9qnn2o?at_medium=RSS&amp;at_campaign=rss" title="Data centres could pay hundreds of millions in deposits for power demands" data-topics="chips government"><span class="week-rest-num">07</span><span class="week-rest-title">Ofgem Proposes Deposits for Data Center Power Demands</span></a>
       
-      <a class="week-rest-row" href="https://www.theguardian.com/technology/2026/aug/01/china-silicon-valley-white-house" title="China’s tech advances are causing chaos from Silicon Valley to the White House"><span class="week-rest-num">08</span><span class="week-rest-title">China&#39;s Tech Advances Disrupt Markets, US Industry</span></a>
+      <a class="week-rest-row" href="https://www.theguardian.com/technology/2026/aug/01/china-silicon-valley-white-house" title="China’s tech advances are causing chaos from Silicon Valley to the White House" data-topics="chips government robotics"><span class="week-rest-num">08</span><span class="week-rest-title">China&#39;s Tech Advances Disrupt Markets, US Industry</span></a>
       
-      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/" title="Anthropic says its own AI models breached three companies during security tests"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic: Claude AI Breached 3 Companies in Tests</span></a>
+      <a class="week-rest-row" href="https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/" title="Anthropic says its own AI models breached three companies during security tests" data-topics="security"><span class="week-rest-num">09</span><span class="week-rest-title">Anthropic: Claude AI Breached 3 Companies in Tests</span></a>
       
-      <a class="week-rest-row" href="https://www.theguardian.com/business/2026/jul/30/lloyds-bank-cut-2bn-costs-part-ai-powered-strategy" title="Lloyds Bank to cut £2bn in costs as part of AI-powered strategy"><span class="week-rest-num">10</span><span class="week-rest-title">Lloyds Bank to Cut £2B in Costs with AI Strategy</span></a>
+      <a class="week-rest-row" href="https://www.theguardian.com/business/2026/jul/30/lloyds-bank-cut-2bn-costs-part-ai-powered-strategy" title="Lloyds Bank to cut £2bn in costs as part of AI-powered strategy" data-topics=""><span class="week-rest-num">10</span><span class="week-rest-title">Lloyds Bank to Cut £2B in Costs with AI Strategy</span></a>
       
-      <a class="week-rest-row" href="https://apnews.com/article/minnesota-artificial-intelligence-nudification-x-elon-musk-deepfake-131184be939d540de093b567b12c9e16" title="Elon Musk&#39;s xAI sues Minnesota over its first-in-the-nation law banning &#39;nudification&#39; technology"><span class="week-rest-num">11</span><span class="week-rest-title">Elon Musk&#39;s xAI Sues Minnesota Over Nudification Law</span></a>
+      <a class="week-rest-row" href="https://apnews.com/article/minnesota-artificial-intelligence-nudification-x-elon-musk-deepfake-131184be939d540de093b567b12c9e16" title="Elon Musk&#39;s xAI sues Minnesota over its first-in-the-nation law banning &#39;nudification&#39; technology" data-topics="government"><span class="week-rest-num">11</span><span class="week-rest-title">Elon Musk&#39;s xAI Sues Minnesota Over Nudification Law</span></a>
       
     </div>
   </div>
@@ -110,4 +142,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

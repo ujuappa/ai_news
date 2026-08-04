@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 25 · 15–21 June 2026 · 16 stories · archived digest</div>
   <h1 class="week-headline">OpenAI and DeepMind Advance AI Specialization in Health and Infrastructure</h1>
   <div class="stat-band">
@@ -28,51 +28,83 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 16</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="robotics">Robotics 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/improving-health-intelligence-in-chatgpt" title="Improving health intelligence in ChatGPT">Improving health intelligence in ChatGPT</a>
-      <p class="week-lead-dek">The new GPT-5.5 Instant model enhances ChatGPT&#39;s health and wellness capabilities. It features improved reasoning, better contextual awareness, and physician-informed evaluations to provide more accurate medical information.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="health">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/improving-health-intelligence-in-chatgpt" title="Improving health intelligence in ChatGPT">Improving health intelligence in ChatGPT</a>
+        <p class="week-lead-dek">The new GPT-5.5 Instant model enhances ChatGPT&#39;s health and wellness capabilities. It features improved reasoning, better contextual awareness, and physician-informed evaluations to provide more accurate medical information.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Research</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/diagnose-rare-childhood-diseases" title="Using AI to help physicians diagnose rare genetic diseases affecting children">Using AI to help physicians diagnose rare genetic diseases affecting children</a>
-      <p class="week-sec-dek">Researchers utilized an OpenAI reasoning model to assist in diagnosing rare genetic diseases in children. The effort successfully identified 18 new diagnoses in clinical cases that previously remained unsolved.</p>
-      
+      <div class="week-sec-item" data-topics="science health">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Research</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/diagnose-rare-childhood-diseases" title="Using AI to help physicians diagnose rare genetic diseases affecting children">Using AI to help physicians diagnose rare genetic diseases affecting children</a>
+        <p class="week-sec-dek">Researchers utilized an OpenAI reasoning model to assist in diagnosing rare genetic diseases in children. The effort successfully identified 18 new diagnoses in clinical cases that previously remained unsolved.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/ai-chemist-improves-reaction" title="A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry"><span class="week-rest-num">03</span><span class="week-rest-title">A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/ai-chemist-improves-reaction" title="A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry" data-topics="science health"><span class="week-rest-num">03</span><span class="week-rest-title">A near-autonomous AI chemist improves a challenging reaction in medicinal chemistry</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/samsung-electronics-chatgpt-codex-deployment" title="Samsung Electronics brings ChatGPT and Codex to employees"><span class="week-rest-num">04</span><span class="week-rest-title">Samsung Electronics brings ChatGPT and Codex to employees</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/samsung-electronics-chatgpt-codex-deployment" title="Samsung Electronics brings ChatGPT and Codex to employees" data-topics="code"><span class="week-rest-num">04</span><span class="week-rest-title">Samsung Electronics brings ChatGPT and Codex to employees</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem" title="Anthropic opens Seoul office"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic opens Seoul office</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/seoul-office-partnerships-korean-ai-ecosystem" title="Anthropic opens Seoul office" data-topics="government"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic opens Seoul office</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/deployment-simulation" title="Predicting model behavior before release by simulating deployment"><span class="week-rest-num">06</span><span class="week-rest-title">Predicting model behavior before release by simulating deployment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/deployment-simulation" title="Predicting model behavior before release by simulating deployment" data-topics="security"><span class="week-rest-num">06</span><span class="week-rest-title">Predicting model behavior before release by simulating deployment</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-life-sci-bench" title="Introducing LifeSciBench"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing LifeSciBench</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-life-sci-bench" title="Introducing LifeSciBench" data-topics="science"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing LifeSciBench</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/unlocking-uk-house-building-with-ai-accelerated-planning/" title="Unlocking UK house-building with AI-accelerated planning"><span class="week-rest-num">08</span><span class="week-rest-title">Unlocking UK house-building with AI-accelerated planning</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/unlocking-uk-house-building-with-ai-accelerated-planning/" title="Unlocking UK house-building with AI-accelerated planning" data-topics="government"><span class="week-rest-num">08</span><span class="week-rest-title">Unlocking UK house-building with AI-accelerated planning</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/securing-the-future-of-ai-agents/" title="Securing the future of AI agents"><span class="week-rest-num">09</span><span class="week-rest-title">Securing the future of AI agents</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/securing-the-future-of-ai-agents/" title="Securing the future of AI agents" data-topics="security"><span class="week-rest-num">09</span><span class="week-rest-title">Securing the future of AI agents</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware" title="From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot"><span class="week-rest-num">10</span><span class="week-rest-title">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware" title="From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot" data-topics="code robotics"><span class="week-rest-num">10</span><span class="week-rest-title">From the Hugging Face Hub to robot hardware with Strands Agents and LeRobot</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/zai-org/glm-52-blog" title="GLM-5.2: Built for Long-Horizon Tasks"><span class="week-rest-num">11</span><span class="week-rest-title">GLM-5.2: Built for Long-Horizon Tasks</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/zai-org/glm-52-blog" title="GLM-5.2: Built for Long-Horizon Tasks" data-topics=""><span class="week-rest-num">11</span><span class="week-rest-title">GLM-5.2: Built for Long-Horizon Tasks</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow/mosaicleaks" title="MosaicLeaks: Can your research agent keep a secret?"><span class="week-rest-num">12</span><span class="week-rest-title">MosaicLeaks: Can your research agent keep a secret?</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow/mosaicleaks" title="MosaicLeaks: Can your research agent keep a secret?" data-topics="security"><span class="week-rest-num">12</span><span class="week-rest-title">MosaicLeaks: Can your research agent keep a secret?</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/chatgpt-enterprise-spend-controls" title="New usage analytics and updated spend controls for enterprises"><span class="week-rest-num">13</span><span class="week-rest-title">New usage analytics and updated spend controls for enterprises</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/chatgpt-enterprise-spend-controls" title="New usage analytics and updated spend controls for enterprises" data-topics=""><span class="week-rest-num">13</span><span class="week-rest-title">New usage analytics and updated spend controls for enterprises</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/peft-beyond-lora" title="Beyond LoRA: Can you beat the most popular fine-tuning technique?"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond LoRA: Can you beat the most popular fine-tuning technique?</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/peft-beyond-lora" title="Beyond LoRA: Can you beat the most popular fine-tuning technique?" data-topics="code"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond LoRA: Can you beat the most popular fine-tuning technique?</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/is-it-agentic-enough" title="Is it agentic enough? Benchmarking open models on your own tooling"><span class="week-rest-num">15</span><span class="week-rest-title">Is it agentic enough? Benchmarking open models on your own tooling</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/is-it-agentic-enough" title="Is it agentic enough? Benchmarking open models on your own tooling" data-topics="code"><span class="week-rest-num">15</span><span class="week-rest-title">Is it agentic enough? Benchmarking open models on your own tooling</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/agentic-resource-discovery-launch" title="Agentic Resource Discovery: Let agents search"><span class="week-rest-num">16</span><span class="week-rest-title">Agentic Resource Discovery: Let agents search</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/agentic-resource-discovery-launch" title="Agentic Resource Discovery: Let agents search" data-topics=""><span class="week-rest-num">16</span><span class="week-rest-title">Agentic Resource Discovery: Let agents search</span></a>
       
     </div>
   </div>
@@ -120,4 +152,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

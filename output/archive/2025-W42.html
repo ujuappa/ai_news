@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 42 · 13–19 October 2025 · 2 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Launches Claude Haiku 4.5 and Open Agent Skills Standard</h1>
   <div class="stat-band">
@@ -28,22 +28,39 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-haiku-4-5" title="Introducing Claude Haiku 4.5">Introducing Claude Haiku 4.5</a>
-      <p class="week-lead-dek">Anthropic has released Claude Haiku 4.5, their latest small-scale language model. The model is now available for use by all customers across their platform.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/claude-haiku-4-5" title="Introducing Claude Haiku 4.5">Introducing Claude Haiku 4.5</a>
+        <p class="week-lead-dek">Anthropic has released Claude Haiku 4.5, their latest small-scale language model. The model is now available for use by all customers across their platform.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Tools &amp; products</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/skills" title="Introducing Agent Skills | Claude by Anthropic">Introducing Agent Skills | Claude by Anthropic</a>
-      <p class="week-sec-dek">Anthropic has introduced organization-wide management for Agent Skills, including a new directory for partner-built tools. Additionally, they have published Agent Skills as an open standard to facilitate cross-platform portability as of December 18, 2025.</p>
-      
+      <div class="week-sec-item" data-topics="code">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Tools &amp; products</span></div>
+        <a class="week-sec-title" href="https://www.anthropic.com/news/skills" title="Introducing Agent Skills | Claude by Anthropic">Introducing Agent Skills | Claude by Anthropic</a>
+        <p class="week-sec-dek">Anthropic has introduced organization-wide management for Agent Skills, including a new directory for partner-built tools. Additionally, they have published Agent Skills as an open standard to facilitate cross-platform portability as of December 18, 2025.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
     </div>
@@ -92,4 +109,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

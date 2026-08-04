@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 24 · 8–14 June 2026 · 20 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Fable 5 pulled as OpenAI files for IPO</h1>
   <div class="stat-band">
@@ -28,59 +28,91 @@
     <div class="stat-col"><div class="stat-num">$150M</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 20</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="education">Education 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/fable-mythos-access" title="Statement on the US government directive to suspend access to Fable 5 and Mythos 5">Statement on the US government directive to suspend access to Fable 5 and Mythos 5</a>
-      <p class="week-lead-dek">Due to a U.S. government export control directive, Anthropic has been forced to suspend all access to Claude Fable 5 and Mythos 5 models globally.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="government">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/fable-mythos-access" title="Statement on the US government directive to suspend access to Fable 5 and Mythos 5">Statement on the US government directive to suspend access to Fable 5 and Mythos 5</a>
+        <p class="week-lead-dek">Due to a U.S. government export control directive, Anthropic has been forced to suspend all access to Claude Fable 5 and Mythos 5 models globally.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/openai-submits-confidential-s-1" title="Confidential submission of draft S-1 to the SEC">Confidential submission of draft S-1 to the SEC</a>
-      <p class="week-sec-dek">OpenAI has confirmed the confidential submission of a draft S-1 filing to the SEC, marking a formal step toward a potential public offering.</p>
-      
+      <div class="week-sec-item" data-topics="money government">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/openai-submits-confidential-s-1" title="Confidential submission of draft S-1 to the SEC">Confidential submission of draft S-1 to the SEC</a>
+        <p class="week-sec-dek">OpenAI has confirmed the confidential submission of a draft S-1 filing to the SEC, marking a formal step toward a potential public offering.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-fable-5-mythos-5" title="Claude Fable 5 and Claude Mythos 5"><span class="week-rest-num">03</span><span class="week-rest-title">Claude Fable 5 and Claude Mythos 5</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-fable-5-mythos-5" title="Claude Fable 5 and Claude Mythos 5" data-topics=""><span class="week-rest-num">03</span><span class="week-rest-title">Claude Fable 5 and Claude Mythos 5</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-partner-network" title="Introducing the OpenAI Partner Network"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing the OpenAI Partner Network</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-partner-network" title="Introducing the OpenAI Partner Network" data-topics="money"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing the OpenAI Partner Network</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-to-acquire-ona" title="OpenAI to acquire Ona"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI to acquire Ona</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-to-acquire-ona" title="OpenAI to acquire Ona" data-topics="code money"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI to acquire Ona</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemma-4-12b-a-unified-encoder-free-multimodal-model/" title="Introducing Gemma 4 12B: a unified, encoder-free multimodal model"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Gemma 4 12B: a unified, encoder-free multimodal model</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/introducing-gemma-4-12b-a-unified-encoder-free-multimodal-model/" title="Introducing Gemma 4 12B: a unified, encoder-free multimodal model" data-topics=""><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Gemma 4 12B: a unified, encoder-free multimodal model</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/tcs-anthropic-partnership" title="TCS and Anthropic bring Claude to regulated industries"><span class="week-rest-num">07</span><span class="week-rest-title">TCS and Anthropic bring Claude to regulated industries</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/tcs-anthropic-partnership" title="TCS and Anthropic bring Claude to regulated industries" data-topics="health"><span class="week-rest-num">07</span><span class="week-rest-title">TCS and Anthropic bring Claude to regulated industries</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/supporting-eu-trustworthy-ai-ecosystem" title="Supporting Europe’s work in ensuring a trustworthy AI ecosystem"><span class="week-rest-num">08</span><span class="week-rest-title">Supporting Europe’s work in ensuring a trustworthy AI ecosystem</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/supporting-eu-trustworthy-ai-ecosystem" title="Supporting Europe’s work in ensuring a trustworthy AI ecosystem" data-topics="government"><span class="week-rest-num">08</span><span class="week-rest-title">Supporting Europe’s work in ensuring a trustworthy AI ecosystem</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/bbva" title="BBVA puts AI at the core of banking with OpenAI"><span class="week-rest-num">09</span><span class="week-rest-title">BBVA puts AI at the core of banking with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/bbva" title="BBVA puts AI at the core of banking with OpenAI" data-topics=""><span class="week-rest-num">09</span><span class="week-rest-title">BBVA puts AI at the core of banking with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/diffusiongemma-4x-faster-text-generation/" title="DiffusionGemma: 4x faster text generation"><span class="week-rest-num">10</span><span class="week-rest-title">DiffusionGemma: 4x faster text generation</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/diffusiongemma-4x-faster-text-generation/" title="DiffusionGemma: 4x faster text generation" data-topics=""><span class="week-rest-num">10</span><span class="week-rest-title">DiffusionGemma: 4x faster text generation</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/fluid-natural-voice-translation-with-gemini-35-live-translate/" title="Fluid, natural voice translation with Gemini 3.5 Live Translate"><span class="week-rest-num">11</span><span class="week-rest-title">Fluid, natural voice translation with Gemini 3.5 Live Translate</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/fluid-natural-voice-translation-with-gemini-35-live-translate/" title="Fluid, natural voice translation with Gemini 3.5 Live Translate" data-topics="music"><span class="week-rest-num">11</span><span class="week-rest-title">Fluid, natural voice translation with Gemini 3.5 Live Translate</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-public-record" title="Results from first Anthropic Public Record"><span class="week-rest-num">12</span><span class="week-rest-title">Results from first Anthropic Public Record</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-public-record" title="Results from first Anthropic Public Record" data-topics=""><span class="week-rest-num">12</span><span class="week-rest-title">Results from first Anthropic Public Record</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/using-codex-to-simulate-black-holes" title="How an astrophysicist uses Codex to help simulate black holes"><span class="week-rest-num">13</span><span class="week-rest-title">How an astrophysicist uses Codex to help simulate black holes</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/using-codex-to-simulate-black-holes" title="How an astrophysicist uses Codex to help simulate black holes" data-topics="code science"><span class="week-rest-num">13</span><span class="week-rest-title">How an astrophysicist uses Codex to help simulate black holes</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-on-oracle-cloud" title="Access OpenAI models and Codex through your Oracle cloud commitment"><span class="week-rest-num">14</span><span class="week-rest-title">Access OpenAI models and Codex through your Oracle cloud commitment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-on-oracle-cloud" title="Access OpenAI models and Codex through your Oracle cloud commitment" data-topics="code"><span class="week-rest-num">14</span><span class="week-rest-title">Access OpenAI models and Codex through your Oracle cloud commitment</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/measuring-the-impact-of-learning-with-ai-in-sierra-leone-and-beyond/" title="Measuring the impact of learning with AI in Sierra Leone and beyond"><span class="week-rest-num">15</span><span class="week-rest-title">Measuring the impact of learning with AI in Sierra Leone and beyond</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/measuring-the-impact-of-learning-with-ai-in-sierra-leone-and-beyond/" title="Measuring the impact of learning with AI in Sierra Leone and beyond" data-topics="education"><span class="week-rest-num">15</span><span class="week-rest-title">Measuring the impact of learning with AI in Sierra Leone and beyond</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/economic-research-exchange" title="Introducing the OpenAI Economic Research Exchange"><span class="week-rest-num">16</span><span class="week-rest-title">Introducing the OpenAI Economic Research Exchange</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/economic-research-exchange" title="Introducing the OpenAI Economic Research Exchange" data-topics=""><span class="week-rest-num">16</span><span class="week-rest-title">Introducing the OpenAI Economic Research Exchange</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/preply" title="How Preply combines AI and human tutors to personalize learning"><span class="week-rest-num">17</span><span class="week-rest-title">How Preply combines AI and human tutors to personalize learning</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/preply" title="How Preply combines AI and human tutors to personalize learning" data-topics="education"><span class="week-rest-num">17</span><span class="week-rest-title">How Preply combines AI and human tutors to personalize learning</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/lseg" title="From data to decisions: how LSEG is scaling trusted AI"><span class="week-rest-num">18</span><span class="week-rest-title">From data to decisions: how LSEG is scaling trusted AI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/lseg" title="From data to decisions: how LSEG is scaling trusted AI" data-topics=""><span class="week-rest-num">18</span><span class="week-rest-title">From data to decisions: how LSEG is scaling trusted AI</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/powering-the-future-of-robotics-in-europe/" title="Powering the future of robotics in Europe"><span class="week-rest-num">19</span><span class="week-rest-title">Powering the future of robotics in Europe</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/powering-the-future-of-robotics-in-europe/" title="Powering the future of robotics in Europe" data-topics="robotics"><span class="week-rest-num">19</span><span class="week-rest-title">Powering the future of robotics in Europe</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/nextdoor" title="How engineers at Nextdoor use Codex to build without limits"><span class="week-rest-num">20</span><span class="week-rest-title">How engineers at Nextdoor use Codex to build without limits</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/nextdoor" title="How engineers at Nextdoor use Codex to build without limits" data-topics="code"><span class="week-rest-num">20</span><span class="week-rest-title">How engineers at Nextdoor use Codex to build without limits</span></a>
       
     </div>
   </div>
@@ -128,4 +160,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

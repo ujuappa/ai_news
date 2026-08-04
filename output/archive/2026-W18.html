@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 18 · 27 Apr – 03 May 2026 · 14 stories · archived digest</div>
   <h1 class="week-headline">OpenAI and Microsoft Reshape Partnership Amidst Massive Compute Expansion</h1>
   <div class="stat-band">
@@ -28,47 +28,79 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 14</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/next-phase-of-microsoft-partnership" title="The next phase of the Microsoft OpenAI partnership">The next phase of the Microsoft OpenAI partnership</a>
-      <p class="week-lead-dek">OpenAI and Microsoft have amended their partnership agreement to simplify operations and provide long-term clarity. The deal is intended to ensure continued collaboration and support for AI innovation at scale.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/next-phase-of-microsoft-partnership" title="The next phase of the Microsoft OpenAI partnership">The next phase of the Microsoft OpenAI partnership</a>
+        <p class="week-lead-dek">OpenAI and Microsoft have amended their partnership agreement to simplify operations and provide long-term clarity. The deal is intended to ensure continued collaboration and support for AI innovation at scale.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age" title="Building the compute infrastructure for the Intelligence Age">Building the compute infrastructure for the Intelligence Age</a>
-      <p class="week-sec-dek">OpenAI is scaling its &#39;Stargate&#39; infrastructure to support the compute demands of AGI. The initiative involves expanding data center capacity to meet the increasing global appetite for high-performance AI processing.</p>
-      
+      <div class="week-sec-item" data-topics="chips">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age" title="Building the compute infrastructure for the Intelligence Age">Building the compute infrastructure for the Intelligence Age</a>
+        <p class="week-sec-dek">OpenAI is scaling its &#39;Stargate&#39; infrastructure to support the compute demands of AGI. The initiative involves expanding data center capacity to meet the increasing global appetite for high-performance AI processing.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-available-at-fedramp-moderate" title="OpenAI available at FedRAMP Moderate"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI available at FedRAMP Moderate</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-available-at-fedramp-moderate" title="OpenAI available at FedRAMP Moderate" data-topics="government security"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI available at FedRAMP Moderate</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence" title="Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence" title="Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents" data-topics="music video"><span class="week-rest-num">04</span><span class="week-rest-title">Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/openai-on-aws" title="OpenAI models, Codex, and Managed Agents come to AWS"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI models, Codex, and Managed Agents come to AWS</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/openai-on-aws" title="OpenAI models, Codex, and Managed Agents come to AWS" data-topics="code"><span class="week-rest-num">05</span><span class="week-rest-title">OpenAI models, Codex, and Managed Agents come to AWS</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/announcing-our-partnership-with-the-republic-of-korea/" title="Announcing our partnership with the Republic of Korea"><span class="week-rest-num">06</span><span class="week-rest-title">Announcing our partnership with the Republic of Korea</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/announcing-our-partnership-with-the-republic-of-korea/" title="Announcing our partnership with the Republic of Korea" data-topics="government science"><span class="week-rest-num">06</span><span class="week-rest-title">Announcing our partnership with the Republic of Korea</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/ai-co-clinician/" title="Enabling a new model for healthcare with AI co-clinician"><span class="week-rest-num">07</span><span class="week-rest-title">Enabling a new model for healthcare with AI co-clinician</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/ai-co-clinician/" title="Enabling a new model for healthcare with AI co-clinician" data-topics="health"><span class="week-rest-num">07</span><span class="week-rest-title">Enabling a new model for healthcare with AI co-clinician</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/where-the-goblins-came-from" title="Where the goblins came from"><span class="week-rest-num">08</span><span class="week-rest-title">Where the goblins came from</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/where-the-goblins-came-from" title="Where the goblins came from" data-topics=""><span class="week-rest-num">08</span><span class="week-rest-title">Where the goblins came from</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/cybersecurity-in-the-intelligence-age" title="Cybersecurity in the Intelligence Age"><span class="week-rest-num">09</span><span class="week-rest-title">Cybersecurity in the Intelligence Age</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/cybersecurity-in-the-intelligence-age" title="Cybersecurity in the Intelligence Age" data-topics="security"><span class="week-rest-num">09</span><span class="week-rest-title">Cybersecurity in the Intelligence Age</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/powering-ai-strengthening-the-grid-space-solar-energy-and-long-duration-storage/" title="Powering AI, Strengthening the Grid: Innovation in Space Solar Energy and Long-Duration Storage"><span class="week-rest-num">10</span><span class="week-rest-title">Powering AI, Strengthening the Grid: Innovation in Space Solar Energy and Long-Duration Storage</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/04/powering-ai-strengthening-the-grid-space-solar-energy-and-long-duration-storage/" title="Powering AI, Strengthening the Grid: Innovation in Space Solar Energy and Long-Duration Storage" data-topics="chips science"><span class="week-rest-num">10</span><span class="week-rest-title">Powering AI, Strengthening the Grid: Innovation in Space Solar Energy and Long-Duration Storage</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/open-source-codex-orchestration-symphony" title="An open-source spec for orchestration: Symphony"><span class="week-rest-num">11</span><span class="week-rest-title">An open-source spec for orchestration: Symphony</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/open-source-codex-orchestration-symphony" title="An open-source spec for orchestration: Symphony" data-topics="code"><span class="week-rest-num">11</span><span class="week-rest-title">An open-source spec for orchestration: Symphony</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-1" title="Granite 4.1 LLMs: How They’re Built"><span class="week-rest-num">12</span><span class="week-rest-title">Granite 4.1 LLMs: How They’re Built</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-granite/granite-4-1" title="Granite 4.1 LLMs: How They’re Built" data-topics=""><span class="week-rest-num">12</span><span class="week-rest-title">Granite 4.1 LLMs: How They’re Built</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/inference-providers-deepinfra" title="DeepInfra on Hugging Face Inference Providers 🔥"><span class="week-rest-num">13</span><span class="week-rest-title">DeepInfra on Hugging Face Inference Providers 🔥</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/inference-providers-deepinfra" title="DeepInfra on Hugging Face Inference Providers 🔥" data-topics=""><span class="week-rest-num">13</span><span class="week-rest-title">DeepInfra on Hugging Face Inference Providers 🔥</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-creative-work" title="Claude for Creative Work"><span class="week-rest-num">14</span><span class="week-rest-title">Claude for Creative Work</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-creative-work" title="Claude for Creative Work" data-topics="art"><span class="week-rest-num">14</span><span class="week-rest-title">Claude for Creative Work</span></a>
       
     </div>
   </div>
@@ -116,4 +148,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

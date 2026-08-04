@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 13 · 23–29 March 2026 · 11 stories · archived digest</div>
   <h1 class="week-headline">OpenAI Launches Sora 2 and Pledges $1 Billion for Social Good</h1>
   <div class="stat-band">
@@ -28,41 +28,73 @@
     <div class="stat-col"><div class="stat-num">$1B</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 11</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 5</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="music">Music &amp; audio 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="video">Video &amp; film 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/creating-with-sora-safely" title="Creating with Sora Safely">Creating with Sora Safely</a>
-      <p class="week-lead-dek">OpenAI introduced Sora 2, a state-of-the-art video generation model integrated into a new social creation application. The release prioritizes safety and concrete protections given the challenges of high-fidelity synthetic media.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="security video">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/creating-with-sora-safely" title="Creating with Sora Safely">Creating with Sora Safely</a>
+        <p class="week-lead-dek">OpenAI introduced Sora 2, a state-of-the-art video generation model integrated into a new social creation application. The release prioritizes safety and concrete protections given the challenges of high-fidelity synthetic media.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/update-on-the-openai-foundation" title="Update on the OpenAI Foundation">Update on the OpenAI Foundation</a>
-      <p class="week-sec-dek">The OpenAI Foundation has announced a commitment to invest at least $1 billion into AI resilience, health research, and community economic programs. These funds are earmarked for addressing long-term societal challenges.</p>
-      
+      <div class="week-sec-item" data-topics="money health">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/update-on-the-openai-foundation" title="Update on the OpenAI Foundation">Update on the OpenAI Foundation</a>
+        <p class="week-sec-dek">The OpenAI Foundation has announced a commitment to invest at least $1 billion into AI resilience, health research, and community economic programs. These funds are earmarked for addressing long-term societal challenges.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/meta-partners-with-arm-to-develop-new-class-of-data-center-silicon/" title="Meta Partners With Arm to Develop New Class of Data Center Silicon"><span class="week-rest-num">03</span><span class="week-rest-title">Meta Partners With Arm to Develop New Class of Data Center Silicon</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/meta-partners-with-arm-to-develop-new-class-of-data-center-silicon/" title="Meta Partners With Arm to Develop New Class of Data Center Silicon" data-topics="chips"><span class="week-rest-num">03</span><span class="week-rest-title">Meta Partners With Arm to Develop New Class of Data Center Silicon</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/" title="Gemini 3.1 Flash Live: Making audio AI more natural and reliable"><span class="week-rest-num">04</span><span class="week-rest-title">Gemini 3.1 Flash Live: Making audio AI more natural and reliable</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/" title="Gemini 3.1 Flash Live: Making audio AI more natural and reliable" data-topics="music"><span class="week-rest-num">04</span><span class="week-rest-title">Gemini 3.1 Flash Live: Making audio AI more natural and reliable</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-the-model-spec" title="Inside our approach to the Model Spec"><span class="week-rest-num">05</span><span class="week-rest-title">Inside our approach to the Model Spec</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-the-model-spec" title="Inside our approach to the Model Spec" data-topics="security"><span class="week-rest-num">05</span><span class="week-rest-title">Inside our approach to the Model Spec</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/safety-bug-bounty" title="Introducing the OpenAI Safety Bug Bounty program"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing the OpenAI Safety Bug Bounty program</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/safety-bug-bounty" title="Introducing the OpenAI Safety Bug Bounty program" data-topics="security"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing the OpenAI Safety Bug Bounty program</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/ai-pointer/" title="Reimagining the mouse pointer for the AI era"><span class="week-rest-num">07</span><span class="week-rest-title">Reimagining the mouse pointer for the AI era</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/ai-pointer/" title="Reimagining the mouse pointer for the AI era" data-topics=""><span class="week-rest-num">07</span><span class="week-rest-title">Reimagining the mouse pointer for the AI era</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/protecting-people-from-harmful-manipulation/" title="Protecting people from harmful manipulation"><span class="week-rest-num">08</span><span class="week-rest-title">Protecting people from harmful manipulation</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/protecting-people-from-harmful-manipulation/" title="Protecting people from harmful manipulation" data-topics="security health"><span class="week-rest-num">08</span><span class="week-rest-title">Protecting people from harmful manipulation</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/" title="Lyria 3 Pro: Create longer tracks in more"><span class="week-rest-num">09</span><span class="week-rest-title">Lyria 3 Pro: Create longer tracks in more</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/" title="Lyria 3 Pro: Create longer tracks in more" data-topics="music"><span class="week-rest-num">09</span><span class="week-rest-title">Lyria 3 Pro: Create longer tracks in more</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/powering-product-discovery-in-chatgpt" title="Powering product discovery in ChatGPT"><span class="week-rest-num">10</span><span class="week-rest-title">Powering product discovery in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/powering-product-discovery-in-chatgpt" title="Powering product discovery in ChatGPT" data-topics=""><span class="week-rest-num">10</span><span class="week-rest-title">Powering product discovery in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow-AI/eva" title="A New Framework for Evaluating Voice Agents (EVA)"><span class="week-rest-num">11</span><span class="week-rest-title">A New Framework for Evaluating Voice Agents (EVA)</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ServiceNow-AI/eva" title="A New Framework for Evaluating Voice Agents (EVA)" data-topics="security music"><span class="week-rest-num">11</span><span class="week-rest-title">A New Framework for Evaluating Voice Agents (EVA)</span></a>
       
     </div>
   </div>
@@ -110,4 +142,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 29 · 13–19 July 2026 · 10 stories · archived digest</div>
   <h1 class="week-headline">Google Launches Gemini 3.5 Flash Cyber for Automated Security Patching</h1>
   <div class="stat-band">
@@ -28,39 +28,71 @@
     <div class="stat-col"><div class="stat-num">$10M</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 10</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/" title="Introducing Gemini 3.5 Flash Cyber">Introducing Gemini 3.5 Flash Cyber</a>
-      <p class="week-lead-dek">Google has released Gemini 3.5 Flash Cyber, a specialized lightweight model. It is designed to assist in identifying and patching security vulnerabilities.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code security">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/" title="Introducing Gemini 3.5 Flash Cyber">Introducing Gemini 3.5 Flash Cyber</a>
+        <p class="week-lead-dek">Google has released Gemini 3.5 Flash Cyber, a specialized lightweight model. It is designed to assist in identifying and patching security vulnerabilities.</p>
+        
+        <div class="week-lead-byline">Google DeepMind Blog · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Google DeepMind Blog · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://www.anthropic.com/news/canadian-ai-research" title="Anthropic commits $10 million to Canadian AI research">Anthropic commits $10 million to Canadian AI research</a>
-      <p class="week-sec-dek">Anthropic has committed $10 million to support Canadian AI research. The investment recognizes Canada&#39;s historical role in pioneering deep neural networks and reinforcement learning.</p>
-      
+      <div class="week-sec-item" data-topics="money">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://www.anthropic.com/news/canadian-ai-research" title="Anthropic commits $10 million to Canadian AI research">Anthropic commits $10 million to Canadian AI research</a>
+        <p class="week-sec-dek">Anthropic has committed $10 million to support Canadian AI research. The investment recognizes Canada&#39;s historical role in pioneering deep neural networks and reinforcement learning.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/unlocking-self-improvement-gpt-red" title="GPT-Red: Unlocking Self-Improvement for Robustness"><span class="week-rest-num">03</span><span class="week-rest-title">GPT-Red: Unlocking Self-Improvement for Robustness</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/unlocking-self-improvement-gpt-red" title="GPT-Red: Unlocking Self-Improvement for Robustness" data-topics="security"><span class="week-rest-num">03</span><span class="week-rest-title">GPT-Red: Unlocking Self-Improvement for Robustness</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/security-incident-july-2026" title="Security incident disclosure — July 2026"><span class="week-rest-num">04</span><span class="week-rest-title">Security incident disclosure — July 2026</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/security-incident-july-2026" title="Security incident disclosure — July 2026" data-topics="security"><span class="week-rest-num">04</span><span class="week-rest-title">Security incident disclosure — July 2026</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/advancing-ai-safety-through-state-and-federal-action" title="The US is advancing AI safety through state and federal action"><span class="week-rest-num">05</span><span class="week-rest-title">The US is advancing AI safety through state and federal action</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/advancing-ai-safety-through-state-and-federal-action" title="The US is advancing AI safety through state and federal action" data-topics="government"><span class="week-rest-num">05</span><span class="week-rest-title">The US is advancing AI safety through state and federal action</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/teachers-local-businesses-win-as-meta-expands-louisiana-data-center/" title="Teachers and Local Businesses Win as Meta Expands Louisiana Data Center"><span class="week-rest-num">06</span><span class="week-rest-title">Teachers and Local Businesses Win as Meta Expands Louisiana Data Center</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/07/teachers-local-businesses-win-as-meta-expands-louisiana-data-center/" title="Teachers and Local Businesses Win as Meta Expands Louisiana Data Center" data-topics="chips"><span class="week-rest-num">06</span><span class="week-rest-title">Teachers and Local Businesses Win as Meta Expands Louisiana Data Center</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/controlling-reasoning-effort-in-llms" title="Controlling Reasoning Effort in LLMs"><span class="week-rest-num">07</span><span class="week-rest-title">Controlling Reasoning Effort in LLMs</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/controlling-reasoning-effort-in-llms" title="Controlling Reasoning Effort in LLMs" data-topics=""><span class="week-rest-num">07</span><span class="week-rest-title">Controlling Reasoning Effort in LLMs</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/our-approach-to-bioresilience/" title="Our approach to bioresilience"><span class="week-rest-num">08</span><span class="week-rest-title">Our approach to bioresilience</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/our-approach-to-bioresilience/" title="Our approach to bioresilience" data-topics="security science"><span class="week-rest-num">08</span><span class="week-rest-title">Our approach to bioresilience</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/real-world-voiceeq" title="Introducing Real World VoiceEQ: Measuring the human quality of voice AI"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Real World VoiceEQ: Measuring the human quality of voice AI</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/real-world-voiceeq" title="Introducing Real World VoiceEQ: Measuring the human quality of voice AI" data-topics="music"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Real World VoiceEQ: Measuring the human quality of voice AI</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-teachers" title="Introducing Claude for Teachers"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing Claude for Teachers</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-for-teachers" title="Introducing Claude for Teachers" data-topics="education"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing Claude for Teachers</span></a>
       
     </div>
   </div>
@@ -108,4 +140,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

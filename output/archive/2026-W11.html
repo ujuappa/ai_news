@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 11 · 9–15 March 2026 · 14 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Pledges $100M to Partner Network as OpenAI Acquires Promptfoo</h1>
   <div class="stat-band">
@@ -28,47 +28,79 @@
     <div class="stat-col"><div class="stat-num">$100M</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 14</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="robotics">Robotics 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-partner-network" title="Anthropic invests $100 million into the Claude Partner Network">Anthropic invests $100 million into the Claude Partner Network</a>
-      <p class="week-lead-dek">Anthropic has launched the Claude Partner Network with an initial investment of $100 million. The program provides partner organizations with technical certification, support, and investment opportunities to accelerate enterprise AI adoption.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/claude-partner-network" title="Anthropic invests $100 million into the Claude Partner Network">Anthropic invests $100 million into the Claude Partner Network</a>
+        <p class="week-lead-dek">Anthropic has launched the Claude Partner Network with an initial investment of $100 million. The program provides partner organizations with technical certification, support, and investment opportunities to accelerate enterprise AI adoption.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-promptfoo" title="OpenAI to acquire Promptfoo">OpenAI to acquire Promptfoo</a>
-      <p class="week-sec-dek">OpenAI is acquiring Promptfoo, a security platform specializing in vulnerability assessment for AI systems. The move is intended to bolster enterprise AI development security.</p>
-      
+      <div class="week-sec-item" data-topics="money security">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-promptfoo" title="OpenAI to acquire Promptfoo">OpenAI to acquire Promptfoo</a>
+        <p class="week-sec-dek">OpenAI is acquiring Promptfoo, a security platform specializing in vulnerability assessment for AI systems. The move is intended to bolster enterprise AI development security.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/expanding-metas-custom-silicon-to-power-our-ai-workloads/" title="Expanding Meta’s Custom Silicon to Power Our AI Workloads"><span class="week-rest-num">03</span><span class="week-rest-title">Expanding Meta’s Custom Silicon to Power Our AI Workloads</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/expanding-metas-custom-silicon-to-power-our-ai-workloads/" title="Expanding Meta’s Custom Silicon to Power Our AI Workloads" data-topics="chips"><span class="week-rest-num">03</span><span class="week-rest-title">Expanding Meta’s Custom Silicon to Power Our AI Workloads</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/instruction-hierarchy-challenge" title="Improving instruction hierarchy in frontier LLMs"><span class="week-rest-num">04</span><span class="week-rest-title">Improving instruction hierarchy in frontier LLMs</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/instruction-hierarchy-challenge" title="Improving instruction hierarchy in frontier LLMs" data-topics="security"><span class="week-rest-num">04</span><span class="week-rest-title">Improving instruction hierarchy in frontier LLMs</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/designing-agents-to-resist-prompt-injection" title="Designing AI agents to resist prompt injection"><span class="week-rest-num">05</span><span class="week-rest-title">Designing AI agents to resist prompt injection</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/designing-agents-to-resist-prompt-injection" title="Designing AI agents to resist prompt injection" data-topics="security"><span class="week-rest-num">05</span><span class="week-rest-title">Designing AI agents to resist prompt injection</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/equip-responses-api-computer-environment" title="From model to agent: Equipping the Responses API with a computer environment"><span class="week-rest-num">06</span><span class="week-rest-title">From model to agent: Equipping the Responses API with a computer environment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/equip-responses-api-computer-environment" title="From model to agent: Equipping the Responses API with a computer environment" data-topics="code"><span class="week-rest-num">06</span><span class="week-rest-title">From model to agent: Equipping the Responses API with a computer environment</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ulysses-sp" title="Ulysses Sequence Parallelism: Training with Million-Token Contexts"><span class="week-rest-num">07</span><span class="week-rest-title">Ulysses Sequence Parallelism: Training with Million-Token Contexts</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ulysses-sp" title="Ulysses Sequence Parallelism: Training with Million-Token Contexts" data-topics=""><span class="week-rest-num">07</span><span class="week-rest-title">Ulysses Sequence Parallelism: Training with Million-Token Contexts</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/" title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier"><span class="week-rest-num">08</span><span class="week-rest-title">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/" title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier" data-topics=""><span class="week-rest-num">08</span><span class="week-rest-title">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/wayfair" title="Wayfair boosts catalog accuracy and support speed with OpenAI"><span class="week-rest-num">09</span><span class="week-rest-title">Wayfair boosts catalog accuracy and support speed with OpenAI</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/wayfair" title="Wayfair boosts catalog accuracy and support speed with OpenAI" data-topics=""><span class="week-rest-num">09</span><span class="week-rest-title">Wayfair boosts catalog accuracy and support speed with OpenAI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt" title="New ways to learn math and science in ChatGPT"><span class="week-rest-num">10</span><span class="week-rest-title">New ways to learn math and science in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt" title="New ways to learn math and science in ChatGPT" data-topics="science education"><span class="week-rest-num">10</span><span class="week-rest-title">New ways to learn math and science in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/async-rl-training-landscape" title="Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries"><span class="week-rest-num">11</span><span class="week-rest-title">Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/async-rl-training-landscape" title="Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries" data-topics="code"><span class="week-rest-num">11</span><span class="week-rest-title">Keep the Tokens Flowing: Lessons from 16 Open-Source RL Libraries</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/storage-buckets" title="Introducing Storage Buckets on the Hugging Face Hub"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Storage Buckets on the Hugging Face Hub</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/storage-buckets" title="Introducing Storage Buckets on the Hugging Face Hub" data-topics="code"><span class="week-rest-num">12</span><span class="week-rest-title">Introducing Storage Buckets on the Hugging Face Hub</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/sydney-fourth-office-asia-pacific" title="Sydney will become Anthropic’s fourth office in Asia-Pacific"><span class="week-rest-num">13</span><span class="week-rest-title">Sydney will become Anthropic’s fourth office in Asia-Pacific</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/sydney-fourth-office-asia-pacific" title="Sydney will become Anthropic’s fourth office in Asia-Pacific" data-topics=""><span class="week-rest-num">13</span><span class="week-rest-title">Sydney will become Anthropic’s fourth office in Asia-Pacific</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/lerobot-release-v050" title="LeRobot v0.5.0: Scaling Every Dimension"><span class="week-rest-num">14</span><span class="week-rest-title">LeRobot v0.5.0: Scaling Every Dimension</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/lerobot-release-v050" title="LeRobot v0.5.0: Scaling Every Dimension" data-topics="code robotics"><span class="week-rest-num">14</span><span class="week-rest-title">LeRobot v0.5.0: Scaling Every Dimension</span></a>
       
     </div>
   </div>
@@ -116,4 +148,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

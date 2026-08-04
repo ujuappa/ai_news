@@ -1271,6 +1271,46 @@
     **피드·검색도 같이 막았다** — 사이트에서만 떼면 RSS 구독자는 계속 404 를 맞는다.
   - 검증: `tests/test_linkcheck.py` 30건 신설(분류표 · 렌더 계약 · 인코딩 · probe 계약).
     `fetch.resolve_article` 계약 테스트는 grounding 파일에서 이리로 옮겼다. 전체 **279 passed**.
+- 2026-08-04: **홈 필터를 카테고리 → 토픽으로 교체.**
+  설계 문서: `docs/superpowers/specs/2026-08-04-topic-filters-design.md`.
+  사용자 지시: "상단 바 카테고리는 그대로 두고 필터만 바꿔라."
+  - **왜**: 홈 필터 pill 이 상단 네비게이션과 **똑같은 4개**를 반복해 한 줄을 쓰면서 아무것도
+    더해주지 않았다. 카테고리는 "어떤 종류의 사건인가"(모델 출시/연구/제품/정책)이고,
+    토픽은 "무엇에 관한 이야기인가"(음악·정부·코드)라 서로 직교한다.
+  - **어휘**: `config.TOPIC_ORDER` 13개(code money chips government security science health
+    art music video robotics cars education). **`CATEGORY_ORDER` 와 절대 합치지 말 것** —
+    그 상수는 `sources.yaml` 최상위 소스 그룹 키를 겸해서, 넣는 순간 소스 버킷이 된다.
+  - **설계를 정한 실측 두 가지**(아카이브 497건 키워드 스캔):
+    (1) 꼬리가 길고 얇다 — 13개를 다 내보내면 하루에 pill 이 **8~9개**인데 대부분 1~2건이다.
+        한 건짜리 필터는 필터가 아니다 → **그날 많은 순 top-6** (`render.TOPIC_PILL_CAP`).
+    (2) 26%가 토픽 2개 이상에 걸린다 → 카테고리와 달리 **다중 라벨**.
+  - **검증은 하되 믿지는 않는다**: `llm.clean_topics` 가 어휘 밖 값을 버리고, 중복을 없애고,
+    3개(`MAX_TOPICS_PER_ITEM`)로 자르고, TOPIC_ORDER 순으로 정규화한다(순서가 모델 나열
+    순서를 따라가면 재렌더마다 `data-topics` 가 흔들린다). image_key 와 같은 이유·같은 패턴.
+    상한이 없으면 모델이 5개씩 달아서 모든 pill 이 모든 기사를 담는다.
+  - **필터 JS**: 카테고리는 하나라 `===` 로 됐지만 토픽은 여러 개라 토큰 비교로 바꿨다.
+    양쪽에 공백을 덧대지 않으면 `art` 가 `chart` 에 걸린다. 토픽 없는 기사는
+    `data-topics=""` 라 All 에서만 보인다(사라지지 않는다). CSS 는 `.is-filtered` 만 보므로 무변경.
+  - **백필**: `backfill_topics.py` 로 아카이브 515건 분류(8배치, 실패 0). 356건에 토픽이 붙고
+    99건은 무토픽(≈30%, 키워드 스캔의 27%와 일치). 분포: code 118 · security 88 ·
+    government 57 · money 53 · science 48 · chips 39 · health 31 · music 16 · education 15 ·
+    art 14 · robotics 12 · video 5 · **cars 0**. 요약/significance 는 건드리지 않는다
+    (과거 다이제스트 내용이 바뀌면 안 되므로 분류 전용 프롬프트 `llm.TOPIC_ONLY_SYSTEM`).
+    `topics='[]'` 인 것만 고르므로 중단 후 재실행하면 이어서 한다.
+  - **아카이브에도 같은 필터를 달았다(같은 날 추가).** 설계 초안에 "아카이브도 home.html 을
+    공유하니 자동으로 붙는다"고 썼는데 **틀렸다** — `render_digest` 가 굽는
+    `index.html` + `archive/<오늘>.html` 만 home.html 이고, 나머지 아카이브 페이지는 전부
+    `render_archive_digest` → `archive_week.html` 이라 필터 줄이 아예 없었다(카테고리 시절부터).
+    그래서 필터 줄과 스크립트를 **`macros.html` 로 빼서 두 템플릿이 공유**하게 했다 —
+    애초에 home.html 안에만 있었던 게 아카이브가 빠진 원인이다. 지금은 아카이브 다이제스트
+    51페이지 전부에 pill 이 있다(나머지 201개는 카테고리 페이지·인덱스라 원래 대상이 아니다).
+    두 가지가 필요했다: (1) 리드/2위가 kicker·제목·요약이 흩어진 형제 요소라 통째로 숨길 수가
+    없어서 `.week-lead-item`/`.week-sec-item` 래퍼로 감쌌다(week-lead-col 에 자식 선택자가
+    없어 레이아웃 영향 없음), (2) 2열 격자에서 한 열이 통째로 숨으면 빈 칸이 남는데
+    (리드가 그 토픽이 아닌 건 흔하다) `.week-split:has(> .is-filtered)` 로 1열로 접는다.
+  - 검증: `tests/test_topics.py` 36건 신설. 전체 **315 passed**. 실제 결과 —
+    오늘 `All 18 | Code 5 | Chips 5 | Government 5 | Money 4 | Security 3 | Science 1`,
+    아카이브 `2026-07-30` `All 25 | Money 10 | Code 7 | Chips 4 | Government 3 | Security 3 | Science 3`.
 
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 

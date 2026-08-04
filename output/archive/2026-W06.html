@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 6 · 2–8 February 2026 · 13 stories · archived digest</div>
   <h1 class="week-headline">OpenAI and Anthropic launch new agentic coding models amid enterprise push</h1>
   <div class="stat-band">
@@ -28,45 +28,77 @@
     <div class="stat-col"><div class="stat-num">$200M</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 13</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 7</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="art">Art &amp; images 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/snowflake-partnership" title="Snowflake and OpenAI partner to bring frontier intelligence to enterprise data">Snowflake and OpenAI partner to bring frontier intelligence to enterprise data</a>
-      <p class="week-lead-dek">OpenAI and Snowflake have entered into a $200M partnership agreement to embed frontier AI intelligence directly into enterprise data workflows. The collaboration aims to enable AI-driven insights and agentic actions within the Snowflake environment.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/snowflake-partnership" title="Snowflake and OpenAI partner to bring frontier intelligence to enterprise data">Snowflake and OpenAI partner to bring frontier intelligence to enterprise data</a>
+        <p class="week-lead-dek">OpenAI and Snowflake have entered into a $200M partnership agreement to embed frontier AI intelligence directly into enterprise data workflows. The collaboration aims to enable AI-driven insights and agentic actions within the Snowflake environment.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/gpt-5-3-codex-system-card" title="GPT-5.3-Codex System Card">GPT-5.3-Codex System Card</a>
-      <p class="week-sec-dek">GPT-5.3-Codex has been released as an advanced agentic coding model, integrating the frontier-level performance of GPT-5.2-Codex with improved professional knowledge and reasoning capabilities. It is positioned as the most capable model in its class for software development.</p>
-      
+      <div class="week-sec-item" data-topics="code">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/gpt-5-3-codex-system-card" title="GPT-5.3-Codex System Card">GPT-5.3-Codex System Card</a>
+        <p class="week-sec-dek">GPT-5.3-Codex has been released as an advanced agentic coding model, integrating the frontier-level performance of GPT-5.2-Codex with improved professional knowledge and reasoning capabilities. It is positioned as the most capable model in its class for software development.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-opus-4-6" title="Claude Opus 4.6"><span class="week-rest-num">03</span><span class="week-rest-title">Claude Opus 4.6</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-opus-4-6" title="Claude Opus 4.6" data-topics="code"><span class="week-rest-num">03</span><span class="week-rest-title">Claude Opus 4.6</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/gpt-5-lowers-protein-synthesis-cost" title="GPT-5 lowers the cost of cell-free protein synthesis"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5 lowers the cost of cell-free protein synthesis</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/gpt-5-lowers-protein-synthesis-cost" title="GPT-5 lowers the cost of cell-free protein synthesis" data-topics="science"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5 lowers the cost of cell-free protein synthesis</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-partners-with-allen-institute-and-howard-hughes-medical-institute" title="Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-partners-with-allen-institute-and-howard-hughes-medical-institute" title="Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery" data-topics="science health"><span class="week-rest-num">05</span><span class="week-rest-title">Anthropic partners with Allen Institute and Howard Hughes Medical Institute to accelerate scientific discovery</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/trusted-access-for-cyber" title="Introducing Trusted Access for Cyber"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Trusted Access for Cyber</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/trusted-access-for-cyber" title="Introducing Trusted Access for Cyber" data-topics="security"><span class="week-rest-num">06</span><span class="week-rest-title">Introducing Trusted Access for Cyber</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-frontier" title="Introducing OpenAI Frontier"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing OpenAI Frontier</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-openai-frontier" title="Introducing OpenAI Frontier" data-topics="code"><span class="week-rest-num">07</span><span class="week-rest-title">Introducing OpenAI Frontier</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/introducing-holo2-235b-a22b" title="H Company&#39;s new Holo2 model takes the lead in UI Localization"><span class="week-rest-num">08</span><span class="week-rest-title">H Company&#39;s new Holo2 model takes the lead in UI Localization</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/introducing-holo2-235b-a22b" title="H Company&#39;s new Holo2 model takes the lead in UI Localization" data-topics="code art"><span class="week-rest-num">08</span><span class="week-rest-title">H Company&#39;s new Holo2 model takes the lead in UI Localization</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk" title="Apple’s Xcode now supports the Claude Agent SDK"><span class="week-rest-num">09</span><span class="week-rest-title">Apple’s Xcode now supports the Claude Agent SDK</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk" title="Apple’s Xcode now supports the Claude Agent SDK" data-topics="code"><span class="week-rest-num">09</span><span class="week-rest-title">Apple’s Xcode now supports the Claude Agent SDK</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-the-codex-app" title="Introducing the Codex app"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Codex app</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-the-codex-app" title="Introducing the Codex app" data-topics="code"><span class="week-rest-num">10</span><span class="week-rest-title">Introducing the Codex app</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-localization" title="Making AI work for everyone, everywhere: our approach to localization"><span class="week-rest-num">11</span><span class="week-rest-title">Making AI work for everyone, everywhere: our approach to localization</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/our-approach-to-localization" title="Making AI work for everyone, everywhere: our approach to localization" data-topics="government"><span class="week-rest-num">11</span><span class="week-rest-title">Making AI work for everyone, everywhere: our approach to localization</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part2" title="Training Design for Text-to-Image Models: Lessons from Ablations"><span class="week-rest-num">12</span><span class="week-rest-title">Training Design for Text-to-Image Models: Lessons from Ablations</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Photoroom/prx-part2" title="Training Design for Text-to-Image Models: Lessons from Ablations" data-topics="art"><span class="week-rest-num">12</span><span class="week-rest-title">Training Design for Text-to-Image Models: Lessons from Ablations</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/unlocking-the-codex-harness" title="Unlocking the Codex harness: how we built the App Server"><span class="week-rest-num">13</span><span class="week-rest-title">Unlocking the Codex harness: how we built the App Server</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/unlocking-the-codex-harness" title="Unlocking the Codex harness: how we built the App Server" data-topics="code"><span class="week-rest-num">13</span><span class="week-rest-title">Unlocking the Codex harness: how we built the App Server</span></a>
       
     </div>
   </div>
@@ -114,4 +146,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

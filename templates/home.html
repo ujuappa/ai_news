@@ -15,16 +15,9 @@
 <div class="home" data-scope>
 
 {% if lead %}
-<div class="filter-row">
-  <span class="filter-label">Filter</span>
-  {% for f in filters %}
-  <button type="button" class="filter-pill {{ 'active' if f.key == 'all' else '' }}"
-          data-filter-btn data-cat="{{ f.key }}">{{ f.label }} {{ f.count }}</button>
-  {% endfor %}
-  <span class="filter-note">Ranked by significance</span>
-</div>
+{{ m.filter_row(filters) }}
 
-<article class="lead" data-cat="{{ lead.category }}">
+<article class="lead" data-topics="{{ lead.topic_attr }}">
   <div class="lead-text">
     <div class="lead-kicker">
       <span class="lead-cat">{{ labels[lead.category] }}</span>
@@ -55,7 +48,7 @@
 </div>
 <div class="also-grid">
   {% for it in grid3 %}
-  <article class="also-card" data-cat="{{ it.category }}">
+  <article class="also-card" data-topics="{{ it.topic_attr }}">
     {{ m.image_slot(it, 'imgslot-card', asset_prefix) }}
     <span class="card-cat">{{ labels[it.category] }}</span>
     <a class="card-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
@@ -80,7 +73,7 @@
 <section class="worth-section" data-section>
 <span class="section-h">Worth knowing</span>
 {% for it in worth %}
-<div class="worth-row" data-cat="{{ it.category }}">
+<div class="worth-row" data-topics="{{ it.topic_attr }}">
   <div>
     <span class="worth-cat">{{ labels[it.category] }}</span>
     <a class="worth-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
@@ -98,7 +91,7 @@
 <section class="brief-section" data-section>
 <span class="section-h section-h-brief">In brief — {{ brief|length }} more</span>
 {% for it in brief %}
-<a class="brief-row"{{ m.href(it) }} data-cat="{{ it.category }}">
+<a class="brief-row"{{ m.href(it) }} data-topics="{{ it.topic_attr }}">
   <span class="brief-title" title="{{ it.title }}">{{ it.display_title }}</span>
   <span class="brief-cat">{{ short_labels[it.category] }}</span>
 </a>
@@ -132,30 +125,5 @@
 </div>
 </div>
 {{ m.site_footer(archive_link.href, total, rss_href=asset_prefix ~ 'feed.xml') }}
-{#
-  카테고리 필터. 서버가 이미 랭킹 순으로 구운 DOM 을 숨기기만 한다 — 재정렬/재요청 없음.
-  JS 가 꺼져 있으면 pill 만 안 눌릴 뿐 전체 목록은 그대로 보인다.
-
-  섹션([data-section])도 같이 숨긴다: 안 그러면 "Also today / Stories 02 – 04" 같은 머리글만
-  남고 아래가 텅 빈 채로 서 있다(캔버스 데모의 실제 동작이기도 하다 — 여기선 고쳤다).
-#}
-<script>(function(){
-  var scope=document.querySelector('[data-scope]'); if(!scope) return;
-  var pills=scope.querySelectorAll('[data-filter-btn]');
-  var sections=scope.querySelectorAll('[data-section]');
-  var items=[].filter.call(scope.querySelectorAll('[data-cat]'),function(el){
-    return !el.hasAttribute('data-filter-btn');});
-  function pick(cat,btn){
-    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
-    for(var j=0;j<items.length;j++)
-      items[j].classList.toggle('is-filtered',cat!=='all'&&items[j].getAttribute('data-cat')!==cat);
-    for(var s=0;s<sections.length;s++){
-      var kept=sections[s].querySelectorAll('[data-cat]:not(.is-filtered)').length;
-      sections[s].classList.toggle('is-filtered',kept===0);
-    }
-  }
-  for(var k=0;k<pills.length;k++)(function(b){
-    b.addEventListener('click',function(){pick(b.getAttribute('data-cat'),b);});
-  })(pills[k]);
-})();</script>
+{{ m.topic_filter_script() }}
 </body></html>

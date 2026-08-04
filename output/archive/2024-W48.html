@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 48 · 25 Nov – 01 Dec 2024 · 1 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Open-Sources Model Context Protocol to Unify Data Connectivity</h1>
   <div class="stat-band">
@@ -28,16 +28,31 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Tools &amp; products</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/model-context-protocol" title="Introducing the Model Context Protocol">Introducing the Model Context Protocol</a>
-      <p class="week-lead-dek">Anthropic has open-sourced the Model Context Protocol (MCP), a standardized framework designed to link AI assistants directly with external data sources like repositories and business tools. This protocol aims to enhance the accuracy and relevance of AI model responses by providing seamless access to siloed information.</p>
-      
-      <div class="week-lead-byline">Anthropic News · tier major</div>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Tools &amp; products</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/model-context-protocol" title="Introducing the Model Context Protocol">Introducing the Model Context Protocol</a>
+        <p class="week-lead-dek">Anthropic has open-sourced the Model Context Protocol (MCP), a standardized framework designed to link AI assistants directly with external data sources like repositories and business tools. This protocol aims to enhance the accuracy and relevance of AI model responses by providing seamless access to siloed information.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
     </div>
@@ -86,4 +101,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

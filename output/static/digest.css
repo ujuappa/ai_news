@@ -193,6 +193,18 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
                border-bottom:2px solid var(--ink); padding-bottom:1px; }
 .byline-link:hover { color:var(--accd); border-bottom-color:var(--accd); }
 
+/* 죽은 링크 (linkcheck.py 가 unreachable/soft_404 로 표시 → 템플릿이 href 를 안 단다).
+   href 없는 <a> 는 이미 클릭도 포커스도 안 되지만, 그대로 두면 **링크처럼 보이는데
+   안 눌리는** 상태가 된다. 그래서 호버 색을 지우고 커서를 되돌린다.
+   2026-08-04: futunn.com/404 가 리드로 실린 뒤 추가. */
+a:not([href]) { cursor:default; }
+a:not([href]):hover { color:var(--ink); }
+.lead-title:not([href]):hover, .card-title:not([href]):hover,
+.worth-title:not([href]):hover, .week-lead-title:not([href]):hover,
+.week-sec-title:not([href]):hover { color:var(--ink); }
+.byline-dead { font:700 13px Archivo,sans-serif; color:var(--n1);
+               border-bottom:2px solid var(--n2); padding-bottom:1px; }
+
 .section-head { display:flex; align-items:baseline; justify-content:space-between; gap:16px;
                 padding:26px 0 14px; }
 .section-h { display:block; font:900 13px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase;
@@ -382,6 +394,11 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
               color:var(--n1); }
 .week-split { display:grid; grid-template-columns:1.4fr 1fr; gap:0; padding-top:24px; }
 @media (max-width:800px) { .week-split { grid-template-columns:1fr; } }
+/* 토픽 필터로 한쪽 열이 통째로 숨으면 2열 격자에 빈 칸이 남는다(리드가 그 토픽이 아닌 건
+   흔한 일이다). 남은 열이 폭을 다 쓰게 한 열로 접는다. :has() 를 못 쓰는 브라우저에서는
+   빈 칸이 보일 뿐 깨지지는 않는다. 2026-08-04 아카이브 필터와 함께 추가. */
+.week-split:has(> .is-filtered) { grid-template-columns:1fr; }
+.week-split:has(> .week-lead-col.is-filtered) .week-rest-col { padding-left:0; }
 .week-lead-col { padding-right:32px; border-right:1px solid var(--n2); }
 @media (max-width:800px) { .week-lead-col { padding-right:0; border-right:0; padding-bottom:28px; } }
 .week-rest-col { padding-left:32px; }

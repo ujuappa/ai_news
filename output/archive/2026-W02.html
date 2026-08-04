@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 2 · 5–11 January 2026 · 1 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Launches Claude for Life Sciences Research Platform</h1>
   <div class="stat-band">
@@ -28,16 +28,34 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/healthcare-life-sciences" title="Advancing Claude in healthcare and the life sciences">Advancing Claude in healthcare and the life sciences</a>
-      <p class="week-lead-dek">Anthropic has introduced Claude for Life Sciences, a specialized initiative aimed at assisting researchers and clinicians in the medical field. The platform is designed to streamline scientific workflows and support industry professionals in accelerating the development of new treatments and research findings.</p>
-      
-      <div class="week-lead-byline">Anthropic News · tier major</div>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="science health">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/healthcare-life-sciences" title="Advancing Claude in healthcare and the life sciences">Advancing Claude in healthcare and the life sciences</a>
+        <p class="week-lead-dek">Anthropic has introduced Claude for Life Sciences, a specialized initiative aimed at assisting researchers and clinicians in the medical field. The platform is designed to streamline scientific workflows and support industry professionals in accelerating the development of new treatments and research findings.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
     </div>
@@ -86,4 +104,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

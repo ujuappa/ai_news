@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 7 · 9–15 February 2026 · 18 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Raises $30 Billion as AI Giants Push Scientific Reasoning</h1>
   <div class="stat-band">
@@ -28,55 +28,87 @@
     <div class="stat-col"><div class="stat-num">$30.02B</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 18</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 7</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 2</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="government">Government &amp; law 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation" title="Anthropic raises $30 billion in Series G funding at $380 billion post-money valuation">Anthropic raises $30 billion in Series G funding at $380 billion post-money valuation</a>
-      <p class="week-lead-dek">Anthropic has successfully raised $30 billion in Series G funding. This round values the company at $380 billion post-money and will support research, product development, and infrastructure expansion.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="money">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Policy &amp; business · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation" title="Anthropic raises $30 billion in Series G funding at $380 billion post-money valuation">Anthropic raises $30 billion in Series G funding at $380 billion post-money valuation</a>
+        <p class="week-lead-dek">Anthropic has successfully raised $30 billion in Series G funding. This round values the company at $380 billion post-money and will support research, product development, and infrastructure expansion.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/gemini-3-deep-think-advancing-science-research-and-engineering/" title="Gemini 3 Deep Think: Advancing science, research and engineering">Gemini 3 Deep Think: Advancing science, research and engineering</a>
-      <p class="week-sec-dek">Google DeepMind has updated Gemini 3 with a new Deep Think reasoning mode. This specialized feature is specifically architected to handle complex challenges in modern science and engineering.</p>
-      
+      <div class="week-sec-item" data-topics="science">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Model releases</span></div>
+        <a class="week-sec-title" href="https://deepmind.google/blog/gemini-3-deep-think-advancing-science-research-and-engineering/" title="Gemini 3 Deep Think: Advancing science, research and engineering">Gemini 3 Deep Think: Advancing science, research and engineering</a>
+        <p class="week-sec-dek">Google DeepMind has updated Gemini 3 with a new Deep Think reasoning mode. This specialized feature is specifically architected to handle complex challenges in modern science and engineering.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-gpt-5-3-codex-spark" title="Introducing GPT-5.3-Codex-Spark"><span class="week-rest-num">03</span><span class="week-rest-title">Introducing GPT-5.3-Codex-Spark</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-gpt-5-3-codex-spark" title="Introducing GPT-5.3-Codex-Spark" data-topics="code"><span class="week-rest-num">03</span><span class="week-rest-title">Introducing GPT-5.3-Codex-Spark</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/new-result-theoretical-physics" title="GPT-5.2 derives a new result in theoretical physics"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5.2 derives a new result in theoretical physics</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/new-result-theoretical-physics" title="GPT-5.2 derives a new result in theoretical physics" data-topics="science"><span class="week-rest-num">04</span><span class="week-rest-title">GPT-5.2 derives a new result in theoretical physics</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/metas-new-data-center-lebanon-indiana-marks-milestone-ai-investment/" title="Meta’s New Data Center in Lebanon, Indiana Marks a Milestone AI Investment"><span class="week-rest-num">05</span><span class="week-rest-title">Meta’s New Data Center in Lebanon, Indiana Marks a Milestone AI Investment</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/metas-new-data-center-lebanon-indiana-marks-milestone-ai-investment/" title="Meta’s New Data Center in Lebanon, Indiana Marks a Milestone AI Investment" data-topics="chips"><span class="week-rest-num">05</span><span class="week-rest-title">Meta’s New Data Center in Lebanon, Indiana Marks a Milestone AI Investment</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-codepath-partnership" title="Anthropic partners with CodePath to bring Claude to the US’s largest collegiate computer science program"><span class="week-rest-num">06</span><span class="week-rest-title">Anthropic partners with CodePath to bring Claude to the US’s largest collegiate computer science program</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/anthropic-codepath-partnership" title="Anthropic partners with CodePath to bring Claude to the US’s largest collegiate computer science program" data-topics="code education"><span class="week-rest-num">06</span><span class="week-rest-title">Anthropic partners with CodePath to bring Claude to the US’s largest collegiate computer science program</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/" title="Accelerating Mathematical and Scientific Discovery with Gemini Deep Think"><span class="week-rest-num">07</span><span class="week-rest-title">Accelerating Mathematical and Scientific Discovery with Gemini Deep Think</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/" title="Accelerating Mathematical and Scientific Discovery with Gemini Deep Think" data-topics="science"><span class="week-rest-num">07</span><span class="week-rest-title">Accelerating Mathematical and Scientific Discovery with Gemini Deep Think</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/bringing-chatgpt-to-genaimil" title="Bringing ChatGPT to GenAI.mil"><span class="week-rest-num">08</span><span class="week-rest-title">Bringing ChatGPT to GenAI.mil</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/bringing-chatgpt-to-genaimil" title="Bringing ChatGPT to GenAI.mil" data-topics="government"><span class="week-rest-num">08</span><span class="week-rest-title">Bringing ChatGPT to GenAI.mil</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt" title="Introducing Lockdown Mode and Elevated Risk labels in ChatGPT"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Lockdown Mode and Elevated Risk labels in ChatGPT</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-lockdown-mode-and-elevated-risk-labels-in-chatgpt" title="Introducing Lockdown Mode and Elevated Risk labels in ChatGPT" data-topics="security"><span class="week-rest-num">09</span><span class="week-rest-title">Introducing Lockdown Mode and Elevated Risk labels in ChatGPT</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/scaling-social-science-research" title="Scaling social science research"><span class="week-rest-num">10</span><span class="week-rest-title">Scaling social science research</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/scaling-social-science-research" title="Scaling social science research" data-topics="code"><span class="week-rest-num">10</span><span class="week-rest-title">Scaling social science research</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/chris-liddell-appointed-anthropic-board" title="Chris Liddell appointed to Anthropic’s board of directors"><span class="week-rest-num">11</span><span class="week-rest-title">Chris Liddell appointed to Anthropic’s board of directors</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/chris-liddell-appointed-anthropic-board" title="Chris Liddell appointed to Anthropic’s board of directors" data-topics=""><span class="week-rest-num">11</span><span class="week-rest-title">Chris Liddell appointed to Anthropic’s board of directors</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/openenv-turing" title="OpenEnv in Practice: Evaluating Tool-Using Agents in Real-World Environments"><span class="week-rest-num">12</span><span class="week-rest-title">OpenEnv in Practice: Evaluating Tool-Using Agents in Real-World Environments</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/openenv-turing" title="OpenEnv in Practice: Evaluating Tool-Using Agents in Real-World Environments" data-topics="code"><span class="week-rest-num">12</span><span class="week-rest-title">OpenEnv in Practice: Evaluating Tool-Using Agents in Real-World Environments</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/helping-people-with-memory-loss-with-ai-glasses/" title="Helping People With Memory Loss Find Their Way With AI Glasses"><span class="week-rest-num">13</span><span class="week-rest-title">Helping People With Memory Loss Find Their Way With AI Glasses</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/helping-people-with-memory-loss-with-ai-glasses/" title="Helping People With Memory Loss Find Their Way With AI Glasses" data-topics="health"><span class="week-rest-num">13</span><span class="week-rest-title">Helping People With Memory Loss Find Their Way With AI Glasses</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/beyond-rate-limits" title="Beyond rate limits: scaling access to Codex and Sora"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond rate limits: scaling access to Codex and Sora</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/beyond-rate-limits" title="Beyond rate limits: scaling access to Codex and Sora" data-topics="code"><span class="week-rest-num">14</span><span class="week-rest-title">Beyond rate limits: scaling access to Codex and Sora</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/custom-cuda-kernels-agent-skills" title="Custom Kernels for All from Codex and Claude"><span class="week-rest-num">15</span><span class="week-rest-title">Custom Kernels for All from Codex and Claude</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/custom-cuda-kernels-agent-skills" title="Custom Kernels for All from Codex and Claude" data-topics="code"><span class="week-rest-num">15</span><span class="week-rest-title">Custom Kernels for All from Codex and Claude</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/donate-public-first-action" title="Anthropic is donating $20 million to Public First Action"><span class="week-rest-num">16</span><span class="week-rest-title">Anthropic is donating $20 million to Public First Action</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/donate-public-first-action" title="Anthropic is donating $20 million to Public First Action" data-topics="security"><span class="week-rest-num">16</span><span class="week-rest-title">Anthropic is donating $20 million to Public First Action</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/threads-dear-algo/" title="Control Your Threads Feed With New Dear Algo Feature"><span class="week-rest-num">17</span><span class="week-rest-title">Control Your Threads Feed With New Dear Algo Feature</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/02/threads-dear-algo/" title="Control Your Threads Feed With New Dear Algo Feature" data-topics=""><span class="week-rest-num">17</span><span class="week-rest-title">Control Your Threads Feed With New Dear Algo Feature</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/transformersjs-v4" title="Transformers.js v4: Now Available on NPM!"><span class="week-rest-num">18</span><span class="week-rest-title">Transformers.js v4: Now Available on NPM!</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/transformersjs-v4" title="Transformers.js v4: Now Available on NPM!" data-topics="code"><span class="week-rest-num">18</span><span class="week-rest-title">Transformers.js v4: Now Available on NPM!</span></a>
       
     </div>
   </div>
@@ -124,4 +156,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

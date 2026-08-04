@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 12 · 16–22 March 2026 · 9 stories · archived digest</div>
   <h1 class="week-headline">OpenAI Unveils GPT-5.4 Efficient Models and Acquires Astral for Coding</h1>
   <div class="stat-band">
@@ -28,37 +28,60 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 9</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="money">Money &amp; markets 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-4-mini-and-nano" title="Introducing GPT-5.4 mini and nano">Introducing GPT-5.4 mini and nano</a>
-      <p class="week-lead-dek">OpenAI introduced GPT-5.4 mini and nano, optimized for efficient coding, multimodal reasoning, and high-volume API sub-agent tasks. These models provide faster performance for resource-sensitive applications.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://openai.com/index/introducing-gpt-5-4-mini-and-nano" title="Introducing GPT-5.4 mini and nano">Introducing GPT-5.4 mini and nano</a>
+        <p class="week-lead-dek">OpenAI introduced GPT-5.4 mini and nano, optimized for efficient coding, multimodal reasoning, and high-volume API sub-agent tasks. These models provide faster performance for resource-sensitive applications.</p>
+        
+        <div class="week-lead-byline">OpenAI News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">OpenAI News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
-      <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-astral" title="OpenAI to acquire Astral">OpenAI to acquire Astral</a>
-      <p class="week-sec-dek">OpenAI has acquired Astral to bolster the development of its Codex models. The integration aims to enhance Python-based developer tools and broader coding infrastructure.</p>
-      
+      <div class="week-sec-item" data-topics="code money">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business · major</span></div>
+        <a class="week-sec-title" href="https://openai.com/index/openai-to-acquire-astral" title="OpenAI to acquire Astral">OpenAI to acquire Astral</a>
+        <p class="week-sec-dek">OpenAI has acquired Astral to bolster the development of its Codex models. The integration aims to enhance Python-based developer tools and broader coding infrastructure.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://openai.com/index/japan-teen-safety-blueprint" title="OpenAI Japan announces Japan Teen Safety Blueprint to put teen safety first"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI Japan announces Japan Teen Safety Blueprint to put teen safety first</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/japan-teen-safety-blueprint" title="OpenAI Japan announces Japan Teen Safety Blueprint to put teen safety first" data-topics="security"><span class="week-rest-num">03</span><span class="week-rest-title">OpenAI Japan announces Japan Teen Safety Blueprint to put teen safety first</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/" title="Measuring progress toward AGI: A cognitive framework"><span class="week-rest-num">04</span><span class="week-rest-title">Measuring progress toward AGI: A cognitive framework</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/" title="Measuring progress toward AGI: A cognitive framework" data-topics=""><span class="week-rest-num">04</span><span class="week-rest-title">Measuring progress toward AGI: A cognitive framework</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/holotron-12b" title="Holotron-12B - High Throughput Computer Use Agent"><span class="week-rest-num">05</span><span class="week-rest-title">Holotron-12B - High Throughput Computer Use Agent</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/Hcompany/holotron-12b" title="Holotron-12B - High Throughput Computer Use Agent" data-topics=""><span class="week-rest-num">05</span><span class="week-rest-title">Holotron-12B - High Throughput Computer Use Agent</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment" title="How we monitor internal coding agents for misalignment"><span class="week-rest-num">06</span><span class="week-rest-title">How we monitor internal coding agents for misalignment</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment" title="How we monitor internal coding agents for misalignment" data-topics="code security"><span class="week-rest-num">06</span><span class="week-rest-title">How we monitor internal coding agents for misalignment</span></a>
       
-      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/visual-attention-variants" title="A Visual Guide to Attention Variants in Modern LLMs"><span class="week-rest-num">07</span><span class="week-rest-title">A Visual Guide to Attention Variants in Modern LLMs</span></a>
+      <a class="week-rest-row" href="https://magazine.sebastianraschka.com/p/visual-attention-variants" title="A Visual Guide to Attention Variants in Modern LLMs" data-topics=""><span class="week-rest-num">07</span><span class="week-rest-title">A Visual Guide to Attention Variants in Modern LLMs</span></a>
       
-      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/boosting-your-support-and-safety-on-metas-apps-with-ai/" title="Boosting Your Support and Safety on Meta’s Apps With AI"><span class="week-rest-num">08</span><span class="week-rest-title">Boosting Your Support and Safety on Meta’s Apps With AI</span></a>
+      <a class="week-rest-row" href="https://about.fb.com/news/2026/03/boosting-your-support-and-safety-on-metas-apps-with-ai/" title="Boosting Your Support and Safety on Meta’s Apps With AI" data-topics="security"><span class="week-rest-num">08</span><span class="week-rest-title">Boosting Your Support and Safety on Meta’s Apps With AI</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/why-codex-security-doesnt-include-sast" title="Why Codex Security Doesn’t Include a SAST Report"><span class="week-rest-num">09</span><span class="week-rest-title">Why Codex Security Doesn’t Include a SAST Report</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/why-codex-security-doesnt-include-sast" title="Why Codex Security Doesn’t Include a SAST Report" data-topics="code security"><span class="week-rest-num">09</span><span class="week-rest-title">Why Codex Security Doesn’t Include a SAST Report</span></a>
       
     </div>
   </div>
@@ -106,4 +129,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>

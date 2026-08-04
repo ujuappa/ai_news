@@ -18,7 +18,7 @@
     <a class="accent" href="index.html">All weeks</a>
   </nav>
 </header>
-<div class="week-body">
+<div class="week-body" data-scope>
   <div class="week-eyebrow">Week 27 · 29 Jun – 05 Jul 2026 · 12 stories · archived digest</div>
   <h1 class="week-headline">Anthropic Launches Agentic Claude Sonnet 5 for Autonomous Task Execution</h1>
   <div class="stat-band">
@@ -28,43 +28,75 @@
     <div class="stat-col"><div class="stat-num">—</div><div class="stat-label">committed (approx.)</div></div>
   </div>
   
+  
+  
+<div class="filter-row">
+  <span class="filter-label">Filter</span>
+  
+  <button type="button" class="filter-pill active"
+          data-filter-btn data-topic="all">All 12</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="code">Code 4</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="science">Science 3</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="chips">Chips &amp; datacenters 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="security">Security 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="health">Health 1</button>
+  
+  <button type="button" class="filter-pill "
+          data-filter-btn data-topic="music">Music &amp; audio 1</button>
+  
+  
+</div>
   <div class="week-split">
-    <div class="week-lead-col">
-      <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
-      <a class="week-lead-title" href="https://www.anthropic.com/news/claude-sonnet-5" title="Introducing Claude Sonnet 5">Introducing Claude Sonnet 5</a>
-      <p class="week-lead-dek">Claude Sonnet 5 launches as a highly agentic model capable of autonomous planning and tool use, including terminal and browser interaction. Anthropic claims it achieves performance levels previously only possible with significantly larger and more expensive models.</p>
+    <div class="week-lead-col" data-section>
+      <div class="week-lead-item" data-topics="code">
+        <div class="week-lead-kicker"><span class="rank-num">01</span><span class="kicker">Model releases · major</span></div>
+        <a class="week-lead-title" href="https://www.anthropic.com/news/claude-sonnet-5" title="Introducing Claude Sonnet 5">Introducing Claude Sonnet 5</a>
+        <p class="week-lead-dek">Claude Sonnet 5 launches as a highly agentic model capable of autonomous planning and tool use, including terminal and browser interaction. Anthropic claims it achieves performance levels previously only possible with significantly larger and more expensive models.</p>
+        
+        <div class="week-lead-byline">Anthropic News · tier major</div>
+      </div>
       
-      <div class="week-lead-byline">Anthropic News · tier major</div>
-      
-      <div class="hr2" style="margin:0 0 18px"></div>
-      <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
-      <a class="week-sec-title" href="https://deepmind.google/blog/google-deepmind-and-a24-announce-first-of-its-kind-research-partnership/" title="Google DeepMind and A24 announce first-of-its-kind research partnership">Google DeepMind and A24 announce first-of-its-kind research partnership</a>
-      <p class="week-sec-dek">Google DeepMind has announced a new research partnership with A24. This collaboration represents a first-of-its-kind cross-industry initiative between an AI research laboratory and a production studio.</p>
-      
+      <div class="week-sec-item" data-topics="video">
+        <div class="hr2" style="margin:0 0 18px"></div>
+        <div class="week-lead-kicker"><span class="rank-num" style="font-size:17px;color:rgba(var(--inkrgb),.4)">02</span><span class="kicker" style="color:rgba(var(--inkrgb),.5)">Policy &amp; business</span></div>
+        <a class="week-sec-title" href="https://deepmind.google/blog/google-deepmind-and-a24-announce-first-of-its-kind-research-partnership/" title="Google DeepMind and A24 announce first-of-its-kind research partnership">Google DeepMind and A24 announce first-of-its-kind research partnership</a>
+        <p class="week-sec-dek">Google DeepMind has announced a new research partnership with A24. This collaboration represents a first-of-its-kind cross-industry initiative between an AI research laboratory and a production studio.</p>
+        
+      </div>
       
     </div>
-    <div class="week-rest-col">
+    <div class="week-rest-col" data-section>
       <div class="week-rest-h">Rest of the week</div>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/fable-safeguards-jailbreak-framework" title="More details on Fable 5’s cyber safeguards and our jailbreak framework"><span class="week-rest-num">03</span><span class="week-rest-title">More details on Fable 5’s cyber safeguards and our jailbreak framework</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/fable-safeguards-jailbreak-framework" title="More details on Fable 5’s cyber safeguards and our jailbreak framework" data-topics="security"><span class="week-rest-num">03</span><span class="week-rest-title">More details on Fable 5’s cyber safeguards and our jailbreak framework</span></a>
       
-      <a class="week-rest-row" href="https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash/" title="Start building with Nano Banana 2 Lite and Gemini Omni Flash"><span class="week-rest-num">04</span><span class="week-rest-title">Start building with Nano Banana 2 Lite and Gemini Omni Flash</span></a>
+      <a class="week-rest-row" href="https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash/" title="Start building with Nano Banana 2 Lite and Gemini Omni Flash" data-topics="code"><span class="week-rest-num">04</span><span class="week-rest-title">Start building with Nano Banana 2 Lite and Gemini Omni Flash</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/introducing-genebench-pro" title="Introducing GeneBench-Pro"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing GeneBench-Pro</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/introducing-genebench-pro" title="Introducing GeneBench-Pro" data-topics="science"><span class="week-rest-num">05</span><span class="week-rest-title">Introducing GeneBench-Pro</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-science-ai-workbench" title="Claude Science, an AI workbench for scientists"><span class="week-rest-num">06</span><span class="week-rest-title">Claude Science, an AI workbench for scientists</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/claude-science-ai-workbench" title="Claude Science, an AI workbench for scientists" data-topics="science health"><span class="week-rest-num">06</span><span class="week-rest-title">Claude Science, an AI workbench for scientists</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/cerebras-gemma4-voice-ai" title="Hugging Face and Cerebras bring Gemma 4 to real-time voice AI"><span class="week-rest-num">07</span><span class="week-rest-title">Hugging Face and Cerebras bring Gemma 4 to real-time voice AI</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/cerebras-gemma4-voice-ai" title="Hugging Face and Cerebras bring Gemma 4 to real-time voice AI" data-topics="chips music"><span class="week-rest-num">07</span><span class="week-rest-title">Hugging Face and Cerebras bring Gemma 4 to real-time voice AI</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/scarfbench" title="ScarfBench: Benchmarking AI Agents for Enterprise Java Framework Migration"><span class="week-rest-num">08</span><span class="week-rest-title">ScarfBench: Benchmarking AI Agents for Enterprise Java Framework Migration</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/ibm-research/scarfbench" title="ScarfBench: Benchmarking AI Agents for Enterprise Java Framework Migration" data-topics="code"><span class="week-rest-num">08</span><span class="week-rest-title">ScarfBench: Benchmarking AI Agents for Enterprise Java Framework Migration</span></a>
       
-      <a class="week-rest-row" href="https://www.anthropic.com/news/redeploying-fable-5" title="Redeploying Claude Fable 5"><span class="week-rest-num">09</span><span class="week-rest-title">Redeploying Claude Fable 5</span></a>
+      <a class="week-rest-row" href="https://www.anthropic.com/news/redeploying-fable-5" title="Redeploying Claude Fable 5" data-topics=""><span class="week-rest-num">09</span><span class="week-rest-title">Redeploying Claude Fable 5</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/eee-community-evals" title="Featuring Every Eval Ever Results on Hugging Face Model Pages"><span class="week-rest-num">10</span><span class="week-rest-title">Featuring Every Eval Ever Results on Hugging Face Model Pages</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/eee-community-evals" title="Featuring Every Eval Ever Results on Hugging Face Model Pages" data-topics="code"><span class="week-rest-num">10</span><span class="week-rest-title">Featuring Every Eval Ever Results on Hugging Face Model Pages</span></a>
       
-      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/discoformer" title="DiScoFormer: One transformer for density and score, across distributions"><span class="week-rest-num">11</span><span class="week-rest-title">DiScoFormer: One transformer for density and score, across distributions</span></a>
+      <a class="week-rest-row" href="https://huggingface.co/blog/allenai/discoformer" title="DiScoFormer: One transformer for density and score, across distributions" data-topics="science"><span class="week-rest-num">11</span><span class="week-rest-title">DiScoFormer: One transformer for density and score, across distributions</span></a>
       
-      <a class="week-rest-row" href="https://openai.com/index/mapping-ai-jobs-transition-eu" title="Mapping Europe’s AI Workforce Opportunity"><span class="week-rest-num">12</span><span class="week-rest-title">Mapping Europe’s AI Workforce Opportunity</span></a>
+      <a class="week-rest-row" href="https://openai.com/index/mapping-ai-jobs-transition-eu" title="Mapping Europe’s AI Workforce Opportunity" data-topics=""><span class="week-rest-num">12</span><span class="week-rest-title">Mapping Europe’s AI Workforce Opportunity</span></a>
       
     </div>
   </div>
@@ -112,4 +144,25 @@
     <a href="../feed.xml">RSS</a>
   </div>
 </footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function pick(topic,btn){
+    for(var i=0;i<pills.length;i++) pills[i].classList.toggle('active',pills[i]===btn);
+    for(var j=0;j<items.length;j++)
+      items[j].classList.toggle('is-filtered',topic!=='all'&&!has(items[j],topic));
+    for(var s=0;s<sections.length;s++){
+      var kept=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',kept===0);
+    }
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){pick(b.getAttribute('data-topic'),b);});
+  })(pills[k]);
+})();</script>
 </body></html>
