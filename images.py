@@ -47,6 +47,7 @@ def reset_cache() -> None:
     global _catalog_cache, _labels_cache
     _catalog_cache = None
     _labels_cache = None
+    _svg_cache.clear()
 
 
 def catalog() -> dict[str, str]:
@@ -105,6 +106,33 @@ def resolve(image_key: str = "", source_id: str = "", category: str = "") -> str
         if hit:
             return hit
     return None
+
+
+_svg_cache: dict[str, str] = {}
+
+
+def inline_svg(rel_path: str | None) -> str | None:
+    """SVG 마크 파일의 내용을 그대로 반환(HTML 에 인라인용). SVG 가 아니면 None.
+
+    왜 `<img src=...>` 가 아니라 인라인인가: `<img>` 로 불러온 SVG 는 **문서와 분리된 별도
+    문서**라 이 페이지의 CSS 를 하나도 못 받는다. 그래서 팔레트 5종을 아무리 바꿔도 마크는
+    파일에 박힌 색 그대로다 — 2026-08-04 실측에서 제네릭 마크의 렌더 채도가 0.2(=사실상 무채색)
+    로 찍혔고, 리드 슬롯을 검은 선 아이콘이 차지하고 있었다. 인라인하면 `currentColor` 가
+    `.imgslot svg { color: var(--acc) }` 를 타서 팔레트를 따라간다.
+
+    브랜드 로고(래스터)는 이 경로를 안 탄다 — 원본 색을 그대로 보여줘야 하고, 상표를 우리
+    팔레트로 물들이면 안 된다."""
+    if not rel_path or not rel_path.lower().endswith(".svg"):
+        return None
+    if rel_path in _svg_cache:
+        return _svg_cache[rel_path]
+    f = IMG_DIR / Path(rel_path).name
+    if not f.is_file():
+        return None
+    # XML 선언은 문서 중간에 오면 안 되므로 제거. 우리가 관리하는 파일만 들어오는 경로다.
+    markup = re.sub(r"<\?xml.*?\?>", "", f.read_text(encoding="utf-8"), flags=re.S).strip()
+    _svg_cache[rel_path] = markup
+    return markup
 
 
 def copy_to(static_out: Path) -> None:

@@ -225,9 +225,12 @@ def test_empty_slot_falls_back_to_the_text_placeholder(tmp_path, monkeypatch):
     monkeypatch.setattr(images, "resolve", lambda *a, **k: None)
     render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
     page = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert 'class="imgslot imgslot-lead"' in page
-    assert "fit-contain" not in page and "fit-cover" not in page
-    assert '<span class="imgslot-label">Anthropic</span>' in page
+    # 슬롯 마크업만 본다 — 페이지 전체에서 'fit-' 을 찾으면 CSS 셀렉터를 언급하는 스크립트
+    # 같은 것에도 걸린다.
+    slot = re.search(r'<div class="imgslot imgslot-lead.*?</div>', page, re.S).group(0)
+    assert slot.startswith('<div class="imgslot imgslot-lead" ')
+    assert "fit-contain" not in slot and "fit-cover" not in slot
+    assert '<span class="imgslot-label">Anthropic</span>' in slot
 
 
 def test_theme_js_carries_all_five_palettes(tmp_path):

@@ -223,6 +223,8 @@ def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) ->
     # 슬롯 맞춤 방식은 전역 상수 하나지만 **아이템에 실어 보낸다** — Jinja 는 `{% import %}` 한
     # 매크로 모듈을 처음 렌더할 때 만들어 캐시하므로, 환경 전역으로 두면 그 시점 값이 굳는다.
     it["image_fit"] = images.IMAGE_FIT
+    # SVG 마크는 인라인해야 팔레트 색을 탄다(images.inline_svg 주석). 래스터 로고는 None.
+    it["image_svg"] = images.inline_svg(it["image"])
     # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
     # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
     it["display_title"] = (it.get("headline") or "").strip() or it["title"]

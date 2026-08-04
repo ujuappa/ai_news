@@ -134,6 +134,10 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
    잡아둔 상자"로 읽힌다. */
 .imgslot.has-img { align-items:center; justify-content:center; background:var(--g); }
 .imgslot img { display:block; width:100%; height:100%; }
+/* 인라인 SVG 마크(제네릭 폴백). `<img>` 로 부르면 CSS 가 안 닿아서 파일에 박힌 색으로만 나온다
+   -> render 가 마크업에 직접 심고, 여기서 팔레트 강조색을 준다. viewBox 가 있어서 비율은
+   알아서 유지된다(object-fit 불필요). 브랜드 로고는 래스터라 이 경로를 안 타고 원색 유지. */
+.imgslot svg { display:block; width:100%; height:100%; color:var(--acc); }
 .imgslot-label { font:700 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                  color:var(--n1); }
 .imgslot-lead { width:100%; aspect-ratio:4/3; padding:10px; }

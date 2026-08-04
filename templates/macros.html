@@ -20,10 +20,20 @@
   (images.IMAGE_FIT · digest.css `.imgslot-*`/`.fit-*` 참고).
 
   이미지는 제목이 이미 말하는 걸 반복하는 장식이라 슬롯 전체가 aria-hidden 이다.
+
+  SVG 는 `<img>` 가 아니라 **인라인**으로 넣는다 — `<img>` 로 부른 SVG 는 이 페이지의 CSS 를
+  못 받아서 팔레트 색을 따라갈 수 없다(제네릭 마크가 팔레트와 무관하게 검은 선으로만 나오던
+  이유. images.inline_svg 주석 참고).
+
+  `loading="lazy"` 는 **쓰지 않는다.** 리드 슬롯은 첫 화면 맨 위인데도 lazy 가 걸리면
+  브라우저가 load 이벤트 뒤로 미룬다 — 2026-08-04 실측: window.load 시점에 이미지 8개 전부
+  complete=false 이고 리소스 타이밍에 요청이 **0건**이었다. 그래서 첫 방문에는 로고가 늦게
+  뜨고 새로고침하면(캐시) 바로 떠서 "새로고침해야 보인다"로 나타났다.
 #}
 {% macro image_slot(it, cls, asset_prefix='') -%}
 <div class="imgslot {{ cls }}{% if it.image %} has-img fit-{{ it.image_fit }}{% endif %}" aria-hidden="true">
-  {%- if it.image %}<img src="{{ asset_prefix }}{{ it.image }}" alt="" loading="lazy" decoding="async">
+  {%- if it.image_svg %}{{ it.image_svg|safe }}
+  {%- elif it.image %}<img src="{{ asset_prefix }}{{ it.image }}" alt="" decoding="async">
   {%- else %}<span class="imgslot-label">{{ it.source_base or it.source_name }}</span>{% endif -%}
 </div>
 {%- endmacro %}
