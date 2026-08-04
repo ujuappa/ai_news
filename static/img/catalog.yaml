@@ -1,0 +1,62 @@
+# 마크 키 -> 사람이 읽는 이름. **LLM 프롬프트에 이 문장이 그대로 들어간다**(images.labels()
+# -> llm._system_instruction) — 모델은 이 설명만 보고 스토리에 붙일 마크를 고른다.
+#
+# 규칙 두 가지:
+#  1. 이 파일은 **선택 사항이다.** 여기 없는 파일도 카탈로그에 들어가고, 그때는 키 자체가
+#     이름이 된다. 설명을 쓰면 모델이 더 잘 고를 뿐이다.
+#  2. **파일이 없는 키는 무시된다.** 그래서 아직 안 올린 로고를 미리 적어둬도 안전하다 —
+#     `static/img/<키>.svg` 를 떨어뜨리는 순간 후보로 살아난다.
+#
+# 파일이 실제로 있는 키만 카탈로그에 잡히므로, 지금 살아있는 목록을 보려면:
+#   python -c "import images; print(sorted(images.catalog()))"
+
+# ── 주체(subject) 마크: 스토리가 "그 회사에 대한" 것일 때 붙는다 ──────────────────
+# 앞쪽 몇 개는 소스 id 와 키가 같은데 우연이 아니다 — 이들은 발행처인 동시에 뉴스의 주체다.
+# 그래서 LLM 이 고르지 않아도 소스 폴백으로 같은 마크가 붙는다.
+openai: OpenAI — the company, ChatGPT, GPT and Sora models
+anthropic: Anthropic — the company, Claude models and Claude Code
+deepmind: Google DeepMind — also for Google/Alphabet AI research generally
+meta_ai: Meta — the company, Llama models
+huggingface_blog: Hugging Face — the company, the Hub, transformers
+arxiv_ai: arXiv — an unaffiliated preprint paper
+
+# 소스가 아닌 순수 주체 마크. 이쪽은 **오직 LLM 만이 고를 수 있다**(폴백으로는 절대 안 붙는다)
+# — 이 기능의 값어치가 대부분 여기서 나온다. 예: TechCrunch 가 쓴 Nvidia 실적 기사 -> nvidia.
+gemini: Google Gemini — a specific Gemini model or the Gemini app
+nvidia: Nvidia — GPUs, CUDA, datacenter chips, earnings
+microsoft: Microsoft — Azure, Copilot, the OpenAI partnership
+apple: Apple — Apple Intelligence, Siri, on-device models
+amd: AMD — Instinct accelerators, ROCm
+tsmc: TSMC — chip fabrication and foundry capacity
+palantir: Palantir
+xai: xAI — the company and its Grok models
+
+# ── 제네릭 폴백: 특정 조직이 주체가 아닐 때 ────────────────────────────────────
+# 키 이름이 `generic_<카테고리>` 인 건 규약이다 — images.resolve() 가 아이템 카테고리로
+# 이 파일을 직접 찾는다(LLM 이 아무것도 안 골랐을 때의 마지막 단계).
+generic_model_releases: a model or product launch with no specific org mark available
+generic_research: a research paper or study with no specific org mark available
+generic_tools_products: a tool, library or developer product with no specific org mark available
+generic_policy_business: regulation, government, funding or business news with no specific org mark
+
+# ── 발행처 전용 마크 ──────────────────────────────────────────────────────────
+# ⚠️ **LLM 이 이걸 고르면 안 된다.** 스토리의 주체가 아니라 그걸 보도한 매체이기 때문
+# (TechCrunch 가 쓴 OpenAI 기사는 openai 여야 한다). 프롬프트에도 그렇게 적혀 있다.
+# 그럼 왜 카탈로그에 두나 — 모델이 null 을 주면 images.resolve() 가 **소스 id 로** 폴백하는데
+# 그 단계에서 필요하다. 즉 이 키들은 "LLM 이 고르는 후보"가 아니라 "폴백 자산"이다.
+# 설명이 그 사실을 말해줘야 모델이 안 고른다.
+techcrunch_ai: publisher mark for TechCrunch — do NOT pick; only for stories about TechCrunch itself
+guardian_ai: publisher mark for The Guardian — do NOT pick; only for stories about the Guardian itself
+bbc_tech: publisher mark for the BBC — do NOT pick; only for stories about the BBC itself
+gnews_ai: publisher mark for Google News — do NOT pick
+hn_ai: publisher mark for Hacker News — do NOT pick; only for stories about Hacker News itself
+hn_show: publisher mark for Hacker News Show HN — do NOT pick
+import_ai: publisher mark for the Import AI newsletter — do NOT pick
+ahead_of_ai: publisher mark for the Ahead of AI newsletter — do NOT pick
+arxiv_lg: publisher mark for arXiv cs.LG — prefer arxiv_ai when picking
+hf_daily_papers: publisher mark for Hugging Face Daily Papers — prefer huggingface_blog when picking
+gemini_grounding: found on the open web, no publisher mark — do NOT pick
+
+# 보관: `extra/` 하위에 로고 변형(아이콘 vs 워드마크)·사진·화면 캡처가 들어 있다. 카탈로그는
+# 하위 폴더를 훑지 않으므로 후보가 아니다 — 지금 고른 게 마음에 안 들면 거기서 꺼내 키 이름으로
+# 바꿔 넣으면 된다(예: `extra/TechCrunch-Logo-fullname.png` -> `techcrunch_ai.png`).

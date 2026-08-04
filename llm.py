@@ -98,6 +98,38 @@ significance. Return ONLY a JSON array, no prose, no markdown fences. Each eleme
 {"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
  "headline": "..."}"""
 
+# 이미지 카탈로그가 있을 때만 SYSTEM 뒤에 붙는 규칙. 별도 호출이 아니라 **같은 배치에 얹는다** —
+# 판정에 필요한 정보(제목/본문)가 이미 프롬프트에 있어서 추가 호출은 순수 낭비다.
+# 비용은 배치당 키 목록 ~250 토큰 + 아이템당 출력 ~10 토큰.
+_IMAGE_RULES = """
+
+ADDITIONALLY, add one more field to every element:
+6. image_key — the brand mark to show beside the story. Rules:
+   - Pick the mark of the story's SUBJECT (the company/lab/org the story is ABOUT), not the
+     publisher that reported it. A TechCrunch story about OpenAI gets "openai", not
+     "techcrunch_ai".
+   - Prefer a specific organization over a "generic_" key.
+   - If several orgs appear, pick the one the headline is actually about.
+   - Use the matching "generic_" key when no specific organization fits.
+   - Use null if nothing in the catalog fits. Never invent a key, never translate or reword
+     one: copy it EXACTLY as written below.
+
+Catalog (key — what it depicts):
+{catalog}
+
+So each element becomes:
+{{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
+ "headline": "...", "image_key": "..." or null}}"""
+
+
+def _system_instruction(image_catalog: dict[str, str] | None) -> str:
+    """카탈로그가 비어 있으면(=이미지 미업로드, 백필) 원래 프롬프트 그대로. 규칙을 조건부로 붙이는
+    이유: 고를 수 있는 게 없는데 image_key 를 요구하면 모델이 키를 지어낸다."""
+    if not image_catalog:
+        return SYSTEM
+    lines = "\n".join(f"- {key} — {label}" for key, label in sorted(image_catalog.items()))
+    return SYSTEM + _IMAGE_RULES.format(catalog=lines)
+
 
 def _payload(items: list[dict]) -> str:
     slim = [
@@ -198,7 +230,7 @@ def _clean_headline(value, fallback_title: str, limit: int = 70) -> str:
     return text[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "\u2026"
 
 
-def _merge_row(it: dict, row: dict) -> None:
+def _merge_row(it: dict, row: dict, image_catalog: dict[str, str] | None = None) -> None:
     """모델 응답 한 줄을 아이템에 반영. enrich 의 배치 루프에서 분리해 둔 이유는
     이 병합 규칙이 테스트 가능한 유일한 지점이기 때문(배치 호출은 네트워크가 필요)."""
     cat = row.get("category")
@@ -208,6 +240,10 @@ def _merge_row(it: dict, row: dict) -> None:
     it["significance"] = _as_float(row.get("significance"))
     it["is_major"] = bool(row.get("is_major", False))
     it["headline"] = _clean_headline(row.get("headline"), it["title"])
+    # 카탈로그에 없는 키는 조용히 버린다. 모델은 그럴듯한 키를 지어내고("anthropic_ai"),
+    # 그대로 저장하면 렌더가 매번 없는 파일을 찾는다 -> 여기서 걸러 소스/제네릭 폴백으로 보낸다.
+    key = _clean_str(row.get("image_key")).lower()
+    it["image_key"] = key if key in (image_catalog or {}) else ""
     it["_enriched"] = True
 
 
@@ -223,7 +259,7 @@ def _thinking_config(model: str) -> types.ThinkingConfig:
     return types.ThinkingConfig(thinking_budget=0)
 
 
-def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
+def _call_batch(client, model: str, chunk: list[dict], system: str = SYSTEM) -> list[dict]:
     """배치 하나를 호출 + 파싱. 일시적 실패(레이트리밋/5xx/JSON 깨짐)는 지수 백오프로
     재시도하고, 마지막 시도까지 실패하면 그대로 raise (호출자가 배치 단위로 격리)."""
     thinking = _thinking_config(model)
@@ -233,7 +269,7 @@ def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
                 model=model,
                 contents=_payload(chunk),
                 config=types.GenerateContentConfig(
-                    system_instruction=SYSTEM,
+                    system_instruction=system,
                     max_output_tokens=16000,
                     thinking_config=thinking,
                     response_mime_type="application/json",
@@ -249,10 +285,14 @@ def _call_batch(client, model: str, chunk: list[dict]) -> list[dict]:
     raise AssertionError("unreachable")
 
 
-def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) -> list[dict]:
-    """items 에 category/summary/significance/is_major/_enriched 를 채워 반환.
+def enrich(items: list[dict], batch_size: int = 40, model: str | None = None,
+           image_catalog: dict[str, str] | None = None) -> list[dict]:
+    """items 에 category/summary/significance/is_major/image_key/_enriched 를 채워 반환.
     model 미지정 시 config.MODEL(환경변수 DIGEST_MODEL) 사용 — 백필처럼 다른 모델을 쓰고
     싶을 때만 명시적으로 넘기면 됨.
+
+    `image_catalog` 는 {키: 사람이 읽는 이름}(images.labels()). 넘기지 않으면 이미지 선택
+    자체를 요청하지 않는다 -> 기존 호출부(backfill 등)는 프롬프트도 비용도 그대로다.
 
     배치 하나가 죽어도 나머지는 살린다(실패 배치의 아이템은 `_enriched: False` + 원문 폴백).
     단 전량 실패면 RuntimeError — 조용히 빈 다이제스트를 커밋하고 CI 가 초록불이 되는 걸 막는다."""
@@ -261,12 +301,13 @@ def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) ->
     client = genai.Client()  # .env 의 GEMINI_API_KEY(Developer API) 또는 GOOGLE_GENAI_USE_VERTEXAI 계열(Vertex AI) 로 자동 인증
     by_id = {it["id"]: it for it in items}
     model_name = model or config.MODEL
+    system = _system_instruction(image_catalog)
 
     batches = [items[i : i + batch_size] for i in range(0, len(items), batch_size)]
     failed = 0
     for n, chunk in enumerate(batches, 1):
         try:
-            rows = _call_batch(client, model_name, chunk)
+            rows = _call_batch(client, model_name, chunk, system)
         except Exception as e:
             failed += 1
             print(f"      ⚠️ 배치 {n}/{len(batches)} 포기 — {len(chunk)}건 원문 폴백 ({type(e).__name__}: {e})")
@@ -275,7 +316,7 @@ def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) ->
             it = by_id.get(row.get("id"))
             if not it:
                 continue
-            _merge_row(it, row)
+            _merge_row(it, row, image_catalog)
 
     # LLM 이 빠뜨렸거나 배치가 죽은 아이템 폴백
     for it in items:
@@ -283,6 +324,7 @@ def enrich(items: list[dict], batch_size: int = 40, model: str | None = None) ->
         it.setdefault("significance", 0.0)
         it.setdefault("is_major", False)
         it.setdefault("headline", it["title"])
+        it.setdefault("image_key", "")   # 소스 마크 -> 카테고리 제네릭 순으로 폴백된다
         it.setdefault("_enriched", False)
 
     done = sum(1 for it in items if it["_enriched"])

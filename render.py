@@ -16,9 +16,9 @@ CSS 6블록을 `templates/*.html` · `static/digest.css` 로 뺐다(1,069줄 -> 
 사이드바(Signal index + Source alert), 테마 스위처가 푸터로 이동. 사인인/주간/월간은 **미구현이라
 의도적으로 뺐다**(사용자 지시 2026-08-03) — 나중에 붙일 자리만 남겨둠.
 
-**이미지**: 캔버스 디자인은 회사별 소스 마크를 쓴다. 아직 이미지 파일이 없으므로 `static/img/`
-(`<source_id>.webp|jpg|jpeg|png|svg`)에 파일을 넣으면 자동으로 잡히고, 없으면 같은 크기의 빈
-플레이스홀더가 자리를 지킨다 -> 레이아웃이 나중에 흔들리지 않는다. `_image_for()` 참고.
+**이미지**: 캔버스 디자인은 스토리마다 마크를 쓴다. 어떤 마크인지는 `images.resolve()` 가 정하고
+(LLM 이 고른 주체 -> 수집 소스 -> 카테고리 제네릭 순), 카탈로그는 `static/img/` 의 파일 목록이다.
+맞는 파일이 하나도 없으면 같은 크기의 빈 플레이스홀더가 자리를 지킨다 -> 레이아웃이 안 흔들린다.
 
 이제 이 파일은 **데이터 가공만** 한다: DB 행 -> 템플릿 변수. 마크업은 templates/, 스타일은 static/.
 
@@ -30,7 +30,6 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 from datetime import date as _date, datetime, timedelta as _timedelta, timezone
 from email.utils import format_datetime
 from html import escape
@@ -38,6 +37,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+import images
 from config import CATEGORY_LABELS, CATEGORY_ORDER
 from store import is_week_label, label_sort_key
 
@@ -94,9 +94,6 @@ def _root_vars_css(palette: dict) -> str:
 
 TEMPLATES_DIR = Path(__file__).parent / "templates"
 STATIC_DIR = Path(__file__).parent / "static"
-IMG_DIR = STATIC_DIR / "img"
-# 디자인이 쓰는 소스 마크 이미지. 확장자 우선순위 = 이 순서(먼저 찾은 게 이긴다).
-IMG_EXTS = (".webp", ".jpg", ".jpeg", ".png", ".svg")
 
 _env = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=True)
 _env.globals.update(palettes=PALETTES, default_theme=DEFAULT_THEME, labels=CATEGORY_LABELS,
@@ -121,35 +118,10 @@ def write_assets(output_dir: Path) -> Path:
     authored = (STATIC_DIR / "digest.css").read_text(encoding="utf-8")
     css_path.parent.mkdir(parents=True, exist_ok=True)
     css_path.write_text(_root_vars_css(PALETTES[DEFAULT_THEME]) + authored, encoding="utf-8")
-    _copy_images(css_path.parent)
+    images.copy_to(css_path.parent)
     _assets_written.add(css_path)
     return css_path
 
-
-def _copy_images(static_out: Path) -> None:
-    """`static/img/` 를 `output/static/img/` 로 복사. 폴더가 없으면 아무것도 안 한다.
-
-    이미지는 아직 준비 전이라(2026-08-03) 보통 빈 폴더다 — 나중에 파일만 떨어뜨리면
-    다음 렌더부터 자동으로 배포된다."""
-    if not IMG_DIR.is_dir():
-        return
-    files = [f for f in IMG_DIR.iterdir() if f.is_file() and f.suffix.lower() in IMG_EXTS]
-    if not files:
-        return
-    dest = static_out / "img"
-    dest.mkdir(parents=True, exist_ok=True)
-    for f in files:
-        shutil.copyfile(f, dest / f.name)
-
-
-def _image_for(source_id: str) -> str | None:
-    """소스별 이미지가 있으면 루트 기준 상대경로, 없으면 None(-> 템플릿이 빈 자리를 그린다)."""
-    if not source_id:
-        return None
-    for ext in IMG_EXTS:
-        if (IMG_DIR / f"{source_id}{ext}").is_file():
-            return f"static/img/{source_id}{ext}"
-    return None
 
 _SHORT_LABELS = {
     "model_releases": "Model", "research": "Research", "tools_products": "Tools",
@@ -246,7 +218,11 @@ def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) ->
     it["source_count"] = len({it["_source_base"], *it.get("cluster_sources", [])})
     it["rel_time"] = _relative_time(it.get("published"), ref)
     it["rel_time_long"] = _relative_time(it.get("published"), ref, long=True)
-    it["image"] = _image_for(it.get("source_id", ""))
+    it["image"] = images.resolve(it.get("image_key", ""), it.get("source_id", ""),
+                                 it.get("category", ""))
+    # 슬롯 맞춤 방식은 전역 상수 하나지만 **아이템에 실어 보낸다** — Jinja 는 `{% import %}` 한
+    # 매크로 모듈을 처음 렌더할 때 만들어 캐시하므로, 환경 전역으로 두면 그 시점 값이 굳는다.
+    it["image_fit"] = images.IMAGE_FIT
     # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
     # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
     it["display_title"] = (it.get("headline") or "").strip() or it["title"]

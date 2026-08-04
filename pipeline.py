@@ -15,6 +15,7 @@ from datetime import date
 import config
 import dedup
 import fetch
+import images
 import llm
 import render
 from store import Store
@@ -70,7 +71,8 @@ def _drop_reasons(clustered: list[dict], flat: list[dict], settings) -> dict[str
     return buckets
 
 
-def _grounding_items(clustered: list[dict], store: Store, settings) -> list[dict]:
+def _grounding_items(clustered: list[dict], store: Store, settings,
+                     image_catalog: dict[str, str] | None = None) -> list[dict]:
     """Google Search grounding 으로 피드가 놓친 주요 뉴스를 줍는다. 보조 경로이므로
     **어떤 실패도 하루치 실행을 죽이지 못한다** — 실패하면 경고만 찍고 0건 반환.
 
@@ -107,7 +109,7 @@ def _grounding_items(clustered: list[dict], store: Store, settings) -> list[dict
         print(f"      놓친 뉴스 {found}건 중 신규 {len(missed)}건, 강화 시작")
         for it in missed:
             it["summary_raw"] = fetch.extract_full_text(it["url"], it.get("summary_raw", ""))
-        return llm.enrich(missed)
+        return llm.enrich(missed, image_catalog=image_catalog)
     except Exception as e:  # noqa: BLE001
         print(f"      [!] grounding 건너뜀 ({type(e).__name__}: {e}) — 피드 수집분으로 계속")
         return []
@@ -180,9 +182,10 @@ def run(dry_run: bool = False):
             it["significance"] = 0.5
             it["is_major"] = False
     else:
-        print(f"[3/5] LLM 강화 — model={config.MODEL}")
-        clustered = llm.enrich(clustered)
-        clustered.extend(_grounding_items(clustered, store, settings))
+        catalog = images.labels()
+        print(f"[3/5] LLM 강화 — model={config.MODEL}, 이미지 후보 {len(catalog)}개")
+        clustered = llm.enrich(clustered, image_catalog=catalog)
+        clustered.extend(_grounding_items(clustered, store, settings, catalog))
 
     id_to_name = {s.id: s.name for s in cfg.sources}
     disabled_ids = {s.id for s in cfg.sources if not s.enabled}

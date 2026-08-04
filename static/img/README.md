@@ -1,26 +1,63 @@
-# static/img — 소스 마크 이미지
+# static/img — 마크 카탈로그
 
-캔버스 디자인(2026-08-03 "AI Digest - Home")은 리드 스토리 / Also today 카드 /
-Worth knowing 행에 회사별 이미지를 쓴다. **아직 이미지가 없어서 지금은 같은 크기의 빈
-플레이스홀더가 자리를 지킨다** — 나중에 파일을 넣으면 레이아웃 변화 없이 채워진다.
+리드 스토리 / Also today 카드 / Worth knowing 행의 이미지 슬롯에 들어가는 마크들.
+**이 폴더의 파일 목록이 곧 카탈로그다** — 설정에 목록을 따로 관리하지 않는다.
+파일을 넣으면 다음 실행부터 LLM 후보에 들어가고, 빼면 자동으로 빠진다.
 
 ## 넣는 법
 
-파일명을 `sources.yaml` 의 소스 id 와 같게 해서 이 폴더에 두면 끝이다.
+파일명(확장자 제외)이 곧 **키**다.
 
 ```
-static/img/openai.webp
-static/img/anthropic.png
-static/img/techcrunch.jpg
+static/img/openai.svg
+static/img/anthropic.svg
+static/img/generic_research.svg
 ```
 
-- 인식하는 확장자(우선순위 순): `.webp` `.jpg` `.jpeg` `.png` `.svg`
+- 인식하는 확장자(우선순위 순): `.svg` `.avif` `.webp` `.png` `.jpg` `.jpeg`
+  같은 키로 두 파일이 있으면 앞선 확장자가 이긴다(`openai.svg` > `openai.png`).
+- 키에 쓸 수 있는 문자: 소문자·숫자·`_`·`-`. 그 외 파일명은 조용히 무시된다
+  (`google&deepmind_logo.png` 처럼 `&` 가 들어가면 후보가 안 된다).
+- **하위 폴더는 훑지 않는다.** 안 쓰는 변형/사진은 `extra/` 에 넣어두면 보관은 되고 후보는 안 된다.
 - 다음 렌더(`python rerender.py` 또는 `python pipeline.py`)에서 `output/static/img/` 로 복사된다.
-- 표시는 `object-fit: cover` + 그레이스케일 필터. 슬롯 비율은 리드 4:3(좁은 화면 16:9),
-  카드 16:10, 썸네일 4:3(128px).
-- 파일이 없는 소스는 계속 플레이스홀더로 나온다 — 전부 채울 필요 없다.
+  카탈로그에 잡힌 이미지만 복사되므로 이 README 와 `catalog.yaml` 은 배포되지 않는다.
 
-구현: `render._image_for()` / `render._copy_images()`, 마크업은 `templates/macros.html`
-의 `image_slot` 매크로, 크기는 `static/digest.css` 의 `.imgslot-*`.
+지금 살아있는 키를 보려면:
 
-⚠️ 공개 뉴스 소스의 브랜드 마크만 둘 것. 사내 자산·PII 는 이 레포에 올리지 않는다.
+```bash
+python -c "import images; print(sorted(images.catalog()))"
+```
+
+## 어떤 마크가 붙는지 (`images.resolve()`)
+
+아이템 하나가 쓸 이미지를 위에서부터 찾는다:
+
+1. **`image_key`** — LLM 이 고른 **스토리의 주체**. TechCrunch 가 쓴 OpenAI 기사면 `openai`.
+   `llm.enrich` 가 요약·분류와 **같은 배치에서** 함께 고른다(추가 API 호출 없음).
+   카탈로그에 없는 키를 지어내면 저장 전에 버려진다(`llm._merge_row`).
+2. **`source_id`** — 수집한 소스의 마크. 위가 비었을 때.
+3. **`generic_<카테고리>`** — 위 둘 다 없을 때의 카테고리 제네릭.
+4. 아무것도 없으면 같은 크기의 빈 슬롯 + 소스명 텍스트. 레이아웃은 안 흔들린다.
+
+3번 덕분에 아카이브 415건(=`image_key` 가 생기기 전 데이터)도 재엔리치 없이 마크가 붙는다.
+
+## 이름과 설명
+
+`catalog.yaml` 에 키별 설명을 적으면 **그 문장이 LLM 프롬프트에 그대로 들어간다** — 모델은
+그걸 보고 고르므로, 설명이 좋을수록 선택이 좋아진다. 파일이 없는 키는 무시되니 아직 안 올린
+로고를 미리 적어둬도 된다. 파일만 넣어도 동작한다(키 자체가 이름이 됨).
+
+## 만들 때
+
+- **SVG 를 우선**할 것. 리드 슬롯은 4:3 전폭이라 작은 래스터는 확대되면 뭉갠다.
+- 팔레트 5종이 **전부 밝은 배경**이다(`render.PALETTES`) — 흰색/밝은 단색 마크는 안 보인다.
+  어두운 단색이나 원본 컬러로 넣을 것.
+- 표시는 `object-fit: contain` + 넉넉한 여백이라 로고가 잘리지 않는다. 사진을 넣게 되면
+  `images.IMAGE_FIT = "cover"` 한 줄로 전체를 꽉 채우는 그레이스케일 처리로 바꿀 수 있다.
+
+## ⚠️ 주의
+
+- 공개 뉴스 소스·회사의 **브랜드 마크만** 둘 것. 사내 자산·PII 는 이 레포에 올리지 않는다.
+- 로고는 상표다. 편집 목적의 인용은 문제없지만 **원형을 변형하거나 팔레트 색으로 물들이지 말 것.**
+- 총 용량을 보수적으로. SVG 면 대개 문제없지만, PNG 만 제공하는 브랜드가 섞이면
+  첫 렌더 후 `output/` 크기를 확인할 것.

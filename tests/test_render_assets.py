@@ -15,6 +15,7 @@ import re
 
 import pytest
 
+import images
 import render
 
 STYLE_RE = re.compile(r"<style>", re.I)
@@ -186,6 +187,47 @@ def test_templates_live_on_disk_not_in_python():
     src = (render.TEMPLATES_DIR.parent / "render.py").read_text(encoding="utf-8")
     assert "<!doctype html" not in src.lower(), "마크업이 render.py 로 되돌아왔다"
     assert "box-sizing" not in src, "CSS 가 render.py 로 되돌아왔다"
+
+
+# ── 이미지 슬롯의 맞춤 방식이 한 곳에서만 정해지는지 ───────────────────────────
+
+def test_both_fit_treatments_exist_in_css():
+    """`images.IMAGE_FIT` 를 뒤집는 게 정말 한 줄이려면 CSS 에 두 벌이 다 있어야 한다."""
+    css = _css_no_comments()
+    assert ".fit-contain img" in css and "object-fit:contain" in css
+    assert ".fit-cover img" in css and "object-fit:cover" in css
+
+
+def test_slot_reserves_space_before_the_image_loads():
+    """aspect-ratio 가 빠지면 로고가 늦게 뜰 때 지면이 밀린다."""
+    css = _css_no_comments()
+    for cls in (".imgslot-lead", ".imgslot-card", ".imgslot-thumb"):
+        m = re.search(re.escape(cls) + r"\s*\{([^}]*)\}", css)
+        assert m and "aspect-ratio:" in m.group(1), f"{cls} 에 aspect-ratio 가 없다"
+
+
+def test_filled_slot_carries_the_configured_fit_class(tmp_path, monkeypatch):
+    """마크업이 `images.IMAGE_FIT` 을 그대로 따라가는지 — 상수 한 줄로 전체가 바뀐다는 계약.
+
+    **Jinja 환경 전역이 아니라 아이템 필드여야 하는 이유가 이 테스트다**: `{% import %}` 한
+    매크로 모듈은 첫 렌더 때 만들어져 캐시되므로, 전역으로 두면 그 시점 값이 굳어서
+    이 테스트가 앞선 테스트의 렌더 여부에 따라 붙었다 떨어졌다 한다(실제로 겪음)."""
+    monkeypatch.setattr(images, "resolve", lambda *a, **k: "static/img/openai.svg")
+    monkeypatch.setattr(images, "IMAGE_FIT", "cover")
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert 'class="imgslot imgslot-lead has-img fit-cover"' in page
+    assert 'src="static/img/openai.svg"' in page
+
+
+def test_empty_slot_falls_back_to_the_text_placeholder(tmp_path, monkeypatch):
+    """맞는 파일이 하나도 없으면 fit-* 없이 소스명 상자를 그린다(기존 동작 유지)."""
+    monkeypatch.setattr(images, "resolve", lambda *a, **k: None)
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert 'class="imgslot imgslot-lead"' in page
+    assert "fit-contain" not in page and "fit-cover" not in page
+    assert '<span class="imgslot-label">Anthropic</span>' in page
 
 
 def test_theme_js_carries_all_five_palettes(tmp_path):

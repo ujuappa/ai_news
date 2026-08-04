@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS items (
     drop_reason  TEXT DEFAULT '',    -- is_published=0 일 때의 사유 (min_significance 등)
     cluster_sources TEXT DEFAULT '[]',  -- 같은 스토리를 함께 다룬 소스 이름 (JSON 배열)
     cluster_size    INTEGER DEFAULT 1,  -- 클러스터 크기(대표 1 + 병합된 N)
-    thread_parent_id TEXT DEFAULT ''    -- 같은 스토리의 '앞 이야기' items.id (없으면 '')
+    thread_parent_id TEXT DEFAULT '',   -- 같은 스토리의 '앞 이야기' items.id (없으면 '')
+    image_key    TEXT DEFAULT ''        -- LLM 이 고른 마크 키(images.catalog). 비면 소스/제네릭 폴백
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -96,6 +97,7 @@ _MIGRATIONS = [
     ("cluster_sources", "ALTER TABLE items ADD COLUMN cluster_sources TEXT DEFAULT '[]'"),
     ("cluster_size", "ALTER TABLE items ADD COLUMN cluster_size INTEGER DEFAULT 1"),
     ("thread_parent_id", "ALTER TABLE items ADD COLUMN thread_parent_id TEXT DEFAULT ''"),
+    ("image_key", "ALTER TABLE items ADD COLUMN image_key TEXT DEFAULT ''"),
 ]
 
 
@@ -241,8 +243,8 @@ class Store:
                 """INSERT OR REPLACE INTO items
                    (id, source_id, category, title, headline, url, summary, significance,
                     is_major, published, fetched_at, digest_date, is_published, drop_reason,
-                    cluster_sources, cluster_size, thread_parent_id)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    cluster_sources, cluster_size, thread_parent_id, image_key)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     it["id"], it["source_id"], it["category"], it["title"],
                     it.get("headline", ""), it["url"],
@@ -253,6 +255,7 @@ class Store:
                     json.dumps(it.get("cluster_sources") or [], ensure_ascii=False),
                     int(it.get("cluster_size", 1) or 1),
                     it.get("thread_parent_id") or "",
+                    it.get("image_key") or "",
                 ),
             )
         self.conn.commit()
@@ -304,7 +307,8 @@ class Store:
         호출부에서 source_id -> 소스 이름 매핑을 채워줘야 함(config.py 참고)."""
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
-                      is_major, published, cluster_sources, cluster_size, thread_parent_id
+                      is_major, published, cluster_sources, cluster_size, thread_parent_id,
+                      image_key
                FROM items WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
@@ -385,7 +389,7 @@ class Store:
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, digest_date, cluster_sources, cluster_size,
-                      thread_parent_id FROM items
+                      thread_parent_id, image_key FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()
@@ -396,7 +400,7 @@ class Store:
         "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""
         sql = """SELECT id, source_id, category, title, headline, url, summary, significance,
                         is_major, published, digest_date, drop_reason,
-                        cluster_sources, cluster_size, thread_parent_id FROM items
+                        cluster_sources, cluster_size, thread_parent_id, image_key FROM items
                  WHERE is_published=0"""
         params: tuple = ()
         if digest_date is not None:

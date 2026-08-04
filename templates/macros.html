@@ -14,13 +14,16 @@
 {%- endmacro %}
 
 {#
-  이미지 슬롯. 파일이 아직 없으므로(2026-08-03) 보통은 같은 크기의 빈 상자가 그려진다 —
-  나중에 `static/img/<source_id>.webp` 를 넣으면 레이아웃 변화 없이 그 자리에 들어간다.
-  비율/크기는 cls 로 정한다(render.py `_image_for` · digest.css `.imgslot-*` 참고).
+  이미지 슬롯. 어떤 마크를 쓸지는 `images.resolve()` 가 정하고(LLM 이 고른 주체 -> 수집 소스 ->
+  카테고리 제네릭), 맞는 파일이 없으면 같은 크기의 빈 상자 + 소스명이 자리를 지킨다.
+  비율/크기는 cls 로, 맞춤 방식(contain/cover)은 render 가 실어주는 `it.image_fit` 으로 정한다
+  (images.IMAGE_FIT · digest.css `.imgslot-*`/`.fit-*` 참고).
+
+  이미지는 제목이 이미 말하는 걸 반복하는 장식이라 슬롯 전체가 aria-hidden 이다.
 #}
 {% macro image_slot(it, cls, asset_prefix='') -%}
-<div class="imgslot {{ cls }}" aria-hidden="true">
-  {%- if it.image %}<img src="{{ asset_prefix }}{{ it.image }}" alt="">
+<div class="imgslot {{ cls }}{% if it.image %} has-img fit-{{ it.image_fit }}{% endif %}" aria-hidden="true">
+  {%- if it.image %}<img src="{{ asset_prefix }}{{ it.image }}" alt="" loading="lazy" decoding="async">
   {%- else %}<span class="imgslot-label">{{ it.source_base or it.source_name }}</span>{% endif -%}
 </div>
 {%- endmacro %}

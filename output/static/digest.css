@@ -125,11 +125,15 @@ footer.site-footer { max-width:1280px; margin:0 auto; background:var(--g); paddi
 a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 /* — 이미지 슬롯 —
-   2026-08-03: 이미지는 아직 없다. 파일이 들어올 때 레이아웃이 밀리지 않도록 **지금부터 자리를
-   차지한다**(aspect-ratio 고정). `static/img/<source_id>.webp` 가 생기면 자동으로 채워진다. */
+   슬롯은 이미지가 있든 없든 aspect-ratio 로 **먼저 자리를 잡는다** — 파일을 넣고 빼도 레이아웃이
+   밀리지 않는다. 채워지지 않은 슬롯은 소스명 텍스트 플레이스홀더. */
 .imgslot { background:var(--g2); border:1px solid var(--n2); display:flex; align-items:flex-end;
            overflow:hidden; }
-.imgslot img { width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.08); }
+/* 채워진 슬롯만 배경을 --g 로. 로고 상당수가 흰 배경을 달고 오는 래스터라 --g2(회색) 위에
+   올리면 로고 안의 흰 사각형이 패널과 어긋나 보인다. 빈 슬롯은 --g2 를 유지해야 "자리를
+   잡아둔 상자"로 읽힌다. */
+.imgslot.has-img { align-items:center; justify-content:center; background:var(--g); }
+.imgslot img { display:block; width:100%; height:100%; }
 .imgslot-label { font:700 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                  color:var(--n1); }
 .imgslot-lead { width:100%; aspect-ratio:4/3; padding:10px; }
@@ -137,6 +141,17 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .imgslot-card .imgslot-label { font-size:9px; letter-spacing:.12em; }
 .imgslot-thumb { width:128px; aspect-ratio:4/3; padding:6px; }
 .imgslot-thumb .imgslot-label { font-size:8px; letter-spacing:.1em; }
+
+/* 맞춤 방식은 두 벌을 다 두고 마크업이 하나를 고른다(`images.IMAGE_FIT` -> macros.image_slot).
+   지금 들어오는 건 사진이 아니라 로고라서 contain 이 기본:
+     contain — 로고 전체를 보여준다. 잘리지 않고 원색 유지, 슬롯이 크므로 여백을 넉넉히.
+     cover   — 슬롯을 꽉 채우고 그레이스케일. 사진/스크린샷을 넣게 되면 이쪽으로.
+   바꿀 때는 CSS 가 아니라 images.IMAGE_FIT 한 줄만 고치면 된다. */
+.fit-contain img { object-fit:contain; filter:none; }
+.fit-cover img { object-fit:cover; filter:grayscale(1) contrast(1.08); }
+.fit-contain.imgslot-lead { padding:12%; }
+.fit-contain.imgslot-card { padding:11%; }
+.fit-contain.imgslot-thumb { padding:14px; }
 
 /* ==== home ==== */
 
