@@ -212,9 +212,14 @@ a:not([href]):hover { color:var(--ink); }
 .section-head .section-h { margin-bottom:0; }
 .section-sub { font:500 11px Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--n1); }
 
-.also-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:32px;
+/* Also today 는 최대 3장(stories 02–04). grid + auto-fit 은 토픽 필터가 카드를
+   display:none 으로 숨길 때 빈 트랙을 접어 남은 카드·imgslot 을 전폭으로 키운다
+   (chips/robotics 에서 이미지가 거대해지던 원인). flex + 50% 상한이면
+   1장→반폭, 2장→반씩(Government & law 기준), 3장→1/3 씩(All 기준). */
+.also-grid { display:flex; flex-wrap:wrap; gap:32px;
              border-top:1px solid var(--n2); padding-top:24px; }
-.also-card { display:flex; flex-direction:column; gap:12px; }
+.also-card { flex:1 1 calc((100% - 64px) / 3); max-width:calc((100% - 32px) / 2);
+             min-width:min(250px, 100%); display:flex; flex-direction:column; gap:12px; }
 .card-cat { font:800 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
 .card-title { font:800 25px/1.12 Archivo,sans-serif; letter-spacing:-.022em; color:var(--ink); text-decoration:none; }
 .card-title:hover { color:var(--accd); }
@@ -271,6 +276,7 @@ a:not([href]):hover { color:var(--ink); }
 @media (max-width:640px) {
   .worth-row { grid-template-columns:minmax(0,1fr); }
   .imgslot-thumb { width:100%; }
+  .also-card { flex-basis:100%; max-width:100%; }
 }
 
 /* ==== category ==== */

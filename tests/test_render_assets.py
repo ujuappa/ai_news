@@ -206,6 +206,22 @@ def test_slot_reserves_space_before_the_image_loads():
         assert m and "aspect-ratio:" in m.group(1), f"{cls} 에 aspect-ratio 가 없다"
 
 
+def test_also_grid_does_not_stretch_a_lone_filtered_card():
+    """토픽 필터가 also-card 를 숨기면 `auto-fit` 이 빈 트랙을 접어 남은 카드가 전폭이 된다.
+
+    슬롯(aspect-ratio 16/10 · width 100%)이 따라 커져 chips/robotics 처럼 1~2건만 남는
+    필터에서 이미지가 거대해진다. All / Government & law(카드 2~3장) 크기를 기준으로,
+    그리드는 auto-fit 을 쓰지 않고 카드에 전폭 방지 상한을 둔다."""
+    css = _css_no_comments()
+    grid = re.search(r"\.also-grid\s*\{([^}]*)\}", css)
+    assert grid, ".also-grid 규칙을 찾지 못했다"
+    assert "auto-fit" not in grid.group(1), \
+        "auto-fit 은 필터로 숨은 카드의 트랙을 접어 Lone 카드를 전폭으로 키운다"
+    card = re.search(r"\.also-card\s*\{([^}]*)\}", css)
+    assert card and "max-width:" in card.group(1), \
+        "Lone also-card 가 전폭으로 커지지 않도록 max-width 가 필요하다"
+
+
 def test_filled_slot_carries_the_configured_fit_class(tmp_path, monkeypatch):
     """마크업이 `images.IMAGE_FIT` 을 그대로 따라가는지 — 상수 한 줄로 전체가 바뀐다는 계약.
 
