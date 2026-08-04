@@ -30,10 +30,12 @@ BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
 # significance 0.7~0.9 를 받아서 하한·캡으로는 안 걸린다(LLM 은 "AI 뉴스 모음"을 중요한
 # 뉴스로 읽는다). 그래서 **수집 단계에서 구조로 막는다.**
 #
-# 세 겹으로 막는 이유 — 블록리스트 하나로는 내일 생기는 새 콘텐츠팜을 못 잡는다:
+# 다섯 겹으로 막는 이유 — 블록리스트 하나로는 내일 생기는 새 콘텐츠팜을 못 잡는다:
 #   1) 맨 도메인(경로 없음)  = 홈페이지/섹션 인덱스. 기사가 아니다. **도메인과 무관하게 항상 유효.**
 #   2) 도메인 블록리스트    = 이미 관측된 팜/뉴스레터 플랫폼.
 #   3) URL 슬러그 패턴      = 'ai-news-today', 'daily-digest' 류. 새 도메인에도 걸린다.
+#   4) soft 404 제목       = 200 을 주는 에러 페이지. URL 만 봐서는 절대 못 잡는다(아래 참고).
+#   5) 제목 불일치         = 도착한 페이지가 주장한 기사가 아닌 경우. **리스트 관리가 필요 없다.**
 # 실제 설정값은 sources.yaml `settings.grounding` 이고, 아래는 그게 없을 때의 폴백이다
 # (직접 호출/테스트 경로). 빈 리스트([])를 넘기면 "필터 끄기"로 동작한다 — None 과 구분됨.
 GROUNDING_BLOCKED_DOMAINS = (
@@ -49,7 +51,6 @@ GROUNDING_BLOCKED_URL_PATTERNS = (
     "this-week-in", "ai-news-", "/newsletter/", "/digest/",
 )
 
-
 def _url_domain(url: str) -> str:
     """호스트만 소문자로. `www.` 와 포트는 뗀다."""
     host = (urlsplit(url).hostname or "").lower()
@@ -58,16 +59,22 @@ def _url_domain(url: str) -> str:
 
 def _grounding_reject_reason(url: str,
                              blocked_domains: tuple[str, ...] | list[str],
-                             blocked_patterns: tuple[str, ...] | list[str]) -> str:
+                             blocked_patterns: tuple[str, ...] | list[str],
+                             page_title: str = "",
+                             claimed_title: str = "") -> str:
     """grounding URL 을 버릴 이유. 실으면 안 될 이유가 없으면 ''.
 
     맨 도메인 검사를 **가장 먼저** 두는 이유: 리스트 관리가 필요 없는 유일한 규칙이고,
-    07-31 에 실린 4건 중 3건이 여기서 잡힌다."""
+    07-31 에 실린 4건 중 3건이 여기서 잡힌다.
+
+    `page_title` 은 `fetch.resolve_article` 이 실제로 받아온 도착 페이지의 제목이다.
+    안 주면(HEAD 폴백/파싱 실패) 내용 검사는 조용히 생략된다 — 우리 쪽 실패를 이유로
+    멀쩡한 기사를 버리지 않는다."""
     parts = urlsplit(url)
     if not _url_domain(url):
         return "invalid"
     if parts.path in ("", "/") and not parts.query:
-        # 홈페이지/섹션 인덱스. resolve_url 은 통과시킨다(200 이니까) — 여기서 잡아야 한다.
+        # 홈페이지/섹션 인덱스. resolve_article 은 통과시킨다(200 이니까) — 여기서 잡아야 한다.
         return "bare_domain"
     domain = _url_domain(url)
     if any(domain == b or domain.endswith("." + b) for b in blocked_domains):
@@ -75,7 +82,9 @@ def _grounding_reject_reason(url: str,
     low = url.lower()
     if any(p in low for p in blocked_patterns):
         return "roundup_pattern"
-    return ""
+    # 여기부터는 URL 이 아니라 **실제로 도착한 페이지**를 본다.
+    # 판정 자체는 fetch 가 갖고 있다 — linkcheck.py 가 같은 기준을 써야 하므로.
+    return fetch.dead_page_reason(page_title, claimed_title)
 
 SYSTEM = """You curate a personal daily AI-news digest. Items are pre-deduplicated.
 For EACH item, decide:
@@ -491,13 +500,15 @@ def catch_missed_news(existing_titles: list[str], model: str | None = None,
             continue
         # grounding 은 불투명한 리다이렉트 주소를 주거나 URL 자체를 지어내기도 한다.
         # 최종 주소로 풀고, 도달 안 되면 버린다(깨진 링크를 싣느니 빼는 게 낫다).
-        url = fetch.resolve_url(raw_url)
+        url, page_title = fetch.resolve_article(raw_url)
         if not url:
             unreachable += 1
             continue
         # 품질 게이트는 **resolve 뒤**에 본다. grounding 이 주는 raw_url 은 리다이렉트
         # 래퍼일 때가 많아서 도메인/슬러그를 봐도 의미가 없다. 하루 3건이라 요청 낭비도 무의미.
-        reason = _grounding_reject_reason(url, doms, pats)
+        # 도착 페이지 제목도 같이 넘긴다 — soft 404 는 URL 로는 판정이 불가능하다.
+        reason = _grounding_reject_reason(url, doms, pats,
+                                          page_title=page_title, claimed_title=title)
         if reason:
             rejected.append((reason, url))
             continue

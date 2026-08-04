@@ -11,6 +11,7 @@ import json
 import re
 import time
 from collections.abc import Sequence
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from urllib.parse import quote, urlencode
@@ -25,7 +26,7 @@ from config import Source
 _TAG_RE = re.compile(r"<[^>]+>")
 _OG_TITLE_RE = re.compile(r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\'](.*?)["\']', re.I)
 _OG_DESC_RE = re.compile(r'<meta[^>]+property=["\']og:description["\'][^>]+content=["\'](.*?)["\']', re.I)
-_TITLE_TAG_RE = re.compile(r"<title>(.*?)</title>", re.I | re.S)
+_TITLE_TAG_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
 _MAIN_RE = re.compile(r"<main[^>]*>(.*?)</main>", re.I | re.S)
 _P_RE = re.compile(r"<p[^>]*>(.*?)</p>", re.I | re.S)
 # 발행일 추출용. sitemap <lastmod> 는 사이트 리빌드 때 갱신되므로 발행일이 아님
@@ -89,29 +90,143 @@ def _apply_cutoff(items: list[dict], max_age_days: int | None) -> list[dict]:
     return [it for it in items if (_parse_dt(it["published"]) or cutoff) >= cutoff]
 
 
-def resolve_url(url: str, timeout: int = 15) -> str:
-    """리다이렉트를 끝까지 따라가 최종 URL 을 반환. 도달 불가면 ''.
+TITLE_READ_BYTES = 200_000  # <title> 은 <head> 안에 있다. 통짜 다운로드를 막는 상한
 
-    grounding(catch_missed_news)용. 두 가지를 동시에 해결한다:
-    (1) Gemini 가 `vertexaisearch.cloud.google.com/grounding-api-redirect/...` 같은 불투명한
-        리다이렉트 주소를 주는 경우 → 실제 기사 주소로 바꾼다(id 해시도 안정된다),
-    (2) 모델이 그럴듯하게 지어낸 URL(404) → 걸러낸다.
-    HEAD 를 막는 사이트가 있어 실패 시 GET(stream)으로 한 번 더 시도한다."""
-    if not url.startswith("http"):
+# ── 도착 페이지가 "주장한 기사"인지 판정 (2026-08-04) ──────────────────────────
+# 근거: `www.futunn.com/404` 가 significance 0.8 로 리드 기사에 실렸다. futunn 은 없는
+# 기사를 `/404` 로 302 시키고 **그 페이지가 200 을 준다**(soft 404) — 상태코드로도 URL
+# 패턴으로도 원리적으로 못 잡는다. 같은 날 `app.rebrandly.com/broken-links`
+# ("Rebrandly Dashboard") 도 같은 부류로 발견됐다. 유일하게 남는 단서가 **<title>** 이다.
+# 여기(fetch)에 두는 이유: grounding 게이트(`llm._grounding_reject_reason`)와 링크 점검
+# (`linkcheck.py`)이 **같은 판정**을 써야 하기 때문. 둘이 갈라지면 의미가 없다.
+_SOFT_404_TITLE_RE = re.compile(
+    r"^\s*(?:404|403|410)\b"
+    r"|\berror\s*404\b"
+    r"|\b(?:page|file|article|content)\s+not\s+found\b"
+    r"|^\s*not\s+found\b"
+    r"|페이지를?\s*찾을\s*수\s*없|页面不存在|頁面不存在|ページが見つかりません",
+    re.I,
+)
+_TITLE_STOP = frozenset("""
+the a an and or of for to in on at with by from as is are was were be been being
+will would can could should this that these those it its his her their our your
+new not no more most about into over after before us we they he she has have had
+""".split())
+# 실측 마진(2026-08-04, 게시된 grounding 14건 전수): 정상 8건은 제목 토큰을 최소 3개
+# 공유하고(비율 1.00), 불량 6건은 전부 **0개**였다. 경계를 2 로 두면 양쪽에 여유가 있다.
+MIN_CLAIM_TOKENS = 3
+MIN_SHARED_TITLE_TOKENS = 2
+
+
+def title_tokens(text: str) -> set[str]:
+    """제목 비교용 토큰. 짧은 토큰과 불용어는 버린다.
+
+    라틴/숫자만 센다 — CJK 전용 제목은 0개가 되어 호출부에서 검사가 생략된다
+    (언어를 이유로 버리지 않기 위한 의도적 선택)."""
+    return {t for t in re.findall(r"[a-z0-9]+", html.unescape(text or "").lower())
+            if len(t) >= 3 and t not in _TITLE_STOP}
+
+
+def dead_page_reason(page_title: str, claimed_title: str = "") -> str:
+    """도착 페이지를 버릴 이유. 멀쩡해 보이면 ''.
+
+    'soft_404'      — 제목이 에러 페이지다(200 을 주더라도).
+    'title_mismatch' — 도착한 페이지가 주장한 기사가 아니다.
+
+    `page_title` 이 비면(HEAD 폴백/파싱 실패) **아무 판정도 하지 않는다** — 우리 쪽 실패를
+    이유로 멀쩡한 기사를 버리지 않기 위해서다."""
+    if not page_title:
         return ""
-    for use_get in (False, True):
+    if _SOFT_404_TITLE_RE.search(page_title):
+        return "soft_404"
+    claim, page = title_tokens(claimed_title), title_tokens(page_title)
+    if (len(claim) >= MIN_CLAIM_TOKENS and page
+            and len(claim & page) < MIN_SHARED_TITLE_TOKENS):
+        return "title_mismatch"
+    return ""
+
+
+def _page_title(resp) -> str:
+    """스트리밍 응답의 앞부분만 읽어 <title> 을 뽑는다. 없으면 ''.
+
+    **인코딩은 서버가 실제로 선언했을 때만 믿는다.** requests 는 Content-Type 에 charset 이
+    없으면 text/* 를 ISO-8859-1 로 가정하는데(HTTP 1.1 규약), 요즘 페이지는 대부분 UTF-8 이라
+    그대로 쓰면 깨진다 — 2026-08-04 점검에서 deepmind.google 제목이 'â' 로 나왔다.
+    CJK 소프트404 문구('頁面不存在' 등)도 이 경로로 깨지면 못 잡는다."""
+    chunks, total = [], 0
+    for chunk in resp.iter_content(8192):
+        chunks.append(chunk)
+        total += len(chunk)
+        if total >= TITLE_READ_BYTES:
+            break
+    declared = "charset=" in (resp.headers.get("content-type") or "").lower()
+    body = b"".join(chunks).decode(resp.encoding if declared and resp.encoding else "utf-8",
+                                   errors="replace")
+    m = _TITLE_TAG_RE.search(body)
+    return _clean(m.group(1), limit=300) if m else ""
+
+
+@dataclass
+class Probe:
+    """URL 을 한 번 찔러 본 결과. `status == 0` 이면 요청 자체가 실패한 것(DNS/TLS/타임아웃)."""
+    url: str = ""       # 리다이렉트를 다 따라간 최종 주소
+    title: str = ""     # 도착 페이지 <title>. HEAD 폴백이면 ''
+    status: int = 0
+    error: str = ""     # status == 0 일 때 예외 이름
+
+    @property
+    def ok(self) -> bool:
+        return 0 < self.status < 400
+
+
+def probe_url(url: str, timeout: int = 15) -> Probe:
+    """리다이렉트를 끝까지 따라가 최종 주소·제목·상태코드를 본다.
+
+    **상태코드를 버리지 않는 게 핵심이다.** 2026-08-04 실측으로 링크 점검을 돌려 보니
+    "못 받았다"가 세 가지 전혀 다른 상황을 뭉뚱그리고 있었다 —
+    wsj.com 은 **401**(페이월. 기사는 멀쩡히 있고 구독자는 읽는다),
+    washingtonpost.com 은 **ConnectionError**(봇 차단),
+    그리고 진짜로 사라진 404/410. 앞의 둘을 죽은 링크로 처리하면 멀쩡한 기사 3건의 링크를
+    떼게 된다 → 호출부가 구분할 수 있도록 날것을 그대로 넘긴다(`linkcheck.py` 분류표 참고).
+
+    제목이 필요하므로 GET 을 먼저 쓴다(HEAD 는 본문이 없다). GET 을 막는 서버를 위해
+    HEAD 로 한 번 더 시도하지만, 그 경로는 제목을 못 준다."""
+    if not url.startswith("http"):
+        return Probe(error="not_http")
+    last = Probe()
+    for use_get in (True, False):
         try:
             if use_get:
                 resp = requests.get(url, headers=_UA, allow_redirects=True,
                                     timeout=timeout, stream=True)
-                resp.close()
-            else:
-                resp = requests.head(url, headers=_UA, allow_redirects=True, timeout=timeout)
-            if resp.status_code < 400:
-                return resp.url
-        except Exception:  # noqa: BLE001
-            continue
-    return ""
+                try:
+                    title = _page_title(resp) if resp.status_code < 400 else ""
+                    return Probe(resp.url, title, resp.status_code)
+                finally:
+                    resp.close()
+            resp = requests.head(url, headers=_UA, allow_redirects=True, timeout=timeout)
+            return Probe(resp.url, "", resp.status_code)
+        except Exception as e:  # noqa: BLE001
+            last = Probe(error=type(e).__name__)
+    return last
+
+
+def resolve_article(url: str, timeout: int = 15) -> tuple[str, str]:
+    """리다이렉트를 끝까지 따라가 (최종 URL, 페이지 <title>) 을 반환. 도달 불가면 ('', '').
+
+    grounding(catch_missed_news)용 — 여기선 "못 받았으면 버린다"가 맞다(하루 3건짜리 보조
+    경로라 애매한 걸 실을 이유가 없다). 사후 점검처럼 이유를 구분해야 하면 `probe_url` 을 쓸 것.
+
+    세 가지를 해결한다:
+    (1) Gemini 가 `vertexaisearch.cloud.google.com/grounding-api-redirect/...` 같은 불투명한
+        리다이렉트 주소를 주는 경우 → 실제 기사 주소로 바꾼다(id 해시도 안정된다),
+    (2) 모델이 그럴듯하게 지어낸 URL(404) → 걸러낸다,
+    (3) **soft 404**: 상태코드만으로는 죽은 링크를 못 거른다. 2026-08-04 실측으로
+        futunn.com 은 없는 기사를 `/404` 로 302 시키고 그 페이지가 **200** 을 준다 →
+        `status_code < 400` 게이트를 그대로 통과해 `www.futunn.com/404` 가 게시됐다.
+        그래서 제목까지 같이 돌려주고, 판정은 `dead_page_reason` 이 한다."""
+    p = probe_url(url, timeout=timeout)
+    return (p.url, p.title) if p.ok else ("", "")
 
 
 def _item_url(entry) -> str:
@@ -387,7 +502,7 @@ def decode_google_news_url(url: str, session: requests.Session | None = None,
     """`news.google.com/rss/articles/...` -> 실제 기사 URL. 실패하면 ''.
 
     **왜 이게 필요한가**: Google News 피드의 링크는 불투명하다. 리다이렉트가 아니라서
-    `resolve_url()` 로는 못 푼다(2026-07-30 실측: 4/4 가 같은 주소를 그대로 반환 — Google 이
+    `resolve_article()` 로는 못 푼다(2026-07-30 실측: 4/4 가 같은 주소를 그대로 반환 — Google 이
     클라이언트 사이드로 넘긴다). id 의 base64 도 URL 이 아니라 protobuf 블롭이다.
     유일하게 동작하는 경로가 이 비공개 RPC 다(`ma2za/google-news-api` 가 쓰는 방식,
     2026-07-30 실측 AP 3/3 성공).

@@ -1203,6 +1203,74 @@
   - 검증: `python rerender.py`(238페이지, API 비용 0) 후 헤드리스 크롬으로 홈/카테고리/아카이브
     인덱스/주간/검색 + 모바일(520px) + 필터 2종(Research 3건, Policy 8건) 스크린샷 확인.
     전체 **205 passed**(테스트 변경 없음 — 계약을 안 깨고 바꿨다는 뜻).
+- 2026-08-04: **grounding soft-404 — 죽은 링크가 리드 기사로 실렸다.** 사용자가 홈 리드
+  "Alibaba Launches Qwen3.8-MAX"(significance 0.80)를 눌렀는데 `www.futunn.com/404` 였다.
+  - **원인은 상태코드 게이트의 사각지대다.** futunn 은 없는 기사를 `/404` 로 302 시키고
+    **그 페이지가 200 을 준다**(soft 404). 그래서 `resolve_url` 의 `status_code < 400` 이
+    통과시키고 **최종 URL 인 `/404` 를 기사 주소로 반환**했다. 그 다음 `_grounding_reject_reason`
+    도 못 잡는다 — `/404` 는 경로가 비어있지 않아 `bare_domain` 이 아니고, 도메인·슬러그
+    블록리스트에도 없다. `resolve_url` 도크스트링에 적혀 있던 "지어낸 404 URL 을 걸러낸다"는
+    **HTTP 404 를 실제로 주는 사이트에만 성립하는 이야기였다.**
+  - id 가 `sha1(최종 URL)` 이라 **지어낸 죽은 futunn 주소 아무거나 넣어도 저장된 id
+    `d8499504cab94cfb` 가 그대로 재현된다**(실측). 기사 주소가 이미 죽은 상태로 들어왔다는 증거이자,
+    앞으로 futunn 죽은 링크가 전부 같은 id 로 접히는(=조용히 dedup 되는) 부작용이기도 하다.
+  - **1회성이 아니었다.** 게시된 grounding 14건을 전수 조사하니 **전부 200 을 준다** — 상태코드로는
+    아무것도 구분 못 한다. 반면 도착 페이지의 `<title>` 은 깨끗하게 갈린다:
+    정상 8건은 주장 제목과 **최소 3토큰 겹치고(비율 1.00)**, 불량 6건은 **전부 0토큰**이었다.
+    `app.rebrandly.com/broken-links`("Rebrandly Dashboard", 08-02)가 같은 부류로 같이 잡혔다.
+  - **고침**: `fetch.resolve_url` → **`fetch.resolve_article`** 로 바꿔 `(최종 URL, <title>)` 을
+    돌려준다. 제목이 필요하므로 GET 을 먼저 쓰고(HEAD 는 본문이 없다) `TITLE_READ_BYTES`(200KB)
+    까지만 스트리밍해서 읽는다. 판정은 `_grounding_reject_reason` 이 두 겹 추가로 한다 —
+    `soft_404`(제목이 404/Page not found/頁面不存在 류) + `title_mismatch`(주장 제목과 겹치는
+    토큰 2개 미만). **경계 2 는 실측 마진에서 나왔다**(정상 최소 3 vs 불량 0).
+  - **일부러 느슨하게 둔 곳 2가지**: 제목을 못 얻으면(HEAD 폴백/파싱 실패) 검사를 **생략**한다 —
+    우리 쪽 실패를 이유로 멀쩡한 기사를 버리지 않기 위해서다. 같은 이유로 토큰은 라틴/숫자만 세서
+    **CJK 전용 제목은 0토큰 → 검사 생략**이 된다(언어를 이유로 버리지 않는다).
+  - **기존 2건은 지우지 않고 유의성만 낮췄다**(사용자 지시: "맨 아래 참고 기사로"). futunn
+    0.80 → **0.25**, rebrandly 0.50 → **0.35**. 각 날짜의 당시 최저값(0.30 / 0.40)보다 낮게
+    잡아야 실제로 맨 아래에 간다 — 홈은 `_flatten_ranked` 가 significance 플랫 정렬이고
+    동점이면 최신 발행이 앞이라 floor 와 동점으로 두면 중간에 낀다. 결과: 08-04 리드가
+    Skunk Works(0.70)로 바뀌고 문제의 항목은 18/18 위치. **`rerender.py` 는
+    `group_by_category(items)` 를 settings 없이 부르므로 하한이 재적용되지 않는다**(정렬만).
+    다만 두 값 모두 카테고리 하한(model_releases 0.30 / policy_business 0.40) 아래라,
+    **오늘자를 `python pipeline.py` 로 다시 돌리면 `category_floor` 로 내려간다**(의도한 동작).
+  - 검증: 실제 14건을 새 게이트에 그대로 통과시켜 **keep 8 / reject 6**(soft_404 1 ·
+    title_mismatch 1 · 기존 도메인 규칙 4) 확인. `test_grounding_quality.py` 에 회귀 테스트
+    18건 추가(사고 재현 2건 · 정상 제목 쌍 4건 · 생략 조건 3건 · `resolve_article` 계약 6건 등).
+    전체 **254 passed**, `pipeline.py --dry-run` 정상, `rerender.py` 재생성.
+- 2026-08-04: **링크 사후 점검(`linkcheck.py`) + 죽은 링크의 href 제거.** 위 게이트는 *실을 때*
+  만 본다. 기사는 실린 뒤에도 죽는다 → 게재분을 다시 찔러 `items.link_status` 에 남기고,
+  렌더가 그 값을 보고 링크를 뗀다. 사용자 지시로 "죽은 링크는 평문으로".
+  - **판정 로직을 `fetch` 로 옮겼다**(`dead_page_reason`). grounding 게이트와 링크 점검이
+    **같은 기준**을 써야 "실을 땐 통과였는데 지금은 죽었다"가 진짜 link rot 을 뜻한다.
+    `llm._grounding_reject_reason` 은 이제 그걸 호출만 한다.
+  - **가장 중요한 교훈 — "못 받았다"를 죽은 링크로 부르면 안 된다.** 첫 구현은
+    `DEAD_LINK_STATUSES = ("unreachable", "soft_404")` 였는데, 최근 40건 실측에서 **멀쩡한
+    기사 3건**을 죽일 뻔했다: `wsj.com` 은 **401**(페이월 — 구독자는 읽는다),
+    `washingtonpost.com` 은 **ConnectionError**(봇 차단). 그래서 `fetch.probe_url` 이
+    상태코드를 버리지 않고 그대로 넘기고, 죽은 링크는 **서버가 없다고 명시한 경우로 한정**했다:
+    `DEAD_LINK_STATUSES = ("gone"(404/410), "soft_404")`. `blocked`/`unreachable`/
+    `title_mismatch` 는 리포트만 하고 사람이 판단한다.
+  - **`title_mismatch` 를 자동 제거에서 뺀 게 옳았다는 증거**: 497건 전수에서 16건이 떴는데
+    상당수가 `deepmind.google`·`apnews.com` 이 **게시 후 제목을 갈아끼운** 살아있는 기사였다
+    ("Enabling a new model for healthcare with AI co-clinician" → "AI co-clinician:
+    researching the path toward AI-augmented care"). 수집 시점엔 버려도 되지만 사후엔 아니다.
+  - **전수 결과(497건)**: ok 475 · title_mismatch 16 · unreachable 4(전부 WaPo) ·
+    blocked 1(WSJ) · soft_404 1(futunn) · **gone 0**. 아직 진짜로 삭제된 기사는 없다.
+  - **부수로 잡은 버그 2개**(둘 다 실측에서 드러남):
+    (1) `store.links_to_check` 의 `ORDER BY digest_date DESC` 가 주간 라벨을 전부 위로
+        올렸다('W'(0x57) > '0'(0x30) — `label_sort_key` 가 경고하던 바로 그 함정).
+        `--limit 40` 을 줬더니 백필 주간분만 잡히고 그날 리드(futunn)가 안 들어왔다 →
+        파이썬에서 `label_sort_key` 로 정렬.
+    (2) `_page_title` 이 charset 미선언 페이지를 requests 기본값 ISO-8859-1 로 읽어
+        deepmind 제목이 `â` 로 깨졌다. **CJK 소프트404 문구('頁面不存在')도 이 경로로 깨지면
+        못 잡는다** → 서버가 charset 을 선언했을 때만 그걸 믿고 아니면 UTF-8.
+  - **렌더**: `<a>` 를 `<span>` 으로 바꾸지 않고 **href 만 뗀다** — href 없는 `<a>` 는 HTML5
+    플레이스홀더라 클릭도 탭 포커스도 안 되고, 9곳의 중첩 마크업을 그대로 둘 수 있다
+    (`templates/macros.html` `href` 매크로). 리드는 "Link no longer available" 로 바뀐다.
+    **피드·검색도 같이 막았다** — 사이트에서만 떼면 RSS 구독자는 계속 404 를 맞는다.
+  - 검증: `tests/test_linkcheck.py` 30건 신설(분류표 · 렌더 계약 · 인코딩 · probe 계약).
+    `fetch.resolve_article` 계약 테스트는 grounding 파일에서 이리로 옮겼다. 전체 **279 passed**.
 
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 

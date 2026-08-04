@@ -38,6 +38,22 @@
 </div>
 {%- endmacro %}
 
+{#
+  기사 링크의 href. 죽은 링크(linkcheck.py 가 unreachable/soft_404 로 표시한 것)면
+  **href 를 아예 안 단다.**
+
+  왜 <a> 를 <span> 으로 바꾸지 않는가: href 없는 <a> 는 HTML5 에서 "그 자리에 링크가 있을
+  수 있었다"는 플레이스홀더이고, 클릭도 탭 포커스도 안 된다. 태그를 바꾸면 9곳의 중첩
+  마크업(브리프 행·주간 행은 내부에 span 이 여럿)을 전부 다시 짜야 하는데 얻는 게 없다.
+  보이는 모양은 digest.css `a:not([href])` 가 맡는다.
+
+  2026-08-04 배경: futunn.com/404 가 리드 기사로 실렸다(soft 404 — 200 을 주는 에러 페이지).
+  수집 게이트는 막았지만 **이미 실린 글은 나중에 죽는다** → 사후 점검 + 링크 제거가 필요하다.
+#}
+{% macro href(it) -%}
+{%- if not it.url_dead %} href="{{ it.url }}"{% endif -%}
+{%- endmacro %}
+
 {% macro theme_picker() -%}
 <div class="theme-picker">
   {% for p in palettes %}

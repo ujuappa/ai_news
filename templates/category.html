@@ -25,7 +25,7 @@
 <p class="empty-note">{{ period_word|capitalize }}엔 해당 카테고리 항목이 없습니다.</p>
 {% endif %}
 {% for it in items %}
-<a class="cat-row" href="{{ it.url }}">
+<a class="cat-row"{{ m.href(it) }}>
   <span class="cat-score" style="font-size:{{ it.row_size }}px">{{ '%.2f'|format(it.significance)|replace('0.', '.') }}</span>
   <div>
     <div class="cat-row-title" style="font-size:{{ it.row_size }}px" title="{{ it.title }}">{{ it.display_title }}</div>

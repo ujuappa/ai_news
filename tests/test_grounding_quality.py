@@ -5,15 +5,23 @@
 카테고리 하한(0.40)·캡(10)으로는 걸리지 않는다 — LLM 이 "AI 뉴스 모음"을 중요한 뉴스로 읽는다.
 게다가 3건은 경로가 없는 **맨 도메인**(홈페이지)이라 기사조차 아니었다.
 
+2026-08-04 추가: `www.futunn.com/404` 가 significance 0.8 짜리 리드 기사로 실렸다. futunn 은
+없는 기사를 `/404` 로 302 시키고 **그 페이지가 200 을 준다**(soft 404) — 상태코드 게이트도
+URL 패턴도 원리적으로 못 잡는다. 그래서 도착 페이지의 <title> 을 같이 본다.
+
 고정하는 계약:
   1. 그날 실제로 실린 4개 URL 은 전부 거부된다(회귀 가드).
   2. 같은 이틀에 정상적으로 실린 URL(nist.gov 등)은 통과한다 — 게이트가 과도하지 않다는 증거.
   3. 맨 도메인 거부는 블록리스트와 무관하게 동작한다(새 콘텐츠팜에도 통하는 유일한 규칙).
   4. 프롬프트에 primary-source 규칙이 들어간다.
   5. 거부는 조용히 일어나지 않는다(로그).
+  6. soft 404 와 '주장한 기사가 아닌 페이지'는 제목으로 걸러진다.
+  7. 제목을 못 얻었을 때(HEAD 폴백/파싱 실패/CJK 전용)는 내용 검사를 생략한다 — 우리 쪽
+     실패를 이유로 멀쩡한 기사를 버리지 않는다.
 """
 import pytest
 
+import fetch
 import llm
 
 D = llm.GROUNDING_BLOCKED_DOMAINS
@@ -98,7 +106,7 @@ class _Resp:
         self.text = text
 
 
-def _patch(monkeypatch, payload, record=None):
+def _patch(monkeypatch, payload, record=None, titles=None):
     class _Models:
         def generate_content(self, **kwargs):
             if record is not None:
@@ -110,8 +118,10 @@ def _patch(monkeypatch, payload, record=None):
 
     monkeypatch.setattr(llm.genai, "Client", lambda *a, **k: _Client())
     monkeypatch.setattr(llm.time, "sleep", lambda *_: None)
-    # resolve_url 은 네트워크를 타므로 항등으로 고정 — 여기서 보는 건 품질 게이트다.
-    monkeypatch.setattr(llm.fetch, "resolve_url", lambda u: u)
+    # resolve_article 은 네트워크를 타므로 고정. 기본은 제목 없음 = 내용 검사 생략이라
+    # URL 기반 게이트만 본다. `titles` 를 주면 도착 페이지 제목까지 흉내낸다.
+    monkeypatch.setattr(llm.fetch, "resolve_article",
+                        lambda u, **k: (u, (titles or {}).get(u, "")))
 
 
 _ROWS = """[
@@ -156,6 +166,104 @@ def test_explicit_empty_lists_disable_the_domain_filter(monkeypatch):
     urls = [it["url"] for it in items]
     assert "https://www.buildfastwithai.com/blogs/ai-news-today-july-30-2026" in urls
     assert "https://aiweekly.co/" not in urls   # 구조 규칙은 안 꺼진다
+
+
+# ── 도착 페이지 내용 검사(soft 404 / 제목 불일치) ──────────────────────────────
+# 실측 근거(2026-08-04, 게시된 grounding 14건 전수 재확인): 정상 8건은 주장 제목과 도착
+# 제목이 최소 3토큰 겹쳤고(비율 1.00), 불량 6건은 전부 0토큰이었다.
+
+FUTUNN_CLAIM = ("Performance on par with Anthropic's Fable 5! Alibaba has launched "
+                "Qwen3.8-MAX, featuring 2.4 trillion parameters")
+
+
+def test_soft_404_page_is_rejected_even_though_it_returns_200():
+    """실제 사고 재현: futunn 은 죽은 기사를 200 짜리 /404 로 302 시킨다."""
+    assert llm._grounding_reject_reason(
+        "https://www.futunn.com/404", D, P,
+        page_title="404", claimed_title=FUTUNN_CLAIM) == "soft_404"
+
+
+@pytest.mark.parametrize("title", [
+    "404 頁面不存在",
+    "Page not found",
+    "Error 404 | Example",
+    "404 - Oops",
+    "页面不存在",
+])
+def test_soft_404_title_variants(title):
+    assert llm._grounding_reject_reason(
+        "https://example.com/some/article", [], [],
+        page_title=title, claimed_title=FUTUNN_CLAIM) == "soft_404"
+
+
+def test_landing_page_that_is_not_the_claimed_article_is_rejected():
+    """2026-08-02 실제 사고: app.rebrandly.com/broken-links 가 실렸다(제목 'Rebrandly Dashboard')."""
+    assert llm._grounding_reject_reason(
+        "https://app.rebrandly.com/broken-links", D, P,
+        page_title="Rebrandly Dashboard",
+        claimed_title="AI Review Deadline Nears as Open-Weight Models Stir Conflict",
+    ) == "title_mismatch"
+
+
+@pytest.mark.parametrize("claim,page", [
+    # 같은 이틀에 정상적으로 실린 항목들의 실제 제목 쌍. 하나라도 버리면 과잉 차단이다.
+    ("Pentagon exploring AI to monitor military inmates' phone calls",
+     "Pentagon exploring AI to monitor military inmates’ phone calls | DefenseScoop"),
+    ("Building abundant intelligence", "Building abundant intelligence | OpenAI"),
+    ("Databricks and Microsoft expand Azure partnership into the 2030s",
+     "Databricks and Microsoft expand Azure partnership into the 2030s - SiliconANGLE"),
+    ("Skunk Works® Advances Sensor-Powered AI Fighter Intercept",
+     "Skunk Works® Advances Sensor-Powered AI Fighter Intercept - Aug 4, 2026"),
+])
+def test_real_articles_survive_the_title_check(claim, page):
+    assert llm._grounding_reject_reason(
+        "https://example.com/2026/08/story", [], [],
+        page_title=page, claimed_title=claim) == ""
+
+
+def test_missing_page_title_skips_the_content_check():
+    """HEAD 폴백이나 파싱 실패로 제목이 없을 때 우리 실패를 아이템 탓으로 돌리지 않는다."""
+    assert llm._grounding_reject_reason(
+        "https://example.com/2026/08/story", [], [],
+        page_title="", claimed_title=FUTUNN_CLAIM) == ""
+
+
+def test_cjk_only_title_is_not_rejected_for_being_cjk():
+    """라틴 토큰이 0개면 비교가 불가능하다 — 언어를 이유로 버리지 않는다."""
+    assert llm._grounding_reject_reason(
+        "https://example.cn/2026/08/story", [], [],
+        page_title="人工智能新突破", claimed_title=FUTUNN_CLAIM) == ""
+
+
+def test_short_claim_title_skips_the_content_check():
+    """주장 제목이 너무 짧으면 겹침 판정이 신뢰할 수 없다."""
+    assert llm._grounding_reject_reason(
+        "https://example.com/2026/08/story", [], [],
+        page_title="Rebrandly Dashboard", claimed_title="Gemini 4") == ""
+
+
+def test_catch_missed_news_drops_the_soft_404(monkeypatch, capsys):
+    """통합 회귀: 2026-08-04 에 실제로 실린 아이템이 이제 수집 단계에서 빠진다."""
+    payload = ("""[
+     {"title": "%s", "url": "https://www.futunn.com/404", "summary_raw": "x",
+      "category": "model_releases", "source_name": "\u5bcc\u9014\u8d44\u8baf"},
+     {"title": "Commerce announces $874 million to accelerate compute supply chain",
+      "url": "https://www.nist.gov/news-events/news/x", "summary_raw": "x",
+      "category": "policy_business", "source_name": "NIST"}
+    ]""" % FUTUNN_CLAIM)
+    _patch(monkeypatch, payload, titles={
+        "https://www.futunn.com/404": "404",
+        "https://www.nist.gov/news-events/news/x":
+            "Department of Commerce Announces Letters of Intent With 7 Companies "
+            "for $874 Million to Accelerate Compute Supply Chain",
+    })
+    items = llm.catch_missed_news(["existing"])
+    assert [it["url"] for it in items] == ["https://www.nist.gov/news-events/news/x"]
+    assert "soft_404" in capsys.readouterr().out
+
+
+# `fetch.resolve_article`/`probe_url` 자체의 계약은 tests/test_linkcheck.py 에 있다
+# (링크 점검과 같은 코드를 공유하므로 한 군데서 본다).
 
 
 def test_yaml_settings_reach_the_filter():

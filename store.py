@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS items (
     cluster_sources TEXT DEFAULT '[]',  -- 같은 스토리를 함께 다룬 소스 이름 (JSON 배열)
     cluster_size    INTEGER DEFAULT 1,  -- 클러스터 크기(대표 1 + 병합된 N)
     thread_parent_id TEXT DEFAULT '',   -- 같은 스토리의 '앞 이야기' items.id (없으면 '')
-    image_key    TEXT DEFAULT ''        -- LLM 이 고른 마크 키(images.catalog). 비면 소스/제네릭 폴백
+    image_key    TEXT DEFAULT '',       -- LLM 이 고른 마크 키(images.catalog). 비면 소스/제네릭 폴백
+    link_status  TEXT DEFAULT '',       -- linkcheck.py 사후 점검 결과. ''=미점검 (DEAD_LINK_STATUSES 참고)
+    link_checked_at TEXT DEFAULT ''     -- 마지막 점검 시각(ISO). ''=한 번도 안 봄
 );
 
 CREATE TABLE IF NOT EXISTS seen (
@@ -98,7 +100,19 @@ _MIGRATIONS = [
     ("cluster_size", "ALTER TABLE items ADD COLUMN cluster_size INTEGER DEFAULT 1"),
     ("thread_parent_id", "ALTER TABLE items ADD COLUMN thread_parent_id TEXT DEFAULT ''"),
     ("image_key", "ALTER TABLE items ADD COLUMN image_key TEXT DEFAULT ''"),
+    ("link_status", "ALTER TABLE items ADD COLUMN link_status TEXT DEFAULT ''"),
+    ("link_checked_at", "ALTER TABLE items ADD COLUMN link_checked_at TEXT DEFAULT ''"),
 ]
+
+# `linkcheck.py` 가 기록하는 값 중 **렌더에서 링크를 떼는** 것들.
+# 여기 들어갈 조건은 하나다: **서버가 "그런 문서 없다"고 명시**했거나(404/410), 200 을 주면서
+# 에러 페이지를 보여준 경우(soft 404). 그 외는 전부 뺐다 —
+#   `blocked`(401/403/429)  페이월·봇월이라 링크는 멀쩡하다. wsj.com 이 401 을 준다.
+#   `unreachable`           봇 차단·일시 장애와 구분이 안 된다. washingtonpost.com 이 여기 걸린다.
+#   `title_mismatch`        제목 개편·쿠키 동의 인터스티셜로 오탐이 난다.
+# 2026-08-04 최근 40건 점검에서 이 셋을 죽은 걸로 뒀다면 **멀쩡한 기사 3건**의 링크가 떨어졌다.
+# 리포트에는 다 나오므로 판단은 사람이 한다.
+DEAD_LINK_STATUSES = ("gone", "soft_404")
 
 
 class Store:
@@ -308,11 +322,60 @@ class Store:
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, cluster_sources, cluster_size, thread_parent_id,
-                      image_key
+                      image_key, link_status
                FROM items WHERE digest_date=? AND is_published=1""",
             (digest_date,),
         ).fetchall()
         return [self._row_to_item(r) for r in rows]
+
+    # ---- 링크 사후 점검 (linkcheck.py) ----
+    def links_to_check(self, since: str = "", recheck_days: int | None = None) -> list[dict]:
+        """게재분의 (id, url, title, digest_date, link_status). 같은 URL 은 한 번만.
+
+        `since` 는 digest_date 하한(주간 라벨 '2026-W31' 도 문자열 비교로 걸러지지 않으므로
+        일간 라벨에만 의미가 있다 — 전체를 보려면 그냥 비워둘 것).
+        `recheck_days` 를 주면 그보다 최근에 본 항목은 건너뛴다(중단 후 재개용)."""
+        sql = ("SELECT id, url, title, digest_date, link_status, link_checked_at "
+               "FROM items WHERE is_published=1 AND url != ''")
+        params: list = []
+        if since:
+            sql += " AND digest_date >= ?"
+            params.append(since)
+        if recheck_days is not None:
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=recheck_days)).isoformat()
+            sql += " AND (link_checked_at = '' OR link_checked_at < ?)"
+            params.append(cutoff)
+        # 정렬은 파이썬에서. SQL 의 `ORDER BY digest_date DESC` 는 주간 라벨을 전부 위로
+        # 올려버린다('W'(0x57) > '0'(0x30)) — `--limit` 를 주면 최신 일간이 통째로 빠진다
+        # (2026-08-04 실측: 최근 40건을 봤는데 백필 주간분만 잡히고 그날 리드는 안 들어왔음).
+        seen: set[str] = set()
+        out = []
+        for r in sorted(self.conn.execute(sql, params),
+                        key=lambda r: label_sort_key(r["digest_date"] or ""), reverse=True):
+            if r["url"] in seen:
+                continue
+            seen.add(r["url"])
+            out.append(dict(r))
+        return out
+
+    def record_link_status(self, results: list[tuple[str, str]]) -> int:
+        """[(url, status)] 를 items 에 기록. 같은 URL 을 쓰는 행은 전부 갱신한다.
+
+        id 가 아니라 url 로 갱신하는 이유: 같은 기사가 다른 id(피드 소스별)로 들어와 있을 수
+        있고, 링크가 죽었다는 사실은 URL 의 속성이지 특정 행의 속성이 아니다."""
+        now = _now()
+        for url, status in results:
+            self.conn.execute(
+                "UPDATE items SET link_status=?, link_checked_at=? WHERE url=?",
+                (status, now, url))
+        self.conn.commit()
+        return len(results)
+
+    def link_status_counts(self) -> dict[str, int]:
+        rows = self.conn.execute(
+            "SELECT link_status AS s, COUNT(*) AS n FROM items "
+            "WHERE is_published=1 GROUP BY link_status").fetchall()
+        return {(r["s"] or "unchecked"): r["n"] for r in rows}
 
     def save_recap(self, digest_date: str, category: str, headline: str = "",
                    one_liner: str = "", stats_json: str = "{}"):
@@ -389,7 +452,7 @@ class Store:
         rows = self.conn.execute(
             """SELECT id, source_id, category, title, headline, url, summary, significance,
                       is_major, published, digest_date, cluster_sources, cluster_size,
-                      thread_parent_id, image_key FROM items
+                      thread_parent_id, image_key, link_status FROM items
                WHERE is_published=1
                ORDER BY published DESC"""
         ).fetchall()

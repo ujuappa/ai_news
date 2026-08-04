@@ -273,7 +273,7 @@ policy_business:
           파싱 실패는 신선도 컷을 통과시키는 설계라 이 소스만 7일 컷을 통째로 우회했었다.
           이제 RSS 를 직접 파싱하므로 feedparser 가 발행일을 알아서 읽는다(_published).
           보험으로 _norm_date 에 parsedate_to_datetime 폴백도 추가.
-      (2) [해결] URL: news.google.com 링크는 리다이렉트가 아니라서 resolve_url() 로는 못 푼다
+      (2) [해결] URL: news.google.com 링크는 리다이렉트가 아니라서 resolve_article() 로는 못 푼다
           (실측 4/4 가 같은 주소 반환). fetch.decode_google_news_url() 이 비공개 batchexecute
           RPC 로 실제 기사 URL 을 얻는다. **디코딩 실패 시 아이템을 버린다** — 불투명 링크를
           DB 에 저장하면 본문 추출도 안 되고 사이트에 영구히 남기 때문(2026-07-30 실제 사고).

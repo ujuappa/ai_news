@@ -11,6 +11,8 @@ Claude Code 는 세션 시작 시 이 파일을 자동으로 읽음.
 (2026-07-27 에 6개월치 실행 완료 — 재실행은 보통 불필요, PROJECT_MEMO 참고).
 `rerender.py` 는 DB 데이터로 전체 페이지를 API 비용 없이 재생성(디자인만 바꿨을 때 사용).
 `generate_recaps.py` 는 recap(주간 헤드라인/$ 집계/카테고리 요약) 소급 생성용, 아직 미실행.
+`linkcheck.py` 는 이미 게시된 링크의 link rot 점검(→ `items.link_status`, 죽은 링크는 렌더에서
+href 가 떨어짐). 판정 기준과 "무엇을 죽었다고 부르지 않는지"는 PROJECT_MEMO 2026-08-04 참고.
 
 ## 디자인 (2026-07-27 전면 개편 → 2026-08-03 2차 개편)
 Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인을 DesignSync MCP 로 가져옴
@@ -39,6 +41,7 @@ python pipeline.py --dry-run             # LLM 없이 수집/dedup (DB 미변경
 python pipeline.py                       # 전체
 python pipeline.py --reset               # seen + item_emb 비움 (items/digests/recaps 보존)
 python pipeline.py --purge-all           # digest.db 통째 삭제. 재백필 전 선행 (--yes 로 확인 생략)
+python linkcheck.py --dry-run            # 게시된 링크 점검(리포트만). 반영은 --dry-run 빼고 → rerender.py
 open output/index.html
 ```
 

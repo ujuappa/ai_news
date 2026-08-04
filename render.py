@@ -39,7 +39,7 @@ from jinja2 import Environment, FileSystemLoader
 
 import images
 from config import CATEGORY_LABELS, CATEGORY_ORDER
-from store import is_week_label, label_sort_key
+from store import DEAD_LINK_STATUSES, is_week_label, label_sort_key
 
 
 def group_by_category(items: list[dict], settings=None) -> list[tuple[str, list[dict]]]:
@@ -210,6 +210,10 @@ def _relative_time(published: str | None, ref: datetime | None, long: bool = Fal
 def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) -> None:
     it["domain_path"] = _domain_path(it["url"])
     it["domain"] = _domain(it["url"])
+    # 죽은 링크는 href 를 떼서 못 누르게 한다(templates/macros.html `href`). 판정은 렌더가
+    # 하지 않는다 — linkcheck.py 가 미리 찔러 본 결과(items.link_status)를 읽기만 한다.
+    # 값이 없으면(미점검/구 DB) 살아있는 것으로 본다.
+    it["url_dead"] = (it.get("link_status") or "") in DEAD_LINK_STATUSES
     it["tier_label"] = _tier(it.get("significance", 0.0))
     it["source_name"] = _source_line_name(it)
     # 디자인의 바이라인은 "출처명 · N sources · 9h ago" 라서 접미사 없는 원본 이름과 소스 수가
@@ -449,6 +453,9 @@ def render_search_page(items: list[dict], output_dir: Path):
             "d": it.get("digest_date", ""),
             "sig": round(it.get("significance", 0.0), 2),
             "sm": (it.get("summary") or "")[:200],
+            # 죽은 링크만 표시(있을 때만 키를 넣어 인덱스가 불필요하게 커지지 않게).
+            # 검색에서는 여전히 찾을 수 있어야 한다 — 글이 없어진 게 아니라 링크가 죽은 것.
+            **({"x": 1} if (it.get("link_status") or "") in DEAD_LINK_STATUSES else {}),
         }
         for it in items
     ]
@@ -491,9 +498,13 @@ def _feed_body_html(entry: dict) -> str:
         summary = escape(it.get("summary") or "")
         label = escape(CATEGORY_LABELS.get(it.get("category", ""), ""))
         major = " <em>(major)</em>" if it.get("is_major") else ""
+        # 죽은 링크는 리더에서도 앵커를 만들지 않는다 — RSS 리더는 href 를 그대로 열기 때문에
+        # 사이트에서만 떼면 피드 구독자는 계속 404 를 맞는다(linkcheck.py 참고).
+        dead = (it.get("link_status") or "") in DEAD_LINK_STATUSES
+        head = title if dead else f'<a href="{url}">{title}</a>'
         parts.append(
-            f'<li><a href="{url}">{title}</a>{major}<br>'
-            f"<small>{label}</small>"
+            f"<li>{head}{major}<br>"
+            f"<small>{label}{' · link no longer available' if dead else ''}</small>"
             f"{'<br>' + summary if summary else ''}</li>"
         )
     parts.append("</ol>")

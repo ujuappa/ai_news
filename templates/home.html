@@ -31,7 +31,7 @@
       <span class="lead-sig">Lead story · significance {{ '%.2f'|format(lead.significance) }}</span>
       {% if lead.is_major %}<span class="tag tag-acc">Major</span>{% endif %}
     </div>
-    <a class="lead-title" href="{{ lead.url }}" title="{{ lead.title }}">{{ lead.display_title }}</a>
+    <a class="lead-title"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
     <p class="lead-dek">{{ lead.summary }}</p>
     {% if lead.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
     <div class="lead-byline">
@@ -40,7 +40,8 @@
       <span class="byline-meta">
         {%- if lead.source_count > 1 %}{{ lead.source_count }} sources{% if lead.rel_time_long %} · {% endif %}{% endif -%}
         {{ lead.rel_time_long }}</span>
-      <a class="byline-link" href="{{ lead.url }}">Read at {{ lead.domain }} →</a>
+      {% if lead.url_dead %}<span class="byline-link byline-dead">Link no longer available</span>
+      {%- else %}<a class="byline-link" href="{{ lead.url }}">Read at {{ lead.domain }} →</a>{% endif %}
     </div>
   </div>
   {{ m.image_slot(lead, 'imgslot-lead', asset_prefix) }}
@@ -57,7 +58,7 @@
   <article class="also-card" data-cat="{{ it.category }}">
     {{ m.image_slot(it, 'imgslot-card', asset_prefix) }}
     <span class="card-cat">{{ labels[it.category] }}</span>
-    <a class="card-title" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
+    <a class="card-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="card-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
     <span class="card-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
@@ -82,7 +83,7 @@
 <div class="worth-row" data-cat="{{ it.category }}">
   <div>
     <span class="worth-cat">{{ labels[it.category] }}</span>
-    <a class="worth-title" href="{{ it.url }}" title="{{ it.title }}">{{ it.display_title }}</a>
+    <a class="worth-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="worth-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
     <span class="worth-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
@@ -97,7 +98,7 @@
 <section class="brief-section" data-section>
 <span class="section-h section-h-brief">In brief — {{ brief|length }} more</span>
 {% for it in brief %}
-<a class="brief-row" href="{{ it.url }}" data-cat="{{ it.category }}">
+<a class="brief-row"{{ m.href(it) }} data-cat="{{ it.category }}">
   <span class="brief-title" title="{{ it.title }}">{{ it.display_title }}</span>
   <span class="brief-cat">{{ short_labels[it.category] }}</span>
 </a>

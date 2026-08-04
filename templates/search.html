@@ -70,10 +70,14 @@
     }
     results.innerHTML = matches.slice(0, 100).map(function (it, idx) {
       var topCls = idx === 0 ? ' top-hit' : '';
-      return '<a class="result-row' + topCls + '" href="' + esc(it.u) + '">'
+      // it.x = 링크가 죽은 항목(linkcheck.py). 검색은 되지만 href 를 안 단다 —
+      // href 없는 <a> 는 클릭도 포커스도 안 되는 플레이스홀더다(templates/macros.html href 주석).
+      var link = it.x ? '' : ' href="' + esc(it.u) + '"';
+      return '<a class="result-row' + topCls + '"' + link + '>'
         + '<span class="result-score">' + it.sig.toFixed(2).replace(/^0\./, '.') + '</span>'
         + '<div><div class="result-title">' + highlight(it.t, q) + '</div>'
-        + '<div class="result-byline">' + esc(it.d) + ' · ' + esc(it.s) + '</div></div>'
+        + '<div class="result-byline">' + esc(it.d) + ' · ' + esc(it.s)
+        + (it.x ? ' · link no longer available' : '') + '</div></div>'
         + '</a>';
     }).join('');
   }
