@@ -135,11 +135,19 @@ def test_all_pill_counts_every_story_including_untagged():
     assert pills[0] == {"key": "all", "label": "All", "count": 3}
 
 
-def test_pill_row_is_capped():
-    """실측: 하루에 토픽이 8~9개 붙는데 대부분 1~2건이다. 전부 내보내면 줄이 넘친다."""
+def test_every_topic_of_the_day_reaches_the_drawer():
+    """상한이 없어야 한다 — 2026-08-06(캔버스 6a)에 pill 줄이 서랍으로 바뀌면서 뒤집힌 계약이다.
+
+    예전엔 top-6 으로 잘랐다: 하루에 토픽이 8~9개 붙는데 pill 을 컨트롤 줄에 한 줄로
+    늘어놓으니 줄이 넘쳐서였다. 6a 는 그 줄을 `Filters` 버튼 + 서랍으로 접었고 서랍은
+    몇 개가 들어와도 넘치지 않는다 → 자르는 이유가 없어졌다. 자르면 1~2건짜리 토픽이
+    **아예 고를 수 없는 토픽**이 된다(예전엔 그게 의도된 트레이드오프였다).
+
+    `cap` 인자는 남아 있지만 기본값은 무제한이다."""
     many = _items(*[[t] for t in TOPIC_ORDER])
     pills = render._topic_filters(many, total=len(TOPIC_ORDER))
-    assert len(pills) == render.TOPIC_PILL_CAP + 1  # +1 = All
+    assert len(pills) == len(TOPIC_ORDER) + 1  # +1 = All
+    assert len(render._topic_filters(many, total=len(TOPIC_ORDER), cap=6)) == 7
 
 
 def test_ties_break_on_vocabulary_order():
@@ -232,8 +240,12 @@ def _render_archive(items, tmp_path):
 
 
 def test_archive_page_has_topic_pills(tmp_path):
+    """'all' pill 은 2026-08-06(6a)에 없어졌다 — 다중선택이 되면서 "아무것도 안 고른 상태"가
+    곧 All 이라 버튼이 필요 없다. 대신 그날 붙은 토픽 pill 이 서랍에 있어야 한다."""
     html = _render_archive([_full_item(["code"]), _full_item(["code"])], tmp_path)
-    assert 'data-topic="code"' in html and 'data-topic="all"' in html
+    assert 'data-topic="code"' in html
+    assert 'data-topic="all"' not in html
+    assert "filter-drawer" in html
 
 
 def test_archive_page_tags_lead_second_and_rest(tmp_path):
@@ -257,9 +269,24 @@ def test_home_and_archive_share_one_filter_script(tmp_path):
     assert body in home and body in archive
 
 
-def test_filter_row_is_omitted_when_nothing_is_tagged(tmp_path):
-    """'All' 만 있는 필터 줄은 누를 이유가 없는 죽은 UI 다."""
-    assert "filter-row" not in _render([_full_item([])], tmp_path)
+def test_the_filter_cannot_hide_its_own_undo_control(tmp_path):
+    """컨트롤 줄은 `.panel-body`(data-section) **바깥**에 있어야 한다.
+
+    2026-08-06 6a 포팅에서 리드와 Also today 가 한 장의 카드로 묶였다. 카드 속(.panel-body)은
+    data-section 이라 살아남은 항목이 0이면 통째로 숨는데 — rank 9 이하에만 달린 토픽을 고르면
+    실제로 그렇게 된다 — 컨트롤 줄이 그 안에 있으면 **필터를 걸자마자 필터가 사라져서 되돌릴
+    수단이 없어진다.** (chip 도 pill 도 서랍도 같이 숨는다.)"""
+    html = _render([_full_item(["code"]), _full_item(["music"])], tmp_path)
+    line, body = html.find("control-line"), html.find('class="panel-body"')
+    assert line != -1 and body != -1
+    assert line < body, "컨트롤 줄이 panel-body 안으로 들어갔다 — 필터가 자기를 숨긴다"
+
+
+def test_control_line_is_omitted_when_nothing_is_tagged(tmp_path):
+    """고를 토픽이 없으면 컨트롤 줄도 서랍도 그리지 않는다 — 빈 서랍을 여는 `Filters` 버튼은
+    누를 이유가 없는 죽은 UI 다(예전 'All 만 있는 필터 줄'과 같은 이유)."""
+    html = _render([_full_item([])], tmp_path)
+    assert "control-line" not in html and "filter-drawer" not in html
 
 
 def test_backfill_payload_shape_matches_what_the_llm_expects(tmp_path):

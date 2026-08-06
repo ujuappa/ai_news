@@ -14,21 +14,28 @@ Claude Code 는 세션 시작 시 이 파일을 자동으로 읽음.
 `linkcheck.py` 는 이미 게시된 링크의 link rot 점검(→ `items.link_status`, 죽은 링크는 렌더에서
 href 가 떨어짐). 판정 기준과 "무엇을 죽었다고 부르지 않는지"는 PROJECT_MEMO 2026-08-04 참고.
 
-## 디자인 (2026-07-27 전면 개편 → 2026-08-03 2차 개편)
+## 디자인 (2026-07-27 전면 개편 → 08-03 2차 → 08-06 홈 상단 재편)
 Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인을 DesignSync MCP 로 가져옴
-(Archivo 폰트, radius 0, 5색 라이브 팔레트 피커, 카테고리 필터 페이지, significance 플랫 랭킹).
+(Archivo 폰트, radius 0, 라이브 팔레트 피커, significance 플랫 랭킹).
 마크업은 `templates/*.html`, 스타일은 `static/digest.css`, `render.py` 는 데이터 가공만 한다.
 
-**2026-08-03 2차 개편**(캔버스 "AI Digest - Home"): 라이트 마스트헤드 + 밑줄 탭 네비, 홈 상단
-카테고리 필터 pill, 이미지 슬롯이 붙은 리드/카드/썸네일, 테마 스위처가 푸터로 이동.
-- **사인인 · Weekly · Monthly 는 의도적으로 없다** (미구현 → 죽은 버튼 방지). 붙일 자리는
-  `templates/macros.html` 주석 참고.
+**2026-08-06 홈 상단 재편**(캔버스 "Home Top Organization" 6a): 마스트헤드가 한 줄로
+(워드마크+빨간 점 · 검색 · pill 네비), 날짜/건수가 지면 머리(`.page-head`)로 내려가고,
+리드+Also today 가 한 장의 카드(`.panel`)로 묶이면서 기간 세그먼트와 필터가 그 카드에 붙었다.
+필터는 pill 줄 → **컨트롤 줄 + 서랍 + 제거 가능한 chip, 다중선택(OR)** 으로 바뀌었고
+그날 붙은 토픽 전부가 서랍에 들어간다(top-6 상한 폐지). 팔레트는 6색(`Boncom · Maroon` 추가 —
+6a 의 **색만** 들여왔다. 폰트/radius 는 전역이라 Archivo·radius 0 유지).
+- **사인인 · Weekly · Monthly · Following · 코멘트/팔로우는 의도적으로 없다** (로그인+쓰기
+  백엔드 미구현 → 죽은 버튼 방지). 6a 의 소셜 카드 3장을 붙일 자리는 `templates/home.html`
+  끝 주석, 네비는 `templates/macros.html` 주석 참고. `test_render_assets.py` 가 새는 걸 막는다.
+- **필터를 건드릴 때**: 컨트롤 줄은 `.panel-body`(data-section) **밖**에 둬야 한다 — 안에 두면
+  필터가 자기를 숨겨서 되돌릴 수 없게 된다(`test_topics.py` 에 회귀 가드 있음).
 - **이미지는 빈 슬롯이 자리만 잡고 있다.** `static/img/<source_id>.webp` 등을 넣으면 자동 반영 —
   `static/img/README.md` 참고.
 - CSS 는 **팔레트 키(`--g --ink --acc --n1 --n2 …`)만** 쓸 수 있다. 캔버스의 `--color-*` 를
   들여오면 `tests/test_render_assets.py` 가 잡는다(매핑표는 digest.css 헤더 주석).
 
-자세한 내용은 PROJECT_MEMO 변경로그 2026-08-03 항목 참고.
+자세한 내용은 PROJECT_MEMO 변경로그 2026-08-03 · 2026-08-06 항목 참고.
 
 ## 실행
 ```bash

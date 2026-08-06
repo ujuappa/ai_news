@@ -11,10 +11,20 @@
  *    이 파일 앞에 붙여서 만든다. 팔레트 값을 여기 복붙하면 파이썬 쪽과 갈라진다.
  *    (테마 스위처는 JS 로 --var 를 덮어쓴다 — head 의 theme JS 참고)
  *
+ * 2026-08-06 에 캔버스 "Home Top Organization" 6a 로 홈 상단을 다시 짰다. 바뀐 것: 마스트헤드가
+ * 2단(밑줄 탭 + 기간 칩) -> 한 줄(워드마크+빨간 점 · 검색 · pill 네비), 날짜/건수가 헤더에서
+ * 지면 머리(.page-head: 날짜 칩 · 디스플레이 제목 · stat 쌍)로 내려옴, 리드+Also today 가 한 장의
+ * 카드(.panel)로 묶임, 필터 pill 줄 -> 카드에 붙은 컨트롤 줄 + 필터 서랍(.control-line/
+ * .filter-drawer/.chip, 다중선택). 6a 의 소셜 카드(Updates/judgment/ticker)는 백엔드가 없어서
+ * 넣지 않았다 — templates/home.html 끝 주석 참고.
+ *
  * ⚠️ 쓸 수 있는 변수는 팔레트 키뿐이다(g g2 bar ink ink2 muted n1 n2 acc accd acclt grgb inkrgb).
  *    캔버스의 --color-* 토큰은 여기로 매핑된다: bg->g, surface->g2, text->ink, accent->acc,
  *    accent-700->accd, neutral-400(테두리)->n2, neutral-600(메타)->n1, neutral-800(본문)->ink2.
  *    Mist·Signal red 팔레트가 캔버스 토큰과 값까지 1:1 이라 그대로 맞는다.
+ *    6a 는 별도 시스템(Mona Sans + Playfair italic · radius 12~16 · 그림자)으로 그려졌지만
+ *    **색만** 팔레트로 들여왔다(render.PALETTES 의 "Boncom · Maroon"). 폰트는 Archivo 한 벌,
+ *    radius 는 0, 고도는 테두리 — 6a 의 둥근 모서리/그림자를 그대로 옮기지 않은 이유가 이거다.
  *
  * 섹션 순서: base -> home -> category -> search -> archive_index -> archive_week
  */
@@ -29,43 +39,35 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid v
 .wrap { max-width:1280px; margin:0 auto; background:var(--g);
         border-left:1px solid var(--n2); border-right:1px solid var(--n2); }
 
-/* — 마스트헤드 — */
-.mh { padding:20px 44px 0; border-bottom:2px solid var(--ink); }
-@media (max-width:700px) { .mh { padding:16px 20px 0; } }
-.mh-top { display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
-          flex-wrap:wrap; padding-bottom:16px; }
-.mh-id { display:flex; flex-direction:column; gap:7px; }
-.mh-wordmark { font:900 32px/1 Archivo,sans-serif; letter-spacing:-.03em; color:var(--ink);
+/* — 마스트헤드 (2026-08-06 캔버스 6a: 2단 -> 한 줄, 밑줄 탭 -> pill) — */
+.mh { padding:14px 44px; border-bottom:1px solid var(--n2); }
+@media (max-width:700px) { .mh { padding:14px 20px; } }
+.mh-top { display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.mh-id { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+.mh-wordmark { display:inline-flex; align-items:baseline; gap:3px;
+               font:900 22px/1 Archivo,sans-serif; letter-spacing:-.02em; color:var(--ink);
                text-decoration:none; }
 .mh-wordmark:hover { color:var(--accd); }
-.mh-meta { font:500 12px/1.35 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+/* 6a 의 빨간 점. 팔레트를 따라가므로 Mist 에서는 시그널 레드, Boncom 에서는 6a 의 #ff1a22. */
+.mh-dot { width:7px; height:7px; border-radius:999px; background:var(--acc); flex:none; }
+.mh-meta { font:500 11px/1.35 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
            color:var(--n1); }
+.mh-tools { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 .mh-search { margin:0; }
 .mh-search-field { display:flex; align-items:center; gap:8px; width:250px; max-width:100%;
-                   padding:10px 12px; border:1px solid var(--n2); background:var(--g2); color:var(--n1); }
+                   padding:9px 12px; border:1px solid var(--n2); background:var(--g2); color:var(--n1); }
 .mh-search-field input { border:0; background:none; outline:0; flex:1; min-width:0;
                          font:400 12px Archivo,sans-serif; color:var(--ink); }
 .mh-search-field input::placeholder { color:var(--n1); }
-.mh-bar { display:flex; align-items:stretch; justify-content:space-between; gap:20px; flex-wrap:wrap;
-          border-top:1px solid var(--n2); }
-.mh-nav { display:flex; gap:26px; align-items:stretch; flex-wrap:wrap; }
-.mh-nav a { font:600 12px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
-            white-space:nowrap; padding:13px 0 11px; border-bottom:3px solid transparent;
-            color:var(--n1); text-decoration:none; }
-.mh-nav a:hover { color:var(--ink); }
-.mh-nav a.active { font-weight:800; color:var(--ink); border-bottom-color:var(--ink); }
-/* 기간 토글. Weekly/Monthly 는 미구현이라 마크업에 없다(macros.html 주석 참고) — 지금은
-   "무슨 기간을 보고 있는지" 표시 하나뿐이라 버튼이 아니라 span 이다. */
-.mh-period { display:flex; align-items:stretch; border-left:1px solid var(--n2); }
-.mh-period-on { display:flex; align-items:center; font:800 11px Archivo,sans-serif; letter-spacing:.12em;
-                text-transform:uppercase; padding:0 16px; background:var(--ink); color:var(--g); }
-/* 좁은 화면에서는 탭이 여러 줄로 접히면서 이 칩이 자기 줄로 떨어진다 — 그때 세로 구분선이
-   허공에 뜨고 칩이 줄 전체 높이로 늘어나서, 칩 형태만 남기고 구분선을 없앤다. */
-@media (max-width:700px) {
-  .mh-bar { align-items:center; }
-  .mh-period { border-left:0; }
-  .mh-period-on { padding:6px 12px; margin-bottom:10px; }
-}
+.mh-nav { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
+/* pill 이지만 radius 는 0 이다 — 이 시스템의 radius 는 전부 0 이고, 6a 의 999px 은
+   Boncom 쪽 값이라 색만 들여온다는 결정(render.PALETTES 주석)에서 제외됐다. */
+.mh-pill { font:600 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+           white-space:nowrap; padding:8px 13px; border:1px solid transparent;
+           color:var(--n1); text-decoration:none; }
+.mh-pill:hover { border-color:var(--n2); color:var(--ink); }
+.mh-pill.active { font-weight:800; background:var(--ink); color:var(--g); border-color:var(--ink); }
+.mh-pill.active:hover { color:var(--g); }
 
 /* — 심플 헤더(아카이브 인덱스/주간) — */
 .simple-header { background:var(--g); border-bottom:2px solid var(--ink); padding:18px 44px;
@@ -164,19 +166,84 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 /* 필터가 숨긴 항목. display:none 이라 섹션 헤더만 남을 수 있는데, 그건 캔버스 디자인의 동작과 같다. */
 .is-filtered { display:none !important; }
 
-.filter-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:30px; }
-.filter-label { font:600 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
-                color:var(--n1); margin-right:4px; }
-.filter-pill { font:700 11px Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
-               padding:8px 13px; border:1px solid var(--n2); background:transparent; color:var(--ink);
-               cursor:pointer; }
-.filter-pill:hover { border-color:var(--ink); }
-.filter-pill.active { border-color:var(--ink); background:var(--ink); color:var(--g); }
+/* — 지면 머리 (6a): 날짜 칩 · 디스플레이 제목 · stat 쌍 — */
+.page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:32px;
+             flex-wrap:wrap; padding-bottom:26px; }
+.ph-text { min-width:0; }
+.ph-date { display:inline-block; padding:6px 14px; border:1px solid var(--n2); background:var(--g2);
+           font:700 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+           color:var(--muted); }
+.ph-title { margin:16px 0 14px; font:900 clamp(32px,4.6vw,52px)/1.02 Archivo,sans-serif;
+            letter-spacing:-.03em; color:var(--ink); max-width:22ch; }
+/* 캔버스에서는 Playfair Display italic + maroon 이었다. 폰트를 한 벌 더 싣지 않고
+   italic + --accd 로 같은 대위 효과만 가져왔다(macros.page_head 주석). */
+.ph-em { font-style:italic; font-weight:400; color:var(--accd); letter-spacing:-.02em; }
+.ph-dek { margin:0; max-width:56ch; font:400 16px/1.55 Archivo,sans-serif; color:var(--muted);
+          text-wrap:pretty; }
+.ph-stats { display:flex; gap:32px; padding-top:6px; }
+.ph-stat { display:flex; flex-direction:column; gap:4px; }
+.ph-num { font:700 32px/1 Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.ph-num-dim { color:var(--n1); }
+.ph-label { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+            color:var(--muted); white-space:nowrap; }
+@media (max-width:700px) { .ph-stats { gap:24px; } }
+
+/* — Today's news 카드 (6a). 6a 는 radius 16 + 그림자였지만 이 시스템의 radius 는 0 이고
+     고도는 테두리로 낸다(팔레트로 색만 들여왔다 — render.PALETTES 주석 참고). — */
+.panel { border:1px solid var(--n2); background:var(--g); }
+.panel-head { display:flex; align-items:flex-start; gap:16px; padding:22px 26px 14px; }
+.panel-icon { width:40px; height:40px; flex:none; display:grid; place-items:center;
+              background:var(--g2); color:var(--accd); }
+.panel-id { min-width:0; flex:1; }
+.panel-h { margin:0; font:800 22px/1.2 Archivo,sans-serif; letter-spacing:-.01em; color:var(--ink); }
+.panel-sub { margin:4px 0 0; font:400 14px/1.5 Archivo,sans-serif; color:var(--muted); }
+.panel-range { padding-top:6px; font:700 11px Archivo,sans-serif; letter-spacing:.12em;
+               text-transform:uppercase; color:var(--accd); white-space:nowrap; }
+.panel-body { padding:0 26px 26px; border-top:1px solid var(--n2); }
+@media (max-width:700px) {
+  .panel-head { padding:18px 20px 12px; }
+  .panel-body { padding:0 20px 20px; }
+}
+
+/* — 컨트롤 줄 + 필터 서랍 (6a) — */
+.control-line { display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:0 26px 16px; }
+@media (max-width:700px) { .control-line { padding:0 20px 14px; } }
+.seg { display:inline-flex; padding:3px; border:1px solid var(--n2); background:var(--g2); }
+.seg-on { padding:5px 14px; background:var(--ink); color:var(--g);
+          font:700 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+.drawer-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 15px;
+              border:1px solid var(--n2); background:var(--g); color:var(--ink); cursor:pointer;
+              font:600 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+.drawer-btn:hover { border-color:var(--ink); }
+.drawer-btn.active { border-color:var(--ink); }
+.drawer-btn svg { display:block; }
+.drawer-btn-n { font-weight:800; color:var(--accd); }
+.filter-drawer { display:grid; grid-template-columns:minmax(0,1fr); background:var(--g2);
+                 border-top:1px solid var(--n2); border-bottom:1px solid var(--n2);
+                 margin-bottom:16px; }
+.drawer-group { padding:18px 26px 20px; }
+@media (max-width:700px) { .drawer-group { padding:16px 20px 18px; } }
+.drawer-h { display:block; margin-bottom:12px; font:700 11px Archivo,sans-serif; letter-spacing:.12em;
+            text-transform:uppercase; color:var(--muted); }
+.drawer-pills { display:flex; flex-wrap:wrap; gap:8px; }
+.topic-pill { padding:8px 15px; border:1px solid var(--n2); background:var(--g); color:var(--ink);
+              cursor:pointer; font:600 12px Archivo,sans-serif; }
+.topic-pill:hover { border-color:var(--ink); }
+.topic-pill.active { border-color:var(--ink); background:var(--ink); color:var(--g); }
+/* chip 은 JS 가 만든다(고른 토픽만 보여야 하므로 서버가 미리 구울 수 없다). */
+.chip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.chip { display:inline-flex; align-items:center; gap:7px; padding:8px 14px;
+        border:1px solid var(--ink); background:var(--ink); color:var(--g); cursor:pointer;
+        font:600 12px Archivo,sans-serif; }
+.chip:hover { background:var(--accd); border-color:var(--accd); }
+.chip-x { font-size:14px; line-height:1; opacity:.65; }
 .filter-note { margin-left:auto; font:500 11px Archivo,sans-serif; letter-spacing:.08em;
                text-transform:uppercase; color:var(--n1); }
 
+/* 6a 에서 카드(.panel) 안으로 들어갔다. 아래 마감선은 `.also-break` 의 위 선이 대신하므로
+   여기서는 떼어냈다 — 두 벌이면 리드와 Also today 사이에 선이 두 줄 생긴다. */
 .lead { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,420px); gap:44px; align-items:start;
-        padding-bottom:38px; border-bottom:2px solid var(--ink); }
+        padding:24px 0 28px; }
 .lead-kicker { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
 .lead-cat { font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
 .lead-sig { font:500 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--n1); }
@@ -205,19 +272,26 @@ a:not([href]):hover { color:var(--ink); }
 .byline-dead { font:700 13px Archivo,sans-serif; color:var(--n1);
                border-bottom:2px solid var(--n2); padding-bottom:1px; }
 
-.section-head { display:flex; align-items:baseline; justify-content:space-between; gap:16px;
-                padding:26px 0 14px; }
+/* `.section-head`/`.section-sub` 는 2026-08-06 에 지웠다 — Also today 머리글이 6a 의
+   `.also-break`(라벨 · 헤어라인 · 범위)로 바뀌면서 쓰는 마크업이 없어졌다.
+   `.section-h` 는 Worth knowing / In brief 가 계속 쓴다. */
 .section-h { display:block; font:900 13px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase;
              color:var(--ink); margin-bottom:8px; }
-.section-head .section-h { margin-bottom:0; }
-.section-sub { font:500 11px Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--n1); }
 
 /* Also today 는 최대 3장(stories 02–04). grid + auto-fit 은 토픽 필터가 카드를
    display:none 으로 숨길 때 빈 트랙을 접어 남은 카드·imgslot 을 전폭으로 키운다
    (chips/robotics 에서 이미지가 거대해지던 원인). flex + 50% 상한이면
    1장→반폭, 2장→반씩(Government & law 기준), 3장→1/3 씩(All 기준). */
-.also-grid { display:flex; flex-wrap:wrap; gap:32px;
-             border-top:1px solid var(--n2); padding-top:24px; }
+/* 6a 의 라벨 붙은 구획선. 리드와 Also today 사이의 유일한 선이다(.lead 주석 참고). */
+.also-break { display:flex; align-items:center; gap:16px; padding:16px 0 20px;
+              border-top:1px solid var(--n2); }
+.break-h { font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+           color:var(--ink); white-space:nowrap; }
+.break-rule { flex:1; height:1px; background:var(--n2); }
+.break-sub { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+             color:var(--n1); white-space:nowrap; }
+
+.also-grid { display:flex; flex-wrap:wrap; gap:32px; }
 .also-card { flex:1 1 calc((100% - 64px) / 3); max-width:calc((100% - 32px) / 2);
              min-width:min(250px, 100%); display:flex; flex-direction:column; gap:12px; }
 .card-cat { font:800 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
