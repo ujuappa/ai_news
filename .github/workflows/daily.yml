@@ -4,6 +4,18 @@ on:
   schedule:
     - cron: "0 14 * * *"   # 매일 14:00 UTC (필요시 조정)
   workflow_dispatch: {}      # 수동 실행 버튼
+  # 디자인/템플릿만 바꿨을 때 **API 비용 없이** 배포하는 경로(2026-08-06 추가).
+  # 파이프라인·커밋 스텝은 아래 `if: github.event_name != 'push'` 로 건너뛰고, 이미 커밋된
+  # output/ 을 그대로 Pages 에 올린다.
+  #
+  # ⚠️ 그래서 **로컬에서 `python rerender.py` 로 output/ 을 갱신해 같이 커밋해야 한다.**
+  #    템플릿만 고치고 output/ 을 안 구우면 예전 지면이 그대로 다시 배포된다(빌드가
+  #    렌더를 다시 하지 않는다 — 그게 이 트리거가 싼 이유다).
+  #
+  # 무한 루프는 없다: cron 실행이 스스로 push 하는 `digest: <날짜>` 커밋은 GITHUB_TOKEN 으로
+  # 만들어지고, GitHub 은 GITHUB_TOKEN 이 만든 이벤트로 새 워크플로 실행을 시작하지 않는다.
+  push:
+    branches: [main]
 
 permissions:
   contents: write            # output/ 와 digest.db 커밋용
@@ -18,22 +30,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # push 트리거(디자인 배포)에서는 파이썬도 의존성도 필요 없다 — 렌더를 다시 하지 않고
+      # 커밋된 output/ 을 그대로 올리기 때문. requirements.txt 는 torch 를 끌어와서 무겁다.
       - uses: actions/setup-python@v5
+        if: github.event_name != 'push'
         with:
           python-version: "3.12"
           cache: pip
 
-      - run: pip install -r requirements.txt
+      - if: github.event_name != 'push'
+        run: pip install -r requirements.txt
 
       # 인증: Developer API 키. llm.py 의 genai.Client() 가 GEMINI_API_KEY 를 자동으로 집어감.
       # (Vertex AI 서비스계정 방식은 2026-07-28 에 철회 — PROJECT_MEMO 변경로그 참고)
       - name: Run pipeline
+        if: github.event_name != 'push'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DIGEST_MODEL: gemini-2.5-flash
         run: python pipeline.py
 
       - name: Commit digest + state
+        if: github.event_name != 'push'
         run: |
           git config user.name "digest-bot"
           git config user.email "bot@users.noreply.github.com"

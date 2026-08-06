@@ -1366,6 +1366,26 @@
     나지 않지만(테마 스위처는 실제로 동작 중), sandboxed iframe 같은 데서 첫 페인트 스크립트가
     통째로 죽을 수 있으므로 try/catch 를 씌울 값은 있다 — 이번 스코프 밖이라 손대지 않았다.
 
+- 2026-08-06: **Pages 배포에 push 트리거 추가** (`.github/workflows/daily.yml`).
+  6a 를 머지·push 한 뒤에 "사이트가 안 바뀐다"를 만난 게 계기다 — 워크플로 트리거가
+  `schedule` + `workflow_dispatch` 뿐이고 **Pages 배포 job 이 그 워크플로 안에** 있어서,
+  디자인만 바꿔도 다음 cron(14:00 UTC)까지 기다리거나 수동 실행으로 **전체 파이프라인(=Gemini
+  API 비용)** 을 태우는 수밖에 없었다.
+  - `push: branches: [main]` 을 추가하고, `setup-python`·`pip install`·`Run pipeline`·
+    `Commit digest + state` 네 스텝에 `if: github.event_name != 'push'` 를 걸었다.
+    push 이벤트에서는 `checkout` + `Upload Pages artifact` 2스텝만 돌고 `deploy` 가 이어진다
+    (schedule/dispatch 는 6스텝 그대로). torch 를 끌어오는 pip install 도 건너뛴다.
+  - **전제: 커밋된 `output/` 이 곧 배포물이다.** 빌드가 렌더를 다시 하지 않으므로 템플릿만
+    고치고 push 하면 예전 지면이 재배포된다 → `python rerender.py` 로 구운 `output/` 을 반드시
+    같이 커밋해야 한다. CLAUDE.md 상단에 순서를 적어 뒀다.
+  - **무한 루프 없음**: cron 이 스스로 push 하는 `digest: <날짜>` 커밋은 GITHUB_TOKEN 으로
+    만들어지고, GitHub 은 GITHUB_TOKEN 이 만든 이벤트로 새 워크플로 실행을 시작하지 않는다.
+  - `paths` 필터는 **일부러 안 걸었다.** 문서만 고친 push 에도 배포가 한 번 도는 건 낭비지만
+    (API 비용 0, 30초), 경로 필터를 잘못 적으면 **디자인 변경이 조용히 배포되지 않는** 훨씬
+    나쁜 실패 모드가 생긴다.
+  - 검증: YAML 파싱 + 세 이벤트(schedule/dispatch/push)별 실행 스텝 시뮬레이션으로
+    2스텝 vs 6스텝 확인. 이 커밋의 push 자체가 첫 실물 테스트다.
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:

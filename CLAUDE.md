@@ -10,6 +10,9 @@ Claude Code 는 세션 시작 시 이 파일을 자동으로 읽음.
 오케스트레이터 `pipeline.py`, 설정 `sources.yaml`. `backfill.py` 는 1회성 과거 데이터 백필용
 (2026-07-27 에 6개월치 실행 완료 — 재실행은 보통 불필요, PROJECT_MEMO 참고).
 `rerender.py` 는 DB 데이터로 전체 페이지를 API 비용 없이 재생성(디자인만 바꿨을 때 사용).
+**디자인 변경 배포 순서(2026-08-06부터)**: 템플릿/CSS 고침 → `python rerender.py` → `output/` 까지
+같이 커밋 → main 에 push. push 트리거가 파이프라인을 건너뛰고 커밋된 `output/` 만 Pages 에 올린다
+(API 비용 0). **`rerender.py` 를 빼먹으면 예전 지면이 그대로 재배포된다** — 빌드는 렌더를 안 한다.
 `generate_recaps.py` 는 recap(주간 헤드라인/$ 집계/카테고리 요약) 소급 생성용, 아직 미실행.
 `linkcheck.py` 는 이미 게시된 링크의 link rot 점검(→ `items.link_status`, 죽은 링크는 렌더에서
 href 가 떨어짐). 판정 기준과 "무엇을 죽었다고 부르지 않는지"는 PROJECT_MEMO 2026-08-04 참고.
