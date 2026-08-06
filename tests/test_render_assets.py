@@ -189,6 +189,54 @@ def test_templates_live_on_disk_not_in_python():
     assert "box-sizing" not in src, "CSS 가 render.py 로 되돌아왔다"
 
 
+# ── 홈 상단 (2026-08-06 캔버스 "Home Top Organization" 6a) ────────────────────
+
+def test_masthead_carries_no_link_that_goes_nowhere(tmp_path):
+    """6a 헤더에는 `Following 8` · `Monthly` pill 이 있지만 **일부러 안 넣었다** — 팔로우도
+    주간/월간 기간 전환도 구현이 없어서(후자는 spec 문서만 있다) 누르면 아무 일도 안 일어난다.
+    죽은 버튼 금지는 이 프로젝트의 규칙이고, 캔버스를 옮길 때 가장 새기 쉬운 구멍이다."""
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    for dead in ("Following", "Monthly", "Sign in"):
+        assert dead not in page, f"구현이 없는 {dead!r} 가 마크업에 들어왔다"
+
+
+def test_home_top_ships_the_6a_blocks(tmp_path):
+    """지면 머리 · 카드 · Also today 구획선이 다 나오는지. 하나라도 빠지면 상단이 조용히
+    예전 모양으로 돌아간다. 카드가 실제로 생기도록 아이템 4개를 넣는다(리드 + 02~04)."""
+    items = []
+    for i in range(4):
+        it = dict(ITEM)
+        it["title"] = it["headline"] = f"Story {i}"
+        it["url"] = f"https://example.com/{i}"
+        it["significance"] = 0.9 - i * 0.05
+        items.append(it)
+    render.render_digest("2026-07-31", _groups(items), [], tmp_path, total_records=496)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    for cls in ("page-head", "ph-date", "ph-title", "ph-stats", "panel", "panel-head", "also-break"):
+        assert cls in page, f"{cls} 가 없다"
+    assert "496" in page, "stat 쌍의 in-archive 숫자가 안 실렸다"
+
+
+def test_archived_copy_does_not_claim_to_be_today(tmp_path):
+    """같은 본문을 index.html 과 archive/{date}.html 에 굽는다. 디스플레이 제목만 갈라 놓는데,
+    안 갈라 놓으면 몇 달 뒤에 아카이브 사본이 "Today's news" 라고 우긴다."""
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    root = (tmp_path / "index.html").read_text(encoding="utf-8")
+    arch = (tmp_path / "archive" / "2026-07-31.html").read_text(encoding="utf-8")
+    assert "Today&#39;s news" in root or "Today's news" in root
+    assert "Today&#39;s news" not in arch and "Today's news" not in arch
+    assert "That day&#39;s news" in arch or "That day's news" in arch
+
+
+def test_the_new_palette_is_a_complete_one(tmp_path):
+    """팔레트를 하나 추가할 때 키를 빠뜨리면 그 테마에서만 `var(--x)` 가 빈 값이 된다 —
+    테마를 눌러 보지 않으면 안 걸린다(2026-08-06 에 Boncom 팔레트를 넣으며 추가)."""
+    keys = set(render.PALETTES[render.DEFAULT_THEME])
+    for palette in render.PALETTES:
+        assert set(palette) == keys, f'{palette["name"]}: 키가 다르다'
+
+
 # ── 이미지 슬롯의 맞춤 방식이 한 곳에서만 정해지는지 ───────────────────────────
 
 def test_both_fit_treatments_exist_in_css():

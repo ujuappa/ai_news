@@ -82,6 +82,14 @@ PALETTES = [
     {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d",
      "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013",
      "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"},
+    # 2026-08-06, 캔버스 "Home Top Organization" 6a 에서. 6a 는 Mona Sans + Playfair italic ·
+    # radius 12~16 · 그림자까지 쓰는 별도 시스템으로 그려졌지만, **색만** 팔레트로 들여온다
+    # (사용자 결정 2026-08-06): 폰트와 radius 는 팔레트 변수가 아니라 전역이라 Archivo/radius 0
+    # 이 그대로 유지된다. 6a 의 maroon 은 링크색이라 --accd, 워드마크 옆 빨간 점은 --acc 다
+    # (digest.css `.mh-dot` 이 --acc 를 쓴다 → Mist 에서는 시그널 레드로 나온다).
+    {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a",
+     "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22",
+     "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"},
 ]
 DEFAULT_THEME = 4  # Mist · Signal red — styles.css 자체 기본값 + 기존 사이트 정체성과 가장 가까움
 
@@ -285,18 +293,17 @@ def _nav_links(groups: list[tuple[str, list[dict]]], active_key: str, home_href:
     return links
 
 
-TOPIC_PILL_CAP = 6
-
-
-def _topic_filters(items: list[dict], total: int, cap: int = TOPIC_PILL_CAP) -> list[dict]:
-    """홈 상단 필터 pill — **카테고리가 아니라 토픽**이다(2026-08-04).
+def _topic_filters(items: list[dict], total: int, cap: int | None = None) -> list[dict]:
+    """필터 목록 — **카테고리가 아니라 토픽**이다(2026-08-04).
 
     카테고리 pill 은 상단 네비게이션과 같은 4개를 그대로 반복해서 자리값을 못 했다.
     토픽은 "무엇에 관한 이야기인가"라는 다른 축이라 필터로서 실제로 쓸모가 있다.
 
-    **상한이 필요한 이유**: 실측(2026-08-04)으로 하루치에 토픽이 8~9개 붙는데 대부분 1~2건짜리다.
-    한 건짜리 필터는 필터가 아니고 pill 줄도 넘친다 → 그날 많이 나온 순으로 top-N 만 남긴다.
-    나머지 토픽의 기사는 'All' 에서 계속 보인다(사라지지 않는다).
+    **상한이 없어진 이유(2026-08-06, 캔버스 6a)**: 예전엔 top-6 만 냈다 — 하루치에 토픽이
+    8~9개 붙는데 pill 을 한 줄에 늘어놓으니 줄이 넘쳐서였다. 6a 는 그 줄을 `Filters` 버튼 +
+    서랍으로 바꿨고, 서랍은 몇 개가 들어와도 넘치지 않는다. 그래서 상한의 이유가 없어졌다 —
+    이제 그날 붙은 토픽 전부가 서랍에 들어간다(1건짜리 토픽도 고를 수 있다).
+    `cap` 은 남겨 뒀지만 기본값은 무제한이다.
 
     동점은 TOPIC_ORDER 순으로 깬다 — 안 그러면 같은 데이터로 재렌더할 때 pill 순서가 흔들린다.
     빈 토픽은 애초에 counts 에 없으니 "눌러도 아무것도 안 남는 버튼"은 생기지 않는다."""
@@ -305,7 +312,7 @@ def _topic_filters(items: list[dict], total: int, cap: int = TOPIC_PILL_CAP) -> 
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], order.get(kv[0], len(order))))
     pills = [{"key": "all", "label": "All", "count": total}]
     pills += [{"key": key, "label": TOPIC_LABELS.get(key, key), "count": n}
-              for key, n in ranked[:cap] if key in TOPIC_LABELS]
+              for key, n in (ranked if cap is None else ranked[:cap]) if key in TOPIC_LABELS]
     return pills
 
 
@@ -338,10 +345,14 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
     for i, it in enumerate(flat, start=1):
         _annotate(it, rank=i, ref=ref)
     period_meta_txt, period_word = _period_meta(date, total)
+    # 6a 의 날짜 칩은 "Tuesday · 4 August 2026" 만 담는다 — 건수는 그 아래 stat 쌍이 말한다.
+    period_date = period_meta_txt.rsplit(" · ", 1)[0]
     bands = _signal_bands(flat)
     grid3, worth, brief = flat[1:4], flat[4:8], flat[8:]
     # "Stories 02 – 04" — 카드가 몇 장이든 맞게(조용한 날엔 1~2장일 수 있다).
     also_range = f"Stories 02 – {1 + len(grid3):02d}" if grid3 else ""
+    # 패널 머리글 오른쪽. worth/brief 가 패널 밖에 있어도 랭킹은 이어지므로 그날 전체를 센다.
+    panel_range = f"Ranked 01 – {total:02d}" if total else ""
 
     output_dir.mkdir(parents=True, exist_ok=True)
     archive_dir = output_dir / "archive"
@@ -369,6 +380,10 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
             lead=flat[0] if flat else None, grid3=grid3, worth=worth, brief=brief,
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
             filters=_topic_filters(flat, total), also_range=also_range,
+            period_date=period_date, panel_range=panel_range,
+            # 같은 본문을 루트(index.html)와 아카이브 사본에 굽는다. 디스플레이 제목만
+            # 갈라 놓는다 — 몇 달 뒤에 아카이브 사본을 열었을 때 "Today's news" 는 거짓말이다.
+            head_lead=("Today's news" if not in_archive else "That day's news"),
         )
         out_path.write_text(html, encoding="utf-8")
     return archive_dir / f"{date}.html"

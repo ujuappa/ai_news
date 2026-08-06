@@ -34,7 +34,7 @@
     한 덩어리여야 해서 래퍼로 감쌌다(.week-lead-item/.week-sec-item 은 순수 래퍼 —
     week-lead-col 에 자식 선택자가 없어서 레이아웃에 영향이 없다).
   #}
-  {{ m.filter_row(filters, note='') }}
+  {{ m.control_line(filters, period_label='Weekly') }}
   <div class="week-split">
     <div class="week-lead-col" data-section>
       <div class="week-lead-item" data-topics="{{ lead.topic_attr }}">

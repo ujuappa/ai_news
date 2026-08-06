@@ -1311,6 +1311,60 @@
   - 검증: `tests/test_topics.py` 36건 신설. 전체 **315 passed**. 실제 결과 —
     오늘 `All 18 | Code 5 | Chips 5 | Government 5 | Money 4 | Security 3 | Science 1`,
     아카이브 `2026-07-30` `All 25 | Money 10 | Code 7 | Chips 4 | Government 3 | Security 3 | Science 3`.
+- 2026-08-06: **홈 상단 재편 — Claude Design 캔버스 "Home Top Organization" 6a 포팅.**
+  캔버스는 turn 6개(1a~6a)로, 홈 상단을 조직하는 방법 네 가지에서 시작해 6a 로 수렴했다.
+  가져온 것 · 안 가져온 것 · 그 이유:
+  - **마스트헤드가 2단 → 한 줄.** 워드마크 + 빨간 점(`.mh-dot`, 색은 `--acc` 라 팔레트를 따라간다)
+    · 검색 · pill 네비. 밑줄 탭이 pill 로 바뀌었고 현재 카테고리는 채운 pill(`.active`)이 표시한다.
+    `Today` pill 은 없앴다 — 6a 기준 워드마크가 홈 링크고, 그날 건수는 아래 stat 쌍이 말한다.
+  - **날짜/건수가 헤더에서 지면으로 내려왔다**(`.page-head`): 날짜 칩 · 디스플레이 제목
+    ("Today's news, *ranked by significance*") · 한 줄 설명 · stat 쌍(오늘 N / 아카이브 N).
+    카테고리·검색 페이지는 기간 컨트롤이 없으므로 `masthead(show_meta=true)` 로 헤더에 기간을
+    계속 적는다(홈만 `false`).
+  - **리드 + Also today 가 한 장의 카드(`.panel`)로 묶였고, 기간 세그먼트와 필터가 그 카드에
+    붙었다.** 6a 의 논지가 그거다 — 컨트롤은 자기가 걸리는 대상 위에 얹혀야 한다(5a 에서 컨트롤
+    줄을 페이지 최상단에서 뉴스 위로 내린 것과 같은 이유: 그 줄은 다이제스트만 필터한다).
+  - **필터 pill 줄 → 컨트롤 줄 + 서랍, 그리고 다중선택.** `filter_row` → `control_line`.
+    `Filters` 버튼이 서랍을 열고, 고른 토픽은 제거 가능한 chip 으로 줄에 남는다.
+    이 때문에 **`TOPIC_PILL_CAP`(top-6)이 없어졌다** — 상한의 이유가 "pill 을 한 줄에 늘어놓으면
+    넘친다"였고, 서랍은 넘치지 않는다. 이제 그날 붙은 토픽 전부를 고를 수 있다(1~2건짜리 포함).
+    'All' pill 도 없어졌다 — 아무것도 안 고른 상태가 곧 All 이다.
+    다중선택은 **OR** 다: AND 로 하면 항목당 토픽이 최대 3개(`MAX_TOPICS_PER_ITEM`)라 두 개만
+    골라도 거의 항상 0건이 된다.
+  - **함정 하나 — 컨트롤 줄은 `.panel-body`(data-section) 밖에 둬야 한다.** 안에 두면, rank 9
+    이하에만 달린 토픽을 골랐을 때 카드 속이 통째로 숨으면서 필터 자신도 같이 사라져
+    **되돌릴 수단이 없어진다.** `tests/test_topics.py::test_the_filter_cannot_hide_its_own_undo_control`
+    로 못박았다.
+  - **팔레트 6번째 추가: `Boncom · Maroon`**(사용자 결정). 6a 는 Mona Sans + Playfair Display
+    italic · radius 12~16 · 그림자를 쓰는 별도 시스템으로 그려졌는데, **색만** 팔레트로 들여왔다.
+    폰트와 radius 는 팔레트 변수가 아니라 전역이므로 Archivo 한 벌 · radius 0 · 고도는 테두리가
+    그대로 유지된다. 6a 의 maroon(#4a0e1f)은 링크색이라 `--accd`, 빨간 점(#ff1a22)은 `--acc`.
+    제목의 Playfair italic 대위는 `italic + --accd`(`.ph-em`)로만 가져왔다.
+  - **안 가져온 것 = 6a 마크업의 약 40%**(사용자 결정): 카드 아래 "Below the digest" 구획과
+    Updates(팔로우 + 내 코멘트 + Public/Private 작성기) · Today's judgment(남들 코멘트) ·
+    quiet ticker, 그리고 헤더의 `Following 8` · `Monthly` pill. 전부 로그인 + 쓰기 백엔드가
+    있어야 하는데 이 사이트는 GitHub Pages 정적 산출물이라 붙이면 죽은 버튼이 된다
+    (§10.1 "정적 사이트에 로그인 붙이기는 함정" 과 같은 결론). 붙일 자리는 `templates/home.html`
+    끝 주석에 적어 뒀고, `test_masthead_carries_no_link_that_goes_nowhere` 가 새는 걸 막는다.
+    `Monthly` 는 spec(`docs/superpowers/specs/2026-08-04-weekly-monthly-periods-design.md`)만
+    있고 코드가 없어서 같은 이유로 제외 — 기간 세그먼트는 여전히 `Daily` 표시 하나뿐이다.
+  - **서랍의 `Lab` 그룹도 안 넣었다** — 캔버스 자신이 4b·5i 에서 "Lab 그룹은 아직 읽을 게 없다"고
+    적어 뒀다. source→lab 매핑이나 분류기 필드 + 백필이 선행 조건이다.
+  - **6a 가 그리지 않은 것은 지우지 않았다.** 6a 는 "Home **Top** Organization" 이라 상단만
+    그린 시안이고 Worth knowing / In brief / Signal index 사이드바가 등장하지 않는다. 문자
+    그대로 옮기면 그날 17건 중 13건이 홈에서 사라진다(6a 의 stat 은 17을 그대로 세고 있다) —
+    그래서 카드 아래에 그대로 남겼다. 테마 스위처 푸터도 유지.
+  - 아카이브 사본(`archive/<날짜>.html`)은 디스플레이 제목만 "That day's news" 로 갈랐다 —
+    같은 본문을 두 URL 에 굽는 구조라, 안 갈라 놓으면 몇 달 뒤에 아카이브가 "Today's news"
+    라고 우긴다(`test_archived_copy_does_not_claim_to_be_today`).
+  - 검증: 전체 **321 passed**(신규 6건 — 위 함정 2건 + 6a 블록 존재 + 죽은 링크 없음 +
+    팔레트 키 완전성). 필터 동작은 렌더된 실제 페이지를 jsdom 에 올려 22개 항목으로 확인
+    (초기상태 · 서랍 토글 · 단일선택 · OR · chip 제거 · 전체해제 · 카드 밖 토픽 · 빈 섹션 숨김).
+    `rerender.py` 로 252페이지 재생성 완료(API 비용 0).
+  - ⚠️ jsdom 실행 중 `head_scripts` 의 `localStorage.getItem` 이 opaque origin 에서
+    SecurityError 를 던지는 걸 봤다. **이번 변경과 무관한 기존 코드**이고 http(s)/file 에서는
+    나지 않지만(테마 스위처는 실제로 동작 중), sandboxed iframe 같은 데서 첫 페인트 스크립트가
+    통째로 죽을 수 있으므로 try/catch 를 씌울 값은 있다 — 이번 스코프 밖이라 손대지 않았다.
 
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
