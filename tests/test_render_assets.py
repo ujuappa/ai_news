@@ -229,6 +229,26 @@ def test_archived_copy_does_not_claim_to_be_today(tmp_path):
     assert "That day&#39;s news" in arch or "That day's news" in arch
 
 
+def test_theme_script_survives_blocked_localstorage(tmp_path):
+    """저장소가 막힌 맥락(sandboxed iframe · 사이트 데이터 차단 · 일부 웹뷰)에서는
+    `localStorage` 를 **읽기만 해도** SecurityError 가 난다. 테마 스크립트는 IIFE 하나라
+    그 순간 통째로 죽고, 실측(jsdom) 결과 `__aiDigestSetTheme` 이 undefined 로 남아
+    푸터 스위치 6개가 전부 ReferenceError 를 던지는 죽은 버튼이 됐다.
+
+    배포 CSS 에 기본 팔레트 :root 가 있어서 지면은 멀쩡해 보이고 스위처만 조용히 죽는다 —
+    눈으로 안 잡히는 종류라 테스트로 못박는다."""
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    head = (tmp_path / "index.html").read_text(encoding="utf-8").split("</script>")[0]
+    assert "localStorage" in head, "테마 스크립트를 못 찾았다"
+    for call in re.findall(r"localStorage\.\w+\([^)]*\)", head):
+        # 각 접근이 try 블록 안에 있는지 — 감싸는 함수(read/write)를 거치는 형태여야 한다
+        assert "try{" in head, f"{call} 이 try/catch 밖에 있다"
+    assert re.search(r"function read\(\)\{try\{", head), "읽기 가드(read)가 없다"
+    assert re.search(r"function write\(v\)\{try\{", head), "쓰기 가드(write)가 없다"
+    assert "localStorage.setItem" not in head.split("function write")[0], \
+        "write() 가드를 우회하는 직접 setItem 이 남아 있다"
+
+
 def test_the_new_palette_is_a_complete_one(tmp_path):
     """팔레트를 하나 추가할 때 키를 빠뜨리면 그 테마에서만 `var(--x)` 가 빈 값이 된다 —
     테마를 눌러 보지 않으면 안 걸린다(2026-08-06 에 Boncom 팔레트를 넣으며 추가)."""

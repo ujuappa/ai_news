@@ -20,8 +20,15 @@ on:
 permissions:
   contents: write            # output/ 와 digest.db 커밋용
 
+# 그룹 이름을 레포 고유값으로 바꿨다(2026-08-06). 예전 값은 Pages 스타터 워크플로에서 그대로
+# 가져온 `"pages"` 였는데, 동시성 그룹은 **레포 전역**이라 같은 이름을 쓰는 다른 워크플로와
+# 경쟁한다. 지금 이 레포에는 GitHub 이 만든 내장 `pages-build-deployment`(event: dynamic)가
+# 새로 등록돼 있고, Pages 스타터 계열은 관례적으로 같은 `"pages"` 그룹을 쓴다.
+# 2026-08-06 에 두 워크플로가 겹쳐 돌다 **둘 다 cancelled** 로 끝났다 — 그게 그룹 충돌 때문인지
+# 손으로 취소한 건지는 인증 없이 확인할 수 없었다. 다만 범용 이름을 계속 쓸 이유가 없고
+# 바꾸는 비용이 0 이라, 가능성 하나를 그냥 없앤다.
 concurrency:
-  group: "pages"
+  group: "ai-digest-pages"
   cancel-in-progress: false
 
 jobs:

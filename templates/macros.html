@@ -6,11 +6,20 @@
 
   `palettes_json|safe` 가 필요한 이유: autoescape 가 켜져 있어서 그냥 쓰면 JSON 의 `"` 가
   `&quot;` 로 변해 스크립트가 깨진다. 팔레트 이름은 우리가 정하는 값이라 안전하다(§render.PALETTES).
+
+  **localStorage 접근은 try/catch 로 감싼다(2026-08-06).** 브라우저는 저장소가 막힌 맥락
+  (sandboxed iframe, 사이트 데이터 차단, 일부 웹뷰)에서 `localStorage` 를 **읽기만 해도**
+  SecurityError 를 던진다. 이 스크립트는 IIFE 하나라 그 순간 **통째로 죽는다** — 실측(jsdom):
+  `window.__aiDigestSetTheme` 이 undefined 로 남고, :root 에 팔레트가 하나도 안 깔리고,
+  푸터의 테마 스위치 6개가 전부 클릭 시 ReferenceError 를 던지는 **죽은 버튼**이 된다.
+  (배포 CSS 앞에 기본 팔레트 `:root` 블록이 붙어 있어서 지면 자체는 기본 테마로 멀쩡히 보인다 —
+  그래서 눈으로는 안 드러나고 스위처만 조용히 죽어 있다.)
+  감싸 두면 저장이 막힌 곳에서도 **그 세션 동안은 테마 전환이 동작한다**(유지만 안 될 뿐).
 #}
 {% macro head_scripts(asset_prefix='') -%}
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="{{ asset_prefix }}feed.xml">
 
-<script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';var stored=parseInt(localStorage.getItem(KEY),10);var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){localStorage.setItem(KEY,idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 {%- endmacro %}
 
 {#
