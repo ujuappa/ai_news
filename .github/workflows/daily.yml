@@ -27,6 +27,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # 2026-08-06 실패는 러너가 죽어 통신이 끊긴 형태였다. 상한이 없으면 이런 실행이 기본
+    # 6시간을 붙잡고 있을 수 있다. 정상 실행은 10분 안쪽이라 30분이면 넉넉하다.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -38,8 +41,32 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      # torch 를 **CPU 전용 인덱스에서 먼저** 깐다. 이유(2026-08-06 실패 조사):
+      # PyPI 기본 리눅스 휠은 CUDA 빌드다 — torch 526MB + cudnn 366 + nccl 206 +
+      # cusparselt 170 + triton 198 + nvshmem 60 ≈ 휠만 1.5GB, 게다가
+      # `cuda-toolkit[cublas,cudart,cufft,...]` 11종이 더 붙는다. 압축을 풀면 몇 GB다.
+      # **러너에는 GPU 가 없고** 우리가 하는 일은 22MB MiniLM 을 CPU 로 돌리는 것뿐이라
+      # 이 스택은 전부 낭비이고, 디스크/메모리 압박이 러너를 죽이는 원인으로 가장 유력하다.
+      # CPU 휠은 191MB 하나 + nvidia 의존성 0.
+      # 순서가 중요하다: torch 를 먼저 만족시켜 놓으면 아래 requirements 설치가
+      # sentence-transformers 의 `torch>=1.11` 을 이미 충족된 것으로 보고 CUDA 판을 안 끌어온다.
+      # 버전 범위는 requirements.txt 의 torch 줄과 **같이 맞춰야 한다**(두 곳이다).
+      - name: Install torch (CPU-only — 러너에 GPU 가 없다)
+        if: github.event_name != 'push'
+        run: pip install --index-url https://download.pytorch.org/whl/cpu "torch>=2.13,<2.14"
+
       - if: github.event_name != 'push'
         run: pip install -r requirements.txt
+
+      # 실패 진단용. 2026-08-06 실패는 러너가 통째로 죽어서(“lost communication”) 스텝 로그에
+      # 원인이 남지 않았다 — 디스크/메모리를 남겨 두면 다음엔 한눈에 보인다. 몇 줄이라 싸다.
+      - name: Runner resources
+        if: github.event_name != 'push'
+        run: |
+          echo "--- disk ---";   df -h / | tail -1
+          echo "--- memory ---"; free -m
+          python -c "import torch; print('torch', torch.__version__)"
+          python -c "import sentence_transformers as s; print('sentence-transformers', s.__version__)"
 
       # 인증: Developer API 키. llm.py 의 genai.Client() 가 GEMINI_API_KEY 를 자동으로 집어감.
       # (Vertex AI 서비스계정 방식은 2026-07-28 에 철회 — PROJECT_MEMO 변경로그 참고)

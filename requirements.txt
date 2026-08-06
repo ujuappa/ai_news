@@ -1,9 +1,26 @@
 google-genai>=1.0
 python-dotenv>=1.0
 feedparser>=6.0.11
-sentence-transformers>=3.0     # cross-day dedup 임베딩 (torch 딸려옴; 가벼운 대안은 README 참고)
 numpy>=1.26
 PyYAML>=6.0
 requests>=2.31
 Jinja2>=3.1
 trafilatura>=1.8.1
+
+# cross-day dedup 임베딩(all-MiniLM-L6-v2). 가벼운 대안은 README '확장 포인트' 참고.
+#
+# ⚠️ 상한이 붙은 이유 (2026-08-06): 예전엔 `sentence-transformers>=3.0` 이라 CI 가 매일 최신을
+#    집어갔다. 08-05 야간 실행은 5.6.1 로 성공했고, 08-06 에 5.7.0 이 릴리스된 뒤 그날 실행
+#    2회가 "hosted runner lost communication"(러너 강제 종료)으로 실패했다. 5.7.0 의 선언된
+#    의존성은 5.6.1 과 **완전히 같아서** 5.7.0 이 원인이라고 증명된 건 아니다 — 그래서 이건
+#    범인 지목이 아니라 **재현성 확보**다: 야간 자동 실행이 업스트림 릴리스에 매일 노출되면
+#    안 된다. 5.6.1 은 실제로 성공한 조합이라 그걸 고정한다.
+#    5.7 이상으로 올릴 때는 CI 가 초록인 걸 확인한 뒤 **의도적으로** 올릴 것.
+sentence-transformers>=5.6,<5.7
+# torch 는 sentence-transformers 가 어차피 끌어오지만, 상한을 걸어 두려고 명시한다.
+# **CI 는 이걸 CPU 전용 빌드로 깐다**(.github/workflows/daily.yml 참고) — 러너에 GPU 가 없는데
+# PyPI 기본 리눅스 휠은 CUDA 빌드라 torch 526MB + nvidia/triton 약 1GB + cuda-toolkit 11종을
+# 끌고 온다. CPU 휠은 191MB 하나로 끝이고 nvidia 의존성이 0 이다.
+# 로컬(맥)에서는 그냥 이 줄대로 깔면 된다 — 맥 휠은 애초에 CUDA 가 없다.
+# 상한을 바꾸면 워크플로의 torch 설치 줄도 같이 맞출 것(두 곳이다).
+torch>=2.13,<2.14

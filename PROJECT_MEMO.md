@@ -1386,6 +1386,43 @@
   - 검증: YAML 파싱 + 세 이벤트(schedule/dispatch/push)별 실행 스텝 시뮬레이션으로
     2스텝 vs 6스텝 확인. 이 커밋의 push 자체가 첫 실물 테스트다.
 
+- 2026-08-06: **야간 실행 실패 조사 + CI 를 CPU 전용 torch 로 전환.**
+  08-06 실행 2회(#29 schedule 16:02Z, #30 dispatch 20:04Z)가 실패해서 **그날 다이제스트가
+  아예 생성되지 않았다**(마지막 성공은 #28, 08-05). 둘 다 `3d2726f` 기준이라 이날 작업한
+  6a 포팅과는 **무관하다**.
+  - 실패 메시지: *"The hosted runner lost communication with the server. Anything in your
+    workflow that terminates the runner process, starves it for CPU/Memory, or blocks its
+    network access can cause this error."* → 러너가 통째로 죽은 형태라 **스텝 로그에 원인이
+    남지 않았다**(파이썬 트레이스백이 없다). 스텝별 로그는 인증 없이는 못 읽는다.
+  - **실측한 것**: PyPI 기본 리눅스 휠이 CUDA 빌드다 — torch 526MB · nvidia-cudnn 366 ·
+    nccl 206 · cusparselt 170 · triton 198 · nvshmem 60 ≈ **휠만 1.5GB**, 여기에
+    `cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3`
+    11종이 더 붙는다(크기 미측정). 압축 풀면 몇 GB. **러너에는 GPU 가 없고** 우리가 하는 일은
+    22MB all-MiniLM-L6-v2 를 CPU 로 돌리는 것뿐이다. CPU 전용 휠은 **191MB 하나 + nvidia 의존성 0**.
+    → 디스크/메모리 압박이 가장 유력한 원인이라 보고 여기를 고쳤다.
+  - **고친 것 (1) CI 가 torch 를 CPU 인덱스에서 먼저 깐다**:
+    `pip install --index-url https://download.pytorch.org/whl/cpu "torch>=2.13,<2.14"` 를
+    `pip install -r requirements.txt` **앞에** 둔다. 순서가 핵심 — torch 를 먼저 만족시켜 두면
+    뒤이은 설치가 sentence-transformers 의 `torch>=1.11` 을 충족된 것으로 보고 CUDA 판을
+    안 끌어온다. 임베딩은 **바뀌지 않는다**: 같은 모델·같은 가중치이고, 애초에 러너에 GPU 가
+    없어서 CUDA 빌드도 CPU 커널로 추론하고 있었다 → dedup 임계값 0.83 그대로 유효,
+    `--reset` 이나 `backfill_embeddings.py` 재실행 **불필요**.
+  - **고친 것 (2) `sentence-transformers` 상한**: 예전엔 `>=3.0` 이라 야간 실행이 매일 최신을
+    집어갔다. 08-05 성공은 5.6.1, 08-06 에 **5.7.0 이 릴리스**됐고 그날부터 실패다.
+    다만 **5.7.0 의 선언된 의존성은 5.6.1 과 완전히 동일해서 5.7.0 이 원인이라는 증명은 아니다** —
+    그래서 이 핀은 범인 지목이 아니라 재현성 확보다(야간 자동화가 업스트림 릴리스에 매일
+    노출되면 안 된다). 실제로 성공한 조합인 `>=5.6,<5.7` 로 고정, `torch>=2.13,<2.14` 도 명시.
+    5.7 로 올릴 때는 CI 초록 확인 후 **의도적으로**.
+  - **고친 것 (3) 진단 + 안전장치**: 설치 후 `df -h` / `free -m` / torch·st 버전을 찍는
+    `Runner resources` 스텝 추가(다음에 죽으면 원인이 한눈에 보이게), build job 에
+    `timeout-minutes: 30`(정상은 10분 안쪽인데 상한이 없으면 죽은 실행이 기본 6시간을 붙잡는다).
+  - **검증의 한계**: 로컬(맥)에서 321 passed + `--dry-run` 으로 실제 MiniLM dedup 정상
+    (120건 → cross-day 후 신규 120, 26 items 렌더) 확인. requirements 핀은
+    `pip install --dry-run` 으로 전부 satisfied 확인. **CPU 휠 해석은 리눅스 러너에서만
+    최종 확인된다** — cp312 manylinux CPU 휠(191.8MB)이 인덱스에 실제로 존재하는 것까지만 확인했다.
+  - ⚠️ 별건: `pipeline.py --dry-run` 은 `output/` 에 발췌본을 덮어쓴다(DB 는 안 건드림).
+    스모크 테스트로 돌린 뒤에는 `python rerender.py` 로 되돌려야 한다 — 이번에 두 번 밟았다.
+
 ## 11. 소스 확장 및 AI 그라운딩 (2026-07-29)
 
 파이프라인의 뉴스 수집을 더욱 견고하게 만들기 위해 구조를 추가 확장함:
