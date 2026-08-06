@@ -17,17 +17,29 @@ Claude Code 는 세션 시작 시 이 파일을 자동으로 읽음.
 `linkcheck.py` 는 이미 게시된 링크의 link rot 점검(→ `items.link_status`, 죽은 링크는 렌더에서
 href 가 떨어짐). 판정 기준과 "무엇을 죽었다고 부르지 않는지"는 PROJECT_MEMO 2026-08-04 참고.
 
-## 디자인 (2026-07-27 전면 개편 → 08-03 2차 → 08-06 홈 상단 재편)
+## 디자인 (2026-07-27 전면 개편 → 08-03 2차 → 08-06 홈 상단 재편 → 08-07 Boncom 조판)
 Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인을 DesignSync MCP 로 가져옴
-(Archivo 폰트, radius 0, 라이브 팔레트 피커, significance 플랫 랭킹).
+(라이브 팔레트 피커, significance 플랫 랭킹).
 마크업은 `templates/*.html`, 스타일은 `static/digest.css`, `render.py` 는 데이터 가공만 한다.
+
+**2026-08-07 조판 교체**: 6a 가 그려진 Boncom 시스템을 색 말고 나머지까지 들여왔다(사용자 결정) —
+**Mona Sans**(가변, `wdth` 75~125) 한 벌 + `.ph-em` 전용 Playfair Display italic, radius
+16(카드)/12(컨트롤·슬롯)/999(pill), 고도는 2단 그림자. Archivo·radius 0 은 폐기됐다.
+선언은 `digest.css` **맨 끝** "Boncom 시스템" 블록에 모여 있고 **거기 있어야 한다** —
+`font:` 단축이 `font-variation-settings` 를 리셋해서, 축 선언이 앞서면 조용히 지워진다
+(`test_the_axis_layer_comes_after_every_font_shorthand`). 축은 `wdth` 만 준다(굵기는 각
+규칙의 font-weight 담당). 값 막대(signal index·아카이브 볼륨)와 stat-band 는 **일부러 각지게**
+뒀다 — 막대 끝을 둥글리면 짧은 막대가 부풀어 보인다.
+같은 날 **Wire 티커**(마스트헤드 아래 흐르는 줄 = 랭킹 05 이하 전부)와 지면 머리 제목의
+워드마크화도 들어왔다. 그 과정에서 **필터 서랍이 계속 열려 있던 버그**를 찾아 고쳤다
+(`.filter-drawer{display:grid}` 가 `[hidden]` 을 이기고 있었다 → `[hidden]` 짝 추가).
 
 **2026-08-06 홈 상단 재편**(캔버스 "Home Top Organization" 6a): 마스트헤드가 한 줄로
 (워드마크+빨간 점 · 검색 · pill 네비), 날짜/건수가 지면 머리(`.page-head`)로 내려가고,
 리드+Also today 가 한 장의 카드(`.panel`)로 묶이면서 기간 세그먼트와 필터가 그 카드에 붙었다.
 필터는 pill 줄 → **컨트롤 줄 + 서랍 + 제거 가능한 chip, 다중선택(OR)** 으로 바뀌었고
-그날 붙은 토픽 전부가 서랍에 들어간다(top-6 상한 폐지). 팔레트는 6색(`Boncom · Maroon` 추가 —
-6a 의 **색만** 들여왔다. 폰트/radius 는 전역이라 Archivo·radius 0 유지).
+그날 붙은 토픽 전부가 서랍에 들어간다(top-6 상한 폐지). 팔레트는 6색(`Boncom · Maroon` 추가.
+08-06 에는 6a 에서 색만 들여왔지만 **08-07 에 조판까지 들여왔다** — 위 항목 참고).
 - **사인인 · Weekly · Monthly · Following · 코멘트/팔로우는 의도적으로 없다** (로그인+쓰기
   백엔드 미구현 → 죽은 버튼 방지). 6a 의 소셜 카드 3장을 붙일 자리는 `templates/home.html`
   끝 주석, 네비는 `templates/macros.html` 주석 참고. `test_render_assets.py` 가 새는 걸 막는다.
@@ -37,6 +49,10 @@ Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인�
   `static/img/README.md` 참고.
 - CSS 는 **팔레트 키(`--g --ink --acc --n1 --n2 …`)만** 쓸 수 있다. 캔버스의 `--color-*` 를
   들여오면 `tests/test_render_assets.py` 가 잡는다(매핑표는 digest.css 헤더 주석).
+  조판/radius/그림자는 팔레트가 아니라 전역이라 **var 가 아니라 리터럴**로 쓴다 — 그래서
+  팔레트를 바꿔도 조판은 안 바뀐다.
+- **`display` 를 주는 규칙에는 `[hidden]` 짝을 같이 둘 것.** 저작자 규칙이 브라우저 기본
+  `[hidden]{display:none}` 을 이겨서, 토글이 조용히 죽는다(2026-08-07 필터 서랍 실제 사례).
 
 자세한 내용은 PROJECT_MEMO 변경로그 2026-08-03 · 2026-08-06 항목 참고.
 

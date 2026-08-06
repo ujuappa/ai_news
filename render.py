@@ -82,11 +82,13 @@ PALETTES = [
     {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d",
      "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013",
      "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"},
-    # 2026-08-06, 캔버스 "Home Top Organization" 6a 에서. 6a 는 Mona Sans + Playfair italic ·
-    # radius 12~16 · 그림자까지 쓰는 별도 시스템으로 그려졌지만, **색만** 팔레트로 들여온다
-    # (사용자 결정 2026-08-06): 폰트와 radius 는 팔레트 변수가 아니라 전역이라 Archivo/radius 0
-    # 이 그대로 유지된다. 6a 의 maroon 은 링크색이라 --accd, 워드마크 옆 빨간 점은 --acc 다
-    # (digest.css `.mh-dot` 이 --acc 를 쓴다 → Mist 에서는 시그널 레드로 나온다).
+    # 2026-08-06, 캔버스 "Home Top Organization" 6a 에서. 6a 의 maroon 은 링크색이라 --accd,
+    # 워드마크 옆 빨간 점은 --acc 다(digest.css `.mh-dot` 이 --acc 를 쓴다 → Mist 에서는
+    # 시그널 레드로 나온다).
+    # 2026-08-07: 처음엔 6a 에서 **색만** 들여왔지만(폰트/radius 는 전역이라), 사용자 결정으로
+    # 조판(Mona Sans + Playfair · radius 16/12/999 · 그림자)까지 전면 도입했다. 그 셋은
+    # 팔레트가 아니라 전역이므로 여기가 아니라 digest.css 끝의 "Boncom 시스템" 레이어에 있다 —
+    # 즉 팔레트를 Mist 로 바꿔도 조판은 Boncom 그대로다(색만 갈린다).
     {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a",
      "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22",
      "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"},
@@ -378,6 +380,10 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
             prefix=prefix, asset_prefix=("../" if in_archive else ""),
             search_href=("../search.html" if in_archive else "search.html"),
             lead=flat[0] if flat else None, grid3=grid3, worth=worth, brief=brief,
+            # Wire 티커(6a, 2026-08-07): 리드와 카드 3장 아래로 떨어진 것 **전부**.
+            # 자르지 않는다 — 재생 시간이 항목 수를 따라가므로(macros.wire_ticker) 길어져도
+            # 속도가 그대로고, 여기서 top-N 을 자르면 "아래 것들"이 조용히 빠진다.
+            wire=flat[4:],
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
             filters=_topic_filters(flat, total), also_range=also_range,
             period_date=period_date, panel_range=panel_range,

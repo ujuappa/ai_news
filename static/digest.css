@@ -22,17 +22,22 @@
  *    캔버스의 --color-* 토큰은 여기로 매핑된다: bg->g, surface->g2, text->ink, accent->acc,
  *    accent-700->accd, neutral-400(테두리)->n2, neutral-600(메타)->n1, neutral-800(본문)->ink2.
  *    Mist·Signal red 팔레트가 캔버스 토큰과 값까지 1:1 이라 그대로 맞는다.
- *    6a 는 별도 시스템(Mona Sans + Playfair italic · radius 12~16 · 그림자)으로 그려졌지만
- *    **색만** 팔레트로 들여왔다(render.PALETTES 의 "Boncom · Maroon"). 폰트는 Archivo 한 벌,
- *    radius 는 0, 고도는 테두리 — 6a 의 둥근 모서리/그림자를 그대로 옮기지 않은 이유가 이거다.
+ *
+ * 2026-08-07 에 6a 의 **조판까지** 들여왔다(사용자 결정 — 08-06 에는 색만 들여왔다):
+ * Mona Sans(가변, wdth 75~125) 한 벌 + `.ph-em` 전용 Playfair Display italic, radius
+ * 16(카드)/12(컨트롤·슬롯)/999(pill), 고도는 테두리 대신 2단 그림자. 폰트·radius·그림자는
+ * 팔레트 키가 아니라 **전역**이므로 팔레트를 Mist 로 바꿔도 조판은 Boncom 그대로다.
+ * 실제 선언은 파일 맨 끝 "Boncom 시스템" 레이어에 모여 있다 — 이유는 그 블록 주석 참고.
+ * 같은 날 Wire 티커(6a 신설)와 지면 머리 제목->워드마크도 함께 들어왔다.
  *
  * 섹션 순서: base -> home -> category -> search -> archive_index -> archive_week
+ *            -> Boncom 시스템(radius · 고도 · 조판 축)
  */
 
 /* ==== base ==== */
 
 * { box-sizing: border-box; }
-body { margin:0; background:var(--g2); color:var(--ink); font-family:Archivo,system-ui,sans-serif; }
+body { margin:0; background:var(--g2); color:var(--ink); font-family:'Mona Sans',system-ui,sans-serif; }
 a { color:var(--accd); }
 a:hover { color:var(--acc); }
 button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid var(--acc); outline-offset:2px; }
@@ -45,39 +50,67 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid v
 .mh-top { display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
 .mh-id { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
 .mh-wordmark { display:inline-flex; align-items:baseline; gap:3px;
-               font:900 22px/1 Archivo,sans-serif; letter-spacing:-.02em; color:var(--ink);
+               font:900 22px/1 'Mona Sans',system-ui,sans-serif; letter-spacing:-.02em; color:var(--ink);
                text-decoration:none; }
 .mh-wordmark:hover { color:var(--accd); }
 /* 6a 의 빨간 점. 팔레트를 따라가므로 Mist 에서는 시그널 레드, Boncom 에서는 6a 의 #ff1a22. */
 .mh-dot { width:7px; height:7px; border-radius:999px; background:var(--acc); flex:none; }
-.mh-meta { font:500 11px/1.35 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+.mh-meta { font:500 11px/1.35 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase;
            color:var(--n1); }
 .mh-tools { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 .mh-search { margin:0; }
 .mh-search-field { display:flex; align-items:center; gap:8px; width:250px; max-width:100%;
                    padding:9px 12px; border:1px solid var(--n2); background:var(--g2); color:var(--n1); }
 .mh-search-field input { border:0; background:none; outline:0; flex:1; min-width:0;
-                         font:400 12px Archivo,sans-serif; color:var(--ink); }
+                         font:400 12px 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
 .mh-search-field input::placeholder { color:var(--n1); }
 .mh-nav { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
-/* pill 이지만 radius 는 0 이다 — 이 시스템의 radius 는 전부 0 이고, 6a 의 999px 은
-   Boncom 쪽 값이라 색만 들여온다는 결정(render.PALETTES 주석)에서 제외됐다. */
-.mh-pill { font:600 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+/* radius 는 파일 끝 "Boncom 시스템" 레이어가 준다(2026-08-07 부터 6a 대로 999px). */
+.mh-pill { font:600 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
            white-space:nowrap; padding:8px 13px; border:1px solid transparent;
            color:var(--n1); text-decoration:none; }
 .mh-pill:hover { border-color:var(--n2); color:var(--ink); }
 .mh-pill.active { font-weight:800; background:var(--ink); color:var(--g); border-color:var(--ink); }
 .mh-pill.active:hover { color:var(--g); }
 
+/* — Wire 티커 (2026-08-07, 캔버스 6a). 마스트헤드와 지면 머리 사이의 한 줄.
+     담기는 항목과 왜 목록을 두 벌 굽는지는 macros.wire_ticker 주석 참고.
+     재생 시간(animation-duration)만 마크업이 인라인으로 준다 — 항목 수에 비례해야 해서
+     CSS 에 상수로 박을 수 없다. — */
+.wire { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:16px;
+        padding:10px 44px; background:var(--g2); border-bottom:1px solid var(--n2); }
+@media (max-width:700px) { .wire { padding:10px 20px; gap:12px; } }
+.wire-h { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em;
+          text-transform:uppercase; color:var(--accd); }
+.wire-track { overflow:hidden; }
+.wire-strip { display:flex; width:max-content; animation-name:wire-scroll;
+              animation-timing-function:linear; animation-iteration-count:infinite; }
+.wire-run { display:flex; }
+/* 읽으려고 세운 순간 멈춘다. focus-within 도 같이 — 키보드로 링크를 훑을 때 글자가
+   빠져나가면 탭 순서를 눈으로 따라갈 수 없다. */
+.wire:hover .wire-strip, .wire:focus-within .wire-strip { animation-play-state:paused; }
+.wire-item { padding-right:36px; white-space:nowrap; text-decoration:none;
+             font:400 13px 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
+.wire-item:hover { color:var(--accd); }
+.wire-sig { margin-right:8px; font-weight:700; color:var(--accd); font-variant-numeric:tabular-nums; }
+@keyframes wire-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+/* 움직임을 끈 사용자에게는 애니메이션 대신 가로 스크롤 줄로 준다. 사본(aria-hidden)은
+   감춘다 — 멈춰 세우면 같은 기사가 두 번 보인다. */
+@media (prefers-reduced-motion:reduce) {
+  .wire-track { overflow-x:auto; }
+  .wire-strip { animation:none; }
+  .wire-run[aria-hidden="true"] { display:none; }
+}
+
 /* — 심플 헤더(아카이브 인덱스/주간) — */
 .simple-header { background:var(--g); border-bottom:2px solid var(--ink); padding:18px 44px;
                  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
 .simple-header-id { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
-.wordmark { font:900 24px/1 Archivo,sans-serif; letter-spacing:-.03em; color:var(--ink); text-decoration:none; }
-.simple-header-sub { font:500 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+.wordmark { font:900 24px/1 'Mona Sans',system-ui,sans-serif; letter-spacing:-.03em; color:var(--ink); text-decoration:none; }
+.simple-header-sub { font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
                      color:var(--n1); }
 .simple-header nav { display:flex; align-items:center; gap:18px; }
-.simple-header nav a { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.simple-header nav a { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
                         text-decoration:none; color:var(--muted); }
 .simple-header nav a:hover { color:var(--ink); }
 .simple-header nav a.accent { color:var(--accd); }
@@ -87,7 +120,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid v
 .search-field { display:flex; align-items:center; gap:10px; flex:1; padding:9px 12px;
                 border:1px solid var(--n2); background:var(--g2); }
 .search-field input { border:0; background:none; outline:0; flex:1; min-width:0;
-                      font:400 13px Archivo,sans-serif; color:var(--ink); }
+                      font:400 13px 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
 .search-field input::placeholder { color:var(--n1); }
 
 /* — 테마 스위처(푸터) — */
@@ -104,26 +137,26 @@ footer.site-footer { max-width:1280px; margin:0 auto; background:var(--g); paddi
                      display:flex; align-items:center; justify-content:space-between;
                      flex-wrap:wrap; gap:16px; }
 @media (max-width:700px) { footer.site-footer { padding:18px 20px; } }
-.term-line { font:500 11px Archivo,sans-serif; color:var(--n1); }
+.term-line { font:500 11px 'Mona Sans',system-ui,sans-serif; color:var(--n1); }
 .term-line::before { content:'$ '; color:var(--accd); }
 .site-footer-tools { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.site-footer-label { font:600 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.site-footer-label { font:600 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
                      color:var(--n1); }
-.site-footer-tools a { font:700 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.site-footer-tools a { font:700 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
                        color:var(--muted); text-decoration:none; }
 .site-footer-tools a:hover { color:var(--ink); }
 
 /* — 공용 조각 — */
-.tag { font:800 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:4px 8px; }
+.tag { font:800 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; padding:4px 8px; }
 .tag-acc { background:var(--acc); color:var(--g); }
 .hr2 { height:2px; background:var(--ink); margin:34px 0 26px; }
 .rule2 { height:2px; background:var(--ink); margin:38px 0 0; }
-.empty-note { font:500 13px Archivo,sans-serif; color:var(--n1); padding:20px 0; }
-.kicker { font:900 13px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--accd); }
-.rank-num { font:900 20px Archivo,sans-serif; color:var(--n1); font-variant-numeric:tabular-nums; }
+.empty-note { font:500 13px 'Mona Sans',system-ui,sans-serif; color:var(--n1); padding:20px 0; }
+.kicker { font:900 13px 'Mona Sans',system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--accd); }
+.rank-num { font:900 20px 'Mona Sans',system-ui,sans-serif; color:var(--n1); font-variant-numeric:tabular-nums; }
 .thread-line { display:block; margin:0 0 8px; padding-left:9px; text-decoration:none;
                border-left:2px solid var(--n2);
-               font:600 11px/1.45 Archivo,sans-serif; letter-spacing:.03em; color:var(--n1); }
+               font:600 11px/1.45 'Mona Sans',system-ui,sans-serif; letter-spacing:.03em; color:var(--n1); }
 a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 
 /* — 이미지 슬롯 —
@@ -140,10 +173,12 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
    -> render 가 마크업에 직접 심고, 여기서 팔레트 강조색을 준다. viewBox 가 있어서 비율은
    알아서 유지된다(object-fit 불필요). 브랜드 로고는 래스터라 이 경로를 안 타고 원색 유지. */
 .imgslot svg { display:block; width:100%; height:100%; color:var(--acc); }
-.imgslot-label { font:700 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+.imgslot-label { font:700 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                  color:var(--n1); }
 .imgslot-lead { width:100%; aspect-ratio:4/3; padding:10px; }
-.imgslot-card { width:100%; aspect-ratio:16/10; padding:8px; }
+/* 6a 는 리드·카드·썸네일을 전부 4:3 으로 그린다(handoff-differences §8). 카드가 16/10 이었던
+   건 6a 이전 값이라 2026-08-07 에 맞췄다. */
+.imgslot-card { width:100%; aspect-ratio:4/3; padding:8px; }
 .imgslot-card .imgslot-label { font-size:9px; letter-spacing:.12em; }
 .imgslot-thumb { width:128px; aspect-ratio:4/3; padding:6px; }
 .imgslot-thumb .imgslot-label { font-size:8px; letter-spacing:.1em; }
@@ -171,33 +206,34 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
              flex-wrap:wrap; padding-bottom:26px; }
 .ph-text { min-width:0; }
 .ph-date { display:inline-block; padding:6px 14px; border:1px solid var(--n2); background:var(--g2);
-           font:700 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+           font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
            color:var(--muted); }
-.ph-title { margin:16px 0 14px; font:900 clamp(32px,4.6vw,52px)/1.02 Archivo,sans-serif;
+.ph-title { margin:16px 0 14px; font:900 clamp(32px,4.6vw,52px)/1.02 'Mona Sans',system-ui,sans-serif;
             letter-spacing:-.03em; color:var(--ink); max-width:22ch; }
-/* 캔버스에서는 Playfair Display italic + maroon 이었다. 폰트를 한 벌 더 싣지 않고
-   italic + --accd 로 같은 대위 효과만 가져왔다(macros.page_head 주석). */
-.ph-em { font-style:italic; font-weight:400; color:var(--accd); letter-spacing:-.02em; }
-.ph-dek { margin:0; max-width:56ch; font:400 16px/1.55 Archivo,sans-serif; color:var(--muted);
+/* 캔버스의 대위(對位) 절. 2026-08-07 부터는 흉내가 아니라 실제 Playfair Display italic +
+   maroon(--accd) 이다. 제목이 워드마크로 바뀌면서 현재 마크업에는 쓰이는 곳이 없지만,
+   dek 등에 `<em class="ph-em">` 한 겹으로 되살릴 수 있게 남겨 둔다(macros.page_head 주석). */
+.ph-em { font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:500;
+         color:var(--accd); letter-spacing:-.02em; }
+.ph-dek { margin:0; max-width:56ch; font:400 16px/1.55 'Mona Sans',system-ui,sans-serif; color:var(--muted);
           text-wrap:pretty; }
 .ph-stats { display:flex; gap:32px; padding-top:6px; }
 .ph-stat { display:flex; flex-direction:column; gap:4px; }
-.ph-num { font:700 32px/1 Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.ph-num { font:700 32px/1 'Mona Sans',system-ui,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .ph-num-dim { color:var(--n1); }
-.ph-label { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.ph-label { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
             color:var(--muted); white-space:nowrap; }
 @media (max-width:700px) { .ph-stats { gap:24px; } }
 
-/* — Today's news 카드 (6a). 6a 는 radius 16 + 그림자였지만 이 시스템의 radius 는 0 이고
-     고도는 테두리로 낸다(팔레트로 색만 들여왔다 — render.PALETTES 주석 참고). — */
+/* — Today's news 카드 (6a). radius 16 + 2단 그림자는 파일 끝 "Boncom 시스템" 레이어. — */
 .panel { border:1px solid var(--n2); background:var(--g); }
 .panel-head { display:flex; align-items:flex-start; gap:16px; padding:22px 26px 14px; }
 .panel-icon { width:40px; height:40px; flex:none; display:grid; place-items:center;
               background:var(--g2); color:var(--accd); }
 .panel-id { min-width:0; flex:1; }
-.panel-h { margin:0; font:800 22px/1.2 Archivo,sans-serif; letter-spacing:-.01em; color:var(--ink); }
-.panel-sub { margin:4px 0 0; font:400 14px/1.5 Archivo,sans-serif; color:var(--muted); }
-.panel-range { padding-top:6px; font:700 11px Archivo,sans-serif; letter-spacing:.12em;
+.panel-h { margin:0; font:800 22px/1.2 'Mona Sans',system-ui,sans-serif; letter-spacing:-.01em; color:var(--ink); }
+.panel-sub { margin:4px 0 0; font:400 14px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--muted); }
+.panel-range { padding-top:6px; font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em;
                text-transform:uppercase; color:var(--accd); white-space:nowrap; }
 .panel-body { padding:0 26px 26px; border-top:1px solid var(--n2); }
 @media (max-width:700px) {
@@ -210,10 +246,10 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 @media (max-width:700px) { .control-line { padding:0 20px 14px; } }
 .seg { display:inline-flex; padding:3px; border:1px solid var(--n2); background:var(--g2); }
 .seg-on { padding:5px 14px; background:var(--ink); color:var(--g);
-          font:700 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+          font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
 .drawer-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 15px;
               border:1px solid var(--n2); background:var(--g); color:var(--ink); cursor:pointer;
-              font:600 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+              font:600 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
 .drawer-btn:hover { border-color:var(--ink); }
 .drawer-btn.active { border-color:var(--ink); }
 .drawer-btn svg { display:block; }
@@ -221,23 +257,28 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .filter-drawer { display:grid; grid-template-columns:minmax(0,1fr); background:var(--g2);
                  border-top:1px solid var(--n2); border-bottom:1px solid var(--n2);
                  margin-bottom:16px; }
+/* ⚠️ `display:grid` 는 브라우저 기본 스타일시트의 `[hidden]{display:none}` 을 이긴다(저작자
+   규칙이 UA 규칙보다 세다). 그래서 2026-08-06~08-07 사이 **서랍이 항상 열려 있었고**
+   Filters 버튼은 aria-expanded 만 바꾸는 죽은 토글이었다(6a 는 닫힌 상태로 시작한다).
+   display 를 주는 규칙에는 [hidden] 짝을 반드시 같이 둔다. */
+.filter-drawer[hidden] { display:none; }
 .drawer-group { padding:18px 26px 20px; }
 @media (max-width:700px) { .drawer-group { padding:16px 20px 18px; } }
-.drawer-h { display:block; margin-bottom:12px; font:700 11px Archivo,sans-serif; letter-spacing:.12em;
+.drawer-h { display:block; margin-bottom:12px; font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em;
             text-transform:uppercase; color:var(--muted); }
 .drawer-pills { display:flex; flex-wrap:wrap; gap:8px; }
 .topic-pill { padding:8px 15px; border:1px solid var(--n2); background:var(--g); color:var(--ink);
-              cursor:pointer; font:600 12px Archivo,sans-serif; }
+              cursor:pointer; font:600 12px 'Mona Sans',system-ui,sans-serif; }
 .topic-pill:hover { border-color:var(--ink); }
 .topic-pill.active { border-color:var(--ink); background:var(--ink); color:var(--g); }
 /* chip 은 JS 가 만든다(고른 토픽만 보여야 하므로 서버가 미리 구울 수 없다). */
 .chip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .chip { display:inline-flex; align-items:center; gap:7px; padding:8px 14px;
         border:1px solid var(--ink); background:var(--ink); color:var(--g); cursor:pointer;
-        font:600 12px Archivo,sans-serif; }
+        font:600 12px 'Mona Sans',system-ui,sans-serif; }
 .chip:hover { background:var(--accd); border-color:var(--accd); }
 .chip-x { font-size:14px; line-height:1; opacity:.65; }
-.filter-note { margin-left:auto; font:500 11px Archivo,sans-serif; letter-spacing:.08em;
+.filter-note { margin-left:auto; font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em;
                text-transform:uppercase; color:var(--n1); }
 
 /* 6a 에서 카드(.panel) 안으로 들어갔다. 아래 마감선은 `.also-break` 의 위 선이 대신하므로
@@ -245,18 +286,18 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 .lead { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,420px); gap:44px; align-items:start;
         padding:24px 0 28px; }
 .lead-kicker { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
-.lead-cat { font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
-.lead-sig { font:500 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--n1); }
-.lead-title { display:block; font:900 clamp(34px,4.4vw,60px)/0.98 Archivo,sans-serif; letter-spacing:-.038em;
+.lead-cat { font:800 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
+.lead-sig { font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--n1); }
+.lead-title { display:block; font:900 clamp(34px,4.4vw,60px)/0.98 'Mona Sans',system-ui,sans-serif; letter-spacing:-.038em;
               color:var(--ink); text-decoration:none; margin-bottom:20px; }
 .lead-title:hover { color:var(--accd); }
-.lead-dek { margin:0 0 22px; font:400 20px/1.6 Archivo,sans-serif; color:var(--ink2); max-width:54ch;
+.lead-dek { margin:0 0 22px; font:400 20px/1.6 'Mona Sans',system-ui,sans-serif; color:var(--ink2); max-width:54ch;
             text-wrap:pretty; }
 .lead-byline { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
-.byline-source { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); }
+.byline-source { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); }
 .byline-sep { width:1px; height:12px; background:var(--n2); }
-.byline-meta { font:500 11px Archivo,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--n1); }
-.byline-link { font:700 13px Archivo,sans-serif; color:var(--ink); text-decoration:none;
+.byline-meta { font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--n1); }
+.byline-link { font:700 13px 'Mona Sans',system-ui,sans-serif; color:var(--ink); text-decoration:none;
                border-bottom:2px solid var(--ink); padding-bottom:1px; }
 .byline-link:hover { color:var(--accd); border-bottom-color:var(--accd); }
 
@@ -269,13 +310,13 @@ a:not([href]):hover { color:var(--ink); }
 .lead-title:not([href]):hover, .card-title:not([href]):hover,
 .worth-title:not([href]):hover, .week-lead-title:not([href]):hover,
 .week-sec-title:not([href]):hover { color:var(--ink); }
-.byline-dead { font:700 13px Archivo,sans-serif; color:var(--n1);
+.byline-dead { font:700 13px 'Mona Sans',system-ui,sans-serif; color:var(--n1);
                border-bottom:2px solid var(--n2); padding-bottom:1px; }
 
 /* `.section-head`/`.section-sub` 는 2026-08-06 에 지웠다 — Also today 머리글이 6a 의
    `.also-break`(라벨 · 헤어라인 · 범위)로 바뀌면서 쓰는 마크업이 없어졌다.
    `.section-h` 는 Worth knowing / In brief 가 계속 쓴다. */
-.section-h { display:block; font:900 13px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+.section-h { display:block; font:900 13px 'Mona Sans',system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
              color:var(--ink); margin-bottom:8px; }
 
 /* Also today 는 최대 3장(stories 02–04). grid + auto-fit 은 토픽 필터가 카드를
@@ -285,20 +326,20 @@ a:not([href]):hover { color:var(--ink); }
 /* 6a 의 라벨 붙은 구획선. 리드와 Also today 사이의 유일한 선이다(.lead 주석 참고). */
 .also-break { display:flex; align-items:center; gap:16px; padding:16px 0 20px;
               border-top:1px solid var(--n2); }
-.break-h { font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+.break-h { font:800 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
            color:var(--ink); white-space:nowrap; }
 .break-rule { flex:1; height:1px; background:var(--n2); }
-.break-sub { font:700 11px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.break-sub { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
              color:var(--n1); white-space:nowrap; }
 
 .also-grid { display:flex; flex-wrap:wrap; gap:32px; }
 .also-card { flex:1 1 calc((100% - 64px) / 3); max-width:calc((100% - 32px) / 2);
              min-width:min(250px, 100%); display:flex; flex-direction:column; gap:12px; }
-.card-cat { font:800 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
-.card-title { font:800 25px/1.12 Archivo,sans-serif; letter-spacing:-.022em; color:var(--ink); text-decoration:none; }
+.card-cat { font:800 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accd); }
+.card-title { font:800 25px/1.12 'Mona Sans',system-ui,sans-serif; letter-spacing:-.022em; color:var(--ink); text-decoration:none; }
 .card-title:hover { color:var(--accd); }
-.card-dek { margin:0; font:400 15px/1.6 Archivo,sans-serif; color:var(--ink2); text-wrap:pretty; }
-.card-meta { font:600 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--n1); }
+.card-dek { margin:0; font:400 15px/1.6 'Mona Sans',system-ui,sans-serif; color:var(--ink2); text-wrap:pretty; }
+.card-meta { font:600 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--n1); }
 
 .home-split { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,320px); gap:48px; padding-top:28px; }
 /* 마감선은 마지막 행이 아니라 섹션 바닥에 둔다 — 필터로 마지막 행이 숨으면
@@ -307,39 +348,39 @@ a:not([href]):hover { color:var(--ink); }
 .brief-section { display:block; border-bottom:1px solid var(--n2); }
 .worth-row { display:grid; grid-template-columns:minmax(0,1fr) 128px; gap:20px; padding:18px 0;
              border-top:1px solid var(--n2); }
-.worth-cat { display:block; font:800 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+.worth-cat { display:block; font:800 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
              color:var(--accd); margin-bottom:6px; }
-.worth-title { display:block; font:700 21px/1.26 Archivo,sans-serif; color:var(--ink); text-decoration:none;
+.worth-title { display:block; font:700 21px/1.26 'Mona Sans',system-ui,sans-serif; color:var(--ink); text-decoration:none;
                margin-bottom:7px; }
 .worth-title:hover { color:var(--accd); }
-.worth-dek { margin:0 0 8px; font:400 15px/1.6 Archivo,sans-serif; color:var(--ink2); max-width:64ch;
+.worth-dek { margin:0 0 8px; font:400 15px/1.6 'Mona Sans',system-ui,sans-serif; color:var(--ink2); max-width:64ch;
              text-wrap:pretty; }
-.worth-meta { font:600 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--n1); }
+.worth-meta { font:600 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--n1); }
 
 .section-h-brief { margin:26px 0 8px; }
 .brief-row { display:grid; grid-template-columns:minmax(0,1fr) 120px; gap:16px; align-items:baseline;
              padding:11px 0; border-top:1px solid var(--n2); text-decoration:none; }
 .brief-row:hover { background:var(--g2); }
-.brief-title { font:600 15px/1.4 Archivo,sans-serif; color:var(--ink); }
-.brief-cat { font:600 9px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+.brief-title { font:600 15px/1.4 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
+.brief-cat { font:600 9px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
              color:var(--accd); text-align:right; }
 
 .aside { align-self:start; display:flex; flex-direction:column; gap:20px; }
 .aside-card { background:var(--g2); padding:22px; }
-.aside-h { display:block; font:900 11px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+.aside-h { display:block; font:900 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
            color:var(--ink); }
-.aside-sub { margin:4px 0 16px; font:400 11px/1.5 Archivo,sans-serif; color:var(--muted); }
+.aside-sub { margin:4px 0 16px; font:400 11px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--muted); }
 .band-row { margin-bottom:11px; }
 .band-row:last-child { margin-bottom:0; }
 .band-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
-.band-score { font:700 11px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.band-score { font:700 11px 'Mona Sans',system-ui,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .band-tier { font-weight:500; color:var(--n1); text-transform:uppercase; letter-spacing:.08em; }
-.band-count { font:700 11px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.band-count { font:700 11px 'Mona Sans',system-ui,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .band-bar { height:10px; }
 .source-alert { border:1px solid var(--acc); padding:14px; }
-.source-alert-h { display:block; font:800 10px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+.source-alert-h { display:block; font:800 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                   color:var(--accd); margin-bottom:5px; }
-.source-alert-body { font:400 12px/1.45 Archivo,sans-serif; color:var(--ink); }
+.source-alert-body { font:400 12px/1.45 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
 
 /* 캔버스의 반응형 규칙 그대로: 1000px 에서 리드/스플릿이 1열, 640px 에서 썸네일이 전폭. */
 @media (max-width:1000px) {
@@ -359,27 +400,27 @@ a:not([href]):hover { color:var(--ink); }
 @media (max-width:700px) { .cat-body { padding:24px 20px 32px; } }
 .cat-top { display:grid; grid-template-columns:1fr auto; gap:30px; align-items:end; padding-bottom:16px; }
 @media (max-width:700px) { .cat-top { grid-template-columns:1fr; } }
-.cat-title { margin:0 0 8px; font:900 clamp(30px,6vw,56px)/0.96 Archivo,sans-serif; letter-spacing:-.035em;
+.cat-title { margin:0 0 8px; font:900 clamp(30px,6vw,56px)/0.96 'Mona Sans',system-ui,sans-serif; letter-spacing:-.035em;
              color:var(--ink); }
-.cat-dek { margin:0; font:400 16px/1.5 Archivo,sans-serif; color:var(--ink2); max-width:60ch; }
+.cat-dek { margin:0; font:400 16px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--ink2); max-width:60ch; }
 .pill-row { display:flex; gap:8px; flex-wrap:wrap; }
-.pill { border:1px solid var(--n2); color:var(--ink); font:700 11px Archivo,sans-serif;
+.pill { border:1px solid var(--n2); color:var(--ink); font:700 11px 'Mona Sans',system-ui,sans-serif;
         letter-spacing:.08em; text-transform:uppercase; padding:7px 12px; }
 .pill.active { border-color:var(--ink); background:var(--ink); color:var(--g); }
 .cat-row { display:grid; grid-template-columns:70px 1fr 220px; gap:0; padding:22px 0;
            border-bottom:1px solid var(--n2); text-decoration:none; align-items:start; }
 @media (max-width:700px) { .cat-row { grid-template-columns:50px 1fr; } .cat-row-side { display:none; } }
-.cat-score { font:900 22px Archivo,sans-serif; color:var(--acc); font-variant-numeric:tabular-nums; }
-.cat-row-title { font:900 34px/1.04 Archivo,sans-serif; letter-spacing:-.03em; color:var(--ink); }
-.cat-row-dek { font:400 15px/1.5 Archivo,sans-serif; color:var(--ink2); margin-top:8px; max-width:66ch; }
-.cat-row-link { font:600 13px Archivo,sans-serif; color:var(--accd); margin-top:8px; display:block; }
+.cat-score { font:900 22px 'Mona Sans',system-ui,sans-serif; color:var(--acc); font-variant-numeric:tabular-nums; }
+.cat-row-title { font:900 34px/1.04 'Mona Sans',system-ui,sans-serif; letter-spacing:-.03em; color:var(--ink); }
+.cat-row-dek { font:400 15px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--ink2); margin-top:8px; max-width:66ch; }
+.cat-row-link { font:600 13px 'Mona Sans',system-ui,sans-serif; color:var(--accd); margin-top:8px; display:block; }
 .cat-row-side .tag { margin-bottom:8px; display:inline-block; }
-.cat-row-side-source { font:600 11px/1.5 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+.cat-row-side-source { font:600 11px/1.5 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase;
                         color:var(--n1); }
 .cat-footer { display:flex; justify-content:space-between; align-items:baseline; margin-top:26px; padding-top:14px;
               border-top:2px solid var(--ink); flex-wrap:wrap; gap:10px; }
-.cat-footer-note { font:500 11px Archivo,sans-serif; letter-spacing:.08em; color:var(--n1); }
-.cat-footer-link { font:700 11px Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+.cat-footer-note { font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em; color:var(--n1); }
+.cat-footer-link { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase;
                     color:var(--accd); text-decoration:none; }
 
 /* ==== search ==== */
@@ -389,39 +430,39 @@ a:not([href]):hover { color:var(--ink); }
 .search-hero-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding-bottom:14px; }
 .search-hero .wordmark { font-size:20px; }
 .search-hero .search-field { max-width:340px; }
-#hitcount { margin-left:auto; font:700 10px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+#hitcount { margin-left:auto; font:700 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
             color:var(--accd); white-space:nowrap; }
 .results-body { padding:24px 24px 28px; }
-.results-meta { font:600 12px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--accd);
+.results-meta { font:600 12px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--accd);
                 margin-bottom:12px; }
 .results-hr { height:2px; background:var(--ink); margin-bottom:0; }
 .result-row { display:grid; grid-template-columns:56px 1fr; gap:0; padding:14px 0;
               border-bottom:1px solid var(--n2); text-decoration:none; align-items:start; }
 .result-row.top-hit { background:var(--g2); padding:16px 0; }
-.result-score { font:800 16px Archivo,sans-serif; color:var(--accd); font-variant-numeric:tabular-nums;
+.result-score { font:800 16px 'Mona Sans',system-ui,sans-serif; color:var(--accd); font-variant-numeric:tabular-nums;
                  padding-left:10px; }
 .result-row.top-hit .result-score { font-size:19px; font-weight:900; }
-.result-title { font:700 19px/1.1 Archivo,sans-serif; letter-spacing:-.02em; color:var(--ink); }
+.result-title { font:700 19px/1.1 'Mona Sans',system-ui,sans-serif; letter-spacing:-.02em; color:var(--ink); }
 .result-row.top-hit .result-title { font-size:24px; line-height:1.06; letter-spacing:-.024em; font-weight:800; }
-.result-byline { font:500 11px Archivo,sans-serif; letter-spacing:.06em; text-transform:uppercase;
+.result-byline { font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase;
                   color:var(--n1); margin-top:4px; }
-.result-row.top-hit .result-byline { font:600 12px Archivo,sans-serif; color:var(--accd); margin-top:6px; }
+.result-row.top-hit .result-byline { font:600 12px 'Mona Sans',system-ui,sans-serif; color:var(--accd); margin-top:6px; }
 #results mark { background:color-mix(in srgb, var(--acc) 28%, var(--g)); color:var(--ink); }
-.empty { font:500 13px Archivo,sans-serif; color:var(--n1); padding:16px 0; }
+.empty { font:500 13px 'Mona Sans',system-ui,sans-serif; color:var(--n1); padding:16px 0; }
 
 /* ==== archive_index ==== */
 
 .archive-body { background:var(--g); padding:30px 36px 36px; }
 .archive-top { display:grid; grid-template-columns:1fr auto; gap:30px; align-items:end; padding-bottom:16px; }
-.archive-title { grid-column:1/2; margin:0; font:900 clamp(28px,6vw,46px)/1 Archivo,sans-serif;
+.archive-title { grid-column:1/2; margin:0; font:900 clamp(28px,6vw,46px)/1 'Mona Sans',system-ui,sans-serif;
                   letter-spacing:-.032em; color:var(--ink); }
-.archive-bars-label { grid-column:1/-1; order:3; font:500 11px Archivo,sans-serif; letter-spacing:.06em;
+.archive-bars-label { grid-column:1/-1; order:3; font:500 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.06em;
                        color:var(--n1); padding-top:8px; }
 .archive-bars { grid-column:1/-1; order:4; display:flex; align-items:flex-end; gap:3px; height:74px;
                 margin-top:6px; }
 .archive-bars span { width:14px; }
 .archive-table-head { display:grid; grid-template-columns:110px 90px 1fr 60px; gap:0; padding:12px 0;
-                       border-bottom:1px solid var(--n2); font:800 10px Archivo,sans-serif;
+                       border-bottom:1px solid var(--n2); font:800 10px 'Mona Sans',system-ui,sans-serif;
                        letter-spacing:.14em; text-transform:uppercase; color:var(--n1); }
 .archive-table-head span:last-child { text-align:right; }
 .archive-row { display:grid; grid-template-columns:110px 90px 1fr 60px; gap:0; padding:14px 0;
@@ -432,24 +473,24 @@ a:not([href]):hover { color:var(--ink); }
    **계산상 배경과 완전히 동일** = 하이라이트가 보이지 않았다(07-27 디자인 포팅 때부터).
    --g2 는 모든 팔레트에서 --g 와 다른 '보조 표면' 색이라 실제로 구분된다. */
 .archive-row.latest { background:var(--g2); }
-.archive-row-date { font:800 15px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.archive-row-date { font:800 15px 'Mona Sans',system-ui,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-date { color:var(--accd); }
 .archive-row-bar { display:block; height:10px; }
 /* 2줄에서 자른다(2026-07-31, §13 T3.3). 아카이브 414건은 `headline` 컬럼이 생기기 전
    데이터라 원제목이 그대로 오고, 실측 최장 159자다(NIST 기사) — 자르지 않으면 행 높이가
    제목 길이에 따라 들쭉날쭉해서 표를 훑을 수 없다. 전문은 title 속성으로 남긴다.
    재엔리치(유료 배치)로 headline 을 채우는 대신 CSS 로 처리하기로 결정(사용자, 2026-07-31). */
-.archive-row-top { font:700 16px/1.3 Archivo,sans-serif; color:var(--ink); padding-right:20px;
+.archive-row-top { font:700 16px/1.3 'Mona Sans',system-ui,sans-serif; color:var(--ink); padding-right:20px;
                    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
                    overflow:hidden; }
-.archive-row-count { font:700 14px Archivo,sans-serif; color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; }
+.archive-row-count { font:700 14px 'Mona Sans',system-ui,sans-serif; color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; }
 .archive-row.latest .archive-row-count { color:var(--accd); }
 /* 연도 구분선 — 전체(47행)를 싣게 되면서 훑을 기준선이 필요해짐(2026-07-31, §13 T3.2).
    sticky 라 긴 목록을 스크롤해도 지금 보는 해가 상단에 남는다. */
 .archive-year { position:sticky; top:0; z-index:1; display:grid;
                 grid-template-columns:110px 1fr; gap:0; padding:10px 0 8px; margin-top:22px;
                 background:var(--g); border-bottom:2px solid var(--ink);
-                font:800 11px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+                font:800 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                 color:var(--ink); font-variant-numeric:tabular-nums; }
 .archive-year span:last-child { text-align:right; color:var(--n1); }
 /* 표 머리 바로 아래 첫 연도 헤더엔 여백을 두지 않는다.
@@ -460,17 +501,17 @@ a:not([href]):hover { color:var(--ink); }
 /* ==== archive_week ==== */
 
 .week-body { background:var(--g); padding:30px 36px 36px; }
-.week-eyebrow { font:600 12px Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+.week-eyebrow { font:600 12px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
                 color:var(--n1); margin-bottom:8px; }
-.week-headline { margin:0 0 20px; font:900 clamp(28px,6vw,54px)/0.96 Archivo,sans-serif; letter-spacing:-.035em;
+.week-headline { margin:0 0 20px; font:900 clamp(28px,6vw,54px)/0.96 'Mona Sans',system-ui,sans-serif; letter-spacing:-.035em;
                   color:var(--ink); }
 .stat-band { display:flex; border-top:2px solid var(--ink); border-bottom:2px solid var(--ink);
              flex-wrap:wrap; }
 .stat-col { flex:1 1 140px; padding:14px 18px; border-right:1px solid var(--n2); }
 .stat-col:last-child { border-right:0; }
-.stat-num { font:900 28px Archivo,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+.stat-num { font:900 28px 'Mona Sans',system-ui,sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
 .stat-num.accent { color:var(--acc); }
-.stat-label { font:600 10px Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+.stat-label { font:600 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase;
               color:var(--n1); }
 .week-split { display:grid; grid-template-columns:1.4fr 1fr; gap:0; padding-top:24px; }
 @media (max-width:800px) { .week-split { grid-template-columns:1fr; } }
@@ -484,20 +525,87 @@ a:not([href]):hover { color:var(--ink); }
 .week-rest-col { padding-left:32px; }
 @media (max-width:800px) { .week-rest-col { padding-left:0; } }
 .week-lead-kicker { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
-.week-lead-kicker .rank-num { font:900 22px Archivo,sans-serif; color:var(--acc); }
+.week-lead-kicker .rank-num { font:900 22px 'Mona Sans',system-ui,sans-serif; color:var(--acc); }
 .week-lead-kicker .kicker { font-size:10px; letter-spacing:.14em; }
-.week-lead-title { margin:0 0 12px; font:900 34px/1.02 Archivo,sans-serif; letter-spacing:-.03em; color:var(--ink);
+.week-lead-title { margin:0 0 12px; font:900 34px/1.02 'Mona Sans',system-ui,sans-serif; letter-spacing:-.03em; color:var(--ink);
                     text-decoration:none; display:block; }
-.week-lead-dek { margin:0 0 10px; font:400 16px/1.5 Archivo,sans-serif; color:var(--ink2); }
-.week-lead-byline { font:600 11px Archivo,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+.week-lead-dek { margin:0 0 10px; font:400 16px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--ink2); }
+.week-lead-byline { font:600 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase;
                      color:var(--n1); margin-bottom:22px; }
-.week-sec-title { margin:0 0 8px; font:800 24px/1.1 Archivo,sans-serif; letter-spacing:-.022em; color:var(--ink);
+.week-sec-title { margin:0 0 8px; font:800 24px/1.1 'Mona Sans',system-ui,sans-serif; letter-spacing:-.022em; color:var(--ink);
                    text-decoration:none; display:block; }
-.week-sec-dek { margin:0; font:400 14px/1.5 Archivo,sans-serif; color:var(--muted); }
-.week-rest-h { font:900 11px Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+.week-sec-dek { margin:0; font:400 14px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--muted); }
+.week-rest-h { font:900 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
                margin-bottom:8px; }
 .week-rest-row { display:grid; grid-template-columns:22px 1fr; gap:10px; padding:9px 0;
                   border-top:1px solid var(--n2); text-decoration:none; align-items:baseline; }
 .week-rest-row:last-child { border-bottom:1px solid var(--n2); }
-.week-rest-num { font:600 11px Archivo,sans-serif; color:var(--n1); font-variant-numeric:tabular-nums; }
-.week-rest-title { font:600 14px/1.3 Archivo,sans-serif; color:var(--ink); }
+.week-rest-num { font:600 11px 'Mona Sans',system-ui,sans-serif; color:var(--n1); font-variant-numeric:tabular-nums; }
+.week-rest-title { font:600 14px/1.3 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
+
+/* ==== Boncom 시스템 — radius · 고도 · 조판 축 (2026-08-07) ====
+ *
+ * 캔버스 "Home Top Organization" 6a 가 그려진 시스템에서 색 말고 나머지를 들여온 층이다
+ * (사용자 결정 2026-08-07 — 08-06 에는 색만 들여왔다. handoff-differences §1·§8).
+ * 팔레트가 아니라 **전역**이라 어떤 테마를 골라도 이 조판은 그대로다.
+ *
+ * ⚠️ 이 블록이 파일 **맨 끝**에 있어야 하는 이유: `font:` 단축 속성은 명시하지 않은
+ *    font-* 롱핸드를 초기값으로 되돌리는데, 거기에 **font-variation-settings 가 포함된다.**
+ *    위쪽 규칙들이 전부 `font:` 단축으로 쓰여 있으므로 축 선언이 그보다 앞서면 조용히
+ *    지워진다. 같은 명시도라면 나중 선언이 이기므로 맨 끝이 유일하게 안전한 자리다.
+ *    (규칙 안에 섞어 쓸 거라면 반드시 `font:` **다음 줄**이어야 한다.)
+ *
+ * 축은 wdth 만 준다. Mona Sans 의 wght 축은 각 규칙의 font-weight 가 이미 몰고 있고,
+ * 여기서 'wght' 를 같이 적으면 그쪽이 우선해 버려서 두 곳에서 굵기를 정하게 된다.
+ * 6a 의 배정: 캡스 라벨 75 · 제목 90 · 리드 110 · 디스플레이 125 · 나머지 100(기본값).
+ */
+
+/* radius: 카드 16 · 컨트롤/슬롯 12 · pill 999 · 검색창 8 (6a 값 그대로) */
+.panel, .aside-card, .source-alert { border-radius:16px; }
+/* 카드 안의 띠(필터 서랍 · 본문 경계선)가 둥근 모서리 밖으로 삐져나오지 않게 잘라낸다 —
+   6a 의 카드도 overflow:hidden 이다. 서랍 자체는 카드 중간에 끼는 띠라 각지게 둔다. */
+.panel { overflow:hidden; }
+.imgslot, .panel-icon { border-radius:12px; }
+/* 값 막대(signal index · 아카이브 볼륨)와 통계 밴드는 **각지게 둔다.** 막대 끝을 둥글리면
+   짧은 막대일수록 길이가 부풀어 보여서 길이 비교가 왜곡되고(0건 막대는 아예 점으로 남는다),
+   위아래 2px 선만 있는 stat-band 는 모서리에서 선이 말려 끊긴 것처럼 보인다. */
+.mh-search-field, .search-field { border-radius:8px; }
+.mh-pill, .ph-date, .seg, .seg-on, .drawer-btn, .topic-pill, .chip, .pill, .tag { border-radius:999px; }
+/* seg 는 3px 패딩 안에 알약을 품는 트랙이라 안쪽도 둥글어야 한다 */
+.seg { padding:3px; }
+
+/* 고도: 6a 의 2단 그림자. 색은 팔레트의 잉크(--inkrgb)를 따라간다. */
+.panel { box-shadow:0 1px 2px rgba(var(--inkrgb),.04), 0 4px 12px rgba(var(--inkrgb),.06); }
+
+/* 조판 축 — 캡스 라벨 (wdth 75) */
+.mh-meta, .mh-pill, .ph-date, .ph-label, .panel-range, .break-h, .break-sub, .lead-cat, .lead-sig,
+.card-cat, .card-meta, .worth-cat, .worth-meta, .brief-cat, .byline-source, .byline-meta,
+.byline-dead, .drawer-h, .drawer-btn, .filter-note, .seg-on, .section-h, .aside-h, .aside-sub,
+.source-alert-h, .imgslot-label, .wire-h, .tag, .kicker, .term-line, .site-footer-label,
+.site-footer-tools a, .simple-header-sub, .simple-header nav a, .pill, .cat-row-side-source,
+.cat-footer-note, .cat-footer-link, .results-meta, .result-byline, #hitcount,
+.archive-table-head, .archive-year, .archive-bars-label, .week-eyebrow, .week-lead-byline,
+.week-rest-h, .stat-label, .band-tier {
+  font-variation-settings:'wdth' 75;
+}
+
+/* 조판 축 — 제목 (wdth 90) */
+.panel-h, .card-title, .worth-title, .brief-title, .week-sec-title, .archive-row-top,
+.result-title, .thread-line {
+  font-variation-settings:'wdth' 90;
+}
+
+/* 조판 축 — 리드 (wdth 110) */
+.lead-title, .cat-row-title, .week-lead-title {
+  font-variation-settings:'wdth' 110;
+}
+
+/* 조판 축 — 디스플레이 (wdth 125) */
+.ph-title, .mh-wordmark, .wordmark, .cat-title, .archive-title, .week-headline {
+  font-variation-settings:'wdth' 125;
+}
+
+/* 6a 의 워드마크 옆 점은 글자 크기를 따라간다(헤더의 .mh-dot 은 7px 고정) —
+   52px 짜리 h1 옆에 7px 점을 두면 마침표가 아니라 먼지로 보인다. */
+.ph-title .mh-dot { display:inline-block; width:.14em; height:.14em; margin-left:.06em;
+                    vertical-align:baseline; }

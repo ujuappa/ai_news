@@ -15,11 +15,18 @@
   (배포 CSS 앞에 기본 팔레트 `:root` 블록이 붙어 있어서 지면 자체는 기본 테마로 멀쩡히 보인다 —
   그래서 눈으로는 안 드러나고 스위처만 조용히 죽어 있다.)
   감싸 두면 저장이 막힌 곳에서도 **그 세션 동안은 테마 전환이 동작한다**(유지만 안 될 뿐).
+
+  **폰트는 2026-08-07 에 Archivo -> Mona Sans + Playfair Display italic 으로 갈렸다**(사용자
+  결정: 캔버스 "Home Top Organization" 6a 의 Boncom 조판을 색만이 아니라 통째로 들여온다).
+  Mona Sans 는 가변 폰트라 **wdth 75~125 축**이 있고, 이 사이트의 캡스 라벨/제목/디스플레이가
+  전부 그 축을 쓴다(digest.css 끝의 "조판 축" 레이어). 축이 없는 폴백으로 떨어지면 글자가
+  넓거나 좁아지지 않을 뿐 지면은 그대로 선다. Playfair 는 `.ph-em` 하나에만 쓰므로 italic
+  400~600 만 받는다.
 #}
 {% macro head_scripts(asset_prefix='') -%}
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="{{ asset_prefix }}feed.xml">
 
-<script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 {%- endmacro %}
 
 {#
@@ -209,18 +216,27 @@
 {#
   홈 지면 머리(6a). 날짜 칩 · 디스플레이 제목 · 한 줄 설명 · stat 쌍.
 
-  제목의 강조 절(`.ph-em`)은 캔버스에서 Playfair Display italic + maroon 이었다. 이 레포는
-  Archivo 한 벌만 싣고(폰트 추가는 요청 범위 밖) 색은 팔레트를 따라야 하므로, italic +
-  --accd 로 같은 "대위" 효과만 가져왔다.
+  **제목은 2026-08-07 에 워드마크로 바뀌었다** — 캔버스가 `{{ lead_word }}, ranked by
+  significance` 에서 `AI Digest` + 빨간 점으로 갈아탔다(handoff-differences §2, 사용자 승인).
+  캔버스에는 별도 마스트헤드 줄이 없어서 이 h1 이 곧 워드마크지만, 이 사이트는 모든 페이지가
+  공유하는 `.mh` 헤더에 이미 워드마크를 달고 있다 → **홈에서만 워드마크가 위아래로 두 번
+  나온다.** 사용자가 그 중복을 알고 캔버스 쪽을 택했다(6a 대로 가되 헤더는 손대지 않는다 —
+  카테고리/검색/아카이브 인덱스는 이 h1 이 없어서 헤더 워드마크가 유일한 사이트명이다).
 
-  `lead_word` 를 render 가 실어주는 이유: 아카이브 사본은 몇 달 뒤에 열리므로 거기서
-  "Today's news" 는 거짓말이 된다(render_digest 의 head_lead 주석 참고).
+  `lead_word`("Today's news" / "That day's news")는 이제 제목이 아니라 **카드 머리글**이
+  받는다(home.html 의 `.panel-h`). 아카이브 사본이 몇 달 뒤에 "Today's news" 라고 우기는 걸
+  막는 구분은 거기서 계속 산다 — `test_archived_copy_does_not_claim_to_be_today` 가 지킨다.
+  지면 머리에서는 그 위 날짜 칩이 어느 날인지 말한다.
+
+  `.ph-em` 은 이제 실제로 캔버스대로 Playfair Display italic + --accd 다(폰트 결정이 뒤집혀서
+  더 이상 Archivo italic 흉내가 아니다). 남은 강조 절이 없어 현재 마크업에는 안 쓰이지만,
+  CSS 와 함께 남겨 둔다 — dek 에 대위를 넣고 싶어지면 `<em class="ph-em">` 한 겹이면 된다.
 #}
-{% macro page_head(lead_word, period_date, total, total_records) -%}
+{% macro page_head(period_date, total, total_records) -%}
 <div class="page-head">
   <div class="ph-text">
     <span class="ph-date">{{ period_date }}</span>
-    <h1 class="ph-title">{{ lead_word }}, <em class="ph-em">ranked by significance</em></h1>
+    <h1 class="ph-title">AI Digest<span class="mh-dot" aria-hidden="true"></span></h1>
     <p class="ph-dek">Every item is scored, clustered and ranked before it reaches this page.</p>
   </div>
   <div class="ph-stats">
@@ -228,6 +244,47 @@
     {% if total_records %}<div class="ph-stat"><span class="ph-num ph-num-dim">{{ total_records }}</span><span class="ph-label">In archive</span></div>{% endif %}
   </div>
 </div>
+{%- endmacro %}
+
+{#
+  Wire 티커 (2026-08-07, 캔버스 6a 가 나중에 추가한 조각 — handoff-differences §3).
+
+  마스트헤드와 지면 머리 사이에 한 줄짜리 띠가 흐른다: 캡스 라벨 `Wire` + significance +
+  헤드라인. 담는 건 **리드와 카드 3장 아래로 떨어진 항목 전부**(랭킹 05 이상 = 지면의
+  Worth knowing + In brief). 백엔드가 필요 없는 조각이라 6a 의 소셜 3종과 달리 그대로 옮겼다.
+
+  왜 같은 목록을 두 번 굽는가: 끊김 없는 루프의 표준 수법이다. 트랙을 자기 폭의 -50% 만큼
+  밀면 두 번째 사본이 정확히 첫 사본 자리에 와서 이어 붙는다(캔버스의 `dvtick` 과 같다).
+  **두 번째 사본은 aria-hidden** — 스크린리더가 같은 기사를 두 번 읽으면 안 된다.
+
+  **재생 시간을 항목 수로 계산하는 이유**: 캔버스는 6건짜리 목업이라 60s 가 고정값이었다.
+  실제 지면은 조용한 날 2건, 바쁜 날 30건이 온다 — 고정 60s 면 항목이 많은 날 글자가 흘러가는
+  속도가 그만큼 빨라져서 읽을 수 없다. 항목당 8s 로 두면 속도가 늘 같다(최소 30s).
+
+  움직임을 끈 사용자(prefers-reduced-motion)에게는 애니메이션 대신 **가로 스크롤 줄**로 준다
+  (digest.css). 그래서 사본을 숨겨도 원본 링크는 전부 남는다.
+
+  죽은 링크는 `href()` 가 알아서 href 를 뗀다(다른 지면과 같은 규칙).
+#}
+{% macro wire_ticker(items) -%}
+{%- if items %}
+<div class="wire">
+  <span class="wire-h">Wire</span>
+  <div class="wire-track">
+    <div class="wire-strip" style="animation-duration:{{ [items|length * 8, 30]|max }}s">
+      {%- for pass in [false, true] %}
+      <div class="wire-run"{% if pass %} aria-hidden="true"{% endif %}>
+        {%- for it in items %}
+        {#- 링크 안에 개행을 남기면 nowrap 이라 접히지 않고 점수 앞에 공백 한 칸이 남는다. #}
+        <a class="wire-item"{{ href(it) }} title="{{ it.title }}"{% if pass %} tabindex="-1"{% endif
+          %}><span class="wire-sig">{{ '%.2f'|format(it.significance) }}</span>{{ it.display_title }}</a>
+        {%- endfor %}
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</div>
+{%- endif %}
 {%- endmacro %}
 
 {#

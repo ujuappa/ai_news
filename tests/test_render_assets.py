@@ -257,6 +257,130 @@ def test_the_new_palette_is_a_complete_one(tmp_path):
         assert set(palette) == keys, f'{palette["name"]}: 키가 다르다'
 
 
+# ── 캔버스 6a 2차 (2026-08-07): Boncom 조판 · Wire 티커 · 워드마크 제목 ────────
+
+def _wire_items(n):
+    items = []
+    for i in range(n):
+        it = dict(ITEM)
+        it["title"] = it["headline"] = f"Story {i}"
+        it["url"] = f"https://example.com/{i}"
+        it["significance"] = round(0.9 - i * 0.05, 2)
+        items.append(it)
+    return items
+
+
+def test_the_page_loads_the_boncom_faces_and_nothing_else(tmp_path):
+    """조판을 6a 대로 바꾼 결정(2026-08-07)의 계약. Archivo 를 실어 나르는 링크가 남아 있으면
+    쓰지도 않는 폰트를 매 페이지가 내려받는다."""
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "family=Mona+Sans" in page and "family=Playfair+Display" in page
+    assert "family=Archivo" not in page
+    assert "Archivo" not in _css_no_comments(), "CSS 에 Archivo 폰트 스택이 남아 있다"
+
+
+def test_the_axis_layer_comes_after_every_font_shorthand():
+    """`font:` 단축은 **font-variation-settings 를 초기값으로 되돌린다.** 축 선언이 단축보다
+    앞서면 조용히 지워져서 wdth 75/90/110/125 가 전부 100 으로 렌더된다 — 눈으로는
+    "폰트가 좀 넓네" 정도로만 보여서 안 잡힌다. 축 레이어는 파일 끝에 있어야 한다."""
+    css = _css_no_comments()
+    last_shorthand = max(m.start() for m in re.finditer(r"\bfont:", css))
+    first_axis = min(m.start() for m in re.finditer(r"font-variation-settings:", css))
+    assert first_axis > last_shorthand, "축 레이어가 `font:` 단축보다 앞에 있다"
+
+
+def test_the_axis_layer_sets_only_the_width_axis():
+    """굵기는 각 규칙의 font-weight 가 이미 몰고 있다. 여기서 'wght' 를 같이 적으면
+    그쪽이 우선해서 굵기를 정하는 곳이 두 군데가 된다."""
+    for decl in re.findall(r"font-variation-settings:([^;]+);", _css_no_comments()):
+        assert "wght" not in decl, f"축 레이어가 굵기까지 정한다: {decl.strip()}"
+
+
+def test_the_filter_drawer_starts_closed():
+    """`.filter-drawer{display:grid}` 는 브라우저 기본 `[hidden]{display:none}` 을 이긴다
+    (저작자 규칙 > UA 규칙). 2026-08-06~08-07 사이 실제로 **서랍이 항상 열려 있었고**
+    Filters 버튼은 aria-expanded 만 뒤집는 죽은 토글이었다 — 6a 는 닫힌 채로 시작한다."""
+    css = _css_no_comments()
+    m = re.search(r"\.filter-drawer\[hidden\]\s*\{([^}]*)\}", css)
+    assert m and "display:none" in m.group(1).replace(" ", ""), \
+        "display 를 주는 규칙에는 [hidden] 짝이 있어야 한다"
+
+
+def test_page_head_title_is_the_wordmark(tmp_path):
+    """캔버스가 `{{ lead_word }}, ranked by significance` 에서 워드마크 + 빨간 점으로
+    갈아탔다(handoff §2). 점이 빠지면 그냥 큰 글씨 사이트명이 된다."""
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    title = re.search(r'<h1 class="ph-title">(.*?)</h1>', page, re.S).group(1)
+    assert "AI Digest" in title and "mh-dot" in title
+    assert "ranked by significance" not in title
+    # 점 크기는 em 이어야 한다 — 헤더의 7px 고정값을 52px 제목 옆에 두면 먼지로 보인다
+    assert re.search(r"\.ph-title \.mh-dot\s*\{[^}]*width:\.\d+em", _css_no_comments())
+
+
+def test_wire_carries_the_stories_below_the_cards(tmp_path):
+    """티커는 리드(01)와 카드(02–04) **아래로** 떨어진 것들을 흘린다 — 지면에서 이미 크게
+    보이는 걸 다시 흘리면 티커가 아니라 반복이다."""
+    render.render_digest("2026-07-31", _groups(_wire_items(9)), [], tmp_path)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    wire = re.search(r'<div class="wire">.*?<div class="wire-run">(.*?)</div>', page, re.S).group(1)
+    for shown_above in ("Story 0", "Story 1", "Story 2", "Story 3"):
+        assert shown_above not in wire, f"{shown_above} 는 이미 카드 위에 있다"
+    for below in ("Story 4", "Story 5", "Story 8"):
+        assert below in wire
+    assert "0.70" in wire, "significance 가 빠졌다"
+
+
+def test_wire_second_run_is_hidden_from_screen_readers(tmp_path):
+    """끊김 없는 루프를 위해 같은 목록을 두 벌 굽는다. 사본을 그대로 두면 스크린리더가
+    같은 기사를 두 번 읽고, 탭 순서에도 두 번 걸린다."""
+    render.render_digest("2026-07-31", _groups(_wire_items(9)), [], tmp_path)  # 티커에 5건
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    strip = re.search(r'<div class="wire-strip".*?</div>\s*</div>\s*</div>', page, re.S).group(0)
+    runs = re.findall(r'<div class="wire-run"(.*?)>', strip)
+    assert len(runs) == 2, "루프에 필요한 사본이 두 벌이 아니다"
+    assert runs[0].strip() == "" and 'aria-hidden="true"' in runs[1]
+    assert strip.count('href="https://example.com/4"') == 2, "사본이 같은 목록을 담아야 이어 붙는다"
+    # 사본 쪽 링크만 탭 순서에서 빠진다(원본 5건은 그대로 잡힌다)
+    assert strip.count('tabindex="-1"') == 5
+
+
+def test_wire_speed_does_not_depend_on_how_busy_the_day_was(tmp_path):
+    """캔버스는 6건짜리 목업이라 60s 고정이었다. 고정값이면 30건 오는 날 글자가 그만큼 빨리
+    흘러가서 못 읽는다 — 재생 시간이 항목 수를 따라가야 속도가 늘 같다."""
+    def duration(n, path):
+        render.render_digest("2026-07-31", _groups(_wire_items(n)), [], path)
+        page = (path / "index.html").read_text(encoding="utf-8")
+        return int(re.search(r"animation-duration:(\d+)s", page).group(1))
+    short, long = duration(6, tmp_path / "a"), duration(24, tmp_path / "b")
+    assert long > short, "항목이 4배인데 재생 시간이 그대로면 4배 빨라진다"
+
+
+def test_quiet_day_gets_no_wire(tmp_path):
+    """리드 + 카드 3장으로 그날이 끝나면 흘릴 게 없다. 빈 띠가 서면 안 된다."""
+    render.render_digest("2026-07-31", _groups(_wire_items(4)), [], tmp_path)
+    assert 'class="wire"' not in (tmp_path / "index.html").read_text(encoding="utf-8")
+
+
+def test_wire_is_readable_with_motion_turned_off():
+    """움직임을 끈 사용자에게 애니메이션만 죽이면, 화면 밖으로 나간 항목은 영영 못 본다.
+    가로 스크롤로 바꾸고 중복 사본은 감춘다."""
+    css = _css_no_comments()
+    block = re.search(r"@media \(prefers-reduced-motion:reduce\)\s*\{(.*?)\n\}", css, re.S)
+    assert block, "prefers-reduced-motion 분기가 없다"
+    body = block.group(1)
+    assert "overflow-x:auto" in body and "animation:none" in body
+    assert 'aria-hidden="true"' in body and "display:none" in body
+
+
+def test_wire_pauses_when_you_try_to_read_it():
+    css = _css_no_comments()
+    m = re.search(r"([^{}]+)\{[^{}]*animation-play-state:paused", css)
+    assert m and ":hover" in m.group(1) and ":focus-within" in m.group(1), \
+        "hover(마우스)와 focus-within(키보드) 양쪽에서 멈춰야 한다"
+
+
 # ── 이미지 슬롯의 맞춤 방식이 한 곳에서만 정해지는지 ───────────────────────────
 
 def test_both_fit_treatments_exist_in_css():
@@ -277,7 +401,7 @@ def test_slot_reserves_space_before_the_image_loads():
 def test_also_grid_does_not_stretch_a_lone_filtered_card():
     """토픽 필터가 also-card 를 숨기면 `auto-fit` 이 빈 트랙을 접어 남은 카드가 전폭이 된다.
 
-    슬롯(aspect-ratio 16/10 · width 100%)이 따라 커져 chips/robotics 처럼 1~2건만 남는
+    슬롯(aspect-ratio 4/3 · width 100%)이 따라 커져 chips/robotics 처럼 1~2건만 남는
     필터에서 이미지가 거대해진다. All / Government & law(카드 2~3장) 크기를 기준으로,
     그리드는 auto-fit 을 쓰지 않고 카드에 전폭 방지 상한을 둔다."""
     css = _css_no_comments()
