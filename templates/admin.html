@@ -1,0 +1,983 @@
+{% import "macros.html" as m %}
+{#
+  Admin — 소스 · 필터 토픽 편집기 (2026-08-11 신설, 사용자 결정으로 GitHub API 경로).
+
+  ── 이 페이지가 어떻게 쓰기를 하는가 ──────────────────────────────────────────
+  이 사이트는 GitHub Pages 가 서빙하는 정적 HTML 이라 서버가 없다. 그래서 브라우저가
+  **GitHub Contents API 를 직접 호출해** 기계 소유 JSON 두 개를 커밋한다:
+    sources.custom.json  — 소스 오버레이(추가 · 부분수정 · 삭제)
+    topics.json          — 필터 토픽 어휘
+  `sources.yaml` 은 절대 쓰지 않는다. 그 파일은 주석 240줄이 결정 근거이고, 클라이언트가
+  파싱해 다시 뱉으면 전부 사라진다(config.py 의 CUSTOM_SOURCES_FILE 주석 참고).
+
+  ── 토큰 ─────────────────────────────────────────────────────────────────────
+  **이 산출물에는 비밀값이 하나도 없다.** PAT 은 사용자가 런타임에 입력하고 그 브라우저의
+  localStorage 에만 머문다. 그래서:
+    - 레포/배포물에 토큰이 안 들어간다(공개 레포에서 그건 곧 유출이다 — §10.5 키 노출 3회)
+    - 남이 이 URL 을 열어도 토큰이 없으니 아무것도 못 쓴다(폼만 보인다)
+  fine-grained PAT + 이 레포 하나 + Contents:RW 를 안내한다. Actions:RW 는 "Run pipeline
+  now" 를 쓸 때만 필요하고, 없으면 그 버튼만 못 쓴다(나머지는 정상 동작).
+
+  ── 편집 모델 ────────────────────────────────────────────────────────────────
+  아래 `applyOverlay` 는 **config._apply_overlay 의 JS 사본**이다. 미리보기가 파이프라인의
+  실제 병합 결과와 달라지면 이 페이지는 거짓말을 하는 것이므로, 한쪽을 고치면 다른 쪽도
+  고쳐야 한다(tests/test_admin.py 가 두 구현의 규칙을 같은 픽스처로 비교한다).
+
+  구운 상태(baked)는 **토큰 없이 볼 때만** 쓴다. 연결하면 GitHub 에서 라이브 파일을 다시
+  읽는다 — push 트리거는 렌더를 안 하므로 이 페이지의 구운 값은 낡을 수 있고, 낡은 값으로
+  저장하면 지난 편집이 조용히 되돌아간다.
+
+  ── DOM 규칙 ─────────────────────────────────────────────────────────────────
+  값이 들어가는 자리는 전부 DOM API(textContent · value)로 채운다. innerHTML 로 문자열을
+  이어 붙이지 않는다 — 소스명·피드 URL 은 사용자가 넣는 값이고, 여기서 습관을 만들면
+  나중에 그대로 구멍이 된다(macros.html 의 chip 주석과 같은 규칙).
+  `display` 를 주는 CSS 규칙에는 `[hidden]` 짝이 반드시 있어야 한다 — 저작자 규칙이 브라우저
+  기본 `[hidden]{display:none}` 을 이겨서 토글이 조용히 죽는다(2026-08-07 필터 서랍 사례).
+#}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts(asset_prefix) }}
+<title>AI Digest — Admin</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap">
+{{ m.util_header('Admin', 'admin', asset_prefix, show_admin=true) }}
+
+<div class="archive-body">
+  <div class="archive-top">
+    <h1 class="archive-title">Admin</h1>
+    <p class="admin-lede">
+      Edits commit straight to GitHub from this browser. Your token never leaves it and is
+      never committed — this page ships with no credentials in it.
+      <a class="cat-footer-link" href="{{ asset_prefix }}sources.html">View sources →</a>
+    </p>
+  </div>
+
+  {# ── 연결 ─────────────────────────────────────────────────────────────── #}
+  <section class="adm-card">
+    <div class="adm-card-head">
+      <span class="adm-card-h">Connection</span>
+      <span class="adm-badge" data-conn-badge>Not connected</span>
+    </div>
+    <div class="adm-fields">
+      <label class="adm-field">
+        <span class="adm-label">Repository</span>
+        <input id="adm-repo" type="text" spellcheck="false" placeholder="owner/name" value="{{ repo }}">
+      </label>
+      <label class="adm-field">
+        <span class="adm-label">Fine-grained token</span>
+        <input id="adm-token" type="password" spellcheck="false" autocomplete="off"
+               placeholder="github_pat_…">
+      </label>
+      <div class="adm-field adm-field-btns">
+        <button type="button" class="adm-btn adm-btn-primary" data-connect>Connect</button>
+        <button type="button" class="adm-btn" data-forget hidden>Forget token</button>
+      </div>
+    </div>
+    <p class="adm-note" data-conn-note>
+      Paste a token to load the live config and enable saving. Without one you can still read
+      the configuration below.
+    </p>
+    <details class="adm-help">
+      <summary>How to make the token (and what it can do)</summary>
+      <div class="adm-help-body">
+        <p>GitHub → Settings → Developer settings → <b>Fine-grained tokens</b> → Generate new token.</p>
+        <ul>
+          <li><b>Repository access</b> — Only select repositories → pick just this one.</li>
+          <li><b>Permissions → Contents</b> — Read and write. This is what commits the two config files.</li>
+          <li><b>Permissions → Actions</b> — Read and write. <i>Optional.</i> Only needed for
+              “Run pipeline now”. Leave it off and everything else still works.</li>
+          <li>Set the shortest expiry you can live with. Nothing here needs a long-lived token.</li>
+        </ul>
+        <p class="adm-warn">
+          The token is stored in this browser’s localStorage so you don’t retype it. That means
+          anyone with access to this browser profile can read it — use “Forget token” on a shared
+          machine, and never paste a classic token with account-wide scopes.
+        </p>
+      </div>
+    </details>
+  </section>
+
+  {# ── 탭 ───────────────────────────────────────────────────────────────── #}
+  <div class="adm-tabs" role="tablist">
+    <button type="button" class="adm-tab active" data-tab="sources" role="tab" aria-selected="true">Sources</button>
+    <button type="button" class="adm-tab" data-tab="topics" role="tab" aria-selected="false">Filter topics</button>
+  </div>
+
+  {# ── 소스 ─────────────────────────────────────────────────────────────── #}
+  <section data-panel="sources">
+    <div class="adm-bar">
+      <button type="button" class="adm-btn adm-btn-primary" data-src-add>Add source</button>
+      <span class="adm-dirty" data-src-dirty hidden>Unsaved</span>
+      <span class="adm-bar-gap"></span>
+      <button type="button" class="adm-btn" data-src-discard hidden>Discard changes</button>
+      <button type="button" class="adm-btn adm-btn-save" data-src-save disabled>Save to GitHub</button>
+    </div>
+    <p class="adm-note">
+      Curated sources live in <code>sources.yaml</code> and are never rewritten. Your changes are
+      stored as an overlay in <code>sources.custom.json</code> — editing a curated source records
+      only the fields you changed, and deleting one hides it without losing the original.
+    </p>
+    <div data-src-list></div>
+  </section>
+
+  {# ── 토픽 ─────────────────────────────────────────────────────────────── #}
+  <section data-panel="topics" hidden>
+    <div class="adm-bar">
+      <button type="button" class="adm-btn adm-btn-primary" data-topic-add>Add topic</button>
+      <span class="adm-dirty" data-topic-dirty hidden>Unsaved</span>
+      <span class="adm-bar-gap"></span>
+      <button type="button" class="adm-btn" data-topic-discard hidden>Discard changes</button>
+      <button type="button" class="adm-btn adm-btn-save" data-topic-save disabled>Save to GitHub</button>
+    </div>
+    <p class="adm-note">
+      These are the pills in the home page filter drawer. The <b>gloss</b> never appears on the
+      site — it is the sentence that tells the model where the topic starts and stops, so it is
+      what actually decides classification quality.
+    </p>
+    <div class="adm-cap">
+      <label class="adm-field adm-field-narrow">
+        <span class="adm-label">Max topics per item</span>
+        <input type="number" min="1" max="6" data-topic-cap>
+      </label>
+      <p class="adm-note adm-note-tight">
+        Raising this makes the filter less discriminating — at 5 the model tags generously and
+        every pill matches nearly every story.
+      </p>
+    </div>
+    <div data-topic-list></div>
+    <div class="adm-backfill" data-backfill hidden>
+      <span class="adm-backfill-h">History will not have these topics</span>
+      <p>
+        Topics are attached by the model when an item is collected, so articles already in the
+        archive keep the tags they were given. To apply a new or renamed topic to the archive,
+        run this locally — it calls Gemini and <b>costs money</b>:
+      </p>
+      <code class="adm-cmd">python backfill_topics.py</code>
+      <p class="adm-note adm-note-tight" data-backfill-note></p>
+    </div>
+  </section>
+
+  {# ── 파이프라인 실행 ──────────────────────────────────────────────────── #}
+  <section class="adm-card adm-card-run">
+    <div class="adm-card-head">
+      <span class="adm-card-h">Run pipeline now</span>
+      <span class="adm-badge" data-run-badge>Needs Actions permission</span>
+    </div>
+    <p class="adm-note">
+      Committing config does <b>not</b> re-collect the news. The push trigger deliberately skips
+      the pipeline so design deploys stay free, which means a new source first appears at the next
+      scheduled run (14:00 UTC). This button dispatches the workflow immediately instead.
+    </p>
+    <button type="button" class="adm-btn" data-run disabled>Dispatch daily.yml</button>
+    <p class="adm-note adm-note-tight" data-run-note></p>
+  </section>
+</div>
+</div>
+{{ m.site_footer(asset_prefix ~ 'archive/index.html', 0, rss_href=asset_prefix ~ 'feed.xml') }}
+
+<script id="adm-baked" type="application/json">{{ baked_json|safe }}</script>
+{#
+  병합·검증 규칙은 별도 파일이다(static/admin_rules.js). 이 사이트의 유일한 .js 파일인데,
+  이유는 테스트다 — 그 파일의 `applyOverlay` 는 `config._apply_overlay` 의 사본이라
+  tests/test_admin.py 가 node 로 돌려 파이썬과 같은 픽스처로 대조한다. 인라인이면 못 한다.
+#}
+<script src="{{ asset_prefix }}static/admin_rules.js"></script>
+<script>
+(function () {
+  'use strict';
+  var BAKED = JSON.parse(document.getElementById('adm-baked').textContent);
+  var API = 'https://api.github.com';
+  var TOKEN_KEY = 'ai-digest-gh-token';
+  var REPO_KEY = 'ai-digest-gh-repo';
+
+  var RULES = window.AdminRules;
+  var KEY_RE = RULES.KEY_RE;
+  var OVERRIDABLE = RULES.OVERRIDABLE;
+  var CATEGORY_ORDER = BAKED.categories.map(function (c) { return c.key; });
+
+  // ── 저장소 접근 (막힌 맥락에서도 죽지 않게) ──────────────────────────────
+  // sandboxed iframe · 사이트 데이터 차단 · 일부 웹뷰에서는 localStorage 를 **읽기만 해도**
+  // SecurityError 가 난다. 감싸 두면 그 세션 동안은 동작하고 유지만 안 된다
+  // (macros.html head_scripts 주석과 같은 이유 — 거기서 실제로 죽은 버튼이 나왔다).
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* 유지만 포기 */ } }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  // ── UTF-8 base64 (GitHub Contents API 가 base64 로 주고받는다) ───────────
+  // btoa 는 latin1 만 받으므로 한글이 든 파일을 그냥 넣으면 InvalidCharacterError 가 난다.
+  // TextEncoder 로 바이트를 만든 뒤 바이트당 한 글자로 옮겨서 넘긴다.
+  function b64encode(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64decode(b64) {
+    var bin = atob(String(b64).replace(/\s/g, '')); // API 응답은 76자마다 개행이 들어온다
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  // ── 상태 ────────────────────────────────────────────────────────────────
+  var S = {
+    token: lsGet(TOKEN_KEY) || '',
+    repo: lsGet(REPO_KEY) || BAKED.repo || '',
+    connected: false,
+    canDispatch: false,
+    live: false,              // GitHub 에서 라이브 파일을 읽었는가 (아니면 구운 값)
+    overlay: JSON.parse(JSON.stringify(BAKED.overlay || { sources: [] })),
+    overlaySha: null,
+    overlayClean: '',
+    topics: JSON.parse(JSON.stringify(BAKED.topics || [])),
+    topicsSha: null,
+    topicsCap: BAKED.maxPerItem || 3,
+    topicsComment: null,
+    topicsClean: '',
+    editingSrc: null,
+    editingTopic: null,
+    baseTopicKeys: (BAKED.topics || []).map(function (t) { return t.key; })
+  };
+  S.overlayClean = JSON.stringify(S.overlay.sources || []);
+  S.topicsClean = JSON.stringify({ t: S.topics, c: S.topicsCap });
+
+  var baseById = {};
+  BAKED.baseSources.forEach(function (s) { baseById[s.id] = s; });
+
+  function applyOverlay(base, entries) {
+    return RULES.applyOverlay(base, entries, CATEGORY_ORDER);
+  }
+
+  function overlayEntry(id) {
+    var list = S.overlay.sources || [];
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  function setOverlayEntry(id, patch) {
+    S.overlay.sources = S.overlay.sources || [];
+    var at = -1;
+    for (var i = 0; i < S.overlay.sources.length; i++) {
+      if (S.overlay.sources[i].id === id) { at = i; break; }
+    }
+    if (patch === null) { if (at >= 0) S.overlay.sources.splice(at, 1); }
+    else if (at >= 0) S.overlay.sources[at] = patch;
+    else S.overlay.sources.push(patch);
+  }
+
+  // ── 작은 DOM 헬퍼 ───────────────────────────────────────────────────────
+  // 값은 전부 textContent/value 로 넣는다. 마크업 문자열에 값을 이어 붙이지 않는다.
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = String(text);
+    return n;
+  }
+  function $(sel) { return document.querySelector(sel); }
+  function field(labelText, input) {
+    var l = el('label', 'adm-field');
+    l.appendChild(el('span', 'adm-label', labelText));
+    l.appendChild(input);
+    return l;
+  }
+  function textInput(value, placeholder) {
+    var i = document.createElement('input');
+    i.type = 'text'; i.spellcheck = false;
+    i.value = value == null ? '' : String(value);
+    if (placeholder) i.placeholder = placeholder;
+    return i;
+  }
+  function selectInput(options, value) {
+    var s = document.createElement('select');
+    options.forEach(function (o) {
+      var op = document.createElement('option');
+      op.value = o.key; op.textContent = o.label;
+      if (o.key === value) op.selected = true;
+      s.appendChild(op);
+    });
+    return s;
+  }
+  function checkbox(checked) {
+    var i = document.createElement('input');
+    i.type = 'checkbox'; i.checked = !!checked;
+    return i;
+  }
+  function checkField(labelText, input) {
+    var l = el('label', 'adm-check');
+    l.appendChild(input);
+    l.appendChild(el('span', null, labelText));
+    return l;
+  }
+  {# 상태 문구는 성공/실패 색을 클래스로 준다 — 색만으로 구분하지 않고 문장도 바뀐다. #}
+  function say(node, msg, kind) {
+    node.textContent = msg || '';
+    node.classList.toggle('is-bad', kind === 'bad');
+    node.classList.toggle('is-good', kind === 'good');
+  }
+
+  // ── GitHub API ──────────────────────────────────────────────────────────
+  function gh(path, opts) {
+    opts = opts || {};
+    var headers = {
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+    if (S.token) headers['Authorization'] = 'Bearer ' + S.token;
+    if (opts.body) headers['Content-Type'] = 'application/json';
+    return fetch(API + path, { method: opts.method || 'GET', headers: headers, body: opts.body })
+      .then(function (res) {
+        if (res.status === 204) return {};
+        return res.text().then(function (raw) {
+          var data = null;
+          try { data = raw ? JSON.parse(raw) : null; } catch (e) { data = null; }
+          if (!res.ok) {
+            var msg = (data && data.message) || res.statusText || ('HTTP ' + res.status);
+            var err = new Error(msg);
+            err.status = res.status;
+            throw err;
+          }
+          return data;
+        });
+      });
+  }
+
+  {#
+    경로를 **세그먼트별로** 인코딩한다. `encodeURIComponent(path)` 를 통째로 걸면 `/` 가
+    `%2F` 로 바뀌어 Contents API 가 경로를 못 찾는다 — 지금 두 파일은 레포 루트에 있어서
+    증상이 없지만, 나중에 `config/topics.json` 같은 자리로 옮기는 순간 404 로 죽는다.
+  #}
+  function apiPath(path) {
+    return String(path).split('/').map(encodeURIComponent).join('/');
+  }
+
+  function getFile(path) {
+    // ref 를 안 주면 기본 브랜치를 읽는다. 캐시를 타면 방금 한 커밋을 못 볼 수 있어서
+    // 커밋 응답의 sha 를 그대로 들고 가는 쪽을 택했다(saveFile 참고).
+    return gh('/repos/' + S.repo + '/contents/' + apiPath(path))
+      .then(function (data) {
+        return { text: b64decode(data.content || ''), sha: data.sha };
+      })
+      .catch(function (err) {
+        if (err.status === 404) return { text: null, sha: null }; // 아직 없는 파일 = 새로 만든다
+        throw err;
+      });
+  }
+
+  function saveFile(path, text, sha, message) {
+    var body = { message: message, content: b64encode(text) };
+    if (sha) body.sha = sha; // sha 를 같이 보내면 그 사이 남이 고친 경우 409 로 막힌다
+    return gh('/repos/' + S.repo + '/contents/' + apiPath(path),
+              { method: 'PUT', body: JSON.stringify(body) })
+      .then(function (data) { return data && data.content ? data.content.sha : null; });
+  }
+
+  // ── 연결 ────────────────────────────────────────────────────────────────
+  function reflectConnection() {
+    var badge = $('[data-conn-badge]');
+    badge.textContent = S.connected ? 'Connected' : 'Not connected';
+    badge.classList.toggle('is-on', S.connected);
+    $('[data-forget]').hidden = !S.token;
+    $('[data-run]').disabled = !S.canDispatch;
+    var runBadge = $('[data-run-badge]');
+    runBadge.textContent = S.canDispatch ? 'Ready'
+      : (S.connected ? 'Token has no Actions permission' : 'Needs Actions permission');
+    runBadge.classList.toggle('is-on', S.canDispatch);
+    refreshSaveButtons();
+  }
+
+  function connect() {
+    S.repo = $('#adm-repo').value.trim().replace(/^\/+|\/+$/g, '');
+    var typed = $('#adm-token').value.trim();
+    if (typed) S.token = typed;
+    var note = $('[data-conn-note]');
+    if (!S.repo || S.repo.indexOf('/') < 0) {
+      say(note, 'Repository must look like owner/name.', 'bad');
+      return;
+    }
+    if (!S.token) {
+      say(note, 'A token is required to load the live config and save.', 'bad');
+      return;
+    }
+    say(note, 'Connecting…');
+    lsSet(REPO_KEY, S.repo);
+    lsSet(TOKEN_KEY, S.token);
+    $('#adm-token').value = '';
+
+    var who = '';
+    gh('/user')
+      .then(function (user) {
+        who = (user && user.login) || '';
+        return gh('/repos/' + S.repo);
+      })
+      .then(function (repo) {
+        if (!repo || !repo.permissions || !repo.permissions.push) {
+          throw new Error('That token cannot write to ' + S.repo
+            + ' — check the repository is selected and Contents is Read and write.');
+        }
+        S.connected = true;
+        return loadLive();
+      })
+      .then(function () {
+        // Actions 권한은 따로다. 없어도 저장은 되므로 실패를 치명적으로 취급하지 않는다.
+        return gh('/repos/' + S.repo + '/actions/workflows/' + BAKED.workflow)
+          .then(function () { S.canDispatch = true; })
+          .catch(function () { S.canDispatch = false; });
+      })
+      .then(function () {
+        say(note, 'Connected as ' + who + ' · reading ' + S.repo
+          + (S.canDispatch ? '' : ' · Actions permission missing, dispatch disabled'), 'good');
+        reflectConnection();
+        renderSources();
+        renderTopics();
+      })
+      .catch(function (err) {
+        S.connected = false;
+        S.canDispatch = false;
+        say(note, err.message || 'Connection failed.', 'bad');
+        reflectConnection();
+      });
+  }
+
+  {#
+    연결 직후 **반드시** 라이브 파일을 읽는다. 이 페이지에 구워진 값은 마지막 렌더 시점의
+    것이고, config 를 커밋해도 push 트리거는 렌더를 다시 하지 않으므로(daily.yml 주석)
+    구운 값은 얼마든지 낡을 수 있다. 낡은 값 위에 저장하면 지난 편집이 조용히 사라진다.
+  #}
+  function loadLive() {
+    return Promise.all([getFile(BAKED.paths.sources), getFile(BAKED.paths.topics)])
+      .then(function (files) {
+        var srcFile = files[0], topFile = files[1];
+        if (srcFile.text != null) {
+          var parsed = JSON.parse(srcFile.text);
+          S.overlay = parsed && typeof parsed === 'object' ? parsed : { sources: [] };
+          if (!Array.isArray(S.overlay.sources)) S.overlay.sources = [];
+        }
+        S.overlaySha = srcFile.sha;
+        S.overlayClean = JSON.stringify(S.overlay.sources);
+
+        if (topFile.text != null) {
+          var t = JSON.parse(topFile.text);
+          if (t && Array.isArray(t.topics)) {
+            S.topics = t.topics.filter(function (x) { return x && x.key; });
+            S.topicsCap = t.max_per_item || 3;
+            S.topicsComment = t._comment || null;
+          }
+        }
+        S.topicsSha = topFile.sha;
+        S.topicsClean = JSON.stringify({ t: S.topics, c: S.topicsCap });
+        S.baseTopicKeys = S.topics.map(function (x) { return x.key; });
+        S.live = true;
+      });
+  }
+
+  // ── 소스 목록 ───────────────────────────────────────────────────────────
+  function srcDirty() { return JSON.stringify(S.overlay.sources || []) !== S.overlayClean; }
+  function topicsDirty() {
+    return JSON.stringify({ t: S.topics, c: S.topicsCap }) !== S.topicsClean;
+  }
+  function refreshSaveButtons() {
+    var sd = srcDirty(), td = topicsDirty();
+    $('[data-src-dirty]').hidden = !sd;
+    $('[data-src-discard]').hidden = !sd;
+    $('[data-src-save]').disabled = !(sd && S.connected && S.live);
+    $('[data-topic-dirty]').hidden = !td;
+    $('[data-topic-discard]').hidden = !td;
+    $('[data-topic-save]').disabled = !(td && S.connected && S.live);
+    var added = S.topics.filter(function (t) { return S.baseTopicKeys.indexOf(t.key) < 0; });
+    $('[data-backfill]').hidden = added.length === 0;
+    if (added.length) {
+      say($('[data-backfill-note]'), 'New this session: '
+        + added.map(function (t) { return t.key; }).join(', ')
+        + '. Until you backfill, the filter will only show them on items collected from now on.');
+    }
+  }
+
+  function srcOrigin(id) {
+    if (!baseById[id]) return 'custom';
+    var e = overlayEntry(id);
+    return e && Object.keys(e).some(function (k) { return k !== 'id'; }) ? 'edited' : 'curated';
+  }
+
+  function renderSources() {
+    var host = $('[data-src-list]');
+    host.textContent = '';
+    var merged = applyOverlay(BAKED.baseSources, S.overlay.sources);
+    var deletedIds = (S.overlay.sources || [])
+      .filter(function (r) { return r && r.deleted; })
+      .map(function (r) { return r.id; });
+
+    BAKED.categories.forEach(function (cat) {
+      var rows = merged.filter(function (s) { return s.category === cat.key; });
+      if (!rows.length) return;
+      var brk = el('div', 'also-break');
+      brk.appendChild(el('span', 'break-h', cat.label));
+      brk.appendChild(el('span', 'break-rule'));
+      brk.appendChild(el('span', 'break-sub', rows.length + (rows.length === 1 ? ' source' : ' sources')));
+      host.appendChild(brk);
+      rows.forEach(function (s) { host.appendChild(sourceRow(s)); });
+    });
+
+    if (deletedIds.length) {
+      var d = el('div', 'also-break');
+      d.appendChild(el('span', 'break-h', 'Hidden by overlay'));
+      d.appendChild(el('span', 'break-rule'));
+      d.appendChild(el('span', 'break-sub', String(deletedIds.length)));
+      host.appendChild(d);
+      deletedIds.forEach(function (id) {
+        var row = el('div', 'adm-row adm-row-deleted');
+        var idc = el('div', 'adm-row-id');
+        idc.appendChild(el('span', 'src-name', (baseById[id] && baseById[id].name) || id));
+        idc.appendChild(el('span', 'src-id', id));
+        row.appendChild(idc);
+        row.appendChild(el('div', 'adm-row-note',
+          baseById[id] ? 'Hidden from the pipeline. sources.yaml still has it.'
+                       : 'Deleted entry that is not in sources.yaml either.'));
+        var act = el('div', 'adm-row-actions');
+        var restore = el('button', 'adm-btn adm-btn-sm', 'Restore');
+        restore.type = 'button';
+        restore.addEventListener('click', function () {
+          setOverlayEntry(id, null);
+          renderSources();
+        });
+        act.appendChild(restore);
+        row.appendChild(act);
+        host.appendChild(row);
+      });
+    }
+    refreshSaveButtons();
+  }
+
+  function sourceRow(s) {
+    if (S.editingSrc === s.id) return sourceEditor(s, false);
+    var row = el('div', 'adm-row' + (s.enabled ? '' : ' is-off'));
+
+    var idc = el('div', 'adm-row-id');
+    idc.appendChild(el('span', 'src-name', s.name));
+    idc.appendChild(el('span', 'src-id', s.id));
+    row.appendChild(idc);
+
+    var mid = el('div', 'adm-row-mid');
+    mid.appendChild(el('span', 'src-feed src-feed-query', s.feed_url));
+    var flags = el('span', 'src-flags');
+    flags.appendChild(el('span', 'tag', s.parse));
+    flags.appendChild(el('span', 'tag', s.status));
+    if (!s.enabled) flags.appendChild(el('span', 'tag', 'disabled'));
+    if (s.full_text) flags.appendChild(el('span', 'tag', 'full text'));
+    if (s.max_entries) flags.appendChild(el('span', 'tag', 'max ' + s.max_entries));
+    var origin = srcOrigin(s.id);
+    if (origin !== 'curated') flags.appendChild(el('span', 'tag adm-tag-own', origin));
+    mid.appendChild(flags);
+    row.appendChild(mid);
+
+    var act = el('div', 'adm-row-actions');
+    var edit = el('button', 'adm-btn adm-btn-sm', 'Edit');
+    edit.type = 'button';
+    edit.addEventListener('click', function () { S.editingSrc = s.id; renderSources(); });
+    act.appendChild(edit);
+    var del = el('button', 'adm-btn adm-btn-sm adm-btn-danger', 'Delete');
+    del.type = 'button';
+    del.addEventListener('click', function () { deleteSource(s); });
+    act.appendChild(del);
+    row.appendChild(act);
+    return row;
+  }
+
+  {#
+    삭제의 의미가 출처에 따라 다르다:
+      curated(sources.yaml 에 있음) -> 오버레이에 `deleted: true` 를 남긴다. 원본은 그대로라
+                                       되돌릴 수 있고, 그래서 확인창의 문구도 "숨긴다"다.
+      custom(오버레이에만 있음)     -> 항목을 지운다. 그건 진짜 삭제라 되돌릴 수 없다.
+  #}
+  function deleteSource(s) {
+    var isCurated = !!baseById[s.id];
+    var msg = isCurated
+      ? 'Hide "' + s.name + '" from the pipeline?\n\nsources.yaml keeps the original, so you can '
+        + 'restore it here later.'
+      : 'Delete "' + s.name + '"?\n\nThis source only exists in the overlay, so it is gone for good.';
+    if (!window.confirm(msg)) return;
+    if (isCurated) setOverlayEntry(s.id, { id: s.id, deleted: true });
+    else setOverlayEntry(s.id, null);
+    S.editingSrc = null;
+    renderSources();
+  }
+
+  function sourceEditor(s, isNew) {
+    var box = el('div', 'adm-editor');
+    var head = el('div', 'adm-editor-head');
+    head.appendChild(el('span', 'adm-card-h', isNew ? 'New source' : 'Editing ' + s.id));
+    box.appendChild(head);
+
+    var grid = el('div', 'adm-fields');
+    var idIn = textInput(s.id, 'lowercase_with_underscores');
+    idIn.disabled = !isNew;   // id 변경은 수정이 아니라 다른 소스다(OVERRIDABLE 주석 참고)
+    var nameIn = textInput(s.name, 'OpenAI News');
+    var urlIn = textInput(s.feed_url, 'https://example.com/rss.xml');
+    var catIn = selectInput(BAKED.categories, s.category);
+    var parseIn = selectInput(BAKED.parseKinds, s.parse);
+    var statusIn = selectInput(BAKED.statuses.map(function (x) { return { key: x, label: x }; }), s.status);
+    var maxIn = textInput(s.max_entries == null ? '' : s.max_entries, 'default 25');
+    maxIn.inputMode = 'numeric';
+    var notesIn = textInput(s.notes, 'why this source is here');
+    var pathsIn = textInput((s.sitemap_paths || []).join(', '), '/news/');
+    var enabledIn = checkbox(s.enabled);
+    var fullIn = checkbox(s.full_text);
+
+    grid.appendChild(field('ID' + (isNew ? '' : ' (fixed)'), idIn));
+    grid.appendChild(field('Name', nameIn));
+    grid.appendChild(field('Category', catIn));
+    grid.appendChild(field('Parse', parseIn));
+    grid.appendChild(field('Status', statusIn));
+    grid.appendChild(field('Max entries', maxIn));
+    box.appendChild(grid);
+
+    var wide = el('div', 'adm-fields adm-fields-wide');
+    wide.appendChild(field('Feed URL (or search query for gnews)', urlIn));
+    wide.appendChild(field('Notes', notesIn));
+    box.appendChild(wide);
+
+    var pathsField = field('Sitemap paths (comma separated)', pathsIn);
+    // sitemap_paths 는 parse:sitemap 에서만 읽힌다(fetch.fetch_sitemap_source) — 다른
+    // parse 에서 칸을 보여 주면 채우면 뭔가 될 것처럼 보인다.
+    function syncPaths() { pathsField.hidden = parseIn.value !== 'sitemap'; }
+    parseIn.addEventListener('change', syncPaths);
+    syncPaths();
+    var wide2 = el('div', 'adm-fields adm-fields-wide');
+    wide2.appendChild(pathsField);
+    box.appendChild(wide2);
+
+    var checks = el('div', 'adm-checks');
+    checks.appendChild(checkField('Enabled — fetched on every run', enabledIn));
+    checks.appendChild(checkField('Full text — pull the article body (slower, more tokens)', fullIn));
+    box.appendChild(checks);
+
+    var err = el('p', 'adm-note');
+    box.appendChild(err);
+
+    var act = el('div', 'adm-editor-actions');
+    var save = el('button', 'adm-btn adm-btn-primary', isNew ? 'Add source' : 'Apply');
+    save.type = 'button';
+    save.addEventListener('click', function () {
+      var draft = {
+        id: idIn.value.trim(), name: nameIn.value.trim(), feed_url: urlIn.value.trim(),
+        category: catIn.value, parse: parseIn.value, status: statusIn.value,
+        enabled: enabledIn.checked, full_text: fullIn.checked,
+        notes: notesIn.value.trim(),
+        max_entries: maxIn.value.trim() === '' ? null : parseInt(maxIn.value.trim(), 10),
+        sitemap_paths: pathsIn.value.split(',').map(function (x) { return x.trim(); })
+          .filter(function (x) { return x; })
+      };
+      var taken = Object.keys(baseById).concat(
+        (S.overlay.sources || []).map(function (r) { return r.id; }));
+      var problem = RULES.validateSource(draft, isNew, taken);
+      if (problem) { say(err, problem, 'bad'); return; }
+      commitSourceDraft(draft, isNew);
+    });
+    act.appendChild(save);
+    var cancel = el('button', 'adm-btn', 'Cancel');
+    cancel.type = 'button';
+    cancel.addEventListener('click', function () {
+      S.editingSrc = null;
+      renderSources();
+    });
+    act.appendChild(cancel);
+    box.appendChild(act);
+    return box;
+  }
+
+  {#
+    curated 소스는 **바뀐 필드만** 오버레이에 남긴다. 전체를 복사해 두면 나중에
+    sources.yaml 쪽을 고쳐도 오버레이가 옛 값으로 계속 덮어써서, 원본을 고쳤는데 아무 일도
+    안 일어나는 상태가 된다(디버그하기 아주 어려운 종류다).
+  #}
+  function commitSourceDraft(d, isNew) {
+    var base = baseById[d.id];
+    if (base && !isNew) {
+      var patch = { id: d.id };
+      OVERRIDABLE.forEach(function (k) {
+        var a = d[k], b = base[k];
+        if (JSON.stringify(a) !== JSON.stringify(b)) patch[k] = a;
+      });
+      setOverlayEntry(d.id, Object.keys(patch).length > 1 ? patch : null);
+    } else {
+      setOverlayEntry(d.id, d);
+    }
+    S.editingSrc = null;
+    renderSources();
+  }
+
+  // ── 토픽 ────────────────────────────────────────────────────────────────
+  function renderTopics() {
+    var host = $('[data-topic-list]');
+    host.textContent = '';
+    $('[data-topic-cap]').value = S.topicsCap;
+
+    var head = el('div', 'adm-topic-head');
+    ['Key', 'Label (shown on the pill)', 'Gloss (sent to the model)', ''].forEach(function (h) {
+      head.appendChild(el('span', null, h));
+    });
+    host.appendChild(head);
+
+    S.topics.forEach(function (t, idx) {
+      if (S.editingTopic === t.key) { host.appendChild(topicEditor(t, false, idx)); return; }
+      var row = el('div', 'adm-topic-row');
+      row.appendChild(el('span', 'src-id', t.key));
+      row.appendChild(el('span', 'adm-topic-label', t.label));
+      var gl = el('span', 'adm-topic-gloss', t.gloss || '');
+      if (!t.gloss) { gl.textContent = 'no gloss — the model has to guess'; gl.classList.add('is-bad'); }
+      row.appendChild(gl);
+
+      var act = el('div', 'adm-row-actions');
+      var up = el('button', 'adm-btn adm-btn-sm', '↑');
+      up.type = 'button'; up.disabled = idx === 0;
+      up.title = 'Move up — order breaks ties between pills with the same count';
+      up.addEventListener('click', function () { moveTopic(idx, -1); });
+      act.appendChild(up);
+      var down = el('button', 'adm-btn adm-btn-sm', '↓');
+      down.type = 'button'; down.disabled = idx === S.topics.length - 1;
+      down.addEventListener('click', function () { moveTopic(idx, 1); });
+      act.appendChild(down);
+      var edit = el('button', 'adm-btn adm-btn-sm', 'Edit');
+      edit.type = 'button';
+      edit.addEventListener('click', function () { S.editingTopic = t.key; renderTopics(); });
+      act.appendChild(edit);
+      var del = el('button', 'adm-btn adm-btn-sm adm-btn-danger', 'Delete');
+      del.type = 'button';
+      del.addEventListener('click', function () { deleteTopic(t, idx); });
+      act.appendChild(del);
+      row.appendChild(act);
+      host.appendChild(row);
+    });
+    refreshSaveButtons();
+  }
+
+  function moveTopic(idx, dir) {
+    var to = idx + dir;
+    if (to < 0 || to >= S.topics.length) return;
+    var x = S.topics[idx];
+    S.topics[idx] = S.topics[to];
+    S.topics[to] = x;
+    renderTopics();
+  }
+
+  {#
+    토픽을 지우면 그 필터 pill 이 사라진다. **items.topics 의 과거 값은 그대로 남는다** —
+    render._annotate 와 llm.clean_topics 가 어휘에 없는 값을 버리므로 화면에서만 조용히
+    빠진다. 되돌리려면 같은 key 로 다시 넣으면 되고, 그러면 옛 태그가 다시 살아난다.
+    그 사실을 확인창에 적는다 — 안 적으면 "지웠는데 DB 가 오염된 건가?"를 매번 다시 조사한다.
+  #}
+  function deleteTopic(t, idx) {
+    if (!window.confirm('Delete the "' + t.label + '" topic?\n\nThe pill disappears from the '
+        + 'filter. Items already tagged keep the tag in the database — it is just ignored, so '
+        + 'adding the same key back restores them.')) return;
+    S.topics.splice(idx, 1);
+    S.editingTopic = null;
+    renderTopics();
+  }
+
+  function topicEditor(t, isNew, idx) {
+    var box = el('div', 'adm-editor');
+    box.appendChild(el('span', 'adm-card-h', isNew ? 'New topic' : 'Editing ' + t.key));
+    var grid = el('div', 'adm-fields');
+    var keyIn = textInput(t.key, 'lowercase_key');
+    var labelIn = textInput(t.label, 'Chips & datacenters');
+    grid.appendChild(field('Key', keyIn));
+    grid.appendChild(field('Label', labelIn));
+    box.appendChild(grid);
+    var wide = el('div', 'adm-fields adm-fields-wide');
+    var glossIn = textInput(t.gloss, 'semiconductors, GPUs, datacenters, compute infrastructure');
+    wide.appendChild(field('Gloss — where the topic starts and stops', glossIn));
+    box.appendChild(wide);
+    var err = el('p', 'adm-note');
+    box.appendChild(err);
+
+    var act = el('div', 'adm-editor-actions');
+    var save = el('button', 'adm-btn adm-btn-primary', isNew ? 'Add topic' : 'Apply');
+    save.type = 'button';
+    save.addEventListener('click', function () {
+      var d = { key: keyIn.value.trim(), label: labelIn.value.trim(), gloss: glossIn.value.trim() };
+      var problem = RULES.validateTopic(d, S.topics, isNew ? -1 : idx);
+      if (problem) { say(err, problem, 'bad'); return; }
+      if (!d.gloss) {
+        if (!window.confirm('Save "' + d.key + '" with no gloss?\n\nThe label gets sent to the '
+            + 'model instead, which usually classifies worse.')) return;
+      }
+      if (isNew) S.topics.push(d); else S.topics[idx] = d;
+      S.editingTopic = null;
+      renderTopics();
+    });
+    act.appendChild(save);
+    var cancel = el('button', 'adm-btn', 'Cancel');
+    cancel.type = 'button';
+    cancel.addEventListener('click', function () { S.editingTopic = null; renderTopics(); });
+    act.appendChild(cancel);
+    box.appendChild(act);
+    return box;
+  }
+
+  // ── 저장 ────────────────────────────────────────────────────────────────
+  {#
+    파일을 통째로 재생성한다(부분 패치 아님). `_comment` 는 손으로 쓴 설명이라 반드시
+    보존한다 — 라이브 파일에서 읽은 게 있으면 그걸, 없으면 구운 값을 되쓴다.
+  #}
+  function sourcesFileText() {
+    var doc = { _comment: S.overlay._comment || (BAKED.overlay || {})._comment,
+                sources: S.overlay.sources || [] };
+    if (!doc._comment) delete doc._comment;
+    return JSON.stringify(doc, null, 2) + '\n';
+  }
+  function topicsFileText() {
+    var doc = {};
+    var c = S.topicsComment || BAKED.topicsComment;
+    if (c) doc._comment = c;
+    doc.max_per_item = S.topicsCap;
+    doc.topics = S.topics;
+    return JSON.stringify(doc, null, 2) + '\n';
+  }
+
+  function saveSources() {
+    var btn = $('[data-src-save]');
+    var note = $('[data-conn-note]');
+    btn.disabled = true;
+    say(note, 'Committing ' + BAKED.paths.sources + '…');
+    saveFile(BAKED.paths.sources, sourcesFileText(), S.overlaySha,
+             'admin: update source overlay')
+      .then(function (sha) {
+        S.overlaySha = sha;
+        S.overlayClean = JSON.stringify(S.overlay.sources || []);
+        say(note, 'Saved ' + BAKED.paths.sources
+          + '. The pipeline picks it up on the next scheduled run — or dispatch it below.', 'good');
+        refreshSaveButtons();
+      })
+      .catch(function (err) { saveFailed(note, err, 'src'); });
+  }
+
+  function saveTopics() {
+    var note = $('[data-conn-note]');
+    $('[data-topic-save]').disabled = true;
+    say(note, 'Committing ' + BAKED.paths.topics + '…');
+    saveFile(BAKED.paths.topics, topicsFileText(), S.topicsSha, 'admin: update filter topics')
+      .then(function (sha) {
+        S.topicsSha = sha;
+        S.topicsClean = JSON.stringify({ t: S.topics, c: S.topicsCap });
+        say(note, 'Saved ' + BAKED.paths.topics + '. New topics apply to items collected from '
+          + 'the next run; the archive keeps the tags it already has.', 'good');
+        refreshSaveButtons();
+      })
+      .catch(function (err) { saveFailed(note, err, 'topic'); });
+  }
+
+  {#
+    409 는 우리가 sha 를 보내서 생기는 것이다 — 그 사이 파일이 바뀌었다는 뜻이고, 덮어쓰면
+    남의(또는 다른 탭의) 편집이 사라진다. 그래서 자동 재시도하지 않고 새로고침을 요구한다.
+  #}
+  function saveFailed(note, err, which) {
+    var msg = err.message || 'Save failed.';
+    if (err.status === 409 || /does not match|sha/i.test(msg)) {
+      msg = 'The file changed on GitHub since this page loaded it. Reload and reapply your edits '
+          + 'so you do not overwrite the other change.';
+    } else if (err.status === 403 || err.status === 404) {
+      msg = 'Refused (' + err.status + '). The token needs Contents: Read and write on this '
+          + 'repository. ' + msg;
+    }
+    say(note, msg, 'bad');
+    refreshSaveButtons();
+    if (which === 'src') $('[data-src-save]').disabled = !(srcDirty() && S.connected && S.live);
+    else $('[data-topic-save]').disabled = !(topicsDirty() && S.connected && S.live);
+  }
+
+  function dispatch() {
+    var note = $('[data-run-note]');
+    if (!window.confirm('Run the full pipeline now?\n\nThis collects, classifies and summarises '
+        + 'with Gemini, so it costs API credit — the same as the daily scheduled run.')) return;
+    $('[data-run]').disabled = true;
+    say(note, 'Dispatching…');
+    gh('/repos/' + S.repo + '/actions/workflows/' + BAKED.workflow + '/dispatches',
+       { method: 'POST', body: JSON.stringify({ ref: 'main' }) })
+      .then(function () {
+        say(note, 'Dispatched. Watch it under the Actions tab — a full run is usually under ten '
+          + 'minutes.', 'good');
+      })
+      .catch(function (err) {
+        say(note, (err.message || 'Dispatch failed.')
+          + ' (This needs Actions: Read and write on the token.)', 'bad');
+      })
+      .then(function () { $('[data-run]').disabled = !S.canDispatch; });
+  }
+
+  // ── 배선 ────────────────────────────────────────────────────────────────
+  $('[data-connect]').addEventListener('click', connect);
+  $('#adm-token').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); connect(); }
+  });
+  $('[data-forget]').addEventListener('click', function () {
+    lsDel(TOKEN_KEY);
+    S.token = ''; S.connected = false; S.canDispatch = false; S.live = false;
+    say($('[data-conn-note]'), 'Token removed from this browser.', 'good');
+    reflectConnection();
+  });
+  $('[data-src-add]').addEventListener('click', function () {
+    var host = $('[data-src-list]');
+    var blank = { id: '', name: '', feed_url: '', category: BAKED.categories[0].key,
+                  parse: 'easy', status: 'verify', enabled: true, full_text: false,
+                  sitemap_paths: ['/news/'], max_entries: null, notes: '' };
+    var ed = sourceEditor(blank, true);
+    host.insertBefore(ed, host.firstChild);
+    ed.scrollIntoView({ block: 'nearest' });
+  });
+  $('[data-topic-add]').addEventListener('click', function () {
+    var host = $('[data-topic-list]');
+    var ed = topicEditor({ key: '', label: '', gloss: '' }, true, -1);
+    host.insertBefore(ed, host.firstChild);
+    ed.scrollIntoView({ block: 'nearest' });
+  });
+  $('[data-topic-cap]').addEventListener('change', function (e) {
+    var v = parseInt(e.target.value, 10);
+    S.topicsCap = isFinite(v) && v > 0 ? v : 3;
+    e.target.value = S.topicsCap;
+    refreshSaveButtons();
+  });
+  $('[data-src-save]').addEventListener('click', saveSources);
+  $('[data-topic-save]').addEventListener('click', saveTopics);
+  $('[data-src-discard]').addEventListener('click', function () {
+    S.overlay.sources = JSON.parse(S.overlayClean);
+    S.editingSrc = null;
+    renderSources();
+  });
+  $('[data-topic-discard]').addEventListener('click', function () {
+    var was = JSON.parse(S.topicsClean);
+    S.topics = was.t; S.topicsCap = was.c;
+    S.editingTopic = null;
+    renderTopics();
+  });
+  $('[data-run]').addEventListener('click', dispatch);
+
+  var tabs = document.querySelectorAll('[data-tab]');
+  for (var i = 0; i < tabs.length; i++) (function (btn) {
+    btn.addEventListener('click', function () {
+      var want = btn.getAttribute('data-tab');
+      for (var j = 0; j < tabs.length; j++) {
+        var on = tabs[j] === btn;
+        tabs[j].classList.toggle('active', on);
+        tabs[j].setAttribute('aria-selected', on ? 'true' : 'false');
+      }
+      var panels = document.querySelectorAll('[data-panel]');
+      for (var k = 0; k < panels.length; k++) {
+        panels[k].hidden = panels[k].getAttribute('data-panel') !== want;
+      }
+    });
+  })(tabs[i]);
+
+  // 저장 안 한 편집을 들고 페이지를 떠나려 할 때. 커밋 전이면 전부 브라우저 메모리에만 있다.
+  window.addEventListener('beforeunload', function (e) {
+    if (srcDirty() || topicsDirty()) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  reflectConnection();
+  renderSources();
+  renderTopics();
+  if (S.token && S.repo) {
+    // 토큰이 이미 있으면 바로 연결한다 — 새로고침마다 다시 누르게 하지 않는다.
+    connect();
+  }
+})();
+</script>
+</body></html>

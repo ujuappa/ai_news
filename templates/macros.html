@@ -27,6 +27,14 @@
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="{{ asset_prefix }}feed.xml">
 
 <script>(function(){var PALETTES={{ palettes_json|safe }};var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:{{ default_theme }};function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+{#
+  저장·팔로우(2026-08-11). **모든 지면에 넣는다** — 저장 버튼이 있는 지면(홈·카테고리)뿐
+  아니라 마스트헤드의 `Saved n` 카운트가 어디서나 맞아야 하고, saved.html 은 이 파일의
+  API 로 그려진다. 저장 버튼이 없는 지면에서는 조용히 아무 일도 하지 않는다.
+  `<head>` 에서 동기로 읽어 두면 body 끝의 topic_filter_script 가 window.AIDigestFollow 를
+  이미 볼 수 있다(Following 버튼이 그걸 쓴다).
+#}
+<script src="{{ asset_prefix }}static/follow.js"></script>
 {%- endmacro %}
 
 {#
@@ -149,11 +157,45 @@
   for(var k=0;k<pills.length;k++)(function(b){
     b.addEventListener('click',function(){toggle(b.getAttribute('data-topic'));});
   })(pills[k]);
+  {#
+    `?topics=chips,money` 로 들어오면 그 필터를 켠 상태로 시작한다. saved.html 의 저장한
+    필터("Open in digest")가 이 경로를 쓴다 — 프리셋은 브라우저에만 있고 서버는 모르므로,
+    지면을 미리 걸러서 구울 방법이 없다. 없는 토픽은 버린다(그날 안 붙은 토픽일 수 있다).
+  #}
+  try{
+    var want=(new URLSearchParams(location.search).get('topics')||'').split(',');
+    for(var q=0;q<want.length;q++){
+      var t=want[q].trim();
+      if(t&&scope.querySelector('[data-topic="'+t+'"]')&&on.indexOf(t)<0) on.push(t);
+    }
+    if(on.length){
+      paint();
+      if(drawer){drawer.removeAttribute('hidden');}   {# 왜 걸러졌는지 보이게 서랍을 연다 #}
+      if(drawerBtn){drawerBtn.setAttribute('aria-expanded','true');drawerBtn.classList.add('active');}
+    }
+  }catch(e){/* URLSearchParams 가 없는 아주 오래된 브라우저면 필터를 안 걸고 전체를 보여준다 */}
   if(drawerBtn&&drawer) drawerBtn.addEventListener('click',function(){
     var open=drawer.hasAttribute('hidden');
     if(open) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden','');
     drawerBtn.setAttribute('aria-expanded',open?'true':'false');
     drawerBtn.classList.toggle('active',open);
+  });
+  {#
+    "Following" = 팔로우한 토픽으로 선택을 **교체**한다(누적이 아니라). 누적이면 두 번
+    누를 때 뭐가 걸려 있는지 알 수 없고, 이 버튼의 뜻은 "내가 따라가는 것만 보기"다.
+    이미 그 상태면 다시 눌러 전체로 되돌린다(토글) — 되돌릴 길이 chip 뿐이면 팔로우가
+    많을 때 하나씩 지워야 한다.
+    follow.js 가 없거나(자산 누락) 저장소가 막힌 경우 이 버튼은 숨은 채로 남는다.
+  #}
+  var followApply=scope.querySelector('[data-follow-apply]');
+  if(followApply&&window.AIDigestFollow) followApply.addEventListener('click',function(){
+    var want=window.AIDigestFollow.read().topics.filter(function(t){
+      return scope.querySelector('[data-topic="'+t+'"]');   // 오늘 안 붙은 토픽은 걸 수 없다
+    });
+    var same=want.length===on.length&&want.every(function(t){return on.indexOf(t)>=0;});
+    on=same?[]:want;
+    followApply.classList.toggle('active',!same);
+    paint();
   });
 })();</script>
 {%- endmacro %}
@@ -186,7 +228,7 @@
   일도 안 일어난다). 6a 에는 `Following 8` · `Monthly` pill 이 있으니, 백엔드가 생기면
   아래 nav 의 형제 <a class="mh-pill"> 로 넣으면 된다.
 #}
-{% macro masthead(period_meta, total_records, nav_links, archive_link, search_href, show_search=true, show_meta=true) -%}
+{% macro masthead(period_meta, total_records, nav_links, archive_link, search_href, show_search=true, show_meta=true, asset_prefix='') -%}
 <header class="mh">
   <div class="mh-top">
     <div class="mh-id">
@@ -207,6 +249,13 @@
         <a class="mh-pill {{ 'active' if link.active else '' }}" href="{{ link.href }}">{{ link.label }} {{ link.count }}</a>
         {% endfor %}
         <a class="mh-pill" href="{{ archive_link.href }}">Archive</a>
+        {#
+          Saved 는 **구현이 있는** pill 이다(follow.js + saved.html) — 6a 의 `Following 8` ·
+          `Monthly` 를 넣지 않은 이유와 구분할 것. 그 둘은 지금도 코드가 없어서 안 넣는다.
+          건수는 서버가 모른다(브라우저 localStorage 에만 있다) → 비워 두고 follow.js 가 채운다.
+          0건이면 숫자가 안 붙는다.
+        #}
+        <a class="mh-pill" href="{{ asset_prefix }}saved.html">Saved <span data-saved-count></span></a>
       </nav>
     </div>
   </div>
@@ -318,6 +367,15 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
     Filters<span class="drawer-btn-n" data-filter-count></span>
   </button>
+  {#
+    "내가 팔로우한 토픽만" 한 번에 적용. 팔로우가 0개면 숨는다(JS 가 켠다) — 아무것도 안
+    걸리는 버튼을 보여 주면 눌러 보고 나서야 빈 목록임을 알게 된다.
+    팔로우한 토픽을 **자동으로** 적용하지는 않는다: 홈을 열 때마다 지면 절반이 조용히
+    사라지면 그건 필터가 아니라 고장으로 읽힌다. 적용은 항상 사용자가 누른 결과다.
+  #}
+  <button type="button" class="follow-apply" data-follow-apply hidden>
+    Following<span class="follow-apply-n" data-follow-apply-n></span>
+  </button>
   <div class="chip-row" data-chip-row></div>
   <span class="filter-note">{{ filters[0].count }} stories</span>
 </div>
@@ -326,13 +384,108 @@
     <span class="drawer-h">Topic</span>
     <div class="drawer-pills">
       {% for f in filters if f.key != 'all' %}
-      <button type="button" class="topic-pill" data-filter-btn data-topic="{{ f.key }}"
-              data-label="{{ f.label }}" aria-pressed="false">{{ f.label }} {{ f.count }}</button>
+      {#
+        pill 안에 별을 **중첩 버튼으로 두지 않는다** — `<button>` 안의 `<button>` 은 HTML
+        위반이라 브라우저가 DOM 을 갈라 놓는다. 그래서 pill 과 별을 형제로 두고 묶음
+        (`.pill-pair`)으로 감싼다. 별의 click 은 stopPropagation 한다(follow.js) — 팔로우를
+        누른 것이 필터 토글까지 켜면 안 된다.
+      #}
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="{{ f.key }}"
+                data-label="{{ f.label }}" aria-pressed="false">{{ f.label }} {{ f.count }}</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="{{ f.key }}"
+                aria-pressed="false" title="Follow {{ f.label }}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       {% endfor %}
     </div>
+    <p class="drawer-note">
+      The star follows a topic. Following is remembered in this browser only and never
+      auto-hides stories — use the Following button above to apply it.
+    </p>
   </div>
 </div>
 {%- endif %}
+{%- endmacro %}
+
+{#
+  저장(북마크) 버튼 — 2026-08-11 신설.
+
+  **서버가 굽는다.** 필터 서랍과 같은 방식이다(JS 가 상태만 칠한다). JS 로 주입하지 않는
+  이유: 지면 4종 · 항목 4계층에 슬롯을 심고 나면 주입 순서/타이밍 버그가 붙는데, 마크업으로
+  두면 렌더 결과를 테스트가 그대로 검사할 수 있다.
+
+  저장에 필요한 값이 전부 data-* 로 들어간다. 저장 페이지는 **정적 HTML 을 다시 읽을 수
+  없으므로**(localStorage 만 본다) 목록을 그리는 데 필요한 최소 정보를 저장 시점에 같이
+  가져가야 한다 — 제목·URL·날짜·소스·significance·토픽. 이게 없으면 저장 목록이 id 만 남는다.
+
+  `data-item-title` 에 `display_title`(자른 제목)이 아니라 원제목을 쓰지 않는 이유는 없다 —
+  둘 중 화면에 나가는 건 display_title 이고, 저장 목록도 같은 걸 보여야 같은 기사로 알아본다.
+
+  ⚠️ `<a>` 안에 넣지 말 것. `<a>` 안의 `<button>` 은 HTML 위반이고(대화형 콘텐츠 중첩)
+     브라우저가 DOM 을 재배치해서 버튼이 링크 밖으로 튀어나온다. `.brief-row` 는 그래서
+     2026-08-11 에 `<a>` -> `<div>` 로 바꿨다(home.html 주석 참고).
+#}
+{% macro save_btn(it, compact=false) -%}
+<button type="button" class="save-btn{% if compact %} save-btn-compact{% endif %}" data-save
+        data-item-id="{{ it.save_key }}"
+        data-item-title="{{ it.display_title or it.title }}"
+        data-item-url="{{ it.url }}"
+        data-item-date="{{ it.digest_date }}"
+        data-item-source="{{ it.source_base or it.source_name }}"
+        data-item-sig="{{ '%.2f'|format(it.significance) }}"
+        data-item-topics="{{ it.topic_attr }}"
+        aria-pressed="false">
+  {#- 아이콘은 채워짐/빈 상태를 CSS 가 fill 로 바꾼다(별 두 개를 두지 않는다). #}
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+{%- endmacro %}
+
+{#
+  유틸리티 페이지(Sources · Saved · Admin)의 공용 헤더. 2026-08-11 신설.
+
+  다이제스트 지면의 `.mh` 마스트헤드를 안 쓰는 이유: 그 매크로는 그날의 카테고리 네비와
+  건수(nav_links)를 받는데, 이 세 페이지는 특정 다이제스트에 매여 있지 않아서 넘길 값이
+  없다. 아카이브 인덱스가 이미 같은 이유로 `.simple-header` 를 쓰고 있으므로 그걸 따른다.
+
+  Admin 링크는 **Sources·Saved·Admin 안에서만** 보인다(`show_admin`). 홈에 두지 않는 이유는
+  숨기려는 게 아니라 — 공개 사이트라 어차피 URL 로 열 수 있고 토큰 없이는 아무것도 못 한다 —
+  매일 읽는 지면에 편집 도구를 얹지 않으려는 것뿐이다.
+#}
+{% macro util_header(sub, active, asset_prefix='', show_admin=false) -%}
+<header class="simple-header">
+  <div class="simple-header-id">
+    <a class="wordmark" href="{{ asset_prefix }}index.html">AI Digest</a>
+    <span class="simple-header-sub">{{ sub }}</span>
+  </div>
+  <nav>
+    <a href="{{ asset_prefix }}index.html"{% if active == 'home' %} class="accent"{% endif %}>Today</a>
+    <a href="{{ asset_prefix }}sources.html"{% if active == 'sources' %} class="accent"{% endif %}>Sources</a>
+    <a href="{{ asset_prefix }}saved.html"{% if active == 'saved' %} class="accent"{% endif %}>Saved</a>
+    <a href="{{ asset_prefix }}archive/index.html"{% if active == 'archive' %} class="accent"{% endif %}>Archive</a>
+    {% if show_admin %}<a href="{{ asset_prefix }}admin.html"{% if active == 'admin' %} class="accent"{% endif %}>Admin</a>{% endif %}
+  </nav>
+</header>
+{%- endmacro %}
+
+{#
+  통계 밴드. archive_week 가 쓰던 마크업을 매크로로 뽑았다(소스 페이지가 같은 걸 쓴다).
+  각진 모양은 의도다 — digest.css "Boncom 시스템" 블록 주석 참고.
+#}
+{% macro stat_band(cols) -%}
+<div class="stat-band">
+  {% for c in cols %}
+  <div class="stat-col">
+    <div class="stat-num{% if c.accent %} accent{% endif %}">{{ c.num }}</div>
+    <div class="stat-label">{{ c.label }}</div>
+  </div>
+  {% endfor %}
+</div>
 {%- endmacro %}
 
 {#

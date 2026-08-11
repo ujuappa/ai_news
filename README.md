@@ -5,13 +5,17 @@
 ## 구조
 
 ```
-sources.yaml   소스 목록 + 설정 (검증 완료 2026-07-25)
-config.py      sources.yaml 로드, settings/모델/경로
+sources.yaml   소스 목록 + 설정 (검증 완료 2026-07-25). **손 편집 전용** — 주석이 결정 근거다
+sources.custom.json  소스 오버레이 (기계 소유: output/admin.html 이 GitHub API 로 덮어쓴다)
+topics.json    필터 토픽 어휘 key/label/gloss (기계 소유, 같은 경로로 편집)
+config.py      위 3개 로드, settings/모델/경로
 fetch.py       feedparser 수집 + 정규화 (HF <link> 누락 → guid 폴백)
 dedup.py       임베딩 코사인: 배치 내 클러스터링 + cross-day 중복 스킵
 llm.py         Gemini API: 분류/요약(2-3문장, 숫자 보존)/유의성/major 플래그
 store.py       SQLite: 아이템 히스토리 + seen-store + 다이제스트 기록
-render.py      Jinja2 → index.html + 날짜별 아카이브 + 아카이브 인덱스
+render.py      Jinja2 → index.html + 날짜별 아카이브 + 아카이브 인덱스 + sources/admin/saved
+static/follow.js       저장(북마크)·토픽 팔로우·저장한 필터 — localStorage 전용, 서버 없음
+static/admin_rules.js  오버레이 병합·검증 규칙. config._apply_overlay 의 사본(테스트가 대조)
 pipeline.py    오케스트레이터 (엔트리포인트)
 backfill_embeddings.py  아카이브 임베딩 소급 생성 — threading 용, API 비용 0, 재실행 안전
 .github/workflows/daily.yml   매일 크론 실행 + 커밋
@@ -61,6 +65,24 @@ RSS 피드도 같이 나온다 — `output/feed.xml` (**다이제스트 1개 = �
 2. Settings → Pages → branch=main, folder=`/output`
 3. `.github/workflows/daily.yml` 이 매일 돌면서 `output/` 를 커밋 → Pages 갱신
    (cron 시각 `0 14 * * *` UTC 는 취향대로 조정)
+
+## 소스·토픽 편집 (2026-08-11)
+
+`output/sources.html` 이 소스 디렉터리(읽기 전용, 집계는 DB 실측)이고, 편집은 `output/admin.html`
+에서 한다. **브라우저가 GitHub Contents API 로 직접 커밋한다** — 서버가 없으므로 그것 말고는
+정적 사이트에서 설정을 고칠 방법이 없다.
+
+- 토큰은 **산출물에 들어가지 않는다.** 쓰려면 fine-grained PAT 을 admin 화면에 붙여넣어야 하고,
+  그 값은 그 브라우저의 localStorage 에만 남는다. 권한은 **이 레포 하나 + Contents: Read and
+  write** 로 충분하다(`Actions: Read and write` 는 "Run pipeline now" 버튼에만 필요).
+- 커밋 대상은 `sources.custom.json` 과 `topics.json` 뿐이다. `sources.yaml` 은 주석 240줄이
+  결정 근거라서 **기계가 절대 다시 쓰지 않는다.**
+- ⚠️ **설정을 커밋해도 뉴스를 다시 걷지는 않는다.** `daily.yml` 의 push 트리거는 파이프라인을
+  일부러 건너뛴다(디자인 배포를 무료로 만드는 장치). 새 소스는 다음 cron(14:00 UTC)이나
+  admin 의 "Run pipeline now" 뒤에 반영된다.
+
+`output/saved.html` 은 저장한 기사·팔로우한 토픽·저장한 필터를 관리한다. 전부 **이 브라우저의
+localStorage 에만** 있다 — 계정이 없으니 기기 간 동기화도 없고, 사이트 데이터를 지우면 사라진다.
 
 ## 설계 메모 (반영된 것)
 

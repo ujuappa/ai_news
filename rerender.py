@@ -71,6 +71,11 @@ def run():
 
     render.render_archive_index(store.list_digests(), config.OUTPUT_DIR)
     render.render_search_page(all_items, config.OUTPUT_DIR)
+    repo = config.github_repo()
+    render.render_sources_page(cfg.sources, store.source_stats(), config.OUTPUT_DIR,
+                               total_records=total_records, repo=repo)
+    render.render_admin_page(config.OUTPUT_DIR, repo=repo)
+    render.render_saved_page(config.OUTPUT_DIR, total_records=total_records)
     render.render_feed(store.recent_digest_entries(settings.feed_max_digests),
                        config.OUTPUT_DIR, settings.site_url)
 

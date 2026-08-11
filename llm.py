@@ -17,7 +17,7 @@ from google.genai import types
 
 import config
 import fetch
-from config import CATEGORY_LABELS, MAX_TOPICS_PER_ITEM, TOPIC_ORDER
+from config import CATEGORY_LABELS, MAX_TOPICS_PER_ITEM, TOPIC_GLOSS, TOPIC_ORDER
 
 MAX_RETRIES = 3     # 배치당 총 시도 횟수
 BACKOFF_BASE = 2.0  # 재시도 대기: 2s -> 4s
@@ -114,25 +114,15 @@ significance. Return ONLY a JSON array, no prose, no markdown fences. Each eleme
 {{"id": "...", "category": "...", "summary": "...", "significance": 0.0, "is_major": false,
  "headline": "...", "topics": ["..."]}}"""
 
-# 토픽 설명은 프롬프트에만 쓰는 것이라 config 가 아니라 여기 둔다(config.TOPIC_LABELS 는
-# 화면에 나가는 짧은 라벨이고, 모델에는 경계를 알려줄 문장이 필요하다).
-_TOPIC_GLOSS = {
-    "code": "software engineering, developer tools, programming",
-    "money": "funding, valuations, IPOs, acquisitions, stock moves",
-    "chips": "semiconductors, GPUs, datacenters, compute infrastructure",
-    "government": "regulation, legislation, courts, defense, the public sector",
-    "security": "cyberattacks, vulnerabilities, fraud, model misuse",
-    "science": "physics, chemistry, biology, mathematics, climate research",
-    "health": "medicine, clinical care, drug discovery, patients",
-    "art": "image generation, design, visual artists",
-    "music": "music generation, audio, voice",
-    "video": "video generation, film, animation",
-    "robotics": "robots, drones, embodied AI",
-    "cars": "autonomous driving, vehicles",
-    "education": "schools, students, teaching, training people",
-}
+# 토픽 설명(gloss)은 프롬프트 전용이다 — config.TOPIC_LABELS 는 화면에 나가는 짧은 라벨이고,
+# 모델에는 경계를 알려줄 문장이 필요하다. 2026-08-11 부터 어휘와 함께 `topics.yaml` 에 살고
+# (admin 페이지가 브라우저에서 편집하므로) 여기서는 읽기만 한다.
+# `TOPIC_GLOSS[key]` 대신 `.get(key, key)` 인 이유: 사용자가 admin 에서 gloss 를 비운 토픽을
+# 추가해도 임포트 시점에 KeyError 로 죽지 않아야 한다(config 가 label 로 폴백하지만, 그 폴백이
+# 앞으로도 있을 거라고 이 모듈이 가정하지는 않는다).
+_TOPIC_GLOSS = TOPIC_GLOSS
 SYSTEM = SYSTEM.format(topics="\n".join(
-    f"     {key} — {_TOPIC_GLOSS[key]}" for key in TOPIC_ORDER))
+    f"     {key} — {TOPIC_GLOSS.get(key, key)}" for key in TOPIC_ORDER))
 
 # 이미지 카탈로그가 있을 때만 SYSTEM 뒤에 붙는 규칙. 별도 호출이 아니라 **같은 배치에 얹는다** —
 # 판정에 필요한 정보(제목/본문)가 이미 프롬프트에 있어서 추가 호출은 순수 낭비다.
@@ -322,7 +312,7 @@ def classify_topics(items: list[dict], batch_size: int = 60,
     client = genai.Client()
     model_name = model or config.MODEL
     system = TOPIC_ONLY_SYSTEM.format(topics="\n".join(
-        f"  {key} — {_TOPIC_GLOSS[key]}" for key in TOPIC_ORDER))
+        f"  {key} — {TOPIC_GLOSS.get(key, key)}" for key in TOPIC_ORDER))
     out: dict[str, list[str]] = {}
     batches = [items[i:i + batch_size] for i in range(0, len(items), batch_size)]
     for n, chunk in enumerate(batches, 1):

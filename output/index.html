@@ -5,6 +5,8 @@
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="feed.xml">
 
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+
+<script src="static/follow.js"></script>
 <title>AI Digest — Tuesday · 11 August 2026 · 18 stories</title>
 <link rel="stylesheet" href="static/digest.css">
 </head><body>
@@ -35,6 +37,8 @@
         <a class="mh-pill " href="policy_business.html">Policy &amp; business 10</a>
         
         <a class="mh-pill" href="archive/index.html">Archive</a>
+        
+        <a class="mh-pill" href="saved.html">Saved <span data-saved-count></span></a>
       </nav>
     </div>
   </div>
@@ -114,6 +118,10 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
     Filters<span class="drawer-btn-n" data-filter-count></span>
   </button>
+  
+  <button type="button" class="follow-apply" data-follow-apply hidden>
+    Following<span class="follow-apply-n" data-follow-apply-n></span>
+  </button>
   <div class="chip-row" data-chip-row></div>
   <span class="filter-note">18 stories</span>
 </div>
@@ -122,25 +130,77 @@
     <span class="drawer-h">Topic</span>
     <div class="drawer-pills">
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="security"
-              data-label="Security" aria-pressed="false">Security 9</button>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="government"
-              data-label="Government &amp; law" aria-pressed="false">Government &amp; law 4</button>
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="security"
+                data-label="Security" aria-pressed="false">Security 9</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="security"
+                aria-pressed="false" title="Follow Security">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="code"
-              data-label="Code" aria-pressed="false">Code 3</button>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="money"
-              data-label="Money &amp; markets" aria-pressed="false">Money &amp; markets 3</button>
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="government"
+                data-label="Government &amp; law" aria-pressed="false">Government &amp; law 4</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="government"
+                aria-pressed="false" title="Follow Government &amp; law">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="chips"
-              data-label="Chips &amp; datacenters" aria-pressed="false">Chips &amp; datacenters 3</button>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="music"
-              data-label="Music &amp; audio" aria-pressed="false">Music &amp; audio 2</button>
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="code"
+                data-label="Code" aria-pressed="false">Code 3</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="code"
+                aria-pressed="false" title="Follow Code">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="money"
+                data-label="Money &amp; markets" aria-pressed="false">Money &amp; markets 3</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="money"
+                aria-pressed="false" title="Follow Money &amp; markets">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="chips"
+                data-label="Chips &amp; datacenters" aria-pressed="false">Chips &amp; datacenters 3</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="chips"
+                aria-pressed="false" title="Follow Chips &amp; datacenters">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="music"
+                data-label="Music &amp; audio" aria-pressed="false">Music &amp; audio 2</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="music"
+                aria-pressed="false" title="Follow Music &amp; audio">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
     </div>
+    <p class="drawer-note">
+      The star follows a topic. Following is remembered in this browser only and never
+      auto-hides stories — use the Following button above to apply it.
+    </p>
   </div>
 </div>
 
@@ -159,8 +219,22 @@
     <div class="lead-byline">
       <span class="byline-source">gemini_grounding</span>
       <span class="byline-sep"></span>
-      <span class="byline-meta">2 sources · 1 minute ago</span>
+      <span class="byline-meta">2 sources · 5 hours ago</span>
       <a class="byline-link" href="https://www.gov.ca.gov/2026/08/10/governor-newsom-announces-new-ai-cyber-defense-program-to-protect-californias-critical-infrastructure/">Read at gov.ca.gov →</a>
+      <button type="button" class="save-btn" data-save
+        data-item-id="f5429fa665913236"
+        data-item-title="California Announces AI Cyber Defense Program"
+        data-item-url="https://www.gov.ca.gov/2026/08/10/governor-newsom-announces-new-ai-cyber-defense-program-to-protect-californias-critical-infrastructure/"
+        data-item-date=""
+        data-item-source="gemini_grounding"
+        data-item-sig="0.70"
+        data-item-topics="government security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
     </div>
   </div>
   <div class="imgslot imgslot-lead has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
@@ -190,7 +264,23 @@
     <a class="card-title" href="https://www.morningstar.com/news/dow-jones/202608115403/ibm-together-ai-ink-240-million-agreement-to-scale-ai-deployments" title="IBM, Together AI Ink $240 Million Agreement to Scale AI Deployments">IBM, Together AI Ink $240 Million Agreement to Scale AI</a>
     <p class="card-dek">IBM and Together AI have entered a multi-year agreement worth $240 million to construct a large-scale AI cluster using Nvidia HGX B300 systems on IBM Cloud. This partnership aims to expand AI deployments, particularly for open-source model inference, and is expected to be operational by Q1 2027. The collaboration will also help Together AI penetrate the enterprise market and enhance accessibility to open-source AI.</p>
     
-    <span class="card-meta">gemini_grounding · 2 sources · 1m ago</span>
+    <div class="card-foot">
+      <span class="card-meta">gemini_grounding · 2 sources · 5h ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="8de1b185006cdc74"
+        data-item-title="IBM, Together AI Ink $240 Million Agreement to Scale AI"
+        data-item-url="https://www.morningstar.com/news/dow-jones/202608115403/ibm-together-ai-ink-240-million-agreement-to-scale-ai-deployments"
+        data-item-date=""
+        data-item-source="gemini_grounding"
+        data-item-sig="0.60"
+        data-item-topics="money chips"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </article>
   
   <article class="also-card" data-topics="money chips">
@@ -199,7 +289,23 @@
     <a class="card-title" href="https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&amp;at_campaign=rss" title="Wall Street giants hand Nvidia $500bn to fund boom in AI projects">Wall Street Giants Hand Nvidia $500B to Fund AI Projects</a>
     <p class="card-dek">Nvidia is collaborating with major Wall Street firms, including Apollo, BlackRock, and Goldman Sachs, to raise $500 billion for AI infrastructure, treating AI hardware as a new asset class. This substantial financing will fund new data centers and factories for AI chips, supporting Nvidia&#39;s projects and its partners. The move underlines the immense demand for Nvidia&#39;s GPUs, used by nearly all major tech companies, as compute becomes critical infrastructure for the AI boom.</p>
     
-    <span class="card-meta">BBC — Technology · 6h ago</span>
+    <div class="card-foot">
+      <span class="card-meta">BBC — Technology · 11h ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="b8b7373b56d1beb3"
+        data-item-title="Wall Street Giants Hand Nvidia $500B to Fund AI Projects"
+        data-item-url="https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&amp;at_campaign=rss"
+        data-item-date=""
+        data-item-source="BBC — Technology"
+        data-item-sig="0.60"
+        data-item-topics="money chips"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </article>
   
   <article class="also-card" data-topics="chips">
@@ -208,7 +314,23 @@
     <a class="card-title" href="https://techcrunch.com/2026/08/10/metas-new-glimmer-ai-model-offers-a-hint-at-zuckerbergs-personal-intelligence-vision/" title="Meta’s new Glimmer AI model offers a hint at Zuckerberg’s personal intelligence vision">Meta’s New Glimmer AI Model Offers Hint at Zuckerberg’s Vision</a>
     <p class="card-dek">Meta released Muse Glimmer, an open-weight, 30-billion parameter AI model designed to power personal AI agents locally on consumer hardware. Glimmer, an open version of Meta&#39;s Muse Spark, supports multi-step tasks, text, and images across over 100 languages, aiming for privacy-sensitive, always-on operation without internet connectivity. This release provides a tangible example of Mark Zuckerberg&#39;s vision for widely distributed &#34;personal superintelligence.&#34;</p>
     
-    <span class="card-meta">TechCrunch — AI · 22h ago</span>
+    <div class="card-foot">
+      <span class="card-meta">TechCrunch — AI · 1d ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="e7d6356c97dc9ba4"
+        data-item-title="Meta’s New Glimmer AI Model Offers Hint at Zuckerberg’s Vision"
+        data-item-url="https://techcrunch.com/2026/08/10/metas-new-glimmer-ai-model-offers-a-hint-at-zuckerbergs-personal-intelligence-vision/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.60"
+        data-item-topics="chips"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </article>
   
 </div>
@@ -233,7 +355,23 @@
     <a class="worth-title" href="https://huggingface.co/papers/2608.09119" title="Motif 3: Technical Report">Motif 3: A 314B Parameter Mixture-of-Experts Model</a>
     <p class="worth-dek">Motif 3 is a new decoder-only Mixture-of-Experts language model featuring 314 billion total parameters, with 13.2 billion activated per token and 384 routed experts per layer, selecting eight per token. It incorporates Grouped Differential Latent Attention (GDLA), modified manifold-constrained hyper-connections, Expert Specific PolyNorm activations, and multi-token prediction to enhance optimization, specialization, and inference, pretrained on 12.5 trillion tokens.</p>
     
-    <span class="worth-meta">Hugging Face Daily Papers · 1d ago</span>
+    <div class="worth-foot">
+      <span class="worth-meta">Hugging Face Daily Papers · 2d ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="74741078d9c88058"
+        data-item-title="Motif 3: A 314B Parameter Mixture-of-Experts Model"
+        data-item-url="https://huggingface.co/papers/2608.09119"
+        data-item-date=""
+        data-item-source="Hugging Face Daily Papers"
+        data-item-sig="0.60"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
   <path d="M32 7 58 21 32 35 6 21z"/>
@@ -248,7 +386,23 @@
     <a class="worth-title" href="https://techcrunch.com/2026/08/10/openai-reportedly-completed-a-7-billion-employee-tender-offer/" title="OpenAI reportedly completed a $7 billion employee tender offer">OpenAI Reportedly Completed $7B Employee Tender Offer</a>
     <p class="worth-dek">OpenAI reportedly completed a $7 billion employee tender offer, valuing the company at $852 billion, consistent with its March fundraising round. This tender provides liquidity to employees and suggests a potential delay in a public IPO despite confidential SEC filings in June. The move allows staff to realize stock value while the company addresses internal financial goals and focuses on enterprise growth.</p>
     
-    <span class="worth-meta">TechCrunch — AI · 14h ago</span>
+    <div class="worth-foot">
+      <span class="worth-meta">TechCrunch — AI · 20h ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="1353da4a7fa7cf9e"
+        data-item-title="OpenAI Reportedly Completed $7B Employee Tender Offer"
+        data-item-url="https://techcrunch.com/2026/08/10/openai-reportedly-completed-a-7-billion-employee-tender-offer/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.55"
+        data-item-topics="money"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="static/img/openai.webp" alt="" decoding="async"></div>
 </div>
@@ -259,7 +413,23 @@
     <a class="worth-title" href="https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows" title="Expanding Daybreak as the Cyber Defense Window Narrows">GPT-5.6-Cyber: OpenAI&#39;s New Cybersecurity Model via Daybreak Red</a>
     <p class="worth-dek">OpenAI has introduced GPT-5.6-Cyber, a specialized AI model for cybersecurity, available through its Daybreak Red program. This model is designed to assist authorized users with vulnerability research, exploit validation, and general security testing.</p>
     <a class="thread-line" href="archive/2026-W26.html">Earlier: Daybreak: Tools for securing every organization in the world (2026-W26)</a>
-    <span class="worth-meta">OpenAI News · 1d ago</span>
+    <div class="worth-foot">
+      <span class="worth-meta">OpenAI News · 1d ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="3a8585570cab21df"
+        data-item-title="GPT-5.6-Cyber: OpenAI&#39;s New Cybersecurity Model via Daybreak Red"
+        data-item-url="https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.50"
+        data-item-topics="code security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="static/img/openai.webp" alt="" decoding="async"></div>
 </div>
@@ -270,7 +440,23 @@
     <a class="worth-title" href="https://huggingface.co/papers/2608.09819" title="Macaron-V1: Towards Open Continual Learning with Self-Improvement and Mixture-of-LoRA">Macaron-V1: Open Continual Learning with Self-Improvement</a>
     <p class="worth-dek">Macaron-V1 is an open agent-model family designed for continual learning from real-world experience, featuring recursive model-harness improvement and a Mixture-of-LoRA (MoL) architecture. The flagship Macaron-V1-Venti combines a 744B GLM-5.2 base with four specialist LoRAs for chat, agent, coding, and GenUI, while Macaron-V1-Tall (50B) uses a Qwen3.6 base for local deployment.</p>
     
-    <span class="worth-meta">Hugging Face Daily Papers · 1d ago</span>
+    <div class="worth-foot">
+      <span class="worth-meta">Hugging Face Daily Papers · 2d ago</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="0902187faa230c08"
+        data-item-title="Macaron-V1: Open Continual Learning with Self-Improvement"
+        data-item-url="https://huggingface.co/papers/2608.09819"
+        data-item-date=""
+        data-item-source="Hugging Face Daily Papers"
+        data-item-sig="0.50"
+        data-item-topics="code"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
   </div>
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="static/img/huggingface_blog.png" alt="" decoding="async"></div>
 </div>
@@ -282,55 +468,196 @@
 <section class="brief-section" data-section>
 <span class="section-h section-h-brief">In brief — 10 more</span>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/" data-topics="music">
-  <span class="brief-title" title="Spotify will label ‘AI Persona’ profiles and exclude their music from recommendations">Spotify Will Label &#39;AI Persona&#39; Profiles, Exclude from Recommendations</span>
-  <span class="brief-cat">Policy</span>
-</a>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/11/anthropic-says-it-will-watermark-text-generated-by-its-ai-models/" data-topics="government security">
-  <span class="brief-title" title="Anthropic says it will watermark text generated by its AI models">Anthropic Will Watermark Text Generated by Its AI Models</span>
+<div class="brief-row" data-topics="music">
+  <a class="brief-title" href="https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/" title="Spotify will label ‘AI Persona’ profiles and exclude their music from recommendations">Spotify Will Label &#39;AI Persona&#39; Profiles, Exclude from Recommendations</a>
   <span class="brief-cat">Policy</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="606016c2c8653c1a"
+        data-item-title="Spotify Will Label &#39;AI Persona&#39; Profiles, Exclude from Recommendations"
+        data-item-url="https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.45"
+        data-item-topics="music"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/10/as-ai-led-attacks-multiply-openai-launches-a-new-cyber-model/" data-topics="code security">
-  <span class="brief-title" title="As AI-led attacks multiply, OpenAI launches a new cyber model">As AI-Led Attacks Multiply, OpenAI Launches New Cyber Model</span>
+<div class="brief-row" data-topics="government security">
+  <a class="brief-title" href="https://techcrunch.com/2026/08/11/anthropic-says-it-will-watermark-text-generated-by-its-ai-models/" title="Anthropic says it will watermark text generated by its AI models">Anthropic Will Watermark Text Generated by Its AI Models</a>
+  <span class="brief-cat">Policy</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="6899735f131adbde"
+        data-item-title="Anthropic Will Watermark Text Generated by Its AI Models"
+        data-item-url="https://techcrunch.com/2026/08/11/anthropic-says-it-will-watermark-text-generated-by-its-ai-models/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.45"
+        data-item-topics="government security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-topics="code security">
+  <a class="brief-title" href="https://techcrunch.com/2026/08/10/as-ai-led-attacks-multiply-openai-launches-a-new-cyber-model/" title="As AI-led attacks multiply, OpenAI launches a new cyber model">As AI-Led Attacks Multiply, OpenAI Launches New Cyber Model</a>
   <span class="brief-cat">Tools</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="c1d381bf28de983c"
+        data-item-title="As AI-Led Attacks Multiply, OpenAI Launches New Cyber Model"
+        data-item-url="https://techcrunch.com/2026/08/10/as-ai-led-attacks-multiply-openai-launches-a-new-cyber-model/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.45"
+        data-item-topics="code security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://www.washingtonpost.com/technology/2026/08/10/lawmakers-ramp-up-pressure-ai-companies-over-rogue-models/" data-topics="government security">
-  <span class="brief-title" title="Lawmakers ramp up pressure on AI companies over rogue models">Lawmakers Ramp Up Pressure on AI Companies Over Rogue Models</span>
+<div class="brief-row" data-topics="government security">
+  <a class="brief-title" href="https://www.washingtonpost.com/technology/2026/08/10/lawmakers-ramp-up-pressure-ai-companies-over-rogue-models/" title="Lawmakers ramp up pressure on AI companies over rogue models">Lawmakers Ramp Up Pressure on AI Companies Over Rogue Models</a>
   <span class="brief-cat">Policy</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="b65f3288972458b4"
+        data-item-title="Lawmakers Ramp Up Pressure on AI Companies Over Rogue Models"
+        data-item-url="https://www.washingtonpost.com/technology/2026/08/10/lawmakers-ramp-up-pressure-ai-companies-over-rogue-models/"
+        data-item-date=""
+        data-item-source="Google News"
+        data-item-sig="0.45"
+        data-item-topics="government security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://www.theguardian.com/technology/2026/aug/10/bernie-sanders-ai-development-pause-letter" data-topics="government">
-  <span class="brief-title" title="Bernie Sanders calls on Silicon Valley to ‘pause AI development’ in interest of humanity">Bernie Sanders Calls on Silicon Valley to &#39;Pause AI Development&#39;</span>
+<div class="brief-row" data-topics="government">
+  <a class="brief-title" href="https://www.theguardian.com/technology/2026/aug/10/bernie-sanders-ai-development-pause-letter" title="Bernie Sanders calls on Silicon Valley to ‘pause AI development’ in interest of humanity">Bernie Sanders Calls on Silicon Valley to &#39;Pause AI Development&#39;</a>
   <span class="brief-cat">Policy</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="6706227c8f742d33"
+        data-item-title="Bernie Sanders Calls on Silicon Valley to &#39;Pause AI Development&#39;"
+        data-item-url="https://www.theguardian.com/technology/2026/aug/10/bernie-sanders-ai-development-pause-letter"
+        data-item-date=""
+        data-item-source="The Guardian — AI"
+        data-item-sig="0.45"
+        data-item-topics="government"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" data-topics="music">
-  <span class="brief-title" title="Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS">Build Low-Latency Multilingual Voice Agents with NVIDIA Magpie TTS</span>
+<div class="brief-row" data-topics="music">
+  <a class="brief-title" href="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents" title="Build Low-Latency Multilingual Voice Agents: Open Weights &amp; Full Deployment Control with NVIDIA Magpie TTS">Build Low-Latency Multilingual Voice Agents with NVIDIA Magpie TTS</a>
   <span class="brief-cat">Tools</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="e5b664a37aa39848"
+        data-item-title="Build Low-Latency Multilingual Voice Agents with NVIDIA Magpie TTS"
+        data-item-url="https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents"
+        data-item-date=""
+        data-item-source="Hugging Face Blog"
+        data-item-sig="0.45"
+        data-item-topics="music"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/" data-topics="security">
-  <span class="brief-title" title="The AI safety test is becoming a safety risk">The AI Safety Test Is Becoming a Safety Risk</span>
+<div class="brief-row" data-topics="security">
+  <a class="brief-title" href="https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/" title="The AI safety test is becoming a safety risk">The AI Safety Test Is Becoming a Safety Risk</a>
   <span class="brief-cat">Policy</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="3f7c800bfd24d2d6"
+        data-item-title="The AI Safety Test Is Becoming a Safety Risk"
+        data-item-url="https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.45"
+        data-item-topics="security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://www.bbc.co.uk/news/articles/cn0nww2qlp7o?at_medium=RSS&amp;at_campaign=rss" data-topics="security">
-  <span class="brief-title" title="AI agent hacks gym to get its owner spot in pilates class">AI Agent Hacks Gym to Get Its Owner Spot in Pilates Class</span>
+<div class="brief-row" data-topics="security">
+  <a class="brief-title" href="https://www.bbc.co.uk/news/articles/cn0nww2qlp7o?at_medium=RSS&amp;at_campaign=rss" title="AI agent hacks gym to get its owner spot in pilates class">AI Agent Hacks Gym to Get Its Owner Spot in Pilates Class</a>
   <span class="brief-cat">Policy</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="bffbf1c785b66eca"
+        data-item-title="AI Agent Hacks Gym to Get Its Owner Spot in Pilates Class"
+        data-item-url="https://www.bbc.co.uk/news/articles/cn0nww2qlp7o?at_medium=RSS&amp;at_campaign=rss"
+        data-item-date=""
+        data-item-source="BBC — Technology"
+        data-item-sig="0.40"
+        data-item-topics="security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content" data-topics="security">
-  <span class="brief-title" title="How Claude marks AI-generated content">How Claude Marks AI-Generated Content</span>
+<div class="brief-row" data-topics="security">
+  <a class="brief-title" href="https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content" title="How Claude marks AI-generated content">How Claude Marks AI-Generated Content</a>
   <span class="brief-cat">Tools</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="4f49de3486923264"
+        data-item-title="How Claude Marks AI-Generated Content"
+        data-item-url="https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content"
+        data-item-date=""
+        data-item-source="Hacker News (AI, 100+ points)"
+        data-item-sig="0.40"
+        data-item-topics="security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
-<a class="brief-row" href="https://ailucius.com/blog/making-an-ai-bid-writer-refuse-to-lie" data-topics="security">
-  <span class="brief-title" title="Making an AI bid writer refuse to lie">Making an AI Bid Writer Refuse to Lie</span>
+<div class="brief-row" data-topics="security">
+  <a class="brief-title" href="https://ailucius.com/blog/making-an-ai-bid-writer-refuse-to-lie" title="Making an AI bid writer refuse to lie">Making an AI Bid Writer Refuse to Lie</a>
   <span class="brief-cat">Tools</span>
-</a>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="3d3a2ca918986046"
+        data-item-title="Making an AI Bid Writer Refuse to Lie"
+        data-item-url="https://ailucius.com/blog/making-an-ai-bid-writer-refuse-to-lie"
+        data-item-date=""
+        data-item-source="Hacker News (AI, 100+ points)"
+        data-item-sig="0.30"
+        data-item-topics="security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
 
 </section>
 
@@ -373,11 +700,6 @@
       <div class="band-bar" style="background:var(--n2);width:11%"></div>
     </div>
     
-  </div>
-  
-  <div class="source-alert">
-    <span class="source-alert-h">Source alert</span>
-    <span class="source-alert-body">No working feed for <b>Import AI (Jack Clark)</b> — 0 items collected.</span>
   </div>
   
 </aside>
@@ -488,11 +810,35 @@
   for(var k=0;k<pills.length;k++)(function(b){
     b.addEventListener('click',function(){toggle(b.getAttribute('data-topic'));});
   })(pills[k]);
+  
+  try{
+    var want=(new URLSearchParams(location.search).get('topics')||'').split(',');
+    for(var q=0;q<want.length;q++){
+      var t=want[q].trim();
+      if(t&&scope.querySelector('[data-topic="'+t+'"]')&&on.indexOf(t)<0) on.push(t);
+    }
+    if(on.length){
+      paint();
+      if(drawer){drawer.removeAttribute('hidden');}   
+      if(drawerBtn){drawerBtn.setAttribute('aria-expanded','true');drawerBtn.classList.add('active');}
+    }
+  }catch(e){/* URLSearchParams 가 없는 아주 오래된 브라우저면 필터를 안 걸고 전체를 보여준다 */}
   if(drawerBtn&&drawer) drawerBtn.addEventListener('click',function(){
     var open=drawer.hasAttribute('hidden');
     if(open) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden','');
     drawerBtn.setAttribute('aria-expanded',open?'true':'false');
     drawerBtn.classList.toggle('active',open);
+  });
+  
+  var followApply=scope.querySelector('[data-follow-apply]');
+  if(followApply&&window.AIDigestFollow) followApply.addEventListener('click',function(){
+    var want=window.AIDigestFollow.read().topics.filter(function(t){
+      return scope.querySelector('[data-topic="'+t+'"]');   // 오늘 안 붙은 토픽은 걸 수 없다
+    });
+    var same=want.length===on.length&&want.every(function(t){return on.indexOf(t)>=0;});
+    on=same?[]:want;
+    followApply.classList.toggle('active',!same);
+    paint();
   });
 })();</script>
 </body></html>

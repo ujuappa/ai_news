@@ -70,6 +70,12 @@ settings:
   site_url: https://ujuappa.github.io/ai_news
   feed_max_digests: 20      # 피드에 담을 최근 다이제스트 수. 리더는 보통 이 정도면 충분하다
 
+  # admin 페이지(output/admin.html)가 소스/토픽을 커밋할 대상 레포. `owner/name` 형식.
+  # **비밀값이 아니다** — 공개 레포 주소이고, 쓰기에는 사용자가 브라우저에 직접 넣는
+  # fine-grained PAT 이 따로 필요하다(토큰은 이 파일에도, 산출물에도 들어가지 않는다).
+  # 비워두면 admin 이 첫 화면에서 레포를 직접 입력받아 localStorage 에 기억한다.
+  github_repo: ujuappa/ai_news
+
   # Gemini Search Grounding 소스 품질 게이트 (2026-07-31 신설).
   # 왜: grounding 은 이틀 10건 중 8건 게시인데, **07-31 게시분 4건이 전부 라운드업**이었다 —
   #   aiweekly.co/ · buildfastwithai.com/blogs/ai-news-today-july-30-2026 ·

@@ -1,0 +1,435 @@
+{% import "macros.html" as m %}
+{#
+  Saved — 저장한 기사 · 팔로우한 토픽 · 저장한 필터 (2026-08-11 신설).
+
+  **이 지면은 서버가 내용을 모른다.** 저장/팔로우는 이 브라우저의 localStorage 에만 있다
+  (계정도 서버도 없는 정적 사이트다). 그래서 여기서 굽는 건 빈 껍데기 + 토픽 라벨표뿐이고
+  목록은 follow.js 의 API 로 그린다. rerender 를 해도 이 파일의 바이트는 안 변한다.
+
+  그 한계를 **지면에 적는다**(아래 saved-scope 알림). 로그인 없이 동기화되는 것처럼 보이면
+  그건 죽은 약속이고, 기기를 바꿨을 때 "내 저장이 사라졌다"로 돌아온다.
+
+  ── 세 구획이 각각 다른 축이다. 섞지 말 것 ─────────────────────────────────
+  1. Saved stories   — 개별 기사. 내가 나중에 다시 볼 것.
+  2. Topics you follow — 계열. "이 기사와 비슷한 걸 계속 보고 싶다"의 구현체. 기사 자체를
+     따라갈 수는 없다(정적 사이트라 후속이 붙었는지 알 방법이 없다) → 그 기사의 토픽을
+     따라가면 다음 지면에서 같은 계열이 눈에 띈다.
+  3. Saved filters   — 이름 붙인 토픽 조합. **admin 의 토픽 편집과 다른 축이다** — 여기 것은
+     내 브라우저의 읽기 습관이고, admin 의 어휘는 사이트 전체의 분류 체계다.
+#}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts(asset_prefix) }}
+<title>AI Digest — Saved</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap">
+{{ m.util_header('Saved', 'saved', asset_prefix) }}
+
+<div class="archive-body">
+  <div class="archive-top">
+    <h1 class="archive-title">Saved</h1>
+    <p class="admin-lede">
+      Stories you kept and the topics you follow. Following a topic never hides anything on its
+      own — it pins the topic in the filter drawer so one click narrows the digest to it.
+    </p>
+  </div>
+
+  {#
+    범위 고지. 색만으로 경고하지 않고 문장으로 적는다 — 이건 "나중에 놀라지 않기 위한
+    정보"라서 눈에 띄는 것보다 읽히는 게 중요하다.
+  #}
+  <p class="saved-scope">
+    <b>This lives in this browser only.</b> There is no account and no server, so saving is not
+    synced to your phone or another profile, and clearing site data clears it. Nothing here is
+    ever sent anywhere.
+  </p>
+
+  {{ m.stat_band([
+      {'num': '0', 'label': 'Saved stories'},
+      {'num': '0', 'label': 'Topics followed'},
+      {'num': '0', 'label': 'Saved filters'},
+      {'num': total_records, 'label': 'In archive'}]) }}
+
+  {# ── 저장한 기사 ──────────────────────────────────────────────────────── #}
+  <section class="saved-sec">
+    <div class="also-break">
+      <span class="break-h">Saved stories</span>
+      <span class="break-rule"></span>
+      <span class="break-sub" data-saved-range></span>
+    </div>
+    <div class="saved-bar">
+      <label class="saved-sort">
+        <span class="adm-label">Sort</span>
+        <select data-saved-sort>
+          <option value="recent">Recently saved</option>
+          <option value="sig">Significance</option>
+          <option value="date">Digest date</option>
+        </select>
+      </label>
+      <span class="adm-bar-gap"></span>
+      <button type="button" class="adm-btn" data-saved-clear hidden>Remove all</button>
+    </div>
+    <div data-saved-list></div>
+    <p class="saved-empty" data-saved-empty>
+      Nothing saved yet. Use the <b>Save</b> button on any story — it is on the lead, the cards,
+      and every row of the digest.
+    </p>
+  </section>
+
+  {# ── 팔로우한 토픽 ────────────────────────────────────────────────────── #}
+  <section class="saved-sec">
+    <div class="also-break">
+      <span class="break-h">Topics you follow</span>
+      <span class="break-rule"></span>
+      <span class="break-sub" data-follow-range></span>
+    </div>
+    <p class="adm-note adm-note-tight">
+      Star a topic here or in the digest’s filter drawer. On the digest, the
+      <b>Following</b> button applies all of them at once.
+    </p>
+    <div class="follow-grid" data-follow-grid></div>
+    <div class="saved-suggest" data-suggest hidden>
+      <span class="adm-backfill-h">Suggested from what you saved</span>
+      <div class="follow-grid" data-suggest-grid></div>
+    </div>
+  </section>
+
+  {# ── 저장한 필터 ──────────────────────────────────────────────────────── #}
+  <section class="saved-sec">
+    <div class="also-break">
+      <span class="break-h">Saved filters</span>
+      <span class="break-rule"></span>
+      <span class="break-sub" data-preset-range></span>
+    </div>
+    <p class="adm-note adm-note-tight">
+      A named combination of topics, for reading in more than one mode — “Money &amp; chips” on a
+      market day, “Code” on a build day. These are yours and live in this browser; the topic
+      vocabulary itself is edited in <a href="{{ asset_prefix }}admin.html">Admin</a>.
+    </p>
+
+    <div class="preset-form">
+      <label class="adm-field adm-field-narrow">
+        <span class="adm-label">Name</span>
+        <input type="text" data-preset-name placeholder="Money &amp; chips" spellcheck="false">
+      </label>
+      <div class="adm-field">
+        <span class="adm-label">Topics in this filter</span>
+        <div class="preset-picker" data-preset-picker>
+          {% for t in topics %}
+          <label class="preset-opt">
+            <input type="checkbox" value="{{ t.key }}">
+            <span>{{ t.label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="adm-field adm-field-btns">
+        <button type="button" class="adm-btn adm-btn-primary" data-preset-save>Save filter</button>
+        <button type="button" class="adm-btn" data-preset-cancel hidden>Cancel edit</button>
+      </div>
+    </div>
+    <p class="adm-note adm-note-tight" data-preset-note></p>
+    <div data-preset-list></div>
+  </section>
+</div>
+</div>
+{{ m.site_footer(asset_prefix ~ 'archive/index.html', total_records, rss_href=asset_prefix ~ 'feed.xml') }}
+
+<script id="saved-topics" type="application/json">{{ topics_json|safe }}</script>
+<script>
+(function () {
+  'use strict';
+  var F = window.AIDigestFollow;
+  var LABELS = JSON.parse(document.getElementById('saved-topics').textContent);
+  var editing = null;   // 수정 중인 프리셋의 원래 이름 (null = 새로 만드는 중)
+
+  function $(s) { return document.querySelector(s); }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = String(text);
+    return n;
+  }
+  function label(key) { return LABELS[key] || key; }
+
+  {#
+    localStorage 가 막힌 맥락(사이트 데이터 차단 · sandboxed iframe)에서는 follow.js 의
+    read() 가 항상 빈 상태를 준다. 그럼 이 지면은 "저장한 게 없다"고 말하는데, 실제로는
+    저장이 **불가능한** 상태다 — 그 둘은 다른 사실이라 구분해서 알린다. 그러지 않으면
+    저장 버튼을 눌러도 아무 일도 안 일어나는 이유를 알 방법이 없다.
+  #}
+  function storageBlocked() {
+    try {
+      var k = '__ai_digest_probe';
+      localStorage.setItem(k, '1');
+      localStorage.removeItem(k);
+      return false;
+    } catch (e) { return true; }
+  }
+
+  // ── 저장한 기사 ─────────────────────────────────────────────────────────
+  function savedRows(state) {
+    var mode = $('[data-saved-sort]').value;
+    var rows = Object.keys(state.items).map(function (id) {
+      var r = state.items[id];
+      return { id: id, t: r.t, u: r.u, d: r.d, s: r.s, sig: r.sig, tp: r.tp || [], at: r.at || 0 };
+    });
+    rows.sort(function (a, b) {
+      if (mode === 'sig') return b.sig - a.sig;
+      if (mode === 'date') return String(b.d).localeCompare(String(a.d));
+      return b.at - a.at;
+    });
+    return rows;
+  }
+
+  function renderSaved(state) {
+    var host = $('[data-saved-list]');
+    host.textContent = '';
+    var rows = savedRows(state);
+    $('[data-saved-empty]').hidden = rows.length > 0;
+    $('[data-saved-clear]').hidden = rows.length === 0;
+    $('[data-saved-range]').textContent = rows.length
+      ? rows.length + (rows.length === 1 ? ' story' : ' stories') : '';
+
+    if (!rows.length && storageBlocked()) {
+      var warn = el('p', 'adm-note is-bad',
+        'This browser is blocking site storage, so saving cannot work here at all — it is not '
+        + 'that your list is empty. Allow site data for this page, or use a normal (non-private) '
+        + 'window.');
+      host.appendChild(warn);
+      return;
+    }
+
+    rows.forEach(function (r) {
+      var row = el('div', 'saved-row');
+
+      var main = el('div', 'saved-row-main');
+      {#
+        죽은 링크는 저장 시점에 알 수 없다(linkcheck 는 나중에 돈다) → URL 이 없을 때만
+        링크를 뗀다. href 없는 <a> 는 클릭·포커스가 안 되는 플레이스홀더다(macros.href 주석).
+      #}
+      var title = el('a', 'saved-row-title', r.t || '(untitled)');
+      if (r.u) title.href = r.u;
+      title.title = r.t || '';
+      main.appendChild(title);
+
+      var meta = el('div', 'saved-row-meta');
+      [r.s, r.d, r.sig ? 'significance ' + r.sig.toFixed(2) : ''].forEach(function (bit) {
+        if (bit) meta.appendChild(el('span', null, bit));
+      });
+      main.appendChild(meta);
+
+      if (r.tp.length) {
+        var tw = el('div', 'saved-row-topics');
+        r.tp.forEach(function (k) {
+          var on = F.isFollowing(k);
+          var b = el('button', 'follow-chip' + (on ? ' is-on' : ''), label(k));
+          b.type = 'button';
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          b.title = on ? 'Unfollow ' + label(k) : 'Follow ' + label(k);
+          b.addEventListener('click', function () { F.toggleFollow(k); });
+          tw.appendChild(b);
+        });
+        main.appendChild(tw);
+      }
+      row.appendChild(main);
+
+      var act = el('div', 'saved-row-actions');
+      if (r.tp.length) {
+        var unfollowed = r.tp.filter(function (k) { return !F.isFollowing(k); });
+        if (unfollowed.length) {
+          var fb = el('button', 'adm-btn adm-btn-sm',
+            'Follow its topic' + (unfollowed.length > 1 ? 's' : ''));
+          fb.type = 'button';
+          fb.title = 'Follow ' + unfollowed.map(label).join(', ');
+          fb.addEventListener('click', function () { F.followTopicsOf(r.id); });
+          act.appendChild(fb);
+        }
+      }
+      var rm = el('button', 'adm-btn adm-btn-sm adm-btn-danger', 'Remove');
+      rm.type = 'button';
+      rm.addEventListener('click', function () { F.unsaveItem(r.id); });
+      act.appendChild(rm);
+      row.appendChild(act);
+
+      host.appendChild(row);
+    });
+  }
+
+  // ── 팔로우한 토픽 ───────────────────────────────────────────────────────
+  function renderFollows(state) {
+    var host = $('[data-follow-grid]');
+    host.textContent = '';
+    $('[data-follow-range]').textContent = state.topics.length
+      ? state.topics.length + ' followed' : 'none yet';
+
+    if (!state.topics.length) {
+      host.appendChild(el('p', 'adm-note adm-note-tight',
+        'Nothing followed. Star a topic on a saved story below, or in the filter drawer on the '
+        + 'digest.'));
+    }
+    state.topics.forEach(function (k) {
+      var chip = el('button', 'follow-chip is-on', label(k));
+      chip.type = 'button';
+      chip.setAttribute('aria-pressed', 'true');
+      chip.title = 'Unfollow ' + label(k);
+      chip.appendChild(el('span', 'chip-x', '×'));
+      chip.addEventListener('click', function () { F.toggleFollow(k); });
+      host.appendChild(chip);
+    });
+
+    {#
+      제안: 저장한 기사에 붙어 있는데 아직 팔로우 안 한 토픽. 빈도순 — 두 번 저장한 계열이
+      한 번 저장한 계열보다 먼저다. 자동으로 팔로우하지 않는다(사용자가 고르는 것이다).
+    #}
+    var counts = {};
+    Object.keys(state.items).forEach(function (id) {
+      (state.items[id].tp || []).forEach(function (k) {
+        if (state.topics.indexOf(k) < 0) counts[k] = (counts[k] || 0) + 1;
+      });
+    });
+    var suggest = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+    $('[data-suggest]').hidden = suggest.length === 0;
+    var sg = $('[data-suggest-grid]');
+    sg.textContent = '';
+    suggest.forEach(function (k) {
+      var b = el('button', 'follow-chip', label(k) + ' · ' + counts[k]);
+      b.type = 'button';
+      b.title = 'Follow ' + label(k) + ' (' + counts[k] + ' saved '
+        + (counts[k] === 1 ? 'story' : 'stories') + ')';
+      b.addEventListener('click', function () { F.toggleFollow(k); });
+      sg.appendChild(b);
+    });
+  }
+
+  // ── 저장한 필터(프리셋) ─────────────────────────────────────────────────
+  function pickedTopics() {
+    var boxes = document.querySelectorAll('[data-preset-picker] input[type=checkbox]');
+    var out = [];
+    for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) out.push(boxes[i].value);
+    return out;
+  }
+  function setPicked(keys) {
+    var boxes = document.querySelectorAll('[data-preset-picker] input[type=checkbox]');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].checked = (keys || []).indexOf(boxes[i].value) >= 0;
+    }
+  }
+  function resetForm() {
+    editing = null;
+    $('[data-preset-name]').value = '';
+    setPicked([]);
+    $('[data-preset-cancel]').hidden = true;
+    $('[data-preset-save]').textContent = 'Save filter';
+  }
+
+  function renderPresets(state) {
+    var host = $('[data-preset-list]');
+    host.textContent = '';
+    $('[data-preset-range]').textContent = state.presets.length
+      ? state.presets.length + (state.presets.length === 1 ? ' filter' : ' filters') : 'none yet';
+
+    state.presets.forEach(function (p) {
+      var row = el('div', 'preset-row');
+      var main = el('div', 'preset-row-main');
+      main.appendChild(el('span', 'preset-name', p.name));
+      var chips = el('div', 'saved-row-topics');
+      (p.topics || []).forEach(function (k) {
+        chips.appendChild(el('span', 'tag', label(k)));
+      });
+      main.appendChild(chips);
+      row.appendChild(main);
+
+      var act = el('div', 'saved-row-actions');
+      {#
+        프리셋 적용은 홈으로 **쿼리스트링과 함께** 보내는 것으로 한다. 이 페이지에는 기사가
+        없어서 필터를 걸 대상이 없고, 홈의 필터 스크립트가 ?topics= 를 읽어 켠다.
+      #}
+      var apply = el('a', 'adm-btn adm-btn-sm', 'Open in digest');
+      apply.href = 'index.html?topics=' + encodeURIComponent((p.topics || []).join(','));
+      act.appendChild(apply);
+      var edit = el('button', 'adm-btn adm-btn-sm', 'Edit');
+      edit.type = 'button';
+      edit.addEventListener('click', function () {
+        editing = p.name;
+        $('[data-preset-name]').value = p.name;
+        setPicked(p.topics);
+        $('[data-preset-cancel]').hidden = false;
+        $('[data-preset-save]').textContent = 'Update filter';
+        $('[data-preset-name]').focus();
+      });
+      act.appendChild(edit);
+      var del = el('button', 'adm-btn adm-btn-sm adm-btn-danger', 'Delete');
+      del.type = 'button';
+      del.addEventListener('click', function () {
+        if (!window.confirm('Delete the "' + p.name + '" filter?')) return;
+        if (editing === p.name) resetForm();
+        F.deletePreset(p.name);
+      });
+      act.appendChild(del);
+      row.appendChild(act);
+      host.appendChild(row);
+    });
+  }
+
+  function savePreset() {
+    var note = $('[data-preset-note]');
+    var name = $('[data-preset-name]').value.trim();
+    var picked = pickedTopics();
+    if (!name) {
+      note.textContent = 'Give the filter a name so you can recognise it later.';
+      note.className = 'adm-note adm-note-tight is-bad';
+      return;
+    }
+    if (!picked.length) {
+      note.textContent = 'Pick at least one topic — an empty filter would show everything, which '
+        + 'is what no filter already does.';
+      note.className = 'adm-note adm-note-tight is-bad';
+      return;
+    }
+    // 이름을 바꾼 수정 = 옛 이름을 지우고 새 이름으로 저장한다(savePreset 은 이름으로 맞춘다).
+    if (editing && editing !== name) F.deletePreset(editing);
+    var ok = F.savePreset(name, picked);
+    note.textContent = ok ? 'Saved “' + name + '”.' : 'Could not save that filter.';
+    note.className = 'adm-note adm-note-tight ' + (ok ? 'is-good' : 'is-bad');
+    if (ok) resetForm();
+  }
+
+  // ── 전체 그리기 ─────────────────────────────────────────────────────────
+  function renderAll() {
+    var state = F.read();
+    renderSaved(state);
+    renderFollows(state);
+    renderPresets(state);
+    var nums = document.querySelectorAll('.stat-num');
+    if (nums.length >= 3) {
+      nums[0].textContent = String(Object.keys(state.items).length);
+      nums[1].textContent = String(state.topics.length);
+      nums[2].textContent = String(state.presets.length);
+    }
+  }
+
+  $('[data-saved-sort]').addEventListener('change', renderAll);
+  $('[data-saved-clear]').addEventListener('click', function () {
+    var n = Object.keys(F.read().items).length;
+    if (!window.confirm('Remove all ' + n + ' saved '
+        + (n === 1 ? 'story' : 'stories') + '?\n\nFollowed topics and saved filters stay.')) return;
+    var s = F.read();
+    s.items = {};
+    F.write(s);
+  });
+  $('[data-preset-save]').addEventListener('click', savePreset);
+  $('[data-preset-cancel]').addEventListener('click', resetForm);
+  $('[data-preset-name]').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); savePreset(); }
+  });
+  // follow.js 가 상태를 바꿀 때마다 다시 그린다(칩 하나만 고쳐 그리지 않는다 — 이 지면의
+  // 세 구획이 서로를 참조해서, 부분 갱신하면 제안 목록이 뒤처진다).
+  window.addEventListener('ai-digest-follow-change', renderAll);
+  window.addEventListener('storage', renderAll);
+
+  renderAll();
+})();
+</script>
+</body></html>

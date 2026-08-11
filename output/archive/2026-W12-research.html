@@ -4,6 +4,8 @@
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="../feed.xml">
 
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+
+<script src="../static/follow.js"></script>
 <title>AI Digest — Research — Week 12 · 16–22 March 2026 · 9 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -12,7 +14,7 @@
   <div class="mh-top">
     <div class="mh-id">
       <a class="mh-wordmark" href="../index.html">AI Digest<span class="mh-dot" aria-hidden="true"></span></a>
-      <span class="mh-meta">Week 12 · 16–22 March 2026 · 9 stories · 509 in archive</span>
+      <span class="mh-meta">Week 12 · 16–22 March 2026 · 9 stories · 602 in archive</span>
     </div>
     <div class="mh-tools">
       
@@ -34,6 +36,8 @@
         <a class="mh-pill " href="2026-W12-policy_business.html">Policy &amp; business 2</a>
         
         <a class="mh-pill" href="index.html">Archive</a>
+        
+        <a class="mh-pill" href="../saved.html">Saved <span data-saved-count></span></a>
       </nav>
     </div>
   </div>
@@ -54,10 +58,11 @@
 
 
 
-<a class="cat-row" href="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/">
+
+<div class="cat-row">
   <span class="cat-score" style="font-size:34px">.50</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px" title="Measuring progress toward AGI: A cognitive framework">Measuring progress toward AGI: A cognitive framework</div>
+    <a class="cat-row-title" style="font-size:34px" href="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/" title="Measuring progress toward AGI: A cognitive framework">Measuring progress toward AGI: A cognitive framework</a>
     <div class="cat-row-dek">Google DeepMind has proposed a new cognitive framework to measure advancements toward AGI. To support this, they are launching a Kaggle hackathon focused on developing relevant evaluation metrics.</div>
     
     <span class="cat-row-link">deepmind.google/blog/measuring-progress-t… →</span>
@@ -65,13 +70,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">Google DeepMind Blog · high</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="df6a6cb542d3bdd7"
+        data-item-title="Measuring progress toward AGI: A cognitive framework"
+        data-item-url="https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/"
+        data-item-date=""
+        data-item-source="Google DeepMind Blog"
+        data-item-sig="0.50"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment">
+<div class="cat-row">
   <span class="cat-score" style="font-size:28px">.40</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px" title="How we monitor internal coding agents for misalignment">How we monitor internal coding agents for misalignment</div>
+    <a class="cat-row-title" style="font-size:28px" href="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment" title="How we monitor internal coding agents for misalignment">How we monitor internal coding agents for misalignment</a>
     <div class="cat-row-dek">OpenAI is utilizing chain-of-thought monitoring on internal coding agents to better understand and mitigate misalignment risks. This analysis focuses on real-world deployments to improve overall AI safety protocols.</div>
     
     <span class="cat-row-link">openai.com/index/how-we-monitor-internal-… →</span>
@@ -79,13 +98,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">OpenAI News · high</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="fd3208099b40794a"
+        data-item-title="How we monitor internal coding agents for misalignment"
+        data-item-url="https://openai.com/index/how-we-monitor-internal-coding-agents-misalignment"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.40"
+        data-item-topics="code security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://magazine.sebastianraschka.com/p/visual-attention-variants">
+<div class="cat-row">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px" title="A Visual Guide to Attention Variants in Modern LLMs">A Visual Guide to Attention Variants in Modern LLMs</div>
+    <a class="cat-row-title" style="font-size:22px" href="https://magazine.sebastianraschka.com/p/visual-attention-variants" title="A Visual Guide to Attention Variants in Modern LLMs">A Visual Guide to Attention Variants in Modern LLMs</a>
     
     
     <span class="cat-row-link">magazine.sebastianraschka.com/p/visual-at… →</span>
@@ -93,13 +126,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">Ahead of AI (Sebastian Raschka) · mid</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="1ea34ba04923e8e0"
+        data-item-title="A Visual Guide to Attention Variants in Modern LLMs"
+        data-item-url="https://magazine.sebastianraschka.com/p/visual-attention-variants"
+        data-item-date=""
+        data-item-source="Ahead of AI (Sebastian Raschka)"
+        data-item-sig="0.30"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://openai.com/index/why-codex-security-doesnt-include-sast">
+<div class="cat-row">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px" title="Why Codex Security Doesn’t Include a SAST Report">Why Codex Security Doesn’t Include a SAST Report</div>
+    <a class="cat-row-title" style="font-size:17px" href="https://openai.com/index/why-codex-security-doesnt-include-sast" title="Why Codex Security Doesn’t Include a SAST Report">Why Codex Security Doesn’t Include a SAST Report</a>
     
     
     <span class="cat-row-link">openai.com/index/why-codex-security-doesn… →</span>
@@ -107,8 +154,22 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">OpenAI News · mid</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="bae4347eaebc2477"
+        data-item-title="Why Codex Security Doesn’t Include a SAST Report"
+        data-item-url="https://openai.com/index/why-codex-security-doesnt-include-sast"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.30"
+        data-item-topics="code security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
 
 <div class="cat-footer">

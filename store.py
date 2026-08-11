@@ -484,6 +484,34 @@ class Store:
         ).fetchall()
         return [self._row_to_item(r) for r in rows]
 
+    def source_stats(self) -> dict[str, dict]:
+        """{source_id: {published, dropped, last_date, avg_significance}} — 소스 페이지용.
+
+        **config 가 아니라 DB 를 읽는 이유**: sources.yaml 은 "무엇을 수집하기로 했는가"만
+        말한다. "그래서 실제로 몇 건이 지면에 올랐는가"는 여기밖에 없고, 소스를 지울지
+        판단할 때 필요한 건 후자다(2026-07-31 에 소스 확장을 닫을 때 손으로 세어 본 값이다).
+
+        게재분이 0인데 탈락분이 많은 소스 = 피드는 사는데 신호가 없는 소스, 둘 다 0 =
+        피드가 죽었거나 새로 넣은 소스. 지면에서 그 둘을 구분해 보여준다.
+        """
+        rows = self.conn.execute(
+            """SELECT source_id,
+                      SUM(is_published)                      AS published,
+                      SUM(CASE WHEN is_published=0 THEN 1 ELSE 0 END) AS dropped,
+                      MAX(CASE WHEN is_published=1 THEN digest_date END) AS last_date,
+                      AVG(CASE WHEN is_published=1 THEN significance END) AS avg_sig
+                 FROM items GROUP BY source_id"""
+        ).fetchall()
+        return {
+            r["source_id"]: {
+                "published": r["published"] or 0,
+                "dropped": r["dropped"] or 0,
+                "last_date": r["last_date"] or "",
+                "avg_significance": round(r["avg_sig"], 2) if r["avg_sig"] is not None else None,
+            }
+            for r in rows
+        }
+
     def dropped_items(self, digest_date: str | None = None) -> list[dict]:
         """탈락분 조회 (사유 포함). 카테고리 상한/min_significance 튜닝할 때
         "실제로 뭘 버렸는지" 보려고 — 렌더에는 안 쓰임."""

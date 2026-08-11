@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
 </head><body>
 <div class="wrap">
-{{ m.masthead(period_meta, total_records, nav_links, archive_link, search_href, true, show_meta=false) }}
+{{ m.masthead(period_meta, total_records, nav_links, archive_link, search_href, true, show_meta=false, asset_prefix=asset_prefix) }}
 {#
   Wire 티커는 `data-scope`(=.home) **밖**에 둔다. 토픽 필터는 scope 안의 [data-topics] 만
   숨기는데, 티커에 필터를 걸면 "지금 안 보는 것"까지 흘려보내는 티커의 뜻이 없어지고,
@@ -81,6 +81,7 @@
         {{ lead.rel_time_long }}</span>
       {% if lead.url_dead %}<span class="byline-link byline-dead">Link no longer available</span>
       {%- else %}<a class="byline-link" href="{{ lead.url }}">Read at {{ lead.domain }} →</a>{% endif %}
+      {{ m.save_btn(lead) }}
     </div>
   </div>
   {{ m.image_slot(lead, 'imgslot-lead', asset_prefix) }}
@@ -102,7 +103,10 @@
     <a class="card-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="card-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
-    <span class="card-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+    <div class="card-foot">
+      <span class="card-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+      {{ m.save_btn(it, compact=true) }}
+    </div>
   </article>
   {% endfor %}
 </div>
@@ -129,7 +133,10 @@
     <a class="worth-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="worth-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
-    <span class="worth-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+    <div class="worth-foot">
+      <span class="worth-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+      {{ m.save_btn(it, compact=true) }}
+    </div>
   </div>
   {{ m.image_slot(it, 'imgslot-thumb', asset_prefix) }}
 </div>
@@ -140,11 +147,19 @@
 {% if brief %}
 <section class="brief-section" data-section>
 <span class="section-h section-h-brief">In brief — {{ brief|length }} more</span>
+{#
+  **2026-08-11: 행이 `<a>` 에서 `<div>` 로 바뀌었다.** 저장 버튼을 넣으려면 그래야 한다 —
+  `<a>` 안의 `<button>` 은 대화형 콘텐츠 중첩이라 HTML 위반이고, 브라우저가 파싱 단계에서
+  DOM 을 재배치해 버튼이 링크 밖으로 튀어나온다(그러면 클릭 대상이 어긋난다).
+  링크는 이제 제목이 받는다. 행 전체를 누를 수 있었던 것만 잃었고, `.brief-row:hover` 의
+  배경은 div 에서도 그대로 동작한다. 죽은 링크 처리(href 없음)도 `href()` 가 그대로 맡는다.
+#}
 {% for it in brief %}
-<a class="brief-row"{{ m.href(it) }} data-topics="{{ it.topic_attr }}">
-  <span class="brief-title" title="{{ it.title }}">{{ it.display_title }}</span>
+<div class="brief-row" data-topics="{{ it.topic_attr }}">
+  <a class="brief-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
   <span class="brief-cat">{{ short_labels[it.category] }}</span>
-</a>
+  {{ m.save_btn(it, compact=true) }}
+</div>
 {% endfor %}
 </section>
 {% endif %}

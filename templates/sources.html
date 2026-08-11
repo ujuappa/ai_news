@@ -1,0 +1,123 @@
+{% import "macros.html" as m %}
+{#
+  소스 디렉터리 (2026-08-11 신설). **읽기 전용 지면이다.**
+
+  편집은 `admin.html` 이 한다. 여기에 편집 컨트롤을 두면 안 되는 이유는 취향이 아니라 물리다 —
+  이 페이지는 GitHub Pages 가 서빙하는 정적 HTML 이고, `sources.yaml` 을 쓸 수 있는 건
+  브라우저에서 GitHub Contents API 를 직접 부르는 쪽(=admin, 토큰 필요)뿐이다. 읽기와 쓰기를
+  한 지면에 섞으면 토큰 없이 열었을 때 절반이 죽은 버튼이 된다.
+
+  표가 말하는 두 축을 섞지 말 것:
+    status  = 사람이 적어둔 기대값("이 피드가 있다고 믿는다")
+    health  = DB 실측("그래서 실제로 지면에 올랐나") — render._source_health
+  둘이 어긋나는 게 정보다. `verified` 인데 silent 면 사이트 구조가 바뀐 것이고,
+  quiet(수집은 되는데 전부 하한 아래)는 죽은 소스와 완전히 다른 사례다.
+#}
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{ m.head_scripts(asset_prefix) }}
+<title>AI Digest — Sources</title>
+<link rel="stylesheet" href="{{ asset_prefix }}static/digest.css">
+</head><body>
+<div class="wrap">
+{{ m.util_header('Sources', 'sources', asset_prefix, show_admin=true) }}
+
+<div class="archive-body">
+  <div class="archive-top">
+    <h1 class="archive-title">Sources</h1>
+    <p class="admin-lede">
+      Where every item comes from. Counts are measured from the archive, not from the config —
+      a feed can be alive and still produce nothing that clears the cut.
+      <a class="cat-footer-link" href="{{ asset_prefix }}admin.html">Edit sources →</a>
+    </p>
+  </div>
+
+  {{ m.stat_band(summary) }}
+
+  {% for g in groups %}
+  <div class="src-group">
+    <div class="also-break">
+      <span class="break-h">{{ g.label }}</span>
+      <span class="break-rule"></span>
+      <span class="break-sub">{{ g.sources|length }} source{{ 's' if g.sources|length != 1 }}</span>
+    </div>
+
+    <div class="src-table-head">
+      <span>Source</span><span>Feed</span><span>Parse</span>
+      <span>Published</span><span>Last seen</span><span>State</span>
+    </div>
+
+    {% for s in g.sources %}
+    <div class="src-row{% if not s.enabled %} is-off{% endif %}">
+      <div class="src-cell-id">
+        <span class="src-name">{{ s.name }}</span>
+        <span class="src-id">{{ s.id }}</span>
+        {% if s.notes %}<span class="src-notes">{{ s.notes }}</span>{% endif %}
+      </div>
+      <div class="src-cell-feed">
+        {#- 링크는 피드 URL 그대로. gnews 소스는 feed_url 이 검색어라서 URL 이 아니다 →
+            그때는 링크를 걸지 않는다(href 없는 <a> 는 클릭·포커스가 안 되는 플레이스홀더다,
+            macros.href 주석과 같은 규칙). #}
+        {% if s.feed_url.startswith('http') %}
+        <a class="src-feed" href="{{ s.feed_url }}" title="{{ s.feed_url }}">{{ s.feed_display }}</a>
+        {% else %}
+        <span class="src-feed src-feed-query" title="{{ s.feed_url }}">query: {{ s.feed_url }}</span>
+        {% endif %}
+        <span class="src-flags">
+          {%- if s.full_text %}<span class="tag">full text</span>{% endif %}
+          {%- if s.max_entries %}<span class="tag">max {{ s.max_entries }}</span>{% endif %}
+          {%- if s.dropped %}<span class="tag">{{ s.dropped }} below cut</span>{% endif %}
+        </span>
+      </div>
+      <div class="src-cell-parse">
+        <span class="src-parse">{{ s.parse }}</span>
+        <span class="src-status src-status-{{ s.status }}">{{ s.status }}</span>
+      </div>
+      <div class="src-cell-num">
+        <span class="src-count">{{ s.published }}</span>
+        {% if s.avg_significance is not none %}<span class="src-avg">avg {{ '%.2f'|format(s.avg_significance) }}</span>{% endif %}
+      </div>
+      <div class="src-cell-num">
+        <span class="src-last">{{ s.last_date or '—' }}</span>
+      </div>
+      <div class="src-cell-health">
+        <span class="src-health src-health-{{ s.health }}" title="{{ s.health_note }}">{{ s.health }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  {% if orphans %}
+  {#
+    설정에 없는데 아카이브에는 있는 source_id. 숨기면 소스별 합이 아카이브 총계와 안 맞는
+    이유를 아무도 설명할 수 없게 된다. 현재는 `gemini_grounding` 하나 — 그건 RSS 소스가
+    아니라 LLM 검색 그라운딩에서 들어온 항목이라 sources.yaml 에 있을 수 없다.
+  #}
+  <div class="src-group">
+    <div class="also-break">
+      <span class="break-h">Not in the config</span>
+      <span class="break-rule"></span>
+      <span class="break-sub">{{ orphans|length }}</span>
+    </div>
+    <p class="src-orphan-note">
+      These produced published items but have no entry in <code>sources.yaml</code>. Items that
+      arrived through Gemini search grounding land here — grounding is not a feed, so it has no
+      source row to edit.
+    </p>
+    {% for o in orphans %}
+    <div class="src-row">
+      <div class="src-cell-id"><span class="src-name">{{ o.id }}</span></div>
+      <div class="src-cell-feed"><span class="src-feed src-feed-query">no feed — not fetched from a URL</span></div>
+      <div class="src-cell-parse"></div>
+      <div class="src-cell-num"><span class="src-count">{{ o.published }}</span></div>
+      <div class="src-cell-num"><span class="src-last">{{ o.last_date or '—' }}</span></div>
+      <div class="src-cell-health"><span class="src-health src-health-quiet">external</span></div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+</div>
+{{ m.site_footer(asset_prefix ~ 'archive/index.html', total_records, rss_href=asset_prefix ~ 'feed.xml') }}
+</body></html>

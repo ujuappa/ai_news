@@ -1,0 +1,24 @@
+{
+  "_comment": [
+    "소스 오버레이. 2026-08-11 신설. 이 파일은 기계 소유(machine-owned)다 —",
+    "output/admin.html 이 GitHub Contents API 로 통째로 덮어쓴다.",
+    "",
+    "왜 sources.yaml 을 직접 고치지 않는가: 그 파일은 주석 240줄이 곧 결정 근거다(어떤 피드가 왜 죽었는지,",
+    "full_text 를 왜 껐는지, max_entries 가 왜 그 값인지). 브라우저에서 그 파일을 파싱해 다시 뱉으면",
+    "주석은 버려지는 토큰이라 전부 사라진다. 그래서 손 편집용 원본(sources.yaml)과",
+    "기계 편집용 오버레이(이 파일)를 나눴다. config._apply_overlay 가 id 로 매칭해 얹는다.",
+    "",
+    "항목 의미:",
+    "  sources.yaml 에 없는 id  -> 새 소스. name·feed_url·category 가 필요하다",
+    "  sources.yaml 에 있는 id  -> 준 필드만 덮어쓴다(예: enabled:false 하나만)",
+    "  deleted: true            -> 목록에서 뺀다. 원본은 그대로라 이 항목만 지우면 되돌아온다",
+    "",
+    "category 는 sources.yaml 의 최상위 그룹 키와 같아야 한다",
+    "(model_releases · research · tools_products · policy_business · community_takes).",
+    "",
+    "이 파일을 main 에 커밋하면 Pages 는 갱신되지만 파이프라인은 다시 돌지 않는다 —",
+    "daily.yml 의 push 트리거는 수집을 일부러 건너뛴다(디자인 배포용 무료 경로).",
+    "새 소스가 실제로 수집되는 건 다음 cron(14:00 UTC)이거나 admin 의 'Run pipeline now' 를 누른 뒤다."
+  ],
+  "sources": []
+}

@@ -267,6 +267,14 @@ def run(dry_run: bool = False):
     render.render_search_page(all_items, config.OUTPUT_DIR)
     render.render_feed(store.recent_digest_entries(settings.feed_max_digests),
                        config.OUTPUT_DIR, settings.site_url)
+    # 소스 · admin · 저장 지면(2026-08-11). 다이제스트와 무관하게 매 실행 갱신한다 —
+    # 소스 지면의 집계는 DB 를 읽으므로 오늘 수집분이 바로 반영돼야 하고, admin 은 지금
+    # 설정을 구워 넣으므로 sources.yaml 을 고친 실행에서 낡은 채로 남으면 안 된다.
+    repo = config.github_repo()
+    render.render_sources_page(cfg.sources, store.source_stats(), config.OUTPUT_DIR,
+                               total_records=total_records, repo=repo)
+    render.render_admin_page(config.OUTPUT_DIR, repo=repo)
+    render.render_saved_page(config.OUTPUT_DIR, total_records=total_records)
 
     n_major = sum(1 for it in flat if it.get("is_major"))
     print(f"완료 → {config.OUTPUT_DIR/'index.html'}  ({len(flat)} items, {n_major} major)")

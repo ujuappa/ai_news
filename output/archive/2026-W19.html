@@ -4,6 +4,8 @@
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="../feed.xml">
 
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+
+<script src="../static/follow.js"></script>
 <title>AI Digest — 2026-W19</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -36,6 +38,10 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
     Filters<span class="drawer-btn-n" data-filter-count></span>
   </button>
+  
+  <button type="button" class="follow-apply" data-follow-apply hidden>
+    Following<span class="follow-apply-n" data-follow-apply-n></span>
+  </button>
   <div class="chip-row" data-chip-row></div>
   <span class="filter-note">12 stories</span>
 </div>
@@ -44,22 +50,66 @@
     <span class="drawer-h">Topic</span>
     <div class="drawer-pills">
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="chips"
-              data-label="Chips &amp; datacenters" aria-pressed="false">Chips &amp; datacenters 2</button>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="code"
-              data-label="Code" aria-pressed="false">Code 1</button>
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="chips"
+                data-label="Chips &amp; datacenters" aria-pressed="false">Chips &amp; datacenters 2</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="chips"
+                aria-pressed="false" title="Follow Chips &amp; datacenters">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="security"
-              data-label="Security" aria-pressed="false">Security 1</button>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="science"
-              data-label="Science" aria-pressed="false">Science 1</button>
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="code"
+                data-label="Code" aria-pressed="false">Code 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="code"
+                aria-pressed="false" title="Follow Code">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
-      <button type="button" class="topic-pill" data-filter-btn data-topic="music"
-              data-label="Music &amp; audio" aria-pressed="false">Music &amp; audio 1</button>
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="security"
+                data-label="Security" aria-pressed="false">Security 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="security"
+                aria-pressed="false" title="Follow Security">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="science"
+                data-label="Science" aria-pressed="false">Science 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="science"
+                aria-pressed="false" title="Follow Science">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="music"
+                data-label="Music &amp; audio" aria-pressed="false">Music &amp; audio 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="music"
+                aria-pressed="false" title="Follow Music &amp; audio">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
       
     </div>
+    <p class="drawer-note">
+      The star follows a topic. Following is remembered in this browser only and never
+      auto-hides stories — use the Following button above to apply it.
+    </p>
   </div>
 </div>
   <div class="week-split">
@@ -212,11 +262,35 @@
   for(var k=0;k<pills.length;k++)(function(b){
     b.addEventListener('click',function(){toggle(b.getAttribute('data-topic'));});
   })(pills[k]);
+  
+  try{
+    var want=(new URLSearchParams(location.search).get('topics')||'').split(',');
+    for(var q=0;q<want.length;q++){
+      var t=want[q].trim();
+      if(t&&scope.querySelector('[data-topic="'+t+'"]')&&on.indexOf(t)<0) on.push(t);
+    }
+    if(on.length){
+      paint();
+      if(drawer){drawer.removeAttribute('hidden');}   
+      if(drawerBtn){drawerBtn.setAttribute('aria-expanded','true');drawerBtn.classList.add('active');}
+    }
+  }catch(e){/* URLSearchParams 가 없는 아주 오래된 브라우저면 필터를 안 걸고 전체를 보여준다 */}
   if(drawerBtn&&drawer) drawerBtn.addEventListener('click',function(){
     var open=drawer.hasAttribute('hidden');
     if(open) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden','');
     drawerBtn.setAttribute('aria-expanded',open?'true':'false');
     drawerBtn.classList.toggle('active',open);
+  });
+  
+  var followApply=scope.querySelector('[data-follow-apply]');
+  if(followApply&&window.AIDigestFollow) followApply.addEventListener('click',function(){
+    var want=window.AIDigestFollow.read().topics.filter(function(t){
+      return scope.querySelector('[data-topic="'+t+'"]');   // 오늘 안 붙은 토픽은 걸 수 없다
+    });
+    var same=want.length===on.length&&want.every(function(t){return on.indexOf(t)>=0;});
+    on=same?[]:want;
+    followApply.classList.toggle('active',!same);
+    paint();
   });
 })();</script>
 </body></html>

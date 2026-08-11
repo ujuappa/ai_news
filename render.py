@@ -38,6 +38,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+import config
 import images
 from config import CATEGORY_LABELS, CATEGORY_ORDER, TOPIC_LABELS, TOPIC_ORDER
 from store import DEAD_LINK_STATUSES, is_week_label, label_sort_key
@@ -129,6 +130,15 @@ def write_assets(output_dir: Path) -> Path:
     authored = (STATIC_DIR / "digest.css").read_text(encoding="utf-8")
     css_path.parent.mkdir(parents=True, exist_ok=True)
     css_path.write_text(_root_vars_css(PALETTES[DEFAULT_THEME]) + authored, encoding="utf-8")
+    # 이 사이트의 .js 파일 두 개. 인라인이 아닌 이유가 각각 있다:
+    #   admin_rules.js — `config._apply_overlay` 의 사본이라 tests/test_admin.py 가 node 로
+    #                    돌려서 파이썬과 같은 픽스처로 대조한다. 인라인이면 자동화 불가.
+    #   follow.js      — 지면 5종이 공유한다. 매크로로 인라인하면 같은 코드가 5번 실려서
+    #                    브라우저 캐시가 안 먹고, 필터 스크립트가 갈라졌던 사고를 반복한다
+    #                    (macros.topic_filter_script 주석: 두 벌로 두면 또 갈라진다).
+    for asset in ("admin_rules.js", "follow.js"):
+        (css_path.parent / asset).write_text(
+            (STATIC_DIR / asset).read_text(encoding="utf-8"), encoding="utf-8")
     images.copy_to(css_path.parent)
     _assets_written.add(css_path)
     return css_path
@@ -247,6 +257,12 @@ def _annotate(it: dict, rank: int | None = None, ref: datetime | None = None) ->
     # 표시용 제목은 headline 우선, 없으면 원제목. 한 군데서만 정하고 템플릿은 이것만 쓴다
     # (아카이브 415건은 headline 이 비어 있어서 그대로 원제목으로 나간다).
     it["display_title"] = (it.get("headline") or "").strip() or it["title"]
+    # 저장(북마크) 키. `items.id` 가 원본이고, 없으면 URL 로 떨어진다.
+    # **폴백이 필요한 이유**: 저장은 이 값으로 항목을 구분하는데, 비어 있으면 저장한 기사
+    # 전부가 같은 키(`""`)를 공유해서 하나만 남는다 — 조용하고 찾기 어려운 종류의 고장이다.
+    # 실제 파이프라인/DB 경로는 언제나 id 를 싣지만(store._row_to_item), 합성 데이터나
+    # 옛 행이 섞이는 자리라 여기서 막는다.
+    it["save_key"] = str(it.get("id") or it.get("url") or "")
     # 앞 이야기. 호출부(pipeline/rerender)가 store.thread_parent_info 로 채워준 것만 쓴다 —
     # 부모는 보통 몇 달 전 다이제스트라 지금 렌더 중인 groups 안에 없다.
     parent = it.get("thread_parent")
@@ -509,6 +525,178 @@ def render_search_page(items: list[dict], output_dir: Path):
     tmpl = _env.get_template("search.html")
     html = tmpl.render(total=len(data), data_json=data_json, asset_prefix="")
     (output_dir / "search.html").write_text(html, encoding="utf-8")
+
+
+# 소스 페이지에서 "이 소스가 살아 있는가"를 한 단어로 말하는 판정. `status`(사람이 적어둔
+# 기대값)와 **다른 축**이라 섞지 말 것 — status 는 "피드가 있다고 믿는다", 아래는 "실제로
+# 지면에 올랐다"다. 2026-07-31 에 소스를 손으로 셀 때 실제로 쓴 구분이 이거였다.
+def _source_health(src, stat: dict) -> tuple[str, str]:
+    """(키, 사람이 읽는 한 줄). 키는 CSS 클래스 접미사로도 쓰인다."""
+    if not src.enabled:
+        return "off", "Disabled — not fetched"
+    published, dropped = stat.get("published", 0), stat.get("dropped", 0)
+    if published:
+        return "live", f"{published} published"
+    if dropped:
+        # 피드는 살아 있다. 신호가 하한/상한에 계속 걸리는 것 — 소스를 지울지 판단할 때
+        # "죽었다"와 완전히 다른 사례다(arxiv_lg 가 198건 탈락 3건 게재다).
+        return "quiet", f"Fetching, but {dropped} items all fell below the cut"
+    return "silent", "No items collected yet — feed may be dead"
+
+
+def render_sources_page(sources: list, stats: dict[str, dict], output_dir: Path,
+                        total_records: int = 0, repo: str = "") -> Path:
+    """`output/sources.html` — 소스 디렉터리(**읽기 전용**).
+
+    편집은 여기가 아니라 `admin.html` 이 한다. 정적 페이지는 GitHub Pages 에서 서빙되는
+    죽은 HTML 이라 `sources.yaml` 을 쓸 방법이 없다 — 쓰기는 브라우저가 GitHub Contents
+    API 를 직접 부르는 admin 페이지 몫이고, 이 페이지는 그 결과를 보여주는 곳이다.
+
+    수치는 config(무엇을 수집하기로 했나)와 DB(실제로 뭐가 올랐나)를 합쳐서 낸다. 둘 중
+    하나만으로는 소스를 지울지 판단할 수 없다.
+    """
+    by_cat: dict[str, list[dict]] = {}
+    for src in sources:
+        stat = stats.get(src.id, {})
+        health_key, health_note = _source_health(src, stat)
+        by_cat.setdefault(src.category, []).append({
+            "id": src.id, "name": src.name, "category": src.category,
+            "feed_url": src.feed_url, "feed_display": _domain_path(src.feed_url, 52),
+            "parse": src.parse, "status": src.status, "enabled": src.enabled,
+            "full_text": src.full_text, "max_entries": src.max_entries,
+            "sitemap_paths": src.sitemap_paths, "notes": src.notes,
+            "published": stat.get("published", 0), "dropped": stat.get("dropped", 0),
+            "last_date": stat.get("last_date", ""),
+            "avg_significance": stat.get("avg_significance"),
+            "health": health_key, "health_note": health_note,
+        })
+    groups = [{"key": cat, "label": CATEGORY_LABELS[cat], "sources": by_cat[cat]}
+              for cat in CATEGORY_ORDER if by_cat.get(cat)]
+
+    # DB 에는 있지만 설정에 없는 source_id. 지금은 `gemini_grounding`(그라운딩 보조 항목은
+    # 소스가 아니라 LLM 검색에서 온다)이 여기 걸린다. 숨기면 소스별 합이 아카이브 총계와
+    # 안 맞는 이유를 아무도 설명할 수 없게 되므로 따로 적는다.
+    known = {s.id for s in sources}
+    orphans = [{"id": sid, **stats[sid]} for sid in sorted(stats)
+               if sid not in known and stats[sid].get("published")]
+
+    enabled = [s for s in sources if s.enabled]
+    summary = [
+        {"num": len(sources), "label": "Configured"},
+        {"num": len(enabled), "label": "Enabled"},
+        {"num": sum(1 for s in enabled if _source_health(s, stats.get(s.id, {}))[0] == "live"),
+         "label": "Producing"},
+        {"num": total_records, "label": "In archive"},
+    ]
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_assets(output_dir)
+    html = _env.get_template("sources.html").render(
+        groups=groups, orphans=orphans, summary=summary, total_records=total_records,
+        asset_prefix="", search_href="search.html", repo=repo,
+        parse_kinds=_PARSE_KINDS,
+    )
+    out_path = output_dir / "sources.html"
+    out_path.write_text(html, encoding="utf-8")
+    return out_path
+
+
+# `fetch.fetch_source_counted` 의 분기와 **같이 유지해야 한다**. admin 의 드롭다운이 이 목록을
+# 쓰는데, 여기 없는 값을 고르면 fetch 가 조용히 기본(RSS) 분기로 떨어진다.
+_PARSE_KINDS = [
+    {"key": "easy", "label": "easy — clean RSS/Atom"},
+    {"key": "medium", "label": "medium — RSS that breaks sometimes"},
+    {"key": "hard", "label": "hard — scraping/transcripts"},
+    {"key": "sitemap", "label": "sitemap — scrape sitemap.xml"},
+    {"key": "gnews", "label": "gnews — Google News query"},
+    {"key": "hf_papers", "label": "hf_papers — HuggingFace daily papers"},
+]
+
+_SOURCE_STATUSES = ["verified", "verify", "no_feed"]
+
+
+def render_saved_page(output_dir: Path, total_records: int = 0) -> Path:
+    """`output/saved.html` — 저장한 기사 · 팔로우한 토픽 · 저장한 필터.
+
+    **서버는 이 페이지의 내용을 모른다.** 저장/팔로우는 브라우저 localStorage 에만 있고
+    (계정도 서버도 없다), 여기서 굽는 것은 빈 껍데기 + 토픽 어휘뿐이다. 목록은 follow.js 가
+    그린다. 그래서 이 페이지는 렌더 시점 데이터가 없어 rerender 마다 바이트가 같다.
+
+    토픽 어휘를 구워 보내는 이유: 저장한 항목에는 토픽 **키**만 들어 있어서(`chips`),
+    사람이 읽는 라벨(`Chips & datacenters`)로 바꿀 표가 필요하다. 프리셋 편집기의 선택
+    목록도 같은 표를 쓴다.
+    """
+    topics, _cap = config.load_topics()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_assets(output_dir)
+    html = _env.get_template("saved.html").render(
+        asset_prefix="", total_records=total_records,
+        topics=[{"key": t.key, "label": t.label} for t in topics],
+        topics_json=json.dumps({t.key: t.label for t in topics}, ensure_ascii=False),
+    )
+    out_path = output_dir / "saved.html"
+    out_path.write_text(html, encoding="utf-8")
+    return out_path
+
+
+def _read_json(path: Path, default: dict) -> dict:
+    """기계 소유 JSON 읽기. 없거나 깨졌으면 default — admin 지면은 떠야 한다."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return default
+    return data if isinstance(data, dict) else default
+
+
+def render_admin_page(output_dir: Path, repo: str = "") -> Path:
+    """`output/admin.html` — 소스·토픽 편집기. **브라우저가 GitHub API 로 직접 커밋한다.**
+
+    이 페이지에 비밀값은 **하나도 들어가지 않는다.** 쓰기에 필요한 PAT 은 사용자가 런타임에
+    입력하고 그 브라우저의 localStorage 에만 머문다 → 배포 산출물과 레포에는 토큰이 없고,
+    이 URL 을 남이 열어도 토큰이 없으니 읽기 폼만 보인다. (사용자 결정 2026-08-11: 로컬
+    admin 서버가 아니라 GitHub API 경로. 유일하게 안전한 형태가 이거다 — 산출물에 토큰을
+    구우면 공개 레포에서 그대로 유출된다. PROJECT_MEMO §10.5 의 키 노출 3회 참고.)
+
+    편집 대상은 기계 소유 JSON 두 개다(`sources.custom.json` · `topics.json`).
+    `sources.yaml` 은 건드리지 않는다 — 주석 240줄을 클라이언트가 날려먹지 않게.
+
+    **베이스 상태를 페이지에 구워 넣는 이유**: 토큰 없이 열었을 때도 지금 설정을 볼 수 있어야
+    하고, 오버레이 미리보기를 서버(파이썬)의 병합 규칙과 같은 입력으로 계산해야 한다.
+    실제 편집은 연결 직후 GitHub 에서 **라이브 파일을 다시 읽어** 시작한다 — 구운 값으로
+    저장하면 지난 편집을 조용히 되돌린다(push 트리거는 렌더를 다시 하지 않으므로 이 페이지의
+    구운 값은 얼마든지 낡을 수 있다).
+    """
+    base = config.load(overlay=None)
+    topics, max_per_item = config.load_topics()
+    overlay = _read_json(config.CUSTOM_SOURCES_FILE, {"sources": []})
+    topics_doc = _read_json(config.TOPICS_FILE, {})
+
+    baked = {
+        "repo": repo,
+        "baseSources": [config._row_of(s) for s in base.sources],
+        "overlay": overlay,
+        "topics": [{"key": t.key, "label": t.label, "gloss": t.gloss} for t in topics],
+        # 두 파일의 `_comment` 는 손으로 쓴 설명이다. admin 이 파일을 통째로 재생성하므로
+        # 되쓸 원문을 같이 구워 보낸다 — 안 그러면 첫 저장에서 설명이 사라진다.
+        "topicsComment": topics_doc.get("_comment"),
+        "maxPerItem": max_per_item,
+        "categories": [{"key": c, "label": CATEGORY_LABELS[c]} for c in CATEGORY_ORDER],
+        "parseKinds": _PARSE_KINDS,
+        "statuses": _SOURCE_STATUSES,
+        "paths": {"sources": config.CUSTOM_SOURCES_FILE.name,
+                  "topics": config.TOPICS_FILE.name},
+        "workflow": "daily.yml",
+    }
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_assets(output_dir)
+    html = _env.get_template("admin.html").render(
+        asset_prefix="", repo=repo,
+        baked_json=json.dumps(baked, ensure_ascii=False).replace("</", "<\\/"),
+    )
+    out_path = output_dir / "admin.html"
+    out_path.write_text(html, encoding="utf-8")
+    return out_path
 
 
 def _feed_pub_date(label: str) -> str:

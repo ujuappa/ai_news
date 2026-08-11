@@ -192,13 +192,55 @@ def test_templates_live_on_disk_not_in_python():
 # ── 홈 상단 (2026-08-06 캔버스 "Home Top Organization" 6a) ────────────────────
 
 def test_masthead_carries_no_link_that_goes_nowhere(tmp_path):
-    """6a 헤더에는 `Following 8` · `Monthly` pill 이 있지만 **일부러 안 넣었다** — 팔로우도
-    주간/월간 기간 전환도 구현이 없어서(후자는 spec 문서만 있다) 누르면 아무 일도 안 일어난다.
-    죽은 버튼 금지는 이 프로젝트의 규칙이고, 캔버스를 옮길 때 가장 새기 쉬운 구멍이다."""
+    """죽은 버튼 금지. 캔버스를 옮길 때 가장 새기 쉬운 구멍이다.
+
+    **2026-08-11 에 목록이 줄었다.** 예전에는 `Following` 도 금지어였는데(6a 헤더의
+    `Following 8` pill), 그날 저장·팔로우가 실제로 구현됐다 — `static/follow.js` +
+    `saved.html` + 컨트롤 줄의 Following 버튼. 그래서 이제 `Following` 은 살아 있는
+    컨트롤이고, 금지 대상이 아니라 **가리키는 곳이 실제로 있는지** 검사할 대상이다
+    (아래 test_the_saved_and_following_controls_lead_somewhere_real).
+
+    `Monthly` · `Sign in` 은 여전히 코드가 없다. 주간/월간 기간 전환은
+    docs/superpowers/specs/2026-08-04-weekly-monthly-periods-design.md 에 설계만 있고,
+    로그인은 §10.1(정적 사이트에 인증 붙이기 = 함정)에서 안 하기로 했다.
+    """
     render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
     page = (tmp_path / "index.html").read_text(encoding="utf-8")
-    for dead in ("Following", "Monthly", "Sign in"):
+    for dead in ("Monthly", "Sign in"):
         assert dead not in page, f"구현이 없는 {dead!r} 가 마크업에 들어왔다"
+
+
+def test_the_saved_and_following_controls_lead_somewhere_real(tmp_path):
+    """`Saved` pill 과 `Following` 버튼이 **실제로 뭔가에 연결돼 있는지**.
+
+    이 둘은 2026-08-11 에 구현됐지만, 구현됐다는 사실 자체가 회귀를 막아 주지는 않는다 —
+    자산(`follow.js`)이 안 복사되거나 `saved.html` 을 굽는 호출이 빠지면 pill 은 그대로
+    남아서 404 로 가는 죽은 링크가 된다. 그게 예전의 `Following 8` 과 정확히 같은 상태다.
+
+    토픽이 붙은 아이템으로 렌더해야 컨트롤 줄이 나온다(`filters|length > 1`) — 토픽이 없는
+    픽스처로는 Following 버튼이 아예 안 그려져서 이 검사가 조용히 통과한다.
+    """
+    items = []
+    for i in range(3):
+        it = dict(ITEM)
+        it["title"] = it["headline"] = f"Story {i}"
+        it["url"] = f"https://example.com/{i}"
+        it["topics"] = ["chips", "money"]
+        items.append(it)
+    render.render_digest("2026-07-31", _groups(items), [], tmp_path, total_records=3)
+    render.render_saved_page(tmp_path, total_records=3)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+
+    assert 'href="saved.html"' in page, "Saved pill 이 어디도 가리키지 않는다"
+    assert (tmp_path / "saved.html").exists(), "Saved pill 의 대상 페이지가 없다"
+    # 두 컨트롤 다 follow.js 없이는 아무 일도 하지 않는다.
+    assert 'src="static/follow.js"' in page
+    assert (tmp_path / "static" / "follow.js").exists(), "follow.js 가 복사되지 않았다"
+    assert "data-follow-apply" in page, "Following 버튼이 사라졌다"
+    # 저장 버튼은 항목마다 있어야 하고, 저장에 필요한 값을 들고 있어야 한다.
+    assert page.count("data-item-id=") >= 3, "항목에 저장 버튼이 안 붙었다"
+    for attr in ("data-item-id", "data-item-title", "data-item-url", "data-item-topics"):
+        assert attr in page, f"저장 버튼에 {attr} 가 없다 — 저장 목록을 그릴 수 없다"
 
 
 def test_home_top_ships_the_6a_blocks(tmp_path):

@@ -4,6 +4,8 @@
 <link rel="alternate" type="application/rss+xml" title="AI Digest" href="../feed.xml">
 
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+
+<script src="../static/follow.js"></script>
 <title>AI Digest — Research — Thursday · 30 July 2026 · 25 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -12,7 +14,7 @@
   <div class="mh-top">
     <div class="mh-id">
       <a class="mh-wordmark" href="../index.html">AI Digest<span class="mh-dot" aria-hidden="true"></span></a>
-      <span class="mh-meta">Thursday · 30 July 2026 · 25 stories · 509 in archive</span>
+      <span class="mh-meta">Thursday · 30 July 2026 · 25 stories · 602 in archive</span>
     </div>
     <div class="mh-tools">
       
@@ -34,6 +36,8 @@
         <a class="mh-pill " href="2026-07-30-policy_business.html">Policy &amp; business 9</a>
         
         <a class="mh-pill" href="index.html">Archive</a>
+        
+        <a class="mh-pill" href="../saved.html">Saved <span data-saved-count></span></a>
       </nav>
     </div>
   </div>
@@ -54,10 +58,11 @@
 
 
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26119">
+
+<div class="cat-row">
   <span class="cat-score" style="font-size:34px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:34px" title="Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models">Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models</div>
+    <a class="cat-row-title" style="font-size:34px" href="https://arxiv.org/abs/2607.26119" title="Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models">Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models</a>
     <div class="cat-row-dek">This research probes why reinforcement learning (RL) models outperform supervised fine-tuned (SFT) models on mathematical reasoning tasks by analyzing their internal representations. Findings indicate that RL models develop more linearly separable and structured representations, enabling higher accuracy in predicting answer correctness. They also exhibit a hierarchical architecture where deeper layers are more critical, unlike SFT models which distribute importance uniformly.</div>
     
     <span class="cat-row-link">arxiv.org/abs/2607.26119 →</span>
@@ -65,13 +70,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.AI · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="c588ecbbc38400ce"
+        data-item-title="Probing the Origins of Reasoning Performance: Representational Quality for Mathematical Problem-Solving in RL vs. SFT Fine-Tuned Models"
+        data-item-url="https://arxiv.org/abs/2607.26119"
+        data-item-date=""
+        data-item-source="arXiv cs.AI"
+        data-item-sig="0.65"
+        data-item-topics="science"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26155">
+<div class="cat-row">
   <span class="cat-score" style="font-size:28px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:28px" title="ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science">ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science</div>
+    <a class="cat-row-title" style="font-size:28px" href="https://arxiv.org/abs/2607.26155" title="ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science">ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science</a>
     <div class="cat-row-dek">CLINLENS is a new benchmark featuring 200 executable tasks over five linked MIMIC clinical resources, designed to evaluate long-horizon coding agents for longitudinal multimodal clinical data science. The strongest of 24 model configurations achieved 56.3% scope-macro STRICTPASS despite 100% EXECSUCCESS, with biomedical systems adapted to GPT-4o-mini reaching at most 2.9%. This reveals a significant gap between runnable code and accurate clinical analyses, emphasizing the complexity of real-world clinical data tasks.</div>
     
     <span class="cat-row-link">arxiv.org/abs/2607.26155 →</span>
@@ -79,13 +98,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.AI · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="d1ece3681748b5e6"
+        data-item-title="ClinLens: Towards Long-Horizon Coding Agents for Longitudinal Multimodal Clinical Data Science"
+        data-item-url="https://arxiv.org/abs/2607.26155"
+        data-item-date=""
+        data-item-source="arXiv cs.AI"
+        data-item-sig="0.65"
+        data-item-topics="code health"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26160">
+<div class="cat-row">
   <span class="cat-score" style="font-size:22px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:22px" title="GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning">GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning</div>
+    <a class="cat-row-title" style="font-size:22px" href="https://arxiv.org/abs/2607.26160" title="GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning">GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning</a>
     
     
     <span class="cat-row-link">arxiv.org/abs/2607.26160 →</span>
@@ -93,13 +126,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.AI · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="1bc3804b45589a87"
+        data-item-title="GuideSkill: Evolving Executable LLM Agent Skills for Guideline-Grounded Clinical Reasoning"
+        data-item-url="https://arxiv.org/abs/2607.26160"
+        data-item-date=""
+        data-item-source="arXiv cs.AI"
+        data-item-sig="0.65"
+        data-item-topics="health"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26490">
+<div class="cat-row">
   <span class="cat-score" style="font-size:17px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:17px" title="EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks">EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks</div>
+    <a class="cat-row-title" style="font-size:17px" href="https://arxiv.org/abs/2607.26490" title="EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks">EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks</a>
     
     
     <span class="cat-row-link">arxiv.org/abs/2607.26490 →</span>
@@ -107,13 +154,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.AI · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="6d70de0a44b8ce92"
+        data-item-title="EvoPINN: Agentic Discovery of Executable Algorithms for Physics-Informed Neural Networks"
+        data-item-url="https://arxiv.org/abs/2607.26490"
+        data-item-date=""
+        data-item-source="arXiv cs.AI"
+        data-item-sig="0.65"
+        data-item-topics="code science"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26946">
+<div class="cat-row">
   <span class="cat-score" style="font-size:15px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px" title="Belief-Guided Decision Making with Uncertainty Gating in the Game of Go">Belief-Guided Decision Making with Uncertainty Gating in the Game of Go</div>
+    <a class="cat-row-title" style="font-size:15px" href="https://arxiv.org/abs/2607.26946" title="Belief-Guided Decision Making with Uncertainty Gating in the Game of Go">Belief-Guided Decision Making with Uncertainty Gating in the Game of Go</a>
     
     
     <span class="cat-row-link">arxiv.org/abs/2607.26946 →</span>
@@ -121,13 +182,27 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.AI · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="2adebca749d22b15"
+        data-item-title="Belief-Guided Decision Making with Uncertainty Gating in the Game of Go"
+        data-item-url="https://arxiv.org/abs/2607.26946"
+        data-item-date=""
+        data-item-source="arXiv cs.AI"
+        data-item-sig="0.65"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
-<a class="cat-row" href="https://arxiv.org/abs/2607.26059">
+<div class="cat-row">
   <span class="cat-score" style="font-size:15px">.65</span>
   <div>
-    <div class="cat-row-title" style="font-size:15px" title="Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning">Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning</div>
+    <a class="cat-row-title" style="font-size:15px" href="https://arxiv.org/abs/2607.26059" title="Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning">Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning</a>
     
     
     <span class="cat-row-link">arxiv.org/abs/2607.26059 →</span>
@@ -135,8 +210,22 @@
   <div class="cat-row-side">
     
     <div class="cat-row-side-source">arXiv cs.LG (Machine Learning) · major</div>
+    <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="6e294528fc13de0b"
+        data-item-title="Emergent Sparsity in Frozen Random CNN Feature Extractors for Deep Reinforcement Learning"
+        data-item-url="https://arxiv.org/abs/2607.26059"
+        data-item-date=""
+        data-item-source="arXiv cs.LG (Machine Learning)"
+        data-item-sig="0.65"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
   </div>
-</a>
+</div>
 
 
 <div class="cat-footer">
