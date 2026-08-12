@@ -6,7 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="static/follow.js"></script>
-<title>AI Digest — Model releases — Tuesday · 11 August 2026 · 18 stories</title>
+<title>AI Digest — Model releases — Wednesday · 12 August 2026 · 17 stories</title>
 <link rel="stylesheet" href="static/digest.css">
 </head><body>
 <div class="wrap">
@@ -14,7 +14,7 @@
   <div class="mh-top">
     <div class="mh-id">
       <a class="mh-wordmark" href="index.html">AI Digest<span class="mh-dot" aria-hidden="true"></span></a>
-      <span class="mh-meta">Tuesday · 11 August 2026 · 18 stories · 602 in archive</span>
+      <span class="mh-meta">Wednesday · 12 August 2026 · 17 stories · 618 in archive</span>
     </div>
     <div class="mh-tools">
       
@@ -27,11 +27,11 @@
       
       <nav class="mh-nav">
         
-        <a class="mh-pill active" href="model_releases.html">Model releases 4</a>
+        <a class="mh-pill active" href="model_releases.html">Model releases 2</a>
         
-        <a class="mh-pill " href="research.html">Research 0</a>
+        <a class="mh-pill " href="research.html">Research 2</a>
         
-        <a class="mh-pill " href="tools_products.html">Tools &amp; products 4</a>
+        <a class="mh-pill " href="tools_products.html">Tools &amp; products 3</a>
         
         <a class="mh-pill " href="policy_business.html">Policy &amp; business 10</a>
         
@@ -46,12 +46,12 @@
 <div class="cat-top">
   <div>
     <h1 class="cat-title">Model releases</h1>
-    <p class="cat-dek">New models from Meta, Motif, OpenAI, and Macaron aim for local deployment, specialized tasks, and continual learning.</p>
+    <p class="cat-dek">New models from Google DeepMind and Hugging Face focus on accessibility and efficient edge vision.</p>
   </div>
   <div class="pill-row">
-    <span class="pill active">All 4</span>
-    <span class="pill">Major 2</span>
-    <span class="pill">Hugging Face Daily Papers 2</span>
+    <span class="pill active">All 2</span>
+    
+    <span class="pill">Google DeepMind Blog 1</span>
   </div>
 </div>
 <div class="hr2" style="margin:0"></div>
@@ -60,51 +60,23 @@
 
 
 <div class="cat-row">
-  <span class="cat-score" style="font-size:34px">.60</span>
+  <span class="cat-score" style="font-size:34px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/08/10/metas-new-glimmer-ai-model-offers-a-hint-at-zuckerbergs-personal-intelligence-vision/" title="Meta’s new Glimmer AI model offers a hint at Zuckerberg’s personal intelligence vision">Meta’s New Glimmer AI Model Offers Hint at Zuckerberg’s Vision</a>
-    <div class="cat-row-dek">Meta released Muse Glimmer, an open-weight, 30-billion parameter AI model designed to power personal AI agents locally on consumer hardware. Glimmer, an open version of Meta&#39;s Muse Spark, supports multi-step tasks, text, and images across over 100 languages, aiming for privacy-sensitive, always-on operation without internet connectivity. This release provides a tangible example of Mark Zuckerberg&#39;s vision for widely distributed &#34;personal superintelligence.&#34;</div>
+    <a class="cat-row-title" style="font-size:34px" href="https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/" title="Putting sign language AI into users’ hands">Google DeepMind&#39;s Sign-Language-to-Text Model</a>
+    <div class="cat-row-dek">Google DeepMind has unveiled a new sign-language-to-text (SL2T) model, designed to power innovative sign language features. This breakthrough aims to enhance accessibility for Deaf and hard-of-hearing users.</div>
     
-    <span class="cat-row-link">techcrunch.com/2026/08/10/metas-new-glimm… →</span>
+    <span class="cat-row-link">deepmind.google/blog/putting-sign-languag… →</span>
   </div>
   <div class="cat-row-side">
-    <span class="tag tag-acc">MAJOR</span>
-    <div class="cat-row-side-source">TechCrunch — AI</div>
-    <button type="button" class="save-btn save-btn-compact" data-save
-        data-item-id="e7d6356c97dc9ba4"
-        data-item-title="Meta’s New Glimmer AI Model Offers Hint at Zuckerberg’s Vision"
-        data-item-url="https://techcrunch.com/2026/08/10/metas-new-glimmer-ai-model-offers-a-hint-at-zuckerbergs-personal-intelligence-vision/"
-        data-item-date=""
-        data-item-source="TechCrunch — AI"
-        data-item-sig="0.60"
-        data-item-topics="chips"
-        aria-pressed="false">
-  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
-  <span class="save-btn-label" data-save-label>Save</span>
-</button>
-  </div>
-</div>
-
-<div class="cat-row">
-  <span class="cat-score" style="font-size:28px">.60</span>
-  <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://huggingface.co/papers/2608.09119" title="Motif 3: Technical Report">Motif 3: A 314B Parameter Mixture-of-Experts Model</a>
-    <div class="cat-row-dek">Motif 3 is a new decoder-only Mixture-of-Experts language model featuring 314 billion total parameters, with 13.2 billion activated per token and 384 routed experts per layer, selecting eight per token. It incorporates Grouped Differential Latent Attention (GDLA), modified manifold-constrained hyper-connections, Expert Specific PolyNorm activations, and multi-token prediction to enhance optimization, specialization, and inference, pretrained on 12.5 trillion tokens.</div>
     
-    <span class="cat-row-link">huggingface.co/papers/2608.09119 →</span>
-  </div>
-  <div class="cat-row-side">
-    <span class="tag tag-acc">MAJOR</span>
-    <div class="cat-row-side-source">Hugging Face Daily Papers</div>
+    <div class="cat-row-side-source">Google DeepMind Blog · high</div>
     <button type="button" class="save-btn save-btn-compact" data-save
-        data-item-id="74741078d9c88058"
-        data-item-title="Motif 3: A 314B Parameter Mixture-of-Experts Model"
-        data-item-url="https://huggingface.co/papers/2608.09119"
+        data-item-id="f5d9b5f669dc0283"
+        data-item-title="Google DeepMind&#39;s Sign-Language-to-Text Model"
+        data-item-url="https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/"
         data-item-date=""
-        data-item-source="Hugging Face Daily Papers"
-        data-item-sig="0.60"
+        data-item-source="Google DeepMind Blog"
+        data-item-sig="0.40"
         data-item-topics=""
         aria-pressed="false">
   <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -116,52 +88,24 @@
 </div>
 
 <div class="cat-row">
-  <span class="cat-score" style="font-size:22px">.50</span>
+  <span class="cat-score" style="font-size:28px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows" title="Expanding Daybreak as the Cyber Defense Window Narrows">GPT-5.6-Cyber: OpenAI&#39;s New Cybersecurity Model via Daybreak Red</a>
+    <a class="cat-row-title" style="font-size:28px" href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b" title="LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge">LFM2.5-VL-3B for Better, Faster Vision at the Edge</a>
+    <div class="cat-row-dek">Hugging Face announced LFM2.5-VL-3B, a new 3-billion parameter model designed to enhance vision capabilities for edge devices. This model aims to provide better and faster visual processing, making advanced AI vision more accessible and efficient for deployment in resource-constrained environments.</div>
     
-    <span class="thread-line">Earlier: Daybreak: Tools for securing every organization in the world (2026-W26)</span>
-    <span class="cat-row-link">openai.com/index/expanding-daybreak-as-th… →</span>
+    <span class="cat-row-link">huggingface.co/blog/LiquidAI/lfm2-5-vl-3b →</span>
   </div>
   <div class="cat-row-side">
     
-    <div class="cat-row-side-source">OpenAI News · high</div>
+    <div class="cat-row-side-source">Hugging Face Blog · high</div>
     <button type="button" class="save-btn save-btn-compact" data-save
-        data-item-id="3a8585570cab21df"
-        data-item-title="GPT-5.6-Cyber: OpenAI&#39;s New Cybersecurity Model via Daybreak Red"
-        data-item-url="https://openai.com/index/expanding-daybreak-as-the-cyber-defense-window-narrows"
+        data-item-id="ab799e9da743babb"
+        data-item-title="LFM2.5-VL-3B for Better, Faster Vision at the Edge"
+        data-item-url="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b"
         data-item-date=""
-        data-item-source="OpenAI News"
-        data-item-sig="0.50"
-        data-item-topics="code security"
-        aria-pressed="false">
-  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
-  <span class="save-btn-label" data-save-label>Save</span>
-</button>
-  </div>
-</div>
-
-<div class="cat-row">
-  <span class="cat-score" style="font-size:17px">.50</span>
-  <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://huggingface.co/papers/2608.09819" title="Macaron-V1: Towards Open Continual Learning with Self-Improvement and Mixture-of-LoRA">Macaron-V1: Open Continual Learning with Self-Improvement</a>
-    
-    
-    <span class="cat-row-link">huggingface.co/papers/2608.09819 →</span>
-  </div>
-  <div class="cat-row-side">
-    
-    <div class="cat-row-side-source">Hugging Face Daily Papers · high</div>
-    <button type="button" class="save-btn save-btn-compact" data-save
-        data-item-id="0902187faa230c08"
-        data-item-title="Macaron-V1: Open Continual Learning with Self-Improvement"
-        data-item-url="https://huggingface.co/papers/2608.09819"
-        data-item-date=""
-        data-item-source="Hugging Face Daily Papers"
-        data-item-sig="0.50"
-        data-item-topics="code"
+        data-item-source="Hugging Face Blog"
+        data-item-sig="0.40"
+        data-item-topics=""
         aria-pressed="false">
   <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -173,13 +117,13 @@
 
 
 <div class="cat-footer">
-  <span class="cat-footer-note">4 of 4 shown · category cap 10 · min significance 0.3</span>
+  <span class="cat-footer-note">2 of 2 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="archive/index.html">Model releases in earlier weeks →</a>
 </div>
 </div>
 </div>
 <footer class="site-footer">
-  <span class="term-line">digest --items 4 --status ok</span>
+  <span class="term-line">digest --items 2 --status ok</span>
   <div class="site-footer-tools">
     <span class="site-footer-label">Theme</span>
     <div class="theme-picker">
