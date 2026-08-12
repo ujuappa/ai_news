@@ -137,6 +137,20 @@ def test_rail_css_is_a_400px_side_panel_that_can_hide(tmp_path):
     assert "1100px" in css
 
 
+def test_open_rail_compacts_digest_type_and_logos():
+    """레일이 열리면 제목 clamp 와 로고 슬롯이 뷰포트/고정폭을 그대로 써서 기사가
+    세로로만 길어진다. 열린 동안에만 글자·슬롯을 줄인다."""
+    css = _css()
+    compact = ".digest-shell.is-rail-open"
+    for sel in (".lead-title", ".card-title", ".worth-title", ".imgslot-lead",
+                ".imgslot-thumb", ".imgslot-card"):
+        assert f"{compact} {sel}" in css, f"레일 열림에 {sel} 축소가 없다"
+    lead = re.search(r"\.digest-shell\.is-rail-open \.lead-title\s*\{([^}]*)\}", css)
+    assert lead and "24px" in lead.group(1)
+    thumb = re.search(r"\.digest-shell\.is-rail-open \.imgslot-thumb\s*\{([^}]*)\}", css)
+    assert thumb and "72px" in thumb.group(1)
+
+
 def test_comment_css_does_not_bring_archivo_back():
     """조판은 Mona Sans 다. 스펙이 Archivo 를 말해도 그 폰트는 2026-08-07 에 폐기됐다."""
     css = _css()

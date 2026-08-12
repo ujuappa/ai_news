@@ -879,6 +879,34 @@ a.cat-row-title:hover { color:var(--accd); }
 .digest-shell.is-rail-open { display:flex; align-items:flex-start; gap:0; }
 .digest-shell.is-rail-open .home,
 .digest-shell.is-rail-open .cat-body { flex:1; min-width:0; }
+/* 레일이 열리면 지면이 880px 안쪽으로 좁아진다. 리드 제목은 clamp(34px, 4.4vw, 60px) 라
+   **뷰포트**를 따라가서 칸은 줄었는데 글자만 60px 로 남는다. 로고 슬롯도 420/128px 고정.
+   font-size·width 만 내린다 — `font:` 단축은 축을 리셋한다. */
+.digest-shell.is-rail-open .home { padding:22px 24px 32px; }
+.digest-shell.is-rail-open .lead { grid-template-columns:minmax(0,1fr) minmax(0,160px); gap:18px;
+                                  padding:14px 0 16px; }
+.digest-shell.is-rail-open .lead-title { font-size:24px; line-height:1.08; margin-bottom:10px; }
+.digest-shell.is-rail-open .lead-dek { font-size:14px; line-height:1.5; margin-bottom:12px; }
+.digest-shell.is-rail-open .lead-kicker { margin-bottom:8px; }
+.digest-shell.is-rail-open .panel-h { font-size:18px; }
+.digest-shell.is-rail-open .panel-head { padding:16px 18px 10px; }
+.digest-shell.is-rail-open .panel-body { padding:0 18px 18px; }
+.digest-shell.is-rail-open .control-line { padding:0 18px 12px; }
+.digest-shell.is-rail-open .also-grid { gap:14px; }
+.digest-shell.is-rail-open .also-card { flex-basis:calc((100% - 28px) / 3); min-width:0; max-width:none; gap:8px; }
+.digest-shell.is-rail-open .card-title { font-size:15px; line-height:1.2; }
+.digest-shell.is-rail-open .card-dek { font-size:12.5px; line-height:1.45; }
+.digest-shell.is-rail-open .worth-title { font-size:15px; line-height:1.25; margin-bottom:4px; }
+.digest-shell.is-rail-open .worth-dek { font-size:12.5px; line-height:1.45; }
+.digest-shell.is-rail-open .worth-row { grid-template-columns:minmax(0,1fr) 72px; gap:12px; padding:10px 0; }
+.digest-shell.is-rail-open .brief-title { font-size:13px; }
+.digest-shell.is-rail-open .imgslot-lead { padding:6px; }
+.digest-shell.is-rail-open .imgslot-card { padding:5px; }
+.digest-shell.is-rail-open .imgslot-thumb { width:72px; padding:4px; }
+.digest-shell.is-rail-open .home-split { grid-template-columns:minmax(0,1fr); gap:16px; padding-top:16px; }
+.digest-shell.is-rail-open .aside { display:none; }
+.digest-shell.is-rail-open .cat-row-title { font-size:18px !important; }
+.digest-shell.is-rail-open .cat-score { font-size:18px !important; }
 
 .comment-rail { display:flex; flex-direction:column; flex:none; width:400px;
                 position:sticky; top:0; height:100vh; max-height:100vh;
