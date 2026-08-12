@@ -33,8 +33,11 @@
   API 로 그려진다. 저장 버튼이 없는 지면에서는 조용히 아무 일도 하지 않는다.
   `<head>` 에서 동기로 읽어 두면 body 끝의 topic_filter_script 가 window.AIDigestFollow 를
   이미 볼 수 있다(Following 버튼이 그걸 쓴다).
+  comments.js 도 같은 이유 — 행 클릭으로 레일을 열려면 저장 버튼의 data-* 를 읽어야 해서
+  follow.js 다음에 둔다.
 #}
 <script src="{{ asset_prefix }}static/follow.js"></script>
+<script src="{{ asset_prefix }}static/comments.js"></script>
 {%- endmacro %}
 
 {#
@@ -76,6 +79,55 @@
 #}
 {% macro href(it) -%}
 {%- if not it.url_dead %} href="{{ it.url }}"{% endif -%}
+{%- endmacro %}
+
+{#
+  댓글 레일을 여는 행. 행은 `<a>` 가 아니다 — 제목만 원문 링크(.story-headline)이고
+  나머지 클릭은 레일을 연다. comments.js 가 stopPropagation 을 제목 `<a>` 에 건다.
+#}
+{% macro story_attrs(it) -%}
+data-story data-story-id="{{ it.save_key }}" data-story-title="{{ it.display_title or it.title }}" data-story-source="{{ it.source_base or it.source_name }}" data-story-time="{{ it.rel_time_long or it.rel_time or it.digest_date }}" role="button" tabindex="0"
+{%- endmacro %}
+
+{% macro comment_count(it) -%}
+<span class="comment-count" data-comment-count data-story-id="{{ it.save_key }}">Add the first comment</span>
+{%- endmacro %}
+
+{#
+  댓글 레일 껍데기. 내용은 comments.js 가 칠한다. hidden 으로 시작 — display:flex 규칙에
+  [hidden] 짝이 없으면 빈 레일이 항상 열린다(필터 서랍과 같은 사고).
+#}
+{% macro comment_rail() -%}
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 {%- endmacro %}
 
 {#

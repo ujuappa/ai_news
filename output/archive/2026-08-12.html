@@ -7,6 +7,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Wednesday · 12 August 2026 · 17 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -84,6 +85,7 @@
     </div>
   </div>
 </div>
+<div class="digest-shell" data-digest-shell>
 <div class="home" data-scope>
 
 <div class="page-head">
@@ -194,19 +196,20 @@
 
 
 <div class="panel-body" data-section>
-<article class="lead" data-topics="money chips">
+<article class="lead" data-story data-story-id="76fde13897ce60cc" data-story-title="General Catalyst leads $1.1B round into 2-month-old River AI" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="money chips">
   <div class="lead-text">
     <div class="lead-kicker">
       <span class="lead-cat">Policy &amp; business</span>
       <span class="tag tag-acc">Major</span>
     </div>
-    <a class="lead-title" href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" title="General Catalyst leads $1.1B round into 2-month-old River AI">General Catalyst leads $1.1B round into 2-month-old River AI</a>
+    <a class="lead-title story-headline" href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" title="General Catalyst leads $1.1B round into 2-month-old River AI">General Catalyst leads $1.1B round into 2-month-old River AI</a>
     <p class="lead-dek">River AI, a two-month-old startup co-founded by ex-xAI&#39;s Igor Babuschkin, secured a massive $1.1 billion seed/Series A round led by General Catalyst and AMP PBC, with participation from Nvidia and AMD Ventures. The company aims to reinvent AI by rebuilding the stack from scratch, focusing on personally trainable agents and offering an API for fine-tuning open models.</p>
     
     <div class="lead-byline">
       <span class="byline-source">TechCrunch — AI</span>
       <span class="byline-sep"></span>
       <span class="byline-meta">1 day ago</span>
+      <span class="comment-count" data-comment-count data-story-id="76fde13897ce60cc">Add the first comment</span>
       <a class="byline-link" href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/">Read at techcrunch.com →</a>
       <button type="button" class="save-btn" data-save
         data-item-id="76fde13897ce60cc"
@@ -236,14 +239,15 @@
 </div>
 <div class="also-grid">
   
-  <article class="also-card" data-topics="code money">
+  <article class="also-card" data-story data-story-id="4f312455f728afd7" data-story-title="AI code-testing startup Blacksmith’s valuation jumps almost 10x" data-story-source="TechCrunch — AI" data-story-time="8 hours ago" role="button" tabindex="0" data-topics="code money">
     <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/techcrunch_ai.png" alt="" decoding="async"></div>
     <span class="card-cat">Policy &amp; business</span>
-    <a class="card-title" href="https://techcrunch.com/2026/08/12/blacksmiths-valuation-jumps-10x-to-550m-as-ai-coding-fuels-software-validation/" title="AI code-testing startup Blacksmith’s valuation jumps almost 10x in less than a year">AI code-testing startup Blacksmith’s valuation jumps almost 10x</a>
+    <a class="card-title story-headline" href="https://techcrunch.com/2026/08/12/blacksmiths-valuation-jumps-10x-to-550m-as-ai-coding-fuels-software-validation/" title="AI code-testing startup Blacksmith’s valuation jumps almost 10x in less than a year">AI code-testing startup Blacksmith’s valuation jumps almost 10x</a>
     <p class="card-dek">AI code-testing startup Blacksmith&#39;s valuation has increased by almost 10 times in less than a year, reaching $550 million after a $45 million Series B round. The company helps validate AI-generated code, addressing a growing bottleneck in software development as AI accelerates code creation.</p>
     
     <div class="card-foot">
-      <span class="card-meta">TechCrunch — AI · 6h ago</span>
+      <span class="card-meta">TechCrunch — AI · 8h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="4f312455f728afd7">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="4f312455f728afd7"
         data-item-title="AI code-testing startup Blacksmith’s valuation jumps almost 10x"
@@ -261,14 +265,15 @@
     </div>
   </article>
   
-  <article class="also-card" data-topics="money">
+  <article class="also-card" data-story data-story-id="66a5317327387604" data-story-title="Accel closes oversubscribed $550M India fund within weeks" data-story-source="TechCrunch — AI" data-story-time="21 hours ago" role="button" tabindex="0" data-topics="money">
     <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/techcrunch_ai.png" alt="" decoding="async"></div>
     <span class="card-cat">Policy &amp; business</span>
-    <a class="card-title" href="https://techcrunch.com/2026/08/11/accel-closes-oversubscribed-550m-india-fund-within-weeks-19-months-after-its-last/" title="Accel closes oversubscribed $550M India fund within weeks, 19 months after its last">Accel closes oversubscribed $550M India fund within weeks</a>
+    <a class="card-title story-headline" href="https://techcrunch.com/2026/08/11/accel-closes-oversubscribed-550m-india-fund-within-weeks-19-months-after-its-last/" title="Accel closes oversubscribed $550M India fund within weeks, 19 months after its last">Accel closes oversubscribed $550M India fund within weeks</a>
     <p class="card-dek">Accel has rapidly closed an oversubscribed $550 million India fund, just 19 months after its previous one, as part of a $3.5 billion global fundraising effort. The firm sees AI as a horizontal technology underpinning key sectors like consumer internet, fintech, and advanced manufacturing in India, aiming to invest in local winners for global success.</p>
     
     <div class="card-foot">
-      <span class="card-meta">TechCrunch — AI · 20h ago</span>
+      <span class="card-meta">TechCrunch — AI · 21h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="66a5317327387604">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="66a5317327387604"
         data-item-title="Accel closes oversubscribed $550M India fund within weeks"
@@ -286,14 +291,15 @@
     </div>
   </article>
   
-  <article class="also-card" data-topics="science">
+  <article class="also-card" data-story data-story-id="5570c557a3ab740b" data-story-title="Unreleased Anthropic model makes progress on Riemann hypothesis" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="science">
     <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/anthropic.png" alt="" decoding="async"></div>
     <span class="card-cat">Research</span>
-    <a class="card-title" href="https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/" title="An unreleased Anthropic model made progress on one of math’s biggest unsolved problems">Unreleased Anthropic model makes progress on Riemann hypothesis</a>
+    <a class="card-title story-headline" href="https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/" title="An unreleased Anthropic model made progress on one of math’s biggest unsolved problems">Unreleased Anthropic model makes progress on Riemann hypothesis</a>
     <p class="card-dek">An unreleased Anthropic model made significant progress on the Riemann hypothesis, one of mathematics&#39; biggest unsolved problems, by increasing the lower bound of known solutions. The model, prompted by a staff member without extensive math training, explored 650 ideas and coordinated 60 subagents over 1.5 days, spending 31 million output tokens, highlighting AI&#39;s growing potential for scientific discovery.</p>
     
     <div class="card-foot">
       <span class="card-meta">TechCrunch — AI · 1d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="5570c557a3ab740b">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="5570c557a3ab740b"
         data-item-title="Unreleased Anthropic model makes progress on Riemann hypothesis"
@@ -327,14 +333,15 @@
 <section class="worth-section" data-section>
 <span class="section-h">Worth knowing</span>
 
-<div class="worth-row" data-topics="security">
+<div class="worth-row" data-story data-story-id="d05ac3436999a273" data-story-title="Stealing Reasoning Traces from Proprietary LLM APIs" data-story-source="Hugging Face Daily Papers" data-story-time="2 days ago" role="button" tabindex="0" data-topics="security">
   <div>
     <span class="worth-cat">Research</span>
-    <a class="worth-title" href="https://huggingface.co/papers/2608.09867" title="Stealing Reasoning Traces from Proprietary LLM APIs">Stealing Reasoning Traces from Proprietary LLM APIs</a>
+    <a class="worth-title story-headline" href="https://huggingface.co/papers/2608.09867" title="Stealing Reasoning Traces from Proprietary LLM APIs">Stealing Reasoning Traces from Proprietary LLM APIs</a>
     <p class="worth-dek">Researchers have identified an architectural vulnerability allowing the stealing of reasoning traces from proprietary LLM APIs. By injecting an encrypted reasoning trace from a stronger model into a weaker, less safeguarded model from the same provider, they can force the weaker model to decode and output the trace. This exploit leverages the full compatibility and interchangeability of encrypted blocks across sessions, users, and models within a provider&#39;s ecosystem.</p>
     
     <div class="worth-foot">
       <span class="worth-meta">Hugging Face Daily Papers · 2d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="d05ac3436999a273">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="d05ac3436999a273"
         data-item-title="Stealing Reasoning Traces from Proprietary LLM APIs"
@@ -354,14 +361,15 @@
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/huggingface_blog.png" alt="" decoding="async"></div>
 </div>
 
-<div class="worth-row" data-topics="">
+<div class="worth-row" data-story data-story-id="3eb99b6d02d68959" data-story-title="Everything announced at Made by Google ’26" data-story-source="TechCrunch — AI" data-story-time="4 hours ago" role="button" tabindex="0" data-topics="">
   <div>
     <span class="worth-cat">Tools &amp; products</span>
-    <a class="worth-title" href="https://techcrunch.com/2026/08/12/google-unveils-pixel-11-lineup-new-airtag-rival-and-gemini-features-at-made-by-google-2026/" title="Everything announced at Made by Google ’26: Pixel 11, Pixel Watch 5, Pixel Tag, and tons of Gemini features">Everything announced at Made by Google ’26</a>
+    <a class="worth-title story-headline" href="https://techcrunch.com/2026/08/12/google-unveils-pixel-11-lineup-new-airtag-rival-and-gemini-features-at-made-by-google-2026/" title="Everything announced at Made by Google ’26: Pixel 11, Pixel Watch 5, Pixel Tag, and tons of Gemini features">Everything announced at Made by Google ’26</a>
     <p class="worth-dek">Google&#39;s Made by Google 2026 event unveiled the Pixel 11 series, Pixel Watch 5, Pixel Tag, and a host of new Gemini AI features. These include Live Transcribe for American Sign Language, the voice input feature &#34;Rambler&#34; for natural speech understanding, and enhanced &#34;Circle to Search&#34; capabilities directly from the camera.</p>
     
     <div class="worth-foot">
-      <span class="worth-meta">TechCrunch — AI · 3h ago</span>
+      <span class="worth-meta">TechCrunch — AI · 4h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="3eb99b6d02d68959">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="3eb99b6d02d68959"
         data-item-title="Everything announced at Made by Google ’26"
@@ -381,14 +389,15 @@
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/gemini.jpg" alt="" decoding="async"></div>
 </div>
 
-<div class="worth-row" data-topics="">
+<div class="worth-row" data-story data-story-id="8b18fe174be4812d" data-story-title="Google’s Gemini app surges to 1 billion users" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="">
   <div>
     <span class="worth-cat">Policy &amp; business</span>
-    <a class="worth-title" href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" title="Google’s Gemini app surges to 1 billion users">Google’s Gemini app surges to 1 billion users</a>
+    <a class="worth-title story-headline" href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" title="Google’s Gemini app surges to 1 billion users">Google’s Gemini app surges to 1 billion users</a>
     <p class="worth-dek">Google&#39;s Gemini app has rapidly surpassed 1 billion monthly active users, making it one of the company&#39;s fastest-growing products and the 14th Google product to hit this milestone. This growth, announced by CEO Sundar Pichai, keeps pace with OpenAI&#39;s ChatGPT and reflects Gemini&#39;s increasing integration across Google products and its 150 million daily image generations.</p>
     
     <div class="worth-foot">
-      <span class="worth-meta">TechCrunch — AI · 22h ago</span>
+      <span class="worth-meta">TechCrunch — AI · 1d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="8b18fe174be4812d">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="8b18fe174be4812d"
         data-item-title="Google’s Gemini app surges to 1 billion users"
@@ -408,14 +417,15 @@
   <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/gemini.jpg" alt="" decoding="async"></div>
 </div>
 
-<div class="worth-row" data-topics="government">
+<div class="worth-row" data-story data-story-id="2996b8d8477a8c89" data-story-title="Mark Zuckerberg’s latest manifesto promises to save America" data-story-source="Google News" data-story-time="1 day ago" role="button" tabindex="0" data-topics="government">
   <div>
     <span class="worth-cat">Policy &amp; business</span>
-    <a class="worth-title" href="https://www.washingtonpost.com/technology/2026/08/10/zuckerberg-manifesto-says-meta-ai-will-make-future-everyone/" title="Mark Zuckerberg’s latest manifesto promises to save America with AI">Mark Zuckerberg’s latest manifesto promises to save America</a>
+    <a class="worth-title story-headline" href="https://www.washingtonpost.com/technology/2026/08/10/zuckerberg-manifesto-says-meta-ai-will-make-future-everyone/" title="Mark Zuckerberg’s latest manifesto promises to save America with AI">Mark Zuckerberg’s latest manifesto promises to save America</a>
     <p class="worth-dek">Mark Zuckerberg&#39;s recent manifesto outlines Meta&#39;s ambitious vision for AI, positioning it as a tool to significantly benefit society. He emphasized the importance of open-source AI development for fostering innovation and broadly distributed access, aligning with Meta&#39;s strategy.</p>
     
     <div class="worth-foot">
       <span class="worth-meta">Google News · 2 sources · 1d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="2996b8d8477a8c89">Add the first comment</span>
       <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="2996b8d8477a8c89"
         data-item-title="Mark Zuckerberg’s latest manifesto promises to save America"
@@ -443,8 +453,11 @@
 <span class="section-h section-h-brief">In brief — 9 more</span>
 
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://www.theguardian.com/technology/2026/aug/10/mark-zuckerberg-superintelligent-ai-essay-meta" title="Zuckerberg pushes ‘superintelligent’ AI for all as Meta releases open-weight model">Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model</a>
+<div class="brief-row" data-story data-story-id="edab551df792e744" data-story-title="Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://www.theguardian.com/technology/2026/aug/10/mark-zuckerberg-superintelligent-ai-essay-meta" title="Zuckerberg pushes ‘superintelligent’ AI for all as Meta releases open-weight model">Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model</a>
+    <span class="comment-count" data-comment-count data-story-id="edab551df792e744">Add the first comment</span>
+  </div>
   <span class="brief-cat">Policy</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="edab551df792e744"
@@ -462,8 +475,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://apnews.com/article/meta-ai-mark-zuckerberg-artificial-intelligence-df8a4e7d7825470d09e8090367457c2c" title="Zuckerberg manifesto sketches out Meta’s ambitions for world-changing AI technology">Zuckerberg manifesto sketches out Meta’s world-changing AI</a>
+<div class="brief-row" data-story data-story-id="d6815105354fa051" data-story-title="Zuckerberg manifesto sketches out Meta’s world-changing AI" data-story-source="Google News" data-story-time="1 day ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://apnews.com/article/meta-ai-mark-zuckerberg-artificial-intelligence-df8a4e7d7825470d09e8090367457c2c" title="Zuckerberg manifesto sketches out Meta’s ambitions for world-changing AI technology">Zuckerberg manifesto sketches out Meta’s world-changing AI</a>
+    <span class="comment-count" data-comment-count data-story-id="d6815105354fa051">Add the first comment</span>
+  </div>
   <span class="brief-cat">Policy</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="d6815105354fa051"
@@ -481,8 +497,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals as Meta returns to open models">Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models</a>
+<div class="brief-row" data-story data-story-id="7c784dd3821a1241" data-story-title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models" data-story-source="Hacker News (AI, 100+ points)" data-story-time="2 days ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals as Meta returns to open models">Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models</a>
+    <span class="comment-count" data-comment-count data-story-id="7c784dd3821a1241">Add the first comment</span>
+  </div>
   <span class="brief-cat">Policy</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="7c784dd3821a1241"
@@ -500,8 +519,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/" title="Putting sign language AI into users’ hands">Google DeepMind&#39;s Sign-Language-to-Text Model</a>
+<div class="brief-row" data-story data-story-id="f5d9b5f669dc0283" data-story-title="Google DeepMind&#39;s Sign-Language-to-Text Model" data-story-source="Google DeepMind Blog" data-story-time="5 hours ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/" title="Putting sign language AI into users’ hands">Google DeepMind&#39;s Sign-Language-to-Text Model</a>
+    <span class="comment-count" data-comment-count data-story-id="f5d9b5f669dc0283">Add the first comment</span>
+  </div>
   <span class="brief-cat">Model</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="f5d9b5f669dc0283"
@@ -519,8 +541,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b" title="LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge">LFM2.5-VL-3B for Better, Faster Vision at the Edge</a>
+<div class="brief-row" data-story data-story-id="ab799e9da743babb" data-story-title="LFM2.5-VL-3B for Better, Faster Vision at the Edge" data-story-source="Hugging Face Blog" data-story-time="5 hours ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b" title="LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge">LFM2.5-VL-3B for Better, Faster Vision at the Edge</a>
+    <span class="comment-count" data-comment-count data-story-id="ab799e9da743babb">Add the first comment</span>
+  </div>
   <span class="brief-cat">Model</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="ab799e9da743babb"
@@ -538,8 +563,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="money">
-  <a class="brief-title" href="https://apnews.com/article/stocks-markets-rates-trump-iran-chips-db541ced9f928f993bd3a17958a3deaa" title="US stocks rise back towards records as AI companies report strong profits">US stocks rise as AI companies report strong profits</a>
+<div class="brief-row" data-story data-story-id="95a665254c90ac50" data-story-title="US stocks rise as AI companies report strong profits" data-story-source="Google News" data-story-time="5 hours ago" role="button" tabindex="0" data-topics="money">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://apnews.com/article/stocks-markets-rates-trump-iran-chips-db541ced9f928f993bd3a17958a3deaa" title="US stocks rise back towards records as AI companies report strong profits">US stocks rise as AI companies report strong profits</a>
+    <span class="comment-count" data-comment-count data-story-id="95a665254c90ac50">Add the first comment</span>
+  </div>
   <span class="brief-cat">Policy</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="95a665254c90ac50"
@@ -557,8 +585,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="code">
-  <a class="brief-title" href="https://techcrunch.com/2026/08/11/openai-launches-chatgpt-desktop-app-for-linux/" title="OpenAI launches ChatGPT desktop app for Linux">OpenAI launches ChatGPT desktop app for Linux</a>
+<div class="brief-row" data-story data-story-id="25809d3aff130c2f" data-story-title="OpenAI launches ChatGPT desktop app for Linux" data-story-source="TechCrunch — AI" data-story-time="23 hours ago" role="button" tabindex="0" data-topics="code">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://techcrunch.com/2026/08/11/openai-launches-chatgpt-desktop-app-for-linux/" title="OpenAI launches ChatGPT desktop app for Linux">OpenAI launches ChatGPT desktop app for Linux</a>
+    <span class="comment-count" data-comment-count data-story-id="25809d3aff130c2f">Add the first comment</span>
+  </div>
   <span class="brief-cat">Tools</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="25809d3aff130c2f"
@@ -576,8 +607,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="">
-  <a class="brief-title" href="https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/" title="Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’">Brad Lightcap, OpenAI’s longtime COO, is leaving</a>
+<div class="brief-row" data-story data-story-id="34ac2f6b9783b51f" data-story-title="Brad Lightcap, OpenAI’s longtime COO, is leaving" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/" title="Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’">Brad Lightcap, OpenAI’s longtime COO, is leaving</a>
+    <span class="comment-count" data-comment-count data-story-id="34ac2f6b9783b51f">Add the first comment</span>
+  </div>
   <span class="brief-cat">Policy</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="34ac2f6b9783b51f"
@@ -595,8 +629,11 @@
 </button>
 </div>
 
-<div class="brief-row" data-topics="code security">
-  <a class="brief-title" href="https://openai.com/index/daybreak-models-are-now-available-on-aws" title="Daybreak models are now available on AWS">Daybreak Cybersecurity Models Now on AWS Bedrock</a>
+<div class="brief-row" data-story data-story-id="b274e00978a8c030" data-story-title="Daybreak Cybersecurity Models Now on AWS Bedrock" data-story-source="OpenAI News" data-story-time="1 day ago" role="button" tabindex="0" data-topics="code security">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://openai.com/index/daybreak-models-are-now-available-on-aws" title="Daybreak models are now available on AWS">Daybreak Cybersecurity Models Now on AWS Bedrock</a>
+    <span class="comment-count" data-comment-count data-story-id="b274e00978a8c030">Add the first comment</span>
+  </div>
   <span class="brief-cat">Tools</span>
   <button type="button" class="save-btn save-btn-compact" data-save
         data-item-id="b274e00978a8c030"
@@ -660,6 +697,37 @@
 </aside>
 </div>
 
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

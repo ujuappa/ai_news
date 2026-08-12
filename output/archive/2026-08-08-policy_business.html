@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Saturday · 8 August 2026 · 12 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="71e8d9311d2b4f66" data-story-title="UK Children See Surge in AI Deepfakes of Themselves" data-story-source="The Guardian — AI" data-story-time="16 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" title="Rising number of UK children report seeing explicit deepfakes of themselves">UK Children See Surge in AI Deepfakes of Themselves</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://www.theguardian.com/technology/2026/aug/08/uk-children-explicit-deepfake-images-ai" title="Rising number of UK children report seeing explicit deepfakes of themselves">UK Children See Surge in AI Deepfakes of Themselves</a>
     <div class="cat-row-dek">A report indicates a significant increase in UK children experiencing explicit deepfake images of themselves, with a safety watchdog warning that AI is making such content easier to produce. The Report Remove service, which helps block intimate imagery online, noted a rapid surge in digitally manipulated or &#39;faked&#39; content, including AI-generated and &#39;nudified&#39; images. This trend highlights growing concerns about AI misuse and child safety.</div>
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/08/uk… →</span>
+    <span class="comment-count" data-comment-count data-story-id="71e8d9311d2b4f66">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="5655a593c8d3ecb0" data-story-title="OpenAI Slows Astra Model Development Over Security" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/" title="OpenAI says it slowed Astra model development over security concerns">OpenAI Slows Astra Model Development Over Security</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/" title="OpenAI says it slowed Astra model development over security concerns">OpenAI Slows Astra Model Development Over Security</a>
     <div class="cat-row-dek">OpenAI paused development on some aspects of its Astra model after internal evaluations showed it reached a &#39;critical cybersecurity threshold.&#39; The model demonstrated capabilities to independently identify and carry out cyberattacks, triggering the company&#39;s Preparedness Framework and leading to increased safeguards and transparency with government agencies.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/07/openai-says-it-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="5655a593c8d3ecb0">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="832b203154cd13df" data-story-title="Disney and TikTok Partner for Creator Content" data-story-source="BBC — Technology" data-story-time="3 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://www.bbc.co.uk/news/articles/c235ev9knm4o?at_medium=RSS&amp;at_campaign=rss" title="Disney agrees deal to let TikTokers use its films and TV shows in videos">Disney and TikTok Partner for Creator Content</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://www.bbc.co.uk/news/articles/c235ev9knm4o?at_medium=RSS&amp;at_campaign=rss" title="Disney agrees deal to let TikTokers use its films and TV shows in videos">Disney and TikTok Partner for Creator Content</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/c235ev9knm4o?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="832b203154cd13df">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="a52ff73c1dd899d7" data-story-title="Fifa U-turns on World Cup stake sale to AI investors" data-story-source="BBC — Technology" data-story-time="10 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cd7l4e3v238o?at_medium=RSS&amp;at_campaign=rss" title="Is football AI-proof? Why tech investors wanted a slice of the World Cup">Fifa U-turns on World Cup stake sale to AI investors</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cd7l4e3v238o?at_medium=RSS&amp;at_campaign=rss" title="Is football AI-proof? Why tech investors wanted a slice of the World Cup">Fifa U-turns on World Cup stake sale to AI investors</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cd7l4e3v238o?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="a52ff73c1dd899d7">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="82b10fb0542c7cda" data-story-title="Oracle Bans AI-Generated Code from OpenJDK" data-story-source="Hacker News (AI, 100+ points)" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" title="Oracle bans AI-generated code from OpenJDK">Oracle Bans AI-Generated Code from OpenJDK</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://app.dealroom.co/news/feed/oracle-bans-ai-generated-code-from-openjdk-despite-ellison-s-claim-oracle-isn-t-writing-its-own-code" title="Oracle bans AI-generated code from OpenJDK">Oracle Bans AI-Generated Code from OpenJDK</a>
     
     
     <span class="cat-row-link">app.dealroom.co/news/feed/oracle-bans-ai-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="82b10fb0542c7cda">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="833934ee3b25f4a5" data-story-title="OpenAI Shares Astra Model Cybersecurity Evaluations" data-story-source="OpenAI News" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" title="Responding to the next frontier of critical cyber capabilities">OpenAI Shares Astra Model Cybersecurity Evaluations</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities" title="Responding to the next frontier of critical cyber capabilities">OpenAI Shares Astra Model Cybersecurity Evaluations</a>
     
     <span class="thread-line">Earlier: Cybersecurity in the Intelligence Age (2026-W18)</span>
     <span class="cat-row-link">openai.com/index/responding-next-frontier… →</span>
+    <span class="comment-count" data-comment-count data-story-id="833934ee3b25f4a5">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="883433c49b252abd" data-story-title="Airbnb Uses AI to Ship Features 60% Faster" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/08/07/airbnb-says-ai-is-helping-it-ship-features-faster-as-it-tests-a-new-search-function/" title="Airbnb says AI is helping it ship features faster as it tests a new search function">Airbnb Uses AI to Ship Features 60% Faster</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/08/07/airbnb-says-ai-is-helping-it-ship-features-faster-as-it-tests-a-new-search-function/" title="Airbnb says AI is helping it ship features faster as it tests a new search function">Airbnb Uses AI to Ship Features 60% Faster</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/07/airbnb-says-ai-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="883433c49b252abd">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d58e8698613ff3f0" data-story-title="Australia&#39;s government tackles AI with datacenter safeguards" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/australia-news/audio/2026/aug/07/can-the-government-really-get-ahead-of-the-curve-on-ai-australian-politics-podcast" title="Can the government really get ahead of the curve on AI? - podcast">Australia&#39;s government tackles AI with datacenter safeguards</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/australia-news/audio/2026/aug/07/can-the-government-really-get-ahead-of-the-curve-on-ai-australian-politics-podcast" title="Can the government really get ahead of the curve on AI? - podcast">Australia&#39;s government tackles AI with datacenter safeguards</a>
     
     
     <span class="cat-row-link">theguardian.com/australia-news/audio/2026… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d58e8698613ff3f0">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="3723b1dccc7d5fee" data-story-title="Outrage in Little Rock as two datacenters loom" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" title="‘This is very real redlining’: outrage in Little Rock as two datacenters loom">Outrage in Little Rock as two datacenters loom</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/07/datacenters-little-rock-arkansas" title="‘This is very real redlining’: outrage in Little Rock as two datacenters loom">Outrage in Little Rock as two datacenters loom</a>
     
     
     <span class="cat-row-link">theguardian.com/us-news/2026/aug/07/datac… →</span>
+    <span class="comment-count" data-comment-count data-story-id="3723b1dccc7d5fee">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -313,13 +324,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="b1c4d5e51e254fb3" data-story-title="Danish pupils to orally defend essays against AI cheating" data-story-source="The Guardian — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/06/students-ai-cheating-schools-denmark" title="Danish pupils will have to orally defend essays in attempt to combat AI cheating">Danish pupils to orally defend essays against AI cheating</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/06/students-ai-cheating-schools-denmark" title="Danish pupils will have to orally defend essays in attempt to combat AI cheating">Danish pupils to orally defend essays against AI cheating</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/06/st… →</span>
+    <span class="comment-count" data-comment-count data-story-id="b1c4d5e51e254fb3">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -346,6 +358,37 @@
   <span class="cat-footer-note">10 of 10 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

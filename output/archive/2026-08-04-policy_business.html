@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Tuesday · 4 August 2026 · 17 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="0c8453cce4053836" data-story-title="EU AI Act Kicks Into Action on August 2" data-story-source="gemini_grounding" data-story-time="2 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.80</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://www.malwarebytes.com/blog/news/2026/08/the-ai-act-kicks-into-action-forces-companies-to-be-clear-about-ai-bots" title="The AI Act kicks into action, forces companies to be clear about AI chatbots">EU AI Act Kicks Into Action on August 2</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://www.malwarebytes.com/blog/news/2026/08/the-ai-act-kicks-into-action-forces-companies-to-be-clear-about-ai-bots" title="The AI Act kicks into action, forces companies to be clear about AI chatbots">EU AI Act Kicks Into Action on August 2</a>
     <div class="cat-row-dek">The European Union has begun enforcing key aspects of its AI Act as of August 2. This includes new transparency requirements for AI systems, mandating labels for chatbots and AI-generated content, and prohibiting certain high-risk AI uses like non-consensual sexually explicit content generation. Non-compliance can lead to fines up to 15 million Euros or 3% of global annual turnover, and new complaint and whistleblower tools have been launched for enforcement.</div>
     
     <span class="cat-row-link">malwarebytes.com/blog/news/2026/08/the-ai… →</span>
+    <span class="comment-count" data-comment-count data-story-id="0c8453cce4053836">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="1400f9b3ab2698d1" data-story-title="Obsidian Security raises $85M at $1.1B valuation" data-story-source="gemini_grounding" data-story-time="3 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.80</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://siliconangle.com/2026/08/04/obsidian-security-raises-85m-ai-agents-create-cybersecuritys-next-major-attack-surface/" title="Obsidian Security raises $85M as AI agents create cybersecurity&#39;s next major attack surface">Obsidian Security raises $85M at $1.1B valuation</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://siliconangle.com/2026/08/04/obsidian-security-raises-85m-ai-agents-create-cybersecuritys-next-major-attack-surface/" title="Obsidian Security raises $85M as AI agents create cybersecurity&#39;s next major attack surface">Obsidian Security raises $85M at $1.1B valuation</a>
     <div class="cat-row-dek">Obsidian Security raised an $85 million Series D funding round, valuing the company at $1.1 billion. The investment aims to address the emerging cybersecurity challenges posed by autonomous AI agents interacting with enterprise cloud applications and sensitive data. The company plans to use the capital to expand R&amp;D and accelerate go-to-market strategies.</div>
     
     <span class="cat-row-link">siliconangle.com/2026/08/04/obsidian-secu… →</span>
+    <span class="comment-count" data-comment-count data-story-id="1400f9b3ab2698d1">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="ee6239399ce0e609" data-story-title="Anthropic Signs $10B Cloud Deal with AI Startup Volta" data-story-source="TechCrunch — AI" data-story-time="4 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.80</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/08/04/anthropic-signs-10-billion-deal-with-ai-cloud-startup-volta/" title="Anthropic signs $10B deal with AI cloud startup Volta">Anthropic Signs $10B Cloud Deal with AI Startup Volta</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/08/04/anthropic-signs-10-billion-deal-with-ai-cloud-startup-volta/" title="Anthropic signs $10B deal with AI cloud startup Volta">Anthropic Signs $10B Cloud Deal with AI Startup Volta</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/04/anthropic-signs… →</span>
+    <span class="comment-count" data-comment-count data-story-id="ee6239399ce0e609">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="bedc6f3c74404ef4" data-story-title="SpaceX Buys $329M in Tesla Megapacks for xAI Data Centers" data-story-source="TechCrunch — AI" data-story-time="2 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://techcrunch.com/2026/08/04/spacex-has-bought-329m-worth-of-tesla-megapacks-so-far-this-year/" title="SpaceX has bought $329M worth of Tesla Megapacks so far this year">SpaceX Buys $329M in Tesla Megapacks for xAI Data Centers</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://techcrunch.com/2026/08/04/spacex-has-bought-329m-worth-of-tesla-megapacks-so-far-this-year/" title="SpaceX has bought $329M worth of Tesla Megapacks so far this year">SpaceX Buys $329M in Tesla Megapacks for xAI Data Centers</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/04/spacex-has-boug… →</span>
+    <span class="comment-count" data-comment-count data-story-id="bedc6f3c74404ef4">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="c042f08455663007" data-story-title="EU AI Act &amp; California AI Transparency Act Converge" data-story-source="gemini_grounding" data-story-time="3 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.duanemorris.com/alerts/from_disclosure_to_detection_converging_ai_transparency_obligations_eu_california_0826.html" title="From Disclosure to Detection – Converging AI Transparency Obligations in the EU and California">EU AI Act &amp; California AI Transparency Act Converge</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.duanemorris.com/alerts/from_disclosure_to_detection_converging_ai_transparency_obligations_eu_california_0826.html" title="From Disclosure to Detection – Converging AI Transparency Obligations in the EU and California">EU AI Act &amp; California AI Transparency Act Converge</a>
     
     <span class="thread-line">Earlier: California AI Disclosure Rules Become Operative August 2, 2026 (2026-08-03)</span>
     <span class="cat-row-link">duanemorris.com/alerts/from_disclosure_to… →</span>
+    <span class="comment-count" data-comment-count data-story-id="c042f08455663007">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7e983335d772cf16" data-story-title="Palantir Earnings Surge Past Expectations, Revenue Up 93%" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/03/palantir-second-quarter-earnings" title="‘This quarter was otherworldly’: Palantir earnings surge past expectations">Palantir Earnings Surge Past Expectations, Revenue Up 93%</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/03/palantir-second-quarter-earnings" title="‘This quarter was otherworldly’: Palantir earnings surge past expectations">Palantir Earnings Surge Past Expectations, Revenue Up 93%</a>
     
     
     <span class="cat-row-link">theguardian.com/us-news/2026/aug/03/palan… →</span>
+    <span class="comment-count" data-comment-count data-story-id="7e983335d772cf16">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7c9695089421ebbb" data-story-title="Stock Market Turmoil Over Opaque AI Economy, China Chipmaker" data-story-source="The Guardian — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Over Opaque AI Economy, China Chipmaker</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/02/stock-market-turmoil-nvidia-china-light-ai-economy" title="Stock market turmoil sheds stark light on the opaque AI economy">Stock Market Turmoil Over Opaque AI Economy, China Chipmaker</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/02/st… →</span>
+    <span class="comment-count" data-comment-count data-story-id="7c9695089421ebbb">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="4809b920c6c201d2" data-story-title="Apple Challenges UK Order for Private User Data Access" data-story-source="BBC — Technology" data-story-time="13 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.65</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/cvg0kk3ek2vo?at_medium=RSS&amp;at_campaign=rss" title="Apple issues new challenge against UK order for access to private user data">Apple Challenges UK Order for Private User Data Access</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/cvg0kk3ek2vo?at_medium=RSS&amp;at_campaign=rss" title="Apple issues new challenge against UK order for access to private user data">Apple Challenges UK Order for Private User Data Access</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cvg0kk3ek2vo?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="4809b920c6c201d2">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="3f9a214f4397e6d1" data-story-title="NIST Joins National Genesis Mission to Accelerate AI" data-story-source="gemini_grounding" data-story-time="2 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.nist.gov/news-events/news/2026/08/nist-joins-national-genesis-mission-accelerate-ai-innovation" title="NIST Joins National Genesis Mission to Accelerate AI Innovation">NIST Joins National Genesis Mission to Accelerate AI</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.nist.gov/news-events/news/2026/08/nist-joins-national-genesis-mission-accelerate-ai-innovation" title="NIST Joins National Genesis Mission to Accelerate AI Innovation">NIST Joins National Genesis Mission to Accelerate AI</a>
     
     
     <span class="cat-row-link">nist.gov/news-events/news/2026/08/nist-jo… →</span>
+    <span class="comment-count" data-comment-count data-story-id="3f9a214f4397e6d1">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -313,13 +324,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="91b6731874c505ac" data-story-title="SpaceX Q1 Earnings: Revenue Up, Spending Skyrockets, Loss of $2B" data-story-source="BBC — Technology" data-story-time="3 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/c0qvpveg20vo?at_medium=RSS&amp;at_campaign=rss" title="SpaceX&#39;s first-ever earnings show higher revenues and huge spending">SpaceX Q1 Earnings: Revenue Up, Spending Skyrockets, Loss of $2B</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/c0qvpveg20vo?at_medium=RSS&amp;at_campaign=rss" title="SpaceX&#39;s first-ever earnings show higher revenues and huge spending">SpaceX Q1 Earnings: Revenue Up, Spending Skyrockets, Loss of $2B</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/c0qvpveg20vo?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="91b6731874c505ac">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -346,6 +358,37 @@
   <span class="cat-footer-note">10 of 10 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

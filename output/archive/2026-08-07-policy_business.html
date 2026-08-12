@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Friday · 7 August 2026 · 14 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="5d2f329784e33401" data-story-title="New Mexico court orders Meta to pay additional $567M" data-story-source="TechCrunch — AI" data-story-time="12 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/" title="New Mexico court orders Meta to pay additional $567M in child safety case">New Mexico court orders Meta to pay additional $567M</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/08/07/new-mexico-court-orders-meta-to-pay-additional-567m-in-child-safety-case/" title="New Mexico court orders Meta to pay additional $567M in child safety case">New Mexico court orders Meta to pay additional $567M</a>
     <div class="cat-row-dek">A New Mexico court ordered Meta to pay an additional $567 million, bringing the total fine to $942 million in a child safety case. The ruling mandates changes to Meta&#39;s platforms in the state, including removing &#39;Like&#39; counts for minors, pausing push notifications between 10 p.m. and 7 a.m., and limiting usage to 90 hours per month for users under 18.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/07/new-mexico-cour… →</span>
+    <span class="comment-count" data-comment-count data-story-id="5d2f329784e33401">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="05ae93802b36f282" data-story-title="Meta fined $567M in largest child safety ruling against social media…" data-story-source="BBC — Technology" data-story-time="14 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://www.bbc.co.uk/news/articles/cd7lz3wr2rlo?at_medium=RSS&amp;at_campaign=rss" title="Meta fined $567m in largest child safety ruling against social media giant">Meta fined $567M in largest child safety ruling against social media…</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://www.bbc.co.uk/news/articles/cd7lz3wr2rlo?at_medium=RSS&amp;at_campaign=rss" title="Meta fined $567m in largest child safety ruling against social media giant">Meta fined $567M in largest child safety ruling against social media…</a>
     <div class="cat-row-dek">Meta has been fined an additional $567 million in New Mexico, bringing the total to $942 million, for its platforms&#39; dangers to children. The judge labeled Meta a &#34;public nuisance&#34; and ordered the company to contribute to a fund to mitigate future harms.</div>
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cd7lz3wr2rlo?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="05ae93802b36f282">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d3d7f4fde737af1d" data-story-title="Amid legal battles, Suno says it will start watermarking songs" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/08/06/amid-legal-battles-suno-says-it-will-start-watermarking-songs/" title="Amid legal battles, Suno says it will start watermarking songs">Amid legal battles, Suno says it will start watermarking songs</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/08/06/amid-legal-battles-suno-says-it-will-start-watermarking-songs/" title="Amid legal battles, Suno says it will start watermarking songs">Amid legal battles, Suno says it will start watermarking songs</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/06/amid-legal-batt… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d3d7f4fde737af1d">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="eaff9de6687d87fc" data-story-title="Why is Anthropic destroying books?" data-story-source="The Guardian — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://www.theguardian.com/commentisfree/2026/aug/05/anthropic-ai-destroying-books" title="Why is Anthropic destroying books? | Kathryn James">Why is Anthropic destroying books?</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://www.theguardian.com/commentisfree/2026/aug/05/anthropic-ai-destroying-books" title="Why is Anthropic destroying books? | Kathryn James">Why is Anthropic destroying books?</a>
     
     
     <span class="cat-row-link">theguardian.com/commentisfree/2026/aug/05… →</span>
+    <span class="comment-count" data-comment-count data-story-id="eaff9de6687d87fc">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="fa745c8fb5e379ca" data-story-title="AI fuels more than half of cybercrime in Africa as scams surge –…" data-story-source="Hacker News (AI, 100+ points)" data-story-time="3 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/" title="AI fuels more than half of cybercrime in Africa as scams surge – Interpol">AI fuels more than half of cybercrime in Africa as scams surge –…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/" title="AI fuels more than half of cybercrime in Africa as scams surge – Interpol">AI fuels more than half of cybercrime in Africa as scams surge –…</a>
     
     
     <span class="cat-row-link">africanews.com/2026/08/04/ai-fuels-more-t… →</span>
+    <span class="comment-count" data-comment-count data-story-id="fa745c8fb5e379ca">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="655262c61265532c" data-story-title="The White House’s plan to vet dangerous AI is cloaked in secrecy" data-story-source="The Guardian — AI" data-story-time="10 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/07/white-house-ai" title="The White House’s plan to vet potentially dangerous AI is cloaked in secrecy">The White House’s plan to vet dangerous AI is cloaked in secrecy</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/07/white-house-ai" title="The White House’s plan to vet potentially dangerous AI is cloaked in secrecy">The White House’s plan to vet dangerous AI is cloaked in secrecy</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/07/wh… →</span>
+    <span class="comment-count" data-comment-count data-story-id="655262c61265532c">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="8aa924fe288b2551" data-story-title="Trump orders new 15% tariff on key material for solar panels and…" data-story-source="The Guardian — AI" data-story-time="14 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" title="Trump orders new 15% tariff on key material for solar panels and microchips">Trump orders new 15% tariff on key material for solar panels and…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/us-news/2026/aug/07/trump-orders-tariff-solar-panels-microchips-manufacturing-ingredient" title="Trump orders new 15% tariff on key material for solar panels and microchips">Trump orders new 15% tariff on key material for solar panels and…</a>
     
     
     <span class="cat-row-link">theguardian.com/us-news/2026/aug/07/trump… →</span>
+    <span class="comment-count" data-comment-count data-story-id="8aa924fe288b2551">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7e30da1a73e6a033" data-story-title="As AI ‘therapists’ dish out advice, California lawmakers try to set…" data-story-source="Google News" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/california-chatbots-therapy-ai-health-regulations-438eaaa4afc617153aa83acc150b9bda" title="As AI ‘therapists’ dish out advice, California lawmakers try to set some limits">As AI ‘therapists’ dish out advice, California lawmakers try to set…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/california-chatbots-therapy-ai-health-regulations-438eaaa4afc617153aa83acc150b9bda" title="As AI ‘therapists’ dish out advice, California lawmakers try to set some limits">As AI ‘therapists’ dish out advice, California lawmakers try to set…</a>
     
     
     <span class="cat-row-link">apnews.com/article/california-chatbots-th… →</span>
+    <span class="comment-count" data-comment-count data-story-id="7e30da1a73e6a033">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="da00e1a1384b1683" data-story-title="Ex-Spotify employees raise $10M for e-commerce AI" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/08/06/ex-spotify-employees-raise-10m-to-bring-the-ai-behind-its-recommendations-to-e-commerce/" title="Ex-Spotify employees raise $10M to bring the AI behind its recommendations to e-commerce">Ex-Spotify employees raise $10M for e-commerce AI</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/08/06/ex-spotify-employees-raise-10m-to-bring-the-ai-behind-its-recommendations-to-e-commerce/" title="Ex-Spotify employees raise $10M to bring the AI behind its recommendations to e-commerce">Ex-Spotify employees raise $10M for e-commerce AI</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/06/ex-spotify-empl… →</span>
+    <span class="comment-count" data-comment-count data-story-id="da00e1a1384b1683">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -313,13 +324,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="c62018892e4476d4" data-story-title="Omilia raises $67M to scale its customer support platform" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/08/06/omilia-raises-67m-to-scale-its-customer-support-platform/" title="Omilia raises $67M to scale its customer support platform">Omilia raises $67M to scale its customer support platform</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/08/06/omilia-raises-67m-to-scale-its-customer-support-platform/" title="Omilia raises $67M to scale its customer support platform">Omilia raises $67M to scale its customer support platform</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/06/omilia-raises-6… →</span>
+    <span class="comment-count" data-comment-count data-story-id="c62018892e4476d4">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -346,6 +358,37 @@
   <span class="cat-footer-note">10 of 10 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

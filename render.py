@@ -136,7 +136,8 @@ def write_assets(output_dir: Path) -> Path:
     #   follow.js      — 지면 5종이 공유한다. 매크로로 인라인하면 같은 코드가 5번 실려서
     #                    브라우저 캐시가 안 먹고, 필터 스크립트가 갈라졌던 사고를 반복한다
     #                    (macros.topic_filter_script 주석: 두 벌로 두면 또 갈라진다).
-    for asset in ("admin_rules.js", "follow.js"):
+    #   comments.js    — 댓글 레일. follow 와 같은 이유로 자산 파일이다.
+    for asset in ("admin_rules.js", "follow.js", "comments.js"):
         (css_path.parent / asset).write_text(
             (STATIC_DIR / asset).read_text(encoding="utf-8"), encoding="utf-8")
     images.copy_to(css_path.parent)

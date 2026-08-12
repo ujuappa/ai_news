@@ -38,6 +38,7 @@
   걸지 않을 거면 scope 안에 있을 이유도 없다. 담기는 항목은 아래 worth + brief 와 같다.
 #}
 {{ m.wire_ticker(wire) }}
+<div class="digest-shell" data-digest-shell>
 <div class="home" data-scope>
 
 {{ m.page_head(period_date) }}
@@ -61,13 +62,13 @@
   컨트롤 줄은 **바깥**에 있어서 같이 숨지 않는다 — 필터를 되돌릴 수단이 사라지면 안 된다.
 #}
 <div class="panel-body" data-section>
-<article class="lead" data-topics="{{ lead.topic_attr }}">
+<article class="lead" {{ m.story_attrs(lead) }} data-topics="{{ lead.topic_attr }}">
   <div class="lead-text">
     <div class="lead-kicker">
       <span class="lead-cat">{{ labels[lead.category] }}</span>
       {% if lead.is_major %}<span class="tag tag-acc">Major</span>{% endif %}
     </div>
-    <a class="lead-title"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
+    <a class="lead-title story-headline"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
     <p class="lead-dek">{{ lead.summary }}</p>
     {% if lead.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ lead.thread.date }}.html">Earlier: {{ lead.thread.display }} ({{ lead.thread.date }})</a>{% endif %}
     <div class="lead-byline">
@@ -76,6 +77,7 @@
       <span class="byline-meta">
         {%- if lead.source_count > 1 %}{{ lead.source_count }} sources{% if lead.rel_time_long %} · {% endif %}{% endif -%}
         {{ lead.rel_time_long }}</span>
+      {{ m.comment_count(lead) }}
       {% if lead.url_dead %}<span class="byline-link byline-dead">Link no longer available</span>
       {%- else %}<a class="byline-link" href="{{ lead.url }}">Read at {{ lead.domain }} →</a>{% endif %}
       {{ m.save_btn(lead) }}
@@ -93,14 +95,15 @@
 </div>
 <div class="also-grid">
   {% for it in grid3 %}
-  <article class="also-card" data-topics="{{ it.topic_attr }}">
+  <article class="also-card" {{ m.story_attrs(it) }} data-topics="{{ it.topic_attr }}">
     {{ m.image_slot(it, 'imgslot-card', asset_prefix) }}
     <span class="card-cat">{{ labels[it.category] }}</span>
-    <a class="card-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
+    <a class="card-title story-headline"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="card-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
     <div class="card-foot">
       <span class="card-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+      {{ m.comment_count(it) }}
       {{ m.save_btn(it, compact=true) }}
     </div>
   </article>
@@ -123,14 +126,15 @@
 <section class="worth-section" data-section>
 <span class="section-h">Worth knowing</span>
 {% for it in worth %}
-<div class="worth-row" data-topics="{{ it.topic_attr }}">
+<div class="worth-row" {{ m.story_attrs(it) }} data-topics="{{ it.topic_attr }}">
   <div>
     <span class="worth-cat">{{ labels[it.category] }}</span>
-    <a class="worth-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
+    <a class="worth-title story-headline"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     <p class="worth-dek">{{ it.summary }}</p>
     {% if it.thread %}<a class="thread-line" href="{{ prefix }}archive/{{ it.thread.date }}.html">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</a>{% endif %}
     <div class="worth-foot">
       <span class="worth-meta">{{ it.source_base }}{% if it.source_count > 1 %} · {{ it.source_count }} sources{% endif %}{% if it.rel_time %} · {{ it.rel_time }}{% endif %}</span>
+      {{ m.comment_count(it) }}
       {{ m.save_btn(it, compact=true) }}
     </div>
   </div>
@@ -151,8 +155,11 @@
   배경은 div 에서도 그대로 동작한다. 죽은 링크 처리(href 없음)도 `href()` 가 그대로 맡는다.
 #}
 {% for it in brief %}
-<div class="brief-row" data-topics="{{ it.topic_attr }}">
-  <a class="brief-title"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
+<div class="brief-row" {{ m.story_attrs(it) }} data-topics="{{ it.topic_attr }}">
+  <div class="brief-main">
+    <a class="brief-title story-headline"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
+    {{ m.comment_count(it) }}
+  </div>
   <span class="brief-cat">{{ short_labels[it.category] }}</span>
   {{ m.save_btn(it, compact=true) }}
 </div>
@@ -195,6 +202,8 @@
   붙일 때는 여기 home-split 다음 형제로 <div class="rule2"> + 카드들을 넣으면 된다.
   구획선 라벨 스타일은 위 `.also-break` 를 그대로 쓸 수 있다.
 #}
+</div>
+{{ m.comment_rail() }}
 </div>
 </div>
 {{ m.site_footer(archive_link.href, total, rss_href=asset_prefix ~ 'feed.xml', asset_prefix=asset_prefix) }}

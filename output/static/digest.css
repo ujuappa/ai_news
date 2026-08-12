@@ -41,7 +41,8 @@
 body { margin:0; background:var(--g2); color:var(--ink); font-family:'Mona Sans',system-ui,sans-serif; }
 a { color:var(--accd); }
 a:hover { color:var(--acc); }
-button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid var(--acc); outline-offset:2px; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible,
+[data-story]:focus-visible { outline:2px solid var(--acc); outline-offset:2px; }
 .wrap { max-width:1280px; margin:0 auto; background:var(--g);
         border-left:1px solid var(--n2); border-right:1px solid var(--n2); }
 
@@ -866,6 +867,98 @@ a.cat-row-title:hover { color:var(--accd); }
   .adm-topic-row { grid-template-columns:1fr; gap:6px; }
 }
 
+/* ==== 댓글 레일 (2026-08-12) ====
+ * 서버가 없다 — 스레드는 localStorage. 조판은 Mona Sans (Archivo 는 08-07 에 폐기).
+ * display 를 주는 규칙에는 [hidden] 짝. */
+[data-story] { cursor:pointer; }
+[data-story]:hover { background:color-mix(in srgb, var(--acc) 5%, transparent); }
+.story-headline:hover { text-decoration:underline; }
+.comment-count { display:block; margin-top:4px; font:600 11px 'Mona Sans',system-ui,sans-serif;
+                 letter-spacing:.08em; text-transform:uppercase; color:var(--n1); }
+
+.digest-shell.is-rail-open { display:flex; align-items:flex-start; gap:0; }
+.digest-shell.is-rail-open .home,
+.digest-shell.is-rail-open .cat-body { flex:1; min-width:0; }
+
+.comment-rail { display:flex; flex-direction:column; flex:none; width:400px;
+                position:sticky; top:0; height:100vh; max-height:100vh;
+                background:var(--g); border-left:1px solid var(--n2);
+                box-shadow:0 1px 2px rgba(var(--inkrgb),.04), 0 4px 12px rgba(var(--inkrgb),.12);
+                overflow:hidden; }
+.comment-rail[hidden] { display:none; }
+
+.rail-head { display:flex; align-items:flex-start; gap:10px; flex:none;
+             padding:18px 18px 14px; border-bottom:1px solid rgba(var(--inkrgb),.08);
+             background:var(--g); position:sticky; top:0; z-index:1; }
+.rail-head-text { min-width:0; flex:1; }
+.rail-title { margin:0; font:800 16px/1.3 'Mona Sans',system-ui,sans-serif; color:var(--ink);
+              display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.rail-meta { margin:6px 0 0; font:600 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--n1); }
+.rail-count { display:block; margin-top:8px; font:700 11px 'Mona Sans',system-ui,sans-serif;
+              letter-spacing:.1em; text-transform:uppercase; color:var(--accd); }
+.rail-follow { flex:none; padding:6px 12px; border:1px solid var(--n2); background:var(--g);
+               color:var(--ink); cursor:pointer; font:700 11px 'Mona Sans',system-ui,sans-serif;
+               letter-spacing:.1em; text-transform:uppercase; }
+.rail-follow.is-on { background:var(--ink); color:var(--g); border-color:var(--ink); }
+.rail-close { flex:none; width:32px; height:32px; display:grid; place-items:center;
+              border:1px solid var(--n2); background:var(--g); color:var(--ink); cursor:pointer; }
+.rail-close:hover { border-color:var(--ink); }
+
+.rail-body { flex:1; min-height:0; overflow-y:auto; padding:8px 18px 18px; }
+.rail-empty { padding:28px 4px; }
+.rail-empty[hidden] { display:none; }
+.rail-empty-h { display:block; font:800 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em;
+                text-transform:uppercase; color:var(--muted); }
+.rail-empty p { margin:8px 0 0; font:400 14px/1.5 'Mona Sans',system-ui,sans-serif; color:var(--ink2); }
+
+.cmt-thread { padding:14px 0; border-bottom:1px solid rgba(var(--inkrgb),.08); }
+.cmt { display:flex; gap:10px; align-items:flex-start; }
+.cmt-reply { margin-top:10px; padding-left:32px;
+             border-left:2px solid color-mix(in srgb, var(--acc) 22%, transparent); }
+.cmt-avatar { flex:none; width:26px; height:26px; border-radius:999px; display:grid; place-items:center;
+              background:color-mix(in srgb, var(--ink) 8%, var(--g2)); color:var(--ink);
+              font:700 10px 'Mona Sans',system-ui,sans-serif; letter-spacing:.04em; }
+.cmt-avatar-reply { width:24px; height:24px; font-size:9px; }
+.cmt-avatar.is-me { background:var(--acc); color:var(--g); }
+.cmt-main { min-width:0; flex:1; }
+.cmt-who { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
+.cmt-name, .cmt-time, .cmt-priv { font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em;
+                                  text-transform:uppercase; }
+.cmt-name { color:var(--ink); }
+.cmt-time { color:var(--n1); font-weight:500; }
+.cmt-priv { color:var(--accd); }
+.cmt-body { margin:0; font:400 15px/1.55 'Mona Sans',system-ui,sans-serif; color:var(--ink); }
+.cmt-body-reply { font-size:14px; }
+.cmt-reply-btn { margin-top:10px; padding:0; border:0; background:none; cursor:pointer;
+                 font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em;
+                 text-transform:uppercase; color:var(--accd); }
+.cmt-reply-form { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.cmt-reply-form[hidden] { display:none; }
+.cmt-reply-form textarea, .rail-input {
+  width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid var(--n2);
+  background:var(--g2); color:var(--ink); resize:vertical;
+  font:400 14px/1.45 'Mona Sans',system-ui,sans-serif; }
+.cmt-reply-post, .rail-post { align-self:flex-end; padding:8px 14px; border:0; background:var(--ink);
+                              color:var(--g); cursor:pointer;
+                              font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em;
+                              text-transform:uppercase; }
+
+.rail-composer { flex:none; padding:14px 18px 18px; border-top:1px solid rgba(var(--inkrgb),.08);
+                 background:var(--g); }
+.rail-composer-bar { display:flex; align-items:center; justify-content:space-between; gap:12px;
+                     margin-top:10px; }
+.vis-seg { display:inline-flex; padding:3px; border:1px solid var(--n2); background:var(--g2); }
+.vis-opt { padding:5px 12px; border:0; background:transparent; color:var(--ink); cursor:pointer;
+           font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+.vis-opt.is-on { background:var(--ink); color:var(--g); }
+
+@media (max-width:1100px) {
+  .digest-shell.is-rail-open { display:block; }
+  .comment-rail { position:fixed; inset:0; width:100%; height:100%; max-height:none;
+                  z-index:40; border-left:0; border-radius:0; }
+}
+
 /* ==== Boncom 시스템 — radius · 고도 · 조판 축 (2026-08-07) ====
  *
  * 캔버스 "Home Top Organization" 6a 가 그려진 시스템에서 색 말고 나머지를 들여온 층이다
@@ -893,7 +986,8 @@ a.cat-row-title:hover { color:var(--accd); }
    짧은 막대일수록 길이가 부풀어 보여서 길이 비교가 왜곡되고(0건 막대는 아예 점으로 남는다),
    위아래 2px 선만 있는 stat-band 는 모서리에서 선이 말려 끊긴 것처럼 보인다. */
 .mh-search-field, .search-field { border-radius:8px; }
-.mh-pill, .ph-date, .seg, .seg-on, .drawer-btn, .topic-pill, .chip, .pill, .tag { border-radius:999px; }
+.mh-pill, .ph-date, .seg, .seg-on, .drawer-btn, .topic-pill, .chip, .pill, .tag,
+.rail-follow, .vis-seg, .vis-opt { border-radius:999px; }
 /* seg 는 3px 패딩 안에 알약을 품는 트랙이라 안쪽도 둥글어야 한다 */
 .seg { padding:3px; }
 
@@ -912,13 +1006,15 @@ a.cat-row-title:hover { color:var(--accd); }
 .src-table-head, .src-id, .src-status, .src-health, .src-avg, .src-last, .src-flags .tag,
 .adm-card-h, .adm-badge, .adm-label, .adm-btn, .adm-note, .adm-dirty, .adm-tab,
 .adm-help summary, .adm-backfill-h, .adm-topic-head,
-.save-btn, .follow-apply, .follow-chip, .saved-row-meta, .drawer-note, .preset-row .tag {
+.save-btn, .follow-apply, .follow-chip, .saved-row-meta, .drawer-note, .preset-row .tag,
+.comment-count, .rail-meta, .rail-count, .rail-follow, .rail-empty-h, .rail-post,
+.cmt-name, .cmt-time, .cmt-priv, .cmt-reply-btn, .vis-opt {
   font-variation-settings:'wdth' 75;
 }
 
 /* 조판 축 — 제목 (wdth 90) */
 .panel-h, .card-title, .worth-title, .brief-title, .week-sec-title, .archive-row-top,
-.result-title, .thread-line {
+.result-title, .thread-line, .rail-title, .cmt-body {
   font-variation-settings:'wdth' 90;
 }
 

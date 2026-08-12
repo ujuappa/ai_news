@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="static/follow.js"></script>
+<script src="static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Wednesday · 12 August 2026 · 17 stories</title>
 <link rel="stylesheet" href="static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="76fde13897ce60cc" data-story-title="General Catalyst leads $1.1B round into 2-month-old River AI" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" title="General Catalyst leads $1.1B round into 2-month-old River AI">General Catalyst leads $1.1B round into 2-month-old River AI</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" title="General Catalyst leads $1.1B round into 2-month-old River AI">General Catalyst leads $1.1B round into 2-month-old River AI</a>
     <div class="cat-row-dek">River AI, a two-month-old startup co-founded by ex-xAI&#39;s Igor Babuschkin, secured a massive $1.1 billion seed/Series A round led by General Catalyst and AMP PBC, with participation from Nvidia and AMD Ventures. The company aims to reinvent AI by rebuilding the stack from scratch, focusing on personally trainable agents and offering an API for fine-tuning open models.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/11/general-catalys… →</span>
+    <span class="comment-count" data-comment-count data-story-id="76fde13897ce60cc">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="4f312455f728afd7" data-story-title="AI code-testing startup Blacksmith’s valuation jumps almost 10x" data-story-source="TechCrunch — AI" data-story-time="8 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://techcrunch.com/2026/08/12/blacksmiths-valuation-jumps-10x-to-550m-as-ai-coding-fuels-software-validation/" title="AI code-testing startup Blacksmith’s valuation jumps almost 10x in less than a year">AI code-testing startup Blacksmith’s valuation jumps almost 10x</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://techcrunch.com/2026/08/12/blacksmiths-valuation-jumps-10x-to-550m-as-ai-coding-fuels-software-validation/" title="AI code-testing startup Blacksmith’s valuation jumps almost 10x in less than a year">AI code-testing startup Blacksmith’s valuation jumps almost 10x</a>
     <div class="cat-row-dek">AI code-testing startup Blacksmith&#39;s valuation has increased by almost 10 times in less than a year, reaching $550 million after a $45 million Series B round. The company helps validate AI-generated code, addressing a growing bottleneck in software development as AI accelerates code creation.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/12/blacksmiths-val… →</span>
+    <span class="comment-count" data-comment-count data-story-id="4f312455f728afd7">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="66a5317327387604" data-story-title="Accel closes oversubscribed $550M India fund within weeks" data-story-source="TechCrunch — AI" data-story-time="21 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/08/11/accel-closes-oversubscribed-550m-india-fund-within-weeks-19-months-after-its-last/" title="Accel closes oversubscribed $550M India fund within weeks, 19 months after its last">Accel closes oversubscribed $550M India fund within weeks</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/08/11/accel-closes-oversubscribed-550m-india-fund-within-weeks-19-months-after-its-last/" title="Accel closes oversubscribed $550M India fund within weeks, 19 months after its last">Accel closes oversubscribed $550M India fund within weeks</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/11/accel-closes-ov… →</span>
+    <span class="comment-count" data-comment-count data-story-id="66a5317327387604">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="8b18fe174be4812d" data-story-title="Google’s Gemini app surges to 1 billion users" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" title="Google’s Gemini app surges to 1 billion users">Google’s Gemini app surges to 1 billion users</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" title="Google’s Gemini app surges to 1 billion users">Google’s Gemini app surges to 1 billion users</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/11/googles-gemini-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="8b18fe174be4812d">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="2996b8d8477a8c89" data-story-title="Mark Zuckerberg’s latest manifesto promises to save America" data-story-source="Google News" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.washingtonpost.com/technology/2026/08/10/zuckerberg-manifesto-says-meta-ai-will-make-future-everyone/" title="Mark Zuckerberg’s latest manifesto promises to save America with AI">Mark Zuckerberg’s latest manifesto promises to save America</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.washingtonpost.com/technology/2026/08/10/zuckerberg-manifesto-says-meta-ai-will-make-future-everyone/" title="Mark Zuckerberg’s latest manifesto promises to save America with AI">Mark Zuckerberg’s latest manifesto promises to save America</a>
     
     
     <span class="cat-row-link">washingtonpost.com/technology/2026/08/10/… →</span>
+    <span class="comment-count" data-comment-count data-story-id="2996b8d8477a8c89">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="edab551df792e744" data-story-title="Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/10/mark-zuckerberg-superintelligent-ai-essay-meta" title="Zuckerberg pushes ‘superintelligent’ AI for all as Meta releases open-weight model">Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/10/mark-zuckerberg-superintelligent-ai-essay-meta" title="Zuckerberg pushes ‘superintelligent’ AI for all as Meta releases open-weight model">Zuckerberg pushes ‘superintelligent’ AI for all; Meta releases model</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/10/ma… →</span>
+    <span class="comment-count" data-comment-count data-story-id="edab551df792e744">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d6815105354fa051" data-story-title="Zuckerberg manifesto sketches out Meta’s world-changing AI" data-story-source="Google News" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/meta-ai-mark-zuckerberg-artificial-intelligence-df8a4e7d7825470d09e8090367457c2c" title="Zuckerberg manifesto sketches out Meta’s ambitions for world-changing AI technology">Zuckerberg manifesto sketches out Meta’s world-changing AI</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/meta-ai-mark-zuckerberg-artificial-intelligence-df8a4e7d7825470d09e8090367457c2c" title="Zuckerberg manifesto sketches out Meta’s ambitions for world-changing AI technology">Zuckerberg manifesto sketches out Meta’s world-changing AI</a>
     
     
     <span class="cat-row-link">apnews.com/article/meta-ai-mark-zuckerber… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d6815105354fa051">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7c784dd3821a1241" data-story-title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models" data-story-source="Hacker News (AI, 100+ points)" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals as Meta returns to open models">Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" title="Mark Zuckerberg attacks &#39;closed&#39; AI rivals as Meta returns to open models">Mark Zuckerberg attacks &#39;closed&#39; AI rivals, backs open models</a>
     
     
     <span class="cat-row-link">ft.com/content/4e3957f8-ea7c-4c46-a3de-cd… →</span>
+    <span class="comment-count" data-comment-count data-story-id="7c784dd3821a1241">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="95a665254c90ac50" data-story-title="US stocks rise as AI companies report strong profits" data-story-source="Google News" data-story-time="5 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/stocks-markets-rates-trump-iran-chips-db541ced9f928f993bd3a17958a3deaa" title="US stocks rise back towards records as AI companies report strong profits">US stocks rise as AI companies report strong profits</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/stocks-markets-rates-trump-iran-chips-db541ced9f928f993bd3a17958a3deaa" title="US stocks rise back towards records as AI companies report strong profits">US stocks rise as AI companies report strong profits</a>
     
     
     <span class="cat-row-link">apnews.com/article/stocks-markets-rates-t… →</span>
+    <span class="comment-count" data-comment-count data-story-id="95a665254c90ac50">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -313,13 +324,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="34ac2f6b9783b51f" data-story-title="Brad Lightcap, OpenAI’s longtime COO, is leaving" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/" title="Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’">Brad Lightcap, OpenAI’s longtime COO, is leaving</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/" title="Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’">Brad Lightcap, OpenAI’s longtime COO, is leaving</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/08/11/brad-lightcap-o… →</span>
+    <span class="comment-count" data-comment-count data-story-id="34ac2f6b9783b51f">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -346,6 +358,37 @@
   <span class="cat-footer-note">10 of 10 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="archive/index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

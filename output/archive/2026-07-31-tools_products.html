@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Tools &amp; products — Friday · 31 July 2026 · 24 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="6422ae0f316dfcb1" data-story-title="Google Nixes Earth AI Feature Day After Launch" data-story-source="TechCrunch — AI" data-story-time="4 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/07/31/google-nixes-its-earth-ai-feature-one-day-after-launch-amid-criticism-it-would-spread-misinformation/" title="Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation">Google Nixes Earth AI Feature Day After Launch</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/07/31/google-nixes-its-earth-ai-feature-one-day-after-launch-amid-criticism-it-would-spread-misinformation/" title="Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation">Google Nixes Earth AI Feature Day After Launch</a>
     <div class="cat-row-dek">Google quickly pulled its new AI image generation feature for Google Earth just one day after launch due to widespread criticism about its potential for spreading misinformation. The prompt-based tool allowed users to superimpose fabricated images onto real maps, leading to concerns about geospatial disinformation.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/07/31/google-nixes-it… →</span>
+    <span class="comment-count" data-comment-count data-story-id="6422ae0f316dfcb1">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d240f02eb7f1d851" data-story-title="Smallest.ai Raises $13M for Ultra-Fast Voice AI" data-story-source="TechCrunch — AI" data-story-time="9 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://techcrunch.com/2026/07/31/smallest-ai-raises-13m-to-build-ultra-fast-voice-ai-that-sounds-genuinely-human/" title="Smallest.ai raises $13M to build ultra-fast voice AI that sounds genuinely human">Smallest.ai Raises $13M for Ultra-Fast Voice AI</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://techcrunch.com/2026/07/31/smallest-ai-raises-13m-to-build-ultra-fast-voice-ai-that-sounds-genuinely-human/" title="Smallest.ai raises $13M to build ultra-fast voice AI that sounds genuinely human">Smallest.ai Raises $13M for Ultra-Fast Voice AI</a>
     <div class="cat-row-dek">Smallest.ai has raised $13 million in Series A funding, bringing its total to over $21 million, to develop ultra-fast, human-sounding voice AI. The startup aims to make AI agent conversations indistinguishable from human interaction by using smaller, specialized models that listen, think, and speak simultaneously. Their approach involves a real-time intelligence layer for natural conversations, handing off complex queries to larger foundational models when necessary.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/07/31/smallest-ai-rai… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d240f02eb7f1d851">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="13793f9f32490595" data-story-title="Meta: AI Accelerates New App Development" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/07/30/meta-says-ai-is-making-it-easier-to-build-new-apps-and-more-are-coming/" title="Meta says AI is making it easier to build new apps — and more are coming">Meta: AI Accelerates New App Development</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/07/30/meta-says-ai-is-making-it-easier-to-build-new-apps-and-more-are-coming/" title="Meta says AI is making it easier to build new apps — and more are coming">Meta: AI Accelerates New App Development</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/30/meta-says-ai-is… →</span>
+    <span class="comment-count" data-comment-count data-story-id="13793f9f32490595">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="a3c19fa8f3f85faf" data-story-title="Claude AI chat logs found publicly searchable on Google" data-story-source="BBC — Technology" data-story-time="3 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cly5qgjk5ywo?at_medium=RSS&amp;at_campaign=rss" title="Some people&#39;s chats with Claude AI found to be publicly available online">Claude AI chat logs found publicly searchable on Google</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cly5qgjk5ywo?at_medium=RSS&amp;at_campaign=rss" title="Some people&#39;s chats with Claude AI found to be publicly available online">Claude AI chat logs found publicly searchable on Google</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cly5qgjk5ywo?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="a3c19fa8f3f85faf">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="27e1d6290bc355de" data-story-title="Siri AI could come with a paywall for power users" data-story-source="TechCrunch — AI" data-story-time="7 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/07/31/siri-ai-could-come-with-a-paywall-for-power-users/" title="Siri AI could come with a paywall for power users">Siri AI could come with a paywall for power users</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/07/31/siri-ai-could-come-with-a-paywall-for-power-users/" title="Siri AI could come with a paywall for power users">Siri AI could come with a paywall for power users</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/31/siri-ai-could-c… →</span>
+    <span class="comment-count" data-comment-count data-story-id="27e1d6290bc355de">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="43fb41d572518ac7" data-story-title="Snapchat no longer rewards fully AI-generated Spotlight" data-story-source="TechCrunch — AI" data-story-time="7 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/07/31/snapchat-no-longer-rewards-fully-ai-generated-spotlight-content/" title="Snapchat no longer rewards fully AI-generated Spotlight content">Snapchat no longer rewards fully AI-generated Spotlight</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/07/31/snapchat-no-longer-rewards-fully-ai-generated-spotlight-content/" title="Snapchat no longer rewards fully AI-generated Spotlight content">Snapchat no longer rewards fully AI-generated Spotlight</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/31/snapchat-no-lon… →</span>
+    <span class="comment-count" data-comment-count data-story-id="43fb41d572518ac7">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="c3b2c774b858bb2a" data-story-title="AI Helps Google Fix More Chrome Bugs in June" data-story-source="Hacker News (AI, 100+ points)" data-story-time="16 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://blog.google/security/chrome-stronger-with-every-update/" title="Google fixed more Chrome bugs in June than over the past two years, thanks to AI">AI Helps Google Fix More Chrome Bugs in June</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://blog.google/security/chrome-stronger-with-every-update/" title="Google fixed more Chrome bugs in June than over the past two years, thanks to AI">AI Helps Google Fix More Chrome Bugs in June</a>
     
     
     <span class="cat-row-link">blog.google/security/chrome-stronger-with… →</span>
+    <span class="comment-count" data-comment-count data-story-id="c3b2c774b858bb2a">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="9146ff1756af0f60" data-story-title="Avatarin Builds 24/7 Retail Agent with GPT-Realtime" data-story-source="OpenAI News" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://openai.com/index/avatarin" title="How avatarin built a 24/7 retail agent with GPT-Realtime">Avatarin Builds 24/7 Retail Agent with GPT-Realtime</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://openai.com/index/avatarin" title="How avatarin built a 24/7 retail agent with GPT-Realtime">Avatarin Builds 24/7 Retail Agent with GPT-Realtime</a>
     
     
     <span class="cat-row-link">openai.com/index/avatarin →</span>
+    <span class="comment-count" data-comment-count data-story-id="9146ff1756af0f60">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="2b9e8f6501fcf46c" data-story-title="Merlin Bird ID app hits 12 million downloads in 2026" data-story-source="BBC — Technology" data-story-time="4 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/cr59m5nmemno?at_medium=RSS&amp;at_campaign=rss" title="Why budding birders are flocking to Shazam-like apps to identify avians">Merlin Bird ID app hits 12 million downloads in 2026</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/cr59m5nmemno?at_medium=RSS&amp;at_campaign=rss" title="Why budding birders are flocking to Shazam-like apps to identify avians">Merlin Bird ID app hits 12 million downloads in 2026</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cr59m5nmemno?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="2b9e8f6501fcf46c">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -318,6 +329,37 @@
   <span class="cat-footer-note">9 of 9 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

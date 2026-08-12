@@ -76,9 +76,10 @@ Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인�
 08-06 에는 6a 에서 색만 들여왔지만 **08-07 에 조판까지 들여왔다** — 위 항목 참고).
 **2026-08-12**: 지면 머리의 큰 "AI Digest." · 건수 stat · Daily 칩 · 랭크 라벨 · 티커 점수는
 뗐다. 남는 건 날짜 칩 + Filters. 사이트명은 마스트헤드가 이미 말한다.
-- **사인인 · Weekly · Monthly · 코멘트는 의도적으로 없다** (로그인+쓰기 백엔드 미구현 →
- 죽은 버튼 방지). 6a 의 소셜 카드 3장을 붙일 자리는 `templates/home.html` 끝 주석, 네비는
- `templates/macros.html` 주석 참고. `test_render_assets.py` 가 새는 걸 막는다.
+- **사인인 · Weekly · Monthly 는 의도적으로 없다** (로그인+쓰기 백엔드 미구현 →
+ 죽은 버튼 방지). **댓글은 2026-08-12 에 있다** — 다이제스트 오른쪽 레일, 이 브라우저
+ localStorage 전용(서버 없음 · 공개 스레드가 아님). 6a 의 소셜 카드 3장을 붙일 자리는
+ `templates/home.html` 끝 주석, 네비는 `templates/macros.html` 주석 참고.
  **단 `Following`/`Saved` 는 2026-08-11 에 실제로 구현됐다**(localStorage) — 금지어에서 빠졌고,
  대신 "그 컨트롤이 실제로 연결돼 있는지"를 검사하는 테스트가 생겼다. 위 "소스·토픽 편집" 참고.
 - **필터를 건드릴 때**: 컨트롤 줄은 `.panel-body`(data-section) **밖**에 둬야 한다 — 안에 두면

@@ -7,6 +7,7 @@
 </head><body>
 <div class="wrap">
 {{ m.masthead(period_meta, total_records, nav_links, archive_link, search_href, true, asset_prefix=asset_prefix) }}
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -31,13 +32,14 @@
   같은 처리). 죽은 링크는 `href()` 가 그대로 href 를 뗀다.
 #}
 {% for it in items %}
-<div class="cat-row">
+<div class="cat-row" {{ m.story_attrs(it) }}>
   <span class="cat-score" style="font-size:{{ it.row_size }}px">{{ '%.2f'|format(it.significance)|replace('0.', '.') }}</span>
   <div>
-    <a class="cat-row-title" style="font-size:{{ it.row_size }}px"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
+    <a class="cat-row-title story-headline" style="font-size:{{ it.row_size }}px"{{ m.href(it) }} title="{{ it.title }}">{{ it.display_title }}</a>
     {% if it.show_dek %}<div class="cat-row-dek">{{ it.summary }}</div>{% endif %}
     {% if it.thread %}<span class="thread-line">Earlier: {{ it.thread.display }} ({{ it.thread.date }})</span>{% endif %}
     <span class="cat-row-link">{{ it.domain_path }} →</span>
+    {{ m.comment_count(it) }}
   </div>
   <div class="cat-row-side">
     {% if it.is_major %}<span class="tag tag-acc">MAJOR</span>{% endif %}
@@ -51,6 +53,8 @@
   <span class="cat-footer-note">{{ items|length }} of {{ items|length }} shown · category cap {{ cap }} · min significance {{ min_sig }}</span>
   <a class="cat-footer-link" href="{{ archive_link.href }}">{{ labels[category] }} in earlier weeks →</a>
 </div>
+</div>
+{{ m.comment_rail() }}
 </div>
 </div>
 {{ m.site_footer(archive_link.href, items|length, rss_href=asset_prefix ~ 'feed.xml', asset_prefix=asset_prefix) }}

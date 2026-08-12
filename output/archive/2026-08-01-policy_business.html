@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Saturday · 1 August 2026 · 11 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="0043e5cf7a4e561c" data-story-title="Amazon Q2 Earnings Beat; AWS Revenue Up 37%" data-story-source="TechCrunch — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/07/30/investors-love-ai-as-long-as-youre-a-cloud-host/" title="Investors love AI, as long as you’re a cloud host">Amazon Q2 Earnings Beat; AWS Revenue Up 37%</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/07/30/investors-love-ai-as-long-as-youre-a-cloud-host/" title="Investors love AI, as long as you’re a cloud host">Amazon Q2 Earnings Beat; AWS Revenue Up 37%</a>
     <div class="cat-row-dek">Amazon&#39;s Q2 earnings exceeded expectations, with net sales up 20% and AWS revenue growing 37% to $42 billion, causing its stock to rise nearly 10%. The company increased its 2026 capex forecast to $220 billion, demonstrating continued significant investment in data centers and AI infrastructure, including custom chips like Trainium and Graviton. Investors are showing strong support for cloud hosts in the AI economy, contrasting with skepticism towards AI labs without clear revenue streams.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/07/30/investors-love-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="0043e5cf7a4e561c">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="f003554a7b505a24" data-story-title="OpenAI Reduces GPT-5.6 Model Pricing" data-story-source="gemini_grounding" data-story-time="9 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://openai.com/index/building-abundant-intelligence/" title="Building abundant intelligence">OpenAI Reduces GPT-5.6 Model Pricing</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://openai.com/index/building-abundant-intelligence/" title="Building abundant intelligence">OpenAI Reduces GPT-5.6 Model Pricing</a>
     <div class="cat-row-dek">OpenAI announced price reductions for its GPT-5.6 models: Luna is now 80% cheaper at $0.20 per million input tokens and $1.20 per million output tokens, while Terra is 20% cheaper at $2 and $12 respectively. A new &#34;Fast mode&#34; for GPT-5.6 Sol offers 2.5 times the speed at double the price. The company emphasizes a full-stack approach to making AI more capable and affordable, noting that GPT-5.6 Sol helped reduce end-to-end serving costs by 20% and improved token-generation efficiency through speculative decoding.</div>
     
     <span class="cat-row-link">openai.com/index/building-abundant-intell… →</span>
+    <span class="comment-count" data-comment-count data-story-id="f003554a7b505a24">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="9d803b4958508a6d" data-story-title="India&#39;s App Market Sees Record $345M Spending in Q2" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/07/31/india-is-starting-to-pay-for-apps-not-just-download-them/" title="India is starting to pay for apps, not just download them">India&#39;s App Market Sees Record $345M Spending in Q2</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/07/31/india-is-starting-to-pay-for-apps-not-just-download-them/" title="India is starting to pay for apps, not just download them">India&#39;s App Market Sees Record $345M Spending in Q2</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/31/india-is-starti… →</span>
+    <span class="comment-count" data-comment-count data-story-id="9d803b4958508a6d">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="be8dbde6036bedb3" data-story-title="Amazon, Apple Unveil AI Plans; Investors Demand Results" data-story-source="BBC — Technology" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&amp;at_campaign=rss" title="Amazon and Apple just told us more about their AI plans - here are three things we learned">Amazon, Apple Unveil AI Plans; Investors Demand Results</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&amp;at_campaign=rss" title="Amazon and Apple just told us more about their AI plans - here are three things we learned">Amazon, Apple Unveil AI Plans; Investors Demand Results</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/cp87m46g392o?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="be8dbde6036bedb3">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="a4b674c64517ef6f" data-story-title="Judge: Trump Lacks Evidence for Anthropic Risk Label" data-story-source="TechCrunch — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/" title="Judge says Trump admin still lacks evidence for Anthropic ‘supply-chain risk’ label">Judge: Trump Lacks Evidence for Anthropic Risk Label</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/" title="Judge says Trump admin still lacks evidence for Anthropic ‘supply-chain risk’ label">Judge: Trump Lacks Evidence for Anthropic Risk Label</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/30/judge-says-trum… →</span>
+    <span class="comment-count" data-comment-count data-story-id="a4b674c64517ef6f">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="84de41e36e5f729e" data-story-title="Ofgem Proposes Deposits for Data Center Power Demands" data-story-source="BBC — Technology" data-story-time="3 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/c9q90q9qnn2o?at_medium=RSS&amp;at_campaign=rss" title="Data centres could pay hundreds of millions in deposits for power demands">Ofgem Proposes Deposits for Data Center Power Demands</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.bbc.co.uk/news/articles/c9q90q9qnn2o?at_medium=RSS&amp;at_campaign=rss" title="Data centres could pay hundreds of millions in deposits for power demands">Ofgem Proposes Deposits for Data Center Power Demands</a>
     
     
     <span class="cat-row-link">bbc.co.uk/news/articles/c9q90q9qnn2o?at_m… →</span>
+    <span class="comment-count" data-comment-count data-story-id="84de41e36e5f729e">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="cd4deb3ebc0736b1" data-story-title="China&#39;s Tech Advances Disrupt Markets, US Industry" data-story-source="The Guardian — AI" data-story-time="11 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/01/china-silicon-valley-white-house" title="China’s tech advances are causing chaos from Silicon Valley to the White House">China&#39;s Tech Advances Disrupt Markets, US Industry</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/01/china-silicon-valley-white-house" title="China’s tech advances are causing chaos from Silicon Valley to the White House">China&#39;s Tech Advances Disrupt Markets, US Industry</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/01/ch… →</span>
+    <span class="comment-count" data-comment-count data-story-id="cd4deb3ebc0736b1">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="16030aac77d6773b" data-story-title="Anthropic: Claude AI Breached 3 Companies in Tests" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/" title="Anthropic says its own AI models breached three companies during security tests">Anthropic: Claude AI Breached 3 Companies in Tests</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/" title="Anthropic says its own AI models breached three companies during security tests">Anthropic: Claude AI Breached 3 Companies in Tests</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/30/anthropic-says-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="16030aac77d6773b">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="c7f69c5624a7d4de" data-story-title="Lloyds Bank to Cut £2B in Costs with AI Strategy" data-story-source="The Guardian — AI" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/business/2026/jul/30/lloyds-bank-cut-2bn-costs-part-ai-powered-strategy" title="Lloyds Bank to cut £2bn in costs as part of AI-powered strategy">Lloyds Bank to Cut £2B in Costs with AI Strategy</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/business/2026/jul/30/lloyds-bank-cut-2bn-costs-part-ai-powered-strategy" title="Lloyds Bank to cut £2bn in costs as part of AI-powered strategy">Lloyds Bank to Cut £2B in Costs with AI Strategy</a>
     
     
     <span class="cat-row-link">theguardian.com/business/2026/jul/30/lloy… →</span>
+    <span class="comment-count" data-comment-count data-story-id="c7f69c5624a7d4de">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -313,13 +324,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="e16c33eb2d887f3a" data-story-title="Elon Musk&#39;s xAI Sues Minnesota Over Nudification Law" data-story-source="Google News" data-story-time="3 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/minnesota-artificial-intelligence-nudification-x-elon-musk-deepfake-131184be939d540de093b567b12c9e16" title="Elon Musk&#39;s xAI sues Minnesota over its first-in-the-nation law banning &#39;nudification&#39; technology">Elon Musk&#39;s xAI Sues Minnesota Over Nudification Law</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/minnesota-artificial-intelligence-nudification-x-elon-musk-deepfake-131184be939d540de093b567b12c9e16" title="Elon Musk&#39;s xAI sues Minnesota over its first-in-the-nation law banning &#39;nudification&#39; technology">Elon Musk&#39;s xAI Sues Minnesota Over Nudification Law</a>
     
     
     <span class="cat-row-link">apnews.com/article/minnesota-artificial-i… →</span>
+    <span class="comment-count" data-comment-count data-story-id="e16c33eb2d887f3a">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -346,6 +358,37 @@
   <span class="cat-footer-note">10 of 10 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

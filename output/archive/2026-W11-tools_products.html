@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Tools &amp; products — Week 11 · 9–15 March 2026 · 14 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d4732a41e5a2e0ab" data-story-title="From model to agent: Equipping the Responses API with a computer environment" data-story-source="OpenAI News" data-story-time="" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://openai.com/index/equip-responses-api-computer-environment" title="From model to agent: Equipping the Responses API with a computer environment">From model to agent: Equipping the Responses API with a computer environment</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://openai.com/index/equip-responses-api-computer-environment" title="From model to agent: Equipping the Responses API with a computer environment">From model to agent: Equipping the Responses API with a computer environment</a>
     <div class="cat-row-dek">OpenAI has developed an agent runtime environment using its Responses API, shell tools, and hosted containers. This infrastructure is designed to facilitate secure, scalable agent execution with file and tool access.</div>
     
     <span class="cat-row-link">openai.com/index/equip-responses-api-comp… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d4732a41e5a2e0ab">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="b6e309b8929ae5f5" data-story-title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier" data-story-source="Meta AI Blog" data-story-time="" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/" title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://about.fb.com/news/2026/03/facebook-marketplace-new-meta-ai-tools-make-selling-faster-and-easier/" title="Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier">Facebook Marketplace’s New Meta AI Tools Make Selling Faster and Easier</a>
     <div class="cat-row-dek">Meta is integrating new AI tools into Facebook Marketplace to streamline selling processes. These features include single-click listings and automated AI responses for buyer inquiries.</div>
     
     <span class="cat-row-link">about.fb.com/news/2026/03/facebook-market… →</span>
+    <span class="comment-count" data-comment-count data-story-id="b6e309b8929ae5f5">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="69f2b5ec7d181072" data-story-title="Wayfair boosts catalog accuracy and support speed with OpenAI" data-story-source="OpenAI News" data-story-time="" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://openai.com/index/wayfair" title="Wayfair boosts catalog accuracy and support speed with OpenAI">Wayfair boosts catalog accuracy and support speed with OpenAI</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://openai.com/index/wayfair" title="Wayfair boosts catalog accuracy and support speed with OpenAI">Wayfair boosts catalog accuracy and support speed with OpenAI</a>
     
     
     <span class="cat-row-link">openai.com/index/wayfair →</span>
+    <span class="comment-count" data-comment-count data-story-id="69f2b5ec7d181072">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="88306bd64ac11846" data-story-title="New ways to learn math and science in ChatGPT" data-story-source="OpenAI News" data-story-time="" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt" title="New ways to learn math and science in ChatGPT">New ways to learn math and science in ChatGPT</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt" title="New ways to learn math and science in ChatGPT">New ways to learn math and science in ChatGPT</a>
     
     
     <span class="cat-row-link">openai.com/index/new-ways-to-learn-math-a… →</span>
+    <span class="comment-count" data-comment-count data-story-id="88306bd64ac11846">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="2ae52e2df01b0a9d" data-story-title="Introducing Storage Buckets on the Hugging Face Hub" data-story-source="Hugging Face Blog" data-story-time="" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://huggingface.co/blog/storage-buckets" title="Introducing Storage Buckets on the Hugging Face Hub">Introducing Storage Buckets on the Hugging Face Hub</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://huggingface.co/blog/storage-buckets" title="Introducing Storage Buckets on the Hugging Face Hub">Introducing Storage Buckets on the Hugging Face Hub</a>
     
     
     <span class="cat-row-link">huggingface.co/blog/storage-buckets →</span>
+    <span class="comment-count" data-comment-count data-story-id="2ae52e2df01b0a9d">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="96b2284ecdf3b55b" data-story-title="LeRobot v0.5.0: Scaling Every Dimension" data-story-source="Hugging Face Blog" data-story-time="23 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.30</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://huggingface.co/blog/lerobot-release-v050" title="LeRobot v0.5.0: Scaling Every Dimension">LeRobot v0.5.0: Scaling Every Dimension</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://huggingface.co/blog/lerobot-release-v050" title="LeRobot v0.5.0: Scaling Every Dimension">LeRobot v0.5.0: Scaling Every Dimension</a>
     
     
     <span class="cat-row-link">huggingface.co/blog/lerobot-release-v050 →</span>
+    <span class="comment-count" data-comment-count data-story-id="96b2284ecdf3b55b">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -234,6 +242,37 @@
   <span class="cat-footer-note">6 of 6 shown · category cap 10 · min significance 0.3</span>
   <a class="cat-footer-link" href="index.html">Tools &amp; products in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

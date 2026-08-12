@@ -149,11 +149,11 @@ def test_the_two_rows_that_used_to_be_links_are_no_longer_links(tmp_path):
 
     assert '<div class="brief-row"' in home
     assert '<a class="brief-row"' not in home, "brief-row 가 다시 <a> 가 됐다"
-    assert '<a class="brief-title"' in home, "brief 제목이 링크가 아니다"
+    assert 'class="brief-title story-headline"' in home, "brief 제목이 링크가 아니다"
 
     assert '<div class="cat-row"' in cat
     assert '<a class="cat-row"' not in cat, "cat-row 가 다시 <a> 가 됐다"
-    assert '<a class="cat-row-title"' in cat, "카테고리 행 제목이 링크가 아니다"
+    assert 'class="cat-row-title story-headline"' in cat, "카테고리 행 제목이 링크가 아니다"
 
 
 def test_follow_star_is_a_sibling_of_the_filter_pill_not_a_child(tmp_path):

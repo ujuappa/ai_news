@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Wednesday · 29 July 2026 · 11 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="9108d8d6030cfb71" data-story-title="Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents" data-story-source="TechCrunch — AI" data-story-time="23 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.90</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/07/28/cyera-agrees-to-acquire-oasis-security-for-1b-to-safeguard-proliferating-ai-agents/" title="Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents">Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/07/28/cyera-agrees-to-acquire-oasis-security-for-1b-to-safeguard-proliferating-ai-agents/" title="Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents">Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents</a>
     <div class="cat-row-dek">Cyera acquired Oasis Security for $1 billion, marking Cyera&#39;s third acquisition this year, to enhance its capabilities in safeguarding proliferating AI agents. This major acquisition underscores the growing focus on security in AI agent deployments.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/07/28/cyera-agrees-to… →</span>
+    <span class="comment-count" data-comment-count data-story-id="9108d8d6030cfb71">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="21cfdc136e07efe4" data-story-title="Encore AI raises $30M to build AI agents that learn from customer calls" data-story-source="TechCrunch — AI" data-story-time="9 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://techcrunch.com/2026/07/29/encore-ai-raises-30m-to-build-ai-agents-that-learn-from-customer-calls/" title="Encore AI raises $30M to build AI agents that learn from customer calls">Encore AI raises $30M to build AI agents that learn from customer calls</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://techcrunch.com/2026/07/29/encore-ai-raises-30m-to-build-ai-agents-that-learn-from-customer-calls/" title="Encore AI raises $30M to build AI agents that learn from customer calls">Encore AI raises $30M to build AI agents that learn from customer calls</a>
     <div class="cat-row-dek">Encore AI has secured $30 million in funding to develop AI agents capable of learning from customer calls. The startup analyzes various communication data to identify effective sales techniques and translate them into actionable playbooks for AI agents.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/07/29/encore-ai-raise… →</span>
+    <span class="comment-count" data-comment-count data-story-id="21cfdc136e07efe4">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="1fcec19a53a378b8" data-story-title="As AI content floods the internet, Pangram raises $9M to detect it" data-story-source="TechCrunch — AI" data-story-time="12 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://techcrunch.com/2026/07/29/as-ai-content-floods-the-internet-pangram-raises-9m-to-detect-it/" title="As AI content floods the internet, Pangram raises $9M to detect it">As AI content floods the internet, Pangram raises $9M to detect it</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://techcrunch.com/2026/07/29/as-ai-content-floods-the-internet-pangram-raises-9m-to-detect-it/" title="As AI content floods the internet, Pangram raises $9M to detect it">As AI content floods the internet, Pangram raises $9M to detect it</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/29/as-ai-content-f… →</span>
+    <span class="comment-count" data-comment-count data-story-id="1fcec19a53a378b8">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7f7b3e74b8af186c" data-story-title="LearnVector – Andrew Ng&#39;s AI company building one‑to‑one learning experiences" data-story-source="Hacker News (AI, 100+ points)" data-story-time="22 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://learnvector.ai/" title="LearnVector – Andrew Ng&#39;s AI company building one‑to‑one learning experiences">LearnVector – Andrew Ng&#39;s AI company building one‑to‑one learning experiences</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://learnvector.ai/" title="LearnVector – Andrew Ng&#39;s AI company building one‑to‑one learning experiences">LearnVector – Andrew Ng&#39;s AI company building one‑to‑one learning experiences</a>
     
     
     <span class="cat-row-link">learnvector.ai/ →</span>
+    <span class="comment-count" data-comment-count data-story-id="7f7b3e74b8af186c">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="b066f12120921c9f" data-story-title="Hint, a new AI startup co-founded by Martha Stewart, offers an AI assistant for homeowners" data-story-source="TechCrunch — AI" data-story-time="8 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://techcrunch.com/2026/07/29/hint-a-new-ai-startup-co-founded-by-martha-stewart-offers-an-ai-assistant-for-homeowners/" title="Hint, a new AI startup co-founded by Martha Stewart, offers an AI assistant for homeowners">Hint, a new AI startup co-founded by Martha Stewart, offers an AI assistant for homeowners</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://techcrunch.com/2026/07/29/hint-a-new-ai-startup-co-founded-by-martha-stewart-offers-an-ai-assistant-for-homeowners/" title="Hint, a new AI startup co-founded by Martha Stewart, offers an AI assistant for homeowners">Hint, a new AI startup co-founded by Martha Stewart, offers an AI assistant for homeowners</a>
     
     
     <span class="cat-row-link">techcrunch.com/2026/07/29/hint-a-new-ai-s… →</span>
+    <span class="comment-count" data-comment-count data-story-id="b066f12120921c9f">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -206,6 +213,37 @@
   <span class="cat-footer-note">5 of 5 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">

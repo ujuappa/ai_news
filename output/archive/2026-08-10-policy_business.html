@@ -6,6 +6,7 @@
 <script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
 
 <script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
 <title>AI Digest — Policy &amp; business — Monday · 10 August 2026 · 16 stories</title>
 <link rel="stylesheet" href="../static/digest.css">
 </head><body>
@@ -44,6 +45,7 @@
     </div>
   </div>
 </header>
+<div class="digest-shell" data-digest-shell>
 <div class="cat-body">
 <div class="cat-top">
   <div>
@@ -61,13 +63,14 @@
 
 
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="ec300a62a3dff5d1" data-story-title="Embattled hedge fund Situational Awareness invests $400M in chip…" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:34px">.80</span>
   <div>
-    <a class="cat-row-title" style="font-size:34px" href="https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/" title="Embattled hedge fund Situational Awareness invests $400M in chip startup Source Foundry">Embattled hedge fund Situational Awareness invests $400M in chip…</a>
+    <a class="cat-row-title story-headline" style="font-size:34px" href="https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/" title="Embattled hedge fund Situational Awareness invests $400M in chip startup Source Foundry">Embattled hedge fund Situational Awareness invests $400M in chip…</a>
     <div class="cat-row-dek">Situational Awareness, a hedge fund, invested $400 million in Source Foundry, a chip startup, bringing its total investment to $500 million despite recent significant losses in its public portfolio. The fund, founded by former OpenAI researcher Leopold Aschenbrenner, had previously sold off most of its public holdings to Citadel but retained its Anthropic shares. Source Foundry aims to revolutionize chip manufacturing, making it faster and cheaper.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/09/embattled-hedge… →</span>
+    <span class="comment-count" data-comment-count data-story-id="ec300a62a3dff5d1">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -89,13 +92,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="393ea70e1fb7c3c0" data-story-title="Discovered Materials is playing AI whack-a-mole to hunt cooler chips" data-story-source="TechCrunch — AI" data-story-time="11 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:28px">.70</span>
   <div>
-    <a class="cat-row-title" style="font-size:28px" href="https://techcrunch.com/2026/08/10/discovered-materials-is-playing-ai-whack-a-mole-to-hunt-cooler-chips/" title="Discovered Materials is playing AI whack-a-mole to hunt cooler chips">Discovered Materials is playing AI whack-a-mole to hunt cooler chips</a>
+    <a class="cat-row-title story-headline" style="font-size:28px" href="https://techcrunch.com/2026/08/10/discovered-materials-is-playing-ai-whack-a-mole-to-hunt-cooler-chips/" title="Discovered Materials is playing AI whack-a-mole to hunt cooler chips">Discovered Materials is playing AI whack-a-mole to hunt cooler chips</a>
     <div class="cat-row-dek">Discovered Materials, a startup, raised $9 million in seed funding to use AI agents to find new materials for cooler computer chips. The company, which emerged from Y Combinator, employs Anthropic models and foundational physics models to simulate and identify materials that can improve chip efficiency. They aim to patent and license these discoveries to major chipmakers, addressing the significant heat and power consumption issues in AI data centers.</div>
     
     <span class="cat-row-link">techcrunch.com/2026/08/10/discovered-mate… →</span>
+    <span class="comment-count" data-comment-count data-story-id="393ea70e1fb7c3c0">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -117,13 +121,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="8a4573f69b46f857" data-story-title="SA premier announces royal commission into AI" data-story-source="The Guardian — AI" data-story-time="16 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:22px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:22px" href="https://www.theguardian.com/australia-news/live/2026/aug/10/australia-news-live-transport-minister-sydney-airport-air-traffic-control-catherine-king-aukus-public-inquiry-malcolm-turnbull-alan-jones-trial-ntwnfb" title="SA premier announces royal commission into AI – as it happened">SA premier announces royal commission into AI</a>
+    <a class="cat-row-title story-headline" style="font-size:22px" href="https://www.theguardian.com/australia-news/live/2026/aug/10/australia-news-live-transport-minister-sydney-airport-air-traffic-control-catherine-king-aukus-public-inquiry-malcolm-turnbull-alan-jones-trial-ntwnfb" title="SA premier announces royal commission into AI – as it happened">SA premier announces royal commission into AI</a>
     
     
     <span class="cat-row-link">theguardian.com/australia-news/live/2026/… →</span>
+    <span class="comment-count" data-comment-count data-story-id="8a4573f69b46f857">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -145,13 +150,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="9d2aad9afd23882a" data-story-title="AI &amp; Tech Brief: The Senate’s frontier AI bill" data-story-source="Google News" data-story-time="6 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:17px">.60</span>
   <div>
-    <a class="cat-row-title" style="font-size:17px" href="https://www.washingtonpost.com/wp-intelligence/ai-tech-brief/2026/08/03/ai-tech-brief-senates-frontier-ai-bill/" title="AI &amp; Tech Brief: The Senate’s frontier AI bill">AI &amp; Tech Brief: The Senate’s frontier AI bill</a>
+    <a class="cat-row-title story-headline" style="font-size:17px" href="https://www.washingtonpost.com/wp-intelligence/ai-tech-brief/2026/08/03/ai-tech-brief-senates-frontier-ai-bill/" title="AI &amp; Tech Brief: The Senate’s frontier AI bill">AI &amp; Tech Brief: The Senate’s frontier AI bill</a>
     
     
     <span class="cat-row-link">washingtonpost.com/wp-intelligence/ai-tec… →</span>
+    <span class="comment-count" data-comment-count data-story-id="9d2aad9afd23882a">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     <span class="tag tag-acc">MAJOR</span>
@@ -173,13 +179,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="89638ec2f321064b" data-story-title="Kimsuky Builds Offline AI Stack for Phishing &amp; Malware" data-story-source="gemini_grounding" data-story-time="9 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://thehackernews.com/2026/08/kimsuky-builds-offline-ai-stack-that.html" title="Kimsuky Builds Offline AI Stack to Boost Phishing and Automate Malware Development">Kimsuky Builds Offline AI Stack for Phishing &amp; Malware</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://thehackernews.com/2026/08/kimsuky-builds-offline-ai-stack-that.html" title="Kimsuky Builds Offline AI Stack to Boost Phishing and Automate Malware Development">Kimsuky Builds Offline AI Stack for Phishing &amp; Malware</a>
     
     
     <span class="cat-row-link">thehackernews.com/2026/08/kimsuky-builds-… →</span>
+    <span class="comment-count" data-comment-count data-story-id="89638ec2f321064b">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -201,13 +208,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d26d8326d0e68c42" data-story-title="Chinese users of AI companions bereft after government tightens…" data-story-source="Google News" data-story-time="18 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/china-ai-virtual-companions-bytedance-wechat-22c4247031092c37b61b537dd809b658" title="Chinese users of AI companions bereft after government tightens regulations">Chinese users of AI companions bereft after government tightens…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/china-ai-virtual-companions-bytedance-wechat-22c4247031092c37b61b537dd809b658" title="Chinese users of AI companions bereft after government tightens regulations">Chinese users of AI companions bereft after government tightens…</a>
     
     
     <span class="cat-row-link">apnews.com/article/china-ai-virtual-compa… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d26d8326d0e68c42">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -229,13 +237,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="d150bd3e5836b521" data-story-title="A pillar of environmental enforcement is targeted by Trump and Musk’s…" data-story-source="Google News" data-story-time="2 days ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.50</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://apnews.com/article/trump-musk-xai-environment-citizen-lawsuits-a46d8e3f20d0500175fe2ee981998323" title="A pillar of environmental enforcement is targeted by Trump and Musk’s AI company">A pillar of environmental enforcement is targeted by Trump and Musk’s…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://apnews.com/article/trump-musk-xai-environment-citizen-lawsuits-a46d8e3f20d0500175fe2ee981998323" title="A pillar of environmental enforcement is targeted by Trump and Musk’s AI company">A pillar of environmental enforcement is targeted by Trump and Musk’s…</a>
     
     
     <span class="cat-row-link">apnews.com/article/trump-musk-xai-environ… →</span>
+    <span class="comment-count" data-comment-count data-story-id="d150bd3e5836b521">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -257,13 +266,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="61282b7420ed0675" data-story-title="OpenAI&#39;s letter to Governor Abbott on AI infrastructure" data-story-source="OpenAI News" data-story-time="9 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://openai.com/index/responsible-ai-infrastructure-texas" title="OpenAI’s letter to Governor Abbott on responsible AI infrastructure in Texas">OpenAI&#39;s letter to Governor Abbott on AI infrastructure</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://openai.com/index/responsible-ai-infrastructure-texas" title="OpenAI’s letter to Governor Abbott on responsible AI infrastructure in Texas">OpenAI&#39;s letter to Governor Abbott on AI infrastructure</a>
     
     
     <span class="cat-row-link">openai.com/index/responsible-ai-infrastru… →</span>
+    <span class="comment-count" data-comment-count data-story-id="61282b7420ed0675">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -285,13 +295,14 @@
   </div>
 </div>
 
-<div class="cat-row">
+<div class="cat-row" data-story data-story-id="7c9d0d87cb2bb30b" data-story-title="UK manufacturers face rising hacking risk as survey shows 30% were…" data-story-source="The Guardian — AI" data-story-time="18 hours ago" role="button" tabindex="0">
   <span class="cat-score" style="font-size:15px">.40</span>
   <div>
-    <a class="cat-row-title" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/10/uk-companies-cyber-attack-third-jlr" title="UK manufacturers face rising hacking risk as survey shows 30% were hit last year">UK manufacturers face rising hacking risk as survey shows 30% were…</a>
+    <a class="cat-row-title story-headline" style="font-size:15px" href="https://www.theguardian.com/technology/2026/aug/10/uk-companies-cyber-attack-third-jlr" title="UK manufacturers face rising hacking risk as survey shows 30% were hit last year">UK manufacturers face rising hacking risk as survey shows 30% were…</a>
     
     
     <span class="cat-row-link">theguardian.com/technology/2026/aug/10/uk… →</span>
+    <span class="comment-count" data-comment-count data-story-id="7c9d0d87cb2bb30b">Add the first comment</span>
   </div>
   <div class="cat-row-side">
     
@@ -318,6 +329,37 @@
   <span class="cat-footer-note">9 of 9 shown · category cap 10 · min significance 0.4</span>
   <a class="cat-footer-link" href="index.html">Policy &amp; business in earlier weeks →</a>
 </div>
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
 </div>
 </div>
 <footer class="site-footer">
