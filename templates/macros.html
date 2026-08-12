@@ -250,6 +250,14 @@
         {% endfor %}
         <a class="mh-pill" href="{{ archive_link.href }}">Archive</a>
         {#
+          ⚠️ **Sources 링크는 여기 있어야 한다.** 2026-08-11 에 소스 지면을 만들고 링크를
+          `util_header`(=sources·admin·saved 전용 헤더)에만 달았더니, 그 세 지면끼리만 서로를
+          가리켜서 **홈에서는 도달할 방법이 아예 없었다** — 지면이 다 구워져 있는데도 사용자에게는
+          "안 만들어진" 것과 똑같았다. 도달 가능성은 §13 완성 정의 3번이 이미 못박은 항목이다
+          (아카이브 47개 전부 도달 가능). `test_render_assets.py` 에 회귀 가드를 뒀다.
+        #}
+        <a class="mh-pill" href="{{ asset_prefix }}sources.html">Sources</a>
+        {#
           Saved 는 **구현이 있는** pill 이다(follow.js + saved.html) — 6a 의 `Following 8` ·
           `Monthly` 를 넣지 않은 이유와 구분할 것. 그 둘은 지금도 코드가 없어서 안 넣는다.
           건수는 서버가 모른다(브라우저 localStorage 에만 있다) → 비워 두고 follow.js 가 채운다.
@@ -491,13 +499,20 @@
 {#
   푸터. 테마 스위처가 헤더에서 여기로 내려왔다(캔버스 디자인) — 헤더 우측은 검색 전용.
 #}
-{% macro site_footer(archive_href, total, status='ok', rss_href='') -%}
+{% macro site_footer(archive_href, total, status='ok', rss_href='', asset_prefix='') -%}
 <footer class="site-footer">
   <span class="term-line">digest --items {{ total }} --status {{ status }}</span>
   <div class="site-footer-tools">
     <span class="site-footer-label">Theme</span>
     {{ theme_picker() }}
     <a href="{{ archive_href }}">Archive index</a>
+    {#
+      Sources·Saved 를 푸터에도 두는 이유: 마스트헤드(`.mh`)가 없는 지면이 있다 —
+      아카이브 인덱스와 주간 지면은 `.simple-header` 를 쓴다. 푸터는 모든 지면에 있으므로
+      여기 한 줄이 도달 가능성의 바닥을 만든다(2026-08-11, 링크를 빼먹은 실제 사고 뒤 추가).
+    #}
+    <a href="{{ asset_prefix }}sources.html">Sources</a>
+    <a href="{{ asset_prefix }}saved.html">Saved</a>
     {% if rss_href %}<a href="{{ rss_href }}">RSS</a>{% endif %}
   </div>
 </footer>

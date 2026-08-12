@@ -40,5 +40,6 @@
 {% endfor %}
 </div>
 </div>
-{{ m.site_footer('index.html', digests|length, status='archive', rss_href='../feed.xml') }}
+{#- 이 지면은 output/archive/ 안에 있다 → 루트 지면들은 ../ 로 올라가야 한다. #}
+{{ m.site_footer('index.html', digests|length, status='archive', rss_href='../feed.xml', asset_prefix='../') }}
 </body></html>

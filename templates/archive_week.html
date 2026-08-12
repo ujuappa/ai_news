@@ -66,6 +66,7 @@
   {% endif %}
 </div>
 </div>
-{{ m.site_footer('index.html', total, status='archive', rss_href='../feed.xml') }}
+{#- 이 지면도 output/archive/ 안에 있다 → 루트 지면들은 ../ 로. #}
+{{ m.site_footer('index.html', total, status='archive', rss_href='../feed.xml', asset_prefix='../') }}
 {{ m.topic_filter_script() }}
 </body></html>

@@ -210,6 +210,38 @@ def test_masthead_carries_no_link_that_goes_nowhere(tmp_path):
         assert dead not in page, f"구현이 없는 {dead!r} 가 마크업에 들어왔다"
 
 
+def test_the_new_pages_are_reachable_from_the_digest(tmp_path):
+    """**구워졌다 ≠ 도달할 수 있다.** 2026-08-11 의 실제 사고: 소스 지면을 만들고 링크를
+    `util_header`(sources·admin·saved 전용 헤더)에만 달았더니 그 세 지면끼리만 서로를 가리켜서
+    **홈에서는 들어갈 방법이 아예 없었다.** 파일은 38KB 로 멀쩡히 있었고 테스트도 다 통과했는데,
+    사용자에게는 "안 만들어진" 것과 똑같았다 — 실제로 그렇게 보고됐다.
+
+    도달 가능성은 이 프로젝트가 이미 완성 정의 3번으로 못박은 항목이다(§13: 아카이브 47개
+    전부가 사이트 안에서 도달 가능). 그 규칙을 새 지면에도 적용한다.
+
+    `../` 접두가 붙는 아카이브 사본까지 같이 본다 — 루트 경로를 그대로 쓰면 archive/ 안에서
+    404 가 된다(그건 링크가 없는 것보다 더 나쁘다, 있는 줄 알고 눌렀으니).
+    """
+    render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
+    render.render_category_page("2026-07-31", "model_releases", _groups(), tmp_path,
+                                in_archive=False, one_liner="x", cap=6, min_sig=0.3,
+                                total_records=1)
+    render.render_archive_index([{"date": "2026-07-31", "item_count": 1}], tmp_path)
+    render.render_search_page([], tmp_path)
+
+    # 루트 지면들: 접두 없이 가리켜야 한다.
+    for name in ("index.html", "model_releases.html", "search.html"):
+        page = (tmp_path / name).read_text(encoding="utf-8")
+        assert 'href="sources.html"' in page, f"{name} 에서 소스 지면으로 가는 링크가 없다"
+        assert 'href="saved.html"' in page, f"{name} 에서 저장 지면으로 가는 링크가 없다"
+
+    # archive/ 안의 지면들: ../ 로 올라가야 한다.
+    for name in ("archive/2026-07-31.html", "archive/index.html"):
+        page = (tmp_path / name).read_text(encoding="utf-8")
+        assert 'href="../sources.html"' in page, f"{name} 의 소스 링크가 ../ 없이 나갔다(404)"
+        assert 'href="../saved.html"' in page, f"{name} 의 저장 링크가 ../ 없이 나갔다(404)"
+
+
 def test_the_saved_and_following_controls_lead_somewhere_real(tmp_path):
     """`Saved` pill 과 `Following` 버튼이 **실제로 뭔가에 연결돼 있는지**.
 

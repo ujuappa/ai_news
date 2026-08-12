@@ -18,8 +18,12 @@
     </form>
     {{ m.theme_picker() }}
   </div>
+  {#- 이 지면은 `.mh` 마스트헤드도 site_footer 도 안 쓴다(자체 레이아웃) → 링크를 직접 둔다.
+      안 두면 검색 결과에서 소스/저장 지면으로 갈 방법이 없다. #}
   <nav class="mh-nav" style="border-top:1px solid var(--n2)">
     <a href="index.html">← Today</a>
+    <a href="sources.html">Sources</a>
+    <a href="saved.html">Saved</a>
   </nav>
 </header>
 <div class="results-body">
