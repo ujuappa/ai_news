@@ -223,7 +223,8 @@
      기간·필터는 다이제스트에만 걸리는 컨트롤이라 다이제스트 카드에 붙어 있어야 한다.
      기간 컨트롤이 없는 페이지(카테고리/검색)는 `show_meta` 로 헤더에 기간을 계속 적는다.
 
-  Today pill 은 없앴다 — 6a 기준으로 워드마크가 홈 링크이고, 그날 건수는 홈의 stat 쌍이 말한다.
+  Today pill 은 없앴다 — 6a 기준으로 워드마크가 홈 링크다. 그날 건수 stat 은 2026-08-12 에
+  같이 떼었다(중복).
   Sign in · Weekly · Monthly · Following 은 여전히 **일부러 없다**(구현이 없어서 누르면 아무
   일도 안 일어난다). 6a 에는 `Following 8` · `Monthly` pill 이 있으니, 백엔드가 생기면
   아래 nav 의 형제 <a class="mh-pill"> 로 넣으면 된다.
@@ -271,44 +272,32 @@
 {%- endmacro %}
 
 {#
-  홈 지면 머리(6a). 날짜 칩 · 디스플레이 제목 · 한 줄 설명 · stat 쌍.
+  홈 지면 머리. 2026-08-12 에 날짜 칩만 남겼다.
 
-  **제목은 2026-08-07 에 워드마크로 바뀌었다** — 캔버스가 `{{ lead_word }}, ranked by
-  significance` 에서 `AI Digest` + 빨간 점으로 갈아탔다(handoff-differences §2, 사용자 승인).
-  캔버스에는 별도 마스트헤드 줄이 없어서 이 h1 이 곧 워드마크지만, 이 사이트는 모든 페이지가
-  공유하는 `.mh` 헤더에 이미 워드마크를 달고 있다 → **홈에서만 워드마크가 위아래로 두 번
-  나온다.** 사용자가 그 중복을 알고 캔버스 쪽을 택했다(6a 대로 가되 헤더는 손대지 않는다 —
-  카테고리/검색/아카이브 인덱스는 이 h1 이 없어서 헤더 워드마크가 유일한 사이트명이다).
+  6a 는 여기에 큰 워드마크 · dek · "Stories today / In archive" stat 쌍을 그렸는데, 마스트헤드가
+  이미 사이트명을 말하고 건수·랭크는 본문 순서만으로 알 수 있어서 중복이었다. h1 은 날짜가
+  받는다 — 페이지에 h1 이 하나는 있어야 하고, 사이트명은 `.mh-wordmark` 가 링크라 제목이 아니다.
 
-  `lead_word`("Today's news" / "That day's news")는 이제 제목이 아니라 **카드 머리글**이
-  받는다(home.html 의 `.panel-h`). 아카이브 사본이 몇 달 뒤에 "Today's news" 라고 우기는 걸
-  막는 구분은 거기서 계속 산다 — `test_archived_copy_does_not_claim_to_be_today` 가 지킨다.
-  지면 머리에서는 그 위 날짜 칩이 어느 날인지 말한다.
+  `lead_word`("Today's news" / "That day's news")는 **카드 머리글**이 받는다(home.html 의
+  `.panel-h`). 아카이브 사본이 몇 달 뒤에 "Today's news" 라고 우기는 걸 막는 구분은 거기서
+  산다 — `test_archived_copy_does_not_claim_to_be_today` 가 지킨다.
 
-  `.ph-em` 은 이제 실제로 캔버스대로 Playfair Display italic + --accd 다(폰트 결정이 뒤집혀서
-  더 이상 Archivo italic 흉내가 아니다). 남은 강조 절이 없어 현재 마크업에는 안 쓰이지만,
-  CSS 와 함께 남겨 둔다 — dek 에 대위를 넣고 싶어지면 `<em class="ph-em">` 한 겹이면 된다.
+  `.ph-em` 은 캔버스대로 Playfair Display italic + --accd. 현재 마크업에는 안 쓰이지만 CSS 와
+  함께 남겨 둔다 — dek 에 대위를 넣고 싶어지면 `<em class="ph-em">` 한 겹이면 된다.
 #}
-{% macro page_head(period_date, total, total_records) -%}
+{% macro page_head(period_date) -%}
 <div class="page-head">
-  <div class="ph-text">
-    <span class="ph-date">{{ period_date }}</span>
-    <h1 class="ph-title">AI Digest<span class="mh-dot" aria-hidden="true"></span></h1>
-    <p class="ph-dek">Every item is scored, clustered and ranked before it reaches this page.</p>
-  </div>
-  <div class="ph-stats">
-    <div class="ph-stat"><span class="ph-num">{{ total }}</span><span class="ph-label">Stories today</span></div>
-    {% if total_records %}<div class="ph-stat"><span class="ph-num ph-num-dim">{{ total_records }}</span><span class="ph-label">In archive</span></div>{% endif %}
-  </div>
+  <h1 class="ph-date">{{ period_date }}</h1>
 </div>
 {%- endmacro %}
 
 {#
   Wire 티커 (2026-08-07, 캔버스 6a 가 나중에 추가한 조각 — handoff-differences §3).
 
-  마스트헤드와 지면 머리 사이에 한 줄짜리 띠가 흐른다: 캡스 라벨 `Wire` + significance +
-  헤드라인. 담는 건 **리드와 카드 3장 아래로 떨어진 항목 전부**(랭킹 05 이상 = 지면의
-  Worth knowing + In brief). 백엔드가 필요 없는 조각이라 6a 의 소셜 3종과 달리 그대로 옮겼다.
+  마스트헤드와 지면 머리 사이에 한 줄짜리 띠가 흐른다: 캡스 라벨 `Wire` + 헤드라인.
+  담는 건 **리드와 카드 3장 아래로 떨어진 항목 전부**(랭킹 05 이상 = 지면의 Worth knowing +
+  In brief). 백엔드가 필요 없는 조각이라 6a 의 소셜 3종과 달리 그대로 옮겼다.
+  significance 숫자는 2026-08-12 에 뗐다 — 위가 더 중요하다는 건 순서만으로 충분하다.
 
   왜 같은 목록을 두 번 굽는가: 끊김 없는 루프의 표준 수법이다. 트랙을 자기 폭의 -50% 만큼
   밀면 두 번째 사본이 정확히 첫 사본 자리에 와서 이어 붙는다(캔버스의 `dvtick` 과 같다).
@@ -332,9 +321,9 @@
       {%- for pass in [false, true] %}
       <div class="wire-run"{% if pass %} aria-hidden="true"{% endif %}>
         {%- for it in items %}
-        {#- 링크 안에 개행을 남기면 nowrap 이라 접히지 않고 점수 앞에 공백 한 칸이 남는다. #}
+        {#- 링크 안에 개행을 남기면 nowrap 이라 접히지 않고 제목 앞에 공백 한 칸이 남는다. #}
         <a class="wire-item"{{ href(it) }} title="{{ it.title }}"{% if pass %} tabindex="-1"{% endif
-          %}><span class="wire-sig">{{ '%.2f'|format(it.significance) }}</span>{{ it.display_title }}</a>
+          %}>{{ it.display_title }}</a>
         {%- endfor %}
       </div>
       {%- endfor %}
@@ -355,10 +344,8 @@
   OR 로 걸린다 — 고른 토픽 중 하나라도 달린 기사가 남는다. 고른 게 없으면 = All.
   chip 은 JS 가 만든다(고른 것만 보여야 하므로 서버가 미리 구울 수 없다).
 
-  기간 세그먼트는 헤더에서 여기로 내려왔다. Weekly·Monthly 는 **아직 없다** — 주간/월간
-  기간 전환은 docs/superpowers/specs/2026-08-04-weekly-monthly-periods-design.md 로 설계만
-  돼 있고 코드가 없어서, 붙이면 누르는 순간 아무 일도 안 일어난다. 지금은 "무슨 기간을 보고
-  있는지" 표시 하나뿐이라 버튼이 아니라 span 이다. 구현되면 여기 형제 button 으로 넣으면 된다.
+  기간 세그먼트(Daily/Weekly span)는 2026-08-12 에 뗐다 — 버튼이 아닌데 버튼처럼 보여서
+  눌렀을 때 아무 일도 안 일어났다. 주간/월간 전환이 생기면 여기 형제 button 으로 넣으면 된다.
 
   6a 의 서랍에는 Topic 옆에 **Lab 그룹**(OpenAI/Anthropic/… pill)도 있는데 넣지 않았다 —
   캔버스 자신이 5i·4b 에서 "Lab 그룹은 아직 읽을 게 없다"고 적어 뒀다. source→lab 매핑이나
@@ -367,10 +354,9 @@
   토픽 pill 이 하나도 없으면(그날 아무 기사에도 토픽이 없음) 줄 자체를 그리지 않는다 —
   'All' 만 덩그러니 있는 필터는 누를 이유가 없는 죽은 UI 다.
 #}
-{% macro control_line(filters, period_label='Daily') -%}
+{% macro control_line(filters) -%}
 {%- if filters|length > 1 %}
 <div class="control-line">
-  <div class="seg"><span class="seg-on">{{ period_label }}</span></div>
   <button type="button" class="drawer-btn" data-drawer-btn aria-expanded="false" aria-controls="filter-drawer">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
     Filters<span class="drawer-btn-n" data-filter-count></span>
@@ -385,7 +371,6 @@
     Following<span class="follow-apply-n" data-follow-apply-n></span>
   </button>
   <div class="chip-row" data-chip-row></div>
-  <span class="filter-note">{{ filters[0].count }} stories</span>
 </div>
 <div class="filter-drawer" id="filter-drawer" data-drawer hidden>
   <div class="drawer-group">

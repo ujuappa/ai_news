@@ -12,11 +12,12 @@
  *    (테마 스위처는 JS 로 --var 를 덮어쓴다 — head 의 theme JS 참고)
  *
  * 2026-08-06 에 캔버스 "Home Top Organization" 6a 로 홈 상단을 다시 짰다. 바뀐 것: 마스트헤드가
- * 2단(밑줄 탭 + 기간 칩) -> 한 줄(워드마크+빨간 점 · 검색 · pill 네비), 날짜/건수가 헤더에서
- * 지면 머리(.page-head: 날짜 칩 · 디스플레이 제목 · stat 쌍)로 내려옴, 리드+Also today 가 한 장의
+ * 2단(밑줄 탭 + 기간 칩) -> 한 줄(워드마크+빨간 점 · 검색 · pill 네비), 날짜가 헤더에서
+ * 지면 머리(.page-head)로 내려옴, 리드+Also today 가 한 장의
  * 카드(.panel)로 묶임, 필터 pill 줄 -> 카드에 붙은 컨트롤 줄 + 필터 서랍(.control-line/
  * .filter-drawer/.chip, 다중선택). 6a 의 소셜 카드(Updates/judgment/ticker)는 백엔드가 없어서
  * 넣지 않았다 — templates/home.html 끝 주석 참고.
+ * 2026-08-12 에 지면 머리를 날짜 칩만 남기고, Daily 칩·건수·랭크 라벨·티커 점수를 뗐다.
  *
  * ⚠️ 쓸 수 있는 변수는 팔레트 키뿐이다(g g2 bar ink ink2 muted n1 n2 acc accd acclt grgb inkrgb).
  *    캔버스의 --color-* 토큰은 여기로 매핑된다: bg->g, surface->g2, text->ink, accent->acc,
@@ -201,11 +202,9 @@ a.thread-line:hover { color:var(--accd); border-left-color:var(--accd); }
 /* 필터가 숨긴 항목. display:none 이라 섹션 헤더만 남을 수 있는데, 그건 캔버스 디자인의 동작과 같다. */
 .is-filtered { display:none !important; }
 
-/* — 지면 머리 (6a): 날짜 칩 · 디스플레이 제목 · stat 쌍 — */
-.page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:32px;
-             flex-wrap:wrap; padding-bottom:26px; }
-.ph-text { min-width:0; }
-.ph-date { display:inline-block; padding:6px 14px; border:1px solid var(--n2); background:var(--g2);
+/* — 지면 머리: 날짜 칩만 (2026-08-12). 큰 워드마크·dek·stat 쌍은 마스트헤드와 중복이라 뗐다. — */
+.page-head { padding-bottom:26px; }
+.ph-date { display:inline-block; margin:0; padding:6px 14px; border:1px solid var(--n2); background:var(--g2);
            font:700 11px 'Mona Sans',system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase;
            color:var(--muted); }
 .ph-title { margin:16px 0 14px; font:900 clamp(32px,4.6vw,52px)/1.02 'Mona Sans',system-ui,sans-serif;

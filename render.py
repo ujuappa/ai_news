@@ -363,14 +363,10 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
     for i, it in enumerate(flat, start=1):
         _annotate(it, rank=i, ref=ref)
     period_meta_txt, period_word = _period_meta(date, total)
-    # 6a 의 날짜 칩은 "Tuesday · 4 August 2026" 만 담는다 — 건수는 그 아래 stat 쌍이 말한다.
+    # 날짜 칩은 "Tuesday · 4 August 2026" 만 담는다 — 건수·랭크 라벨은 2026-08-12 에 뗐다.
     period_date = period_meta_txt.rsplit(" · ", 1)[0]
     bands = _signal_bands(flat)
     grid3, worth, brief = flat[1:4], flat[4:8], flat[8:]
-    # "Stories 02 – 04" — 카드가 몇 장이든 맞게(조용한 날엔 1~2장일 수 있다).
-    also_range = f"Stories 02 – {1 + len(grid3):02d}" if grid3 else ""
-    # 패널 머리글 오른쪽. worth/brief 가 패널 밖에 있어도 랭킹은 이어지므로 그날 전체를 센다.
-    panel_range = f"Ranked 01 – {total:02d}" if total else ""
 
     output_dir.mkdir(parents=True, exist_ok=True)
     archive_dir = output_dir / "archive"
@@ -401,8 +397,7 @@ def render_digest(date: str, groups: list[tuple[str, list[dict]]],
             # 속도가 그대로고, 여기서 top-N 을 자르면 "아래 것들"이 조용히 빠진다.
             wire=flat[4:],
             short_labels=_SHORT_LABELS, bands=bands, warnings=warnings,
-            filters=_topic_filters(flat, total), also_range=also_range,
-            period_date=period_date, panel_range=panel_range,
+            filters=_topic_filters(flat, total), period_date=period_date,
             # 같은 본문을 루트(index.html)와 아카이브 사본에 굽는다. 디스플레이 제목만
             # 갈라 놓는다 — 몇 달 뒤에 아카이브 사본을 열었을 때 "Today's news" 는 거짓말이다.
             head_lead=("Today's news" if not in_archive else "That day's news"),

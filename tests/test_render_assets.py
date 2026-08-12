@@ -277,7 +277,7 @@ def test_the_saved_and_following_controls_lead_somewhere_real(tmp_path):
 
 def test_home_top_ships_the_6a_blocks(tmp_path):
     """지면 머리 · 카드 · Also today 구획선이 다 나오는지. 하나라도 빠지면 상단이 조용히
-    예전 모양으로 돌아간다. 카드가 실제로 생기도록 아이템 4개를 넣는다(리드 + 02~04)."""
+    예전 모양으로 돌아간다. 카드가 실제로 생기도록 아이템 4개를 넣는다(리드 + Also today)."""
     items = []
     for i in range(4):
         it = dict(ITEM)
@@ -287,9 +287,40 @@ def test_home_top_ships_the_6a_blocks(tmp_path):
         items.append(it)
     render.render_digest("2026-07-31", _groups(items), [], tmp_path, total_records=496)
     page = (tmp_path / "index.html").read_text(encoding="utf-8")
-    for cls in ("page-head", "ph-date", "ph-title", "ph-stats", "panel", "panel-head", "also-break"):
+    for cls in ("page-head", "ph-date", "panel", "panel-head", "also-break"):
         assert cls in page, f"{cls} 가 없다"
-    assert "496" in page, "stat 쌍의 in-archive 숫자가 안 실렸다"
+
+
+def test_home_chrome_does_not_repeat_counts_or_ranks(tmp_path):
+    """2026-08-12: 건수·랭크·가짜 Daily 칩·큰 워드마크는 홈에서 뺀다. 마스트헤드와 본문
+    순서가 이미 그 일을 하므로 같은 정보를 네 곳에 쓰면 잡음이다."""
+    items = []
+    for i in range(4):
+        it = dict(ITEM)
+        it["title"] = it["headline"] = f"Story {i}"
+        it["url"] = f"https://example.com/{i}"
+        it["significance"] = 0.9 - i * 0.05
+        it["topics"] = ["chips"]
+        items.append(it)
+    render.render_digest("2026-07-31", _groups(items), [], tmp_path, total_records=496)
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "ph-title" not in page
+    assert "ph-stats" not in page
+    assert "Stories today" not in page
+    assert "In archive" not in page
+    assert "Ranked 01" not in page
+    assert "Stories 02" not in page
+    assert "filter-note" not in page
+    assert "lead-sig" not in page
+    assert "wire-sig" not in page
+    assert "panel-range" not in page
+    assert "scored, clustered and ranked" not in page
+    assert 'class="seg"' not in page and "seg-on" not in page
+    assert "Daily" not in page
+    # 날짜는 남고, 사이트명은 마스트헤드만
+    assert re.search(r'<h1 class="ph-date">', page)
+    assert 'class="mh-wordmark"' in page
+    assert "Filters" in page
 
 
 def test_archived_copy_does_not_claim_to_be_today(tmp_path):
@@ -381,16 +412,17 @@ def test_the_filter_drawer_starts_closed():
         "display 를 주는 규칙에는 [hidden] 짝이 있어야 한다"
 
 
-def test_page_head_title_is_the_wordmark(tmp_path):
-    """캔버스가 `{{ lead_word }}, ranked by significance` 에서 워드마크 + 빨간 점으로
-    갈아탔다(handoff §2). 점이 빠지면 그냥 큰 글씨 사이트명이 된다."""
+def test_page_head_is_just_the_date(tmp_path):
+    """2026-08-12: 큰 워드마크·stat·dek 를 떼고 날짜 칩만 남긴다. 사이트명은 마스트헤드가
+    이미 말하므로 지면 머리에 한 번 더 쓸 이유가 없다. h1 은 날짜가 받는다."""
     render.render_digest("2026-07-31", _groups(), [], tmp_path, total_records=1)
     page = (tmp_path / "index.html").read_text(encoding="utf-8")
-    title = re.search(r'<h1 class="ph-title">(.*?)</h1>', page, re.S).group(1)
-    assert "AI Digest" in title and "mh-dot" in title
-    assert "ranked by significance" not in title
-    # 점 크기는 em 이어야 한다 — 헤더의 7px 고정값을 52px 제목 옆에 두면 먼지로 보인다
-    assert re.search(r"\.ph-title \.mh-dot\s*\{[^}]*width:\.\d+em", _css_no_comments())
+    head = re.search(r'<div class="page-head">(.*?)</div>', page, re.S).group(1)
+    assert re.search(r'<h1 class="ph-date">', head)
+    assert "Friday" in head or "31" in head or "July" in head
+    assert "ph-title" not in head and "AI Digest" not in head
+    assert "ph-stats" not in head and "ph-dek" not in head
+    assert 'class="mh-wordmark"' in page
 
 
 def test_wire_carries_the_stories_below_the_cards(tmp_path):
@@ -403,7 +435,8 @@ def test_wire_carries_the_stories_below_the_cards(tmp_path):
         assert shown_above not in wire, f"{shown_above} 는 이미 카드 위에 있다"
     for below in ("Story 4", "Story 5", "Story 8"):
         assert below in wire
-    assert "0.70" in wire, "significance 가 빠졌다"
+    assert "wire-sig" not in wire
+    assert "0.70" not in wire
 
 
 def test_wire_second_run_is_hidden_from_screen_readers(tmp_path):

@@ -3,8 +3,8 @@
   홈 = 신문 1면. 2026-08-03 캔버스 "AI Digest - Home" 포팅 -> 2026-08-06 캔버스
   "Home Top Organization" 6a 로 상단 재편.
 
-  순서: Wire 티커 -> 지면 머리(날짜 칩 · 워드마크 · stat 쌍) -> **Today's news 카드**(컨트롤 줄 +
-  필터 서랍 + 리드 01 + Also today 02~04) -> Worth knowing / In brief + 사이드바.
+  순서: Wire 티커 -> 지면 머리(날짜 칩만, 2026-08-12) -> **Today's news 카드**(필터 +
+  리드 + Also today) -> Worth knowing / In brief + 사이드바.
   항목 분배는 render.render_digest 가 정한다(lead / grid3 / worth / brief, 티커는 worth+brief).
 
   2026-08-07 에 캔버스가 갱신되면서 두 가지가 더 왔다(handoff-differences §2·§3):
@@ -40,7 +40,7 @@
 {{ m.wire_ticker(wire) }}
 <div class="home" data-scope>
 
-{{ m.page_head(period_date, total, total_records) }}
+{{ m.page_head(period_date) }}
 
 {% if lead %}
 <section class="panel">
@@ -50,9 +50,7 @@
   </span>
   <div class="panel-id">
     <h2 class="panel-h">{{ head_lead }}</h2>
-    <p class="panel-sub">Every item scored, clustered and ranked before you see it.</p>
   </div>
-  {% if panel_range %}<span class="panel-range">{{ panel_range }}</span>{% endif %}
 </div>
 
 {{ m.control_line(filters) }}
@@ -67,7 +65,6 @@
   <div class="lead-text">
     <div class="lead-kicker">
       <span class="lead-cat">{{ labels[lead.category] }}</span>
-      <span class="lead-sig">Lead story · significance {{ '%.2f'|format(lead.significance) }}</span>
       {% if lead.is_major %}<span class="tag tag-acc">Major</span>{% endif %}
     </div>
     <a class="lead-title"{{ m.href(lead) }} title="{{ lead.title }}">{{ lead.display_title }}</a>
@@ -89,11 +86,10 @@
 
 {% if grid3 %}
 <section data-section>
-{# 6a 의 라벨 붙은 구획선: 왼쪽 라벨 · 늘어나는 헤어라인 · 오른쪽 범위. #}
+{# 라벨 붙은 구획선: 왼쪽 라벨 · 늘어나는 헤어라인. 범위("Stories 02 – 04")는 2026-08-12 에 뗐다. #}
 <div class="also-break">
   <span class="break-h">Also today</span>
   <span class="break-rule"></span>
-  <span class="break-sub">{{ also_range }}</span>
 </div>
 <div class="also-grid">
   {% for it in grid3 %}
@@ -168,7 +164,7 @@
 <aside class="aside">
   <div class="aside-card">
     <span class="aside-h">Signal index</span>
-    <p class="aside-sub">All {{ total }} stories by significance band. 0.60 and up is major.</p>
+    <p class="aside-sub">Stories by significance band. 0.60 and up is major.</p>
     {% for b in bands %}
     <div class="band-row">
       <div class="band-top">

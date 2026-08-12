@@ -69,11 +69,13 @@ Claude Design(claude.ai/design) 프로젝트에서 만든 "Modernist" 디자인�
 (`.filter-drawer{display:grid}` 가 `[hidden]` 을 이기고 있었다 → `[hidden]` 짝 추가).
 
 **2026-08-06 홈 상단 재편**(캔버스 "Home Top Organization" 6a): 마스트헤드가 한 줄로
-(워드마크+빨간 점 · 검색 · pill 네비), 날짜/건수가 지면 머리(`.page-head`)로 내려가고,
-리드+Also today 가 한 장의 카드(`.panel`)로 묶이면서 기간 세그먼트와 필터가 그 카드에 붙었다.
+(워드마크+빨간 점 · 검색 · pill 네비), 날짜가 지면 머리(`.page-head`)로 내려가고,
+리드+Also today 가 한 장의 카드(`.panel`)로 묶이면서 필터가 그 카드에 붙었다.
 필터는 pill 줄 → **컨트롤 줄 + 서랍 + 제거 가능한 chip, 다중선택(OR)** 으로 바뀌었고
 그날 붙은 토픽 전부가 서랍에 들어간다(top-6 상한 폐지). 팔레트는 6색(`Boncom · Maroon` 추가.
 08-06 에는 6a 에서 색만 들여왔지만 **08-07 에 조판까지 들여왔다** — 위 항목 참고).
+**2026-08-12**: 지면 머리의 큰 "AI Digest." · 건수 stat · Daily 칩 · 랭크 라벨 · 티커 점수는
+뗐다. 남는 건 날짜 칩 + Filters. 사이트명은 마스트헤드가 이미 말한다.
 - **사인인 · Weekly · Monthly · 코멘트는 의도적으로 없다** (로그인+쓰기 백엔드 미구현 →
  죽은 버튼 방지). 6a 의 소셜 카드 3장을 붙일 자리는 `templates/home.html` 끝 주석, 네비는
  `templates/macros.html` 주석 참고. `test_render_assets.py` 가 새는 걸 막는다.
