@@ -1,0 +1,983 @@
+
+
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="alternate" type="application/rss+xml" title="AI Digest" href="../feed.xml">
+
+<script>(function(){var PALETTES=[{"name": "White · Cobalt", "g": "#ffffff", "g2": "#eef1fb", "bar": "#16182b", "ink": "#1e1b16", "ink2": "#4a4436", "muted": "#6b6355", "n1": "#9a917c", "n2": "#bdb49d", "acc": "#2438d6", "accd": "#1b2aa0", "acclt": "#8f9bf0", "grgb": "255,255,255", "inkrgb": "30,27,22"}, {"name": "White · Teal", "g": "#ffffff", "g2": "#eef6f3", "bar": "#14201d", "ink": "#1a1d18", "ink2": "#3d4438", "muted": "#646b5b", "n1": "#909683", "n2": "#b9bfa9", "acc": "#0e7c6b", "accd": "#095e50", "acclt": "#5bbfae", "grgb": "255,255,255", "inkrgb": "26,29,24"}, {"name": "White · Raspberry", "g": "#ffffff", "g2": "#fbeef2", "bar": "#1f0f16", "ink": "#1f1518", "ink2": "#4a3238", "muted": "#6e5157", "n1": "#8f7a80", "n2": "#c7b3ba", "acc": "#c2185b", "accd": "#8f0f41", "acclt": "#e8779e", "grgb": "255,255,255", "inkrgb": "31,21,24"}, {"name": "White · Ember", "g": "#ffffff", "g2": "#fbf1ea", "bar": "#1f1c17", "ink": "#201d16", "ink2": "#463f33", "muted": "#6b6255", "n1": "#98907f", "n2": "#c0b8a6", "acc": "#c2410c", "accd": "#8f2f08", "acclt": "#f0a273", "grgb": "255,255,255", "inkrgb": "32,29,22"}, {"name": "Mist · Signal red", "g": "#f3f2f2", "g2": "#eae9e9", "bar": "#201e1d", "ink": "#201e1d", "ink2": "#444141", "muted": "#605d5d", "n1": "#7d7979", "n2": "#bab6b6", "acc": "#ec3013", "accd": "#ae1800", "acclt": "#ff9783", "grgb": "243,242,242", "inkrgb": "32,30,29"}, {"name": "Boncom · Maroon", "g": "#f4f2ec", "g2": "#edeae1", "bar": "#1a1a1a", "ink": "#1a1a1a", "ink2": "#575753", "muted": "#6e6d6a", "n1": "#8c8b87", "n2": "#c9c7c0", "acc": "#ff1a22", "accd": "#4a0e1f", "acclt": "#ffb3b6", "grgb": "244,242,236", "inkrgb": "26,26,26"}];var KEY='ai-digest-theme';function read(){try{return parseInt(localStorage.getItem(KEY),10);}catch(e){return NaN;}}function write(v){try{localStorage.setItem(KEY,v);}catch(e){}}var stored=read();var i=(!isNaN(stored)&&stored>=0&&stored<PALETTES.length)?stored:4;function apply(idx){var t=PALETTES[idx],root=document.documentElement.style;for(var k in t){if(k!=='name')root.setProperty('--'+k,t[k]);}}apply(i);window.__aiDigestSetTheme=function(idx){write(idx);apply(idx);sync(idx);};function sync(idx){var els=document.querySelectorAll('[data-theme-btn]');for(var j=0;j<els.length;j++){els[j].setAttribute('aria-pressed',(+els[j].getAttribute('data-theme-btn')===idx)?'true':'false');}}document.addEventListener('DOMContentLoaded',function(){sync(i);});})();</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&family=Playfair+Display:ital,wght@1,400..600&display=swap" rel="stylesheet">
+
+<script src="../static/follow.js"></script>
+<script src="../static/comments.js"></script>
+<title>AI Digest — Wednesday · 4 November 2026 · 19 stories</title>
+<link rel="stylesheet" href="../static/digest.css">
+</head><body>
+<div class="wrap">
+<header class="mh">
+  <div class="mh-top">
+    <div class="mh-id">
+      <a class="mh-wordmark" href="../index.html">AI Digest<span class="mh-dot" aria-hidden="true"></span></a>
+      
+    </div>
+    <div class="mh-tools">
+      
+      <form class="mh-search" action="../search.html" method="get">
+        <label class="mh-search-field">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+          <input type="search" name="q" placeholder="Search title, summary, source">
+        </label>
+      </form>
+      
+      <nav class="mh-nav">
+        
+        <a class="mh-pill " href="../model_releases.html">Model releases 2</a>
+        
+        <a class="mh-pill " href="../research.html">Research 1</a>
+        
+        <a class="mh-pill " href="../tools_products.html">Tools &amp; products 6</a>
+        
+        <a class="mh-pill " href="../policy_business.html">Policy &amp; business 10</a>
+        
+        <a class="mh-pill" href="index.html">Archive</a>
+        
+        <a class="mh-pill" href="../sources.html">Sources</a>
+        
+        <a class="mh-pill" href="../saved.html">Saved <span data-saved-count></span></a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+<div class="wire">
+  <span class="wire-h">Wire</span>
+  <div class="wire-track">
+    <div class="wire-strip" style="animation-duration:120s">
+      <div class="wire-run">
+        <a class="wire-item" href="https://openai.com/index/daybreak-red-aws-govcloud" title="Daybreak Red is now available in AWS GovCloud (US-East)">Daybreak Red with GPT-5.6 Cyber now in AWS GovCloud (US-East)</a>
+        <a class="wire-item" href="https://apnews.com/article/ai-schools-classroom-students-google-7ba4219e505db1c11d672f6eefe7155a" title="Google will cut off search access for students at schools that reject AI">Google to Cut Search Access for Schools Rejecting AI</a>
+        <a class="wire-item" href="https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months" title="US tech giants&#39; hidden AI debt swells 90% to $3.2T in 6 months">US Tech Giants&#39; Hidden AI Debt Swells 90% to $3.2T</a>
+        <a class="wire-item" href="https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/" title="Google will let schools disable its AI tools, but not without sacrificing Search">Google will let schools disable AI tools, but not Search</a>
+        <a class="wire-item" href="https://www.theguardian.com/technology/2026/nov/03/ai-powered-malware-artificial-intelligence-hacking-critical-uk-infrastructure" title="AI-powered malware ‘highly likely’ to be used to hack UK infrastructure by 2028">AI-powered malware ‘highly likely’ to hack UK infrastructure by 2028</a>
+        <a class="wire-item" href="https://huggingface.co/papers/2611.02497" title="RoboColosseum: Evaluating Physical Intelligence at Scale In-The-Wild">RoboColosseum: Evaluating Physical Intelligence At Scale</a>
+        <a class="wire-item" href="https://newsroom.ibm.com/2026-11-04-confluent-introduces-its-streamhouse-architecture-to-power-ai-with-real-time-business-context" title="Confluent Introduces Its Streamhouse Architecture to Power AI With Real-Time Business Context">Confluent Introduces Streamhouse Architecture to Power AI</a>
+        <a class="wire-item" href="https://www.washingtonpost.com/technology/2026/11/04/voters-pass-over-20-ballot-measures-ban-or-restrict-data-centers/" title="A nationwide backlash against data centers erupts at the polls">Nationwide Backlash Against Data Centers Erupts</a>
+        <a class="wire-item" href="https://www.bbc.co.uk/news/articles/c8vgxyvz6y9ro?at_medium=RSS&amp;at_campaign=rss" title="French blood storage impacted by freezer hacks as theories swirl about culprits">French blood storage impacted by freezer hacks</a>
+        <a class="wire-item" href="https://openai.com/index/openai-to-acquire-pierre" title="OpenAI to acquire Pierre Computer Company, Inc.">OpenAI to acquire Pierre Computer Company, Inc</a>
+        <a class="wire-item" href="https://github.com/postmanlabs/postman-app-support/issues/14370" title="Postman silently auto-installs AI plugins and attempts to share all API data">Postman Auto-Installs AI Plugins, Shares API Data</a>
+        <a class="wire-item" href="https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/" title="Agentic cheminformatics with Google Antigravity">Agentic cheminformatics with Google Antigravity</a>
+        <a class="wire-item" href="https://openai.com/index/how-we-detect-frontier-model-misalignment" title="How we detect frontier model misalignment">How OpenAI detects frontier model misalignment</a>
+        <a class="wire-item" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" title="Dharma Field Extractor: Any Document In, Structured Fields in JSON Out">Dharma Field Extractor: Document to Structured JSON</a>
+        <a class="wire-item" href="https://huggingface.co/blog/ibm-research/palette-deck-building" title="Palette: teaching a small model to build decks in your design language">Palette: Small Model Builds Decks in Your Design Language</a>
+      </div>
+      <div class="wire-run" aria-hidden="true">
+        <a class="wire-item" href="https://openai.com/index/daybreak-red-aws-govcloud" title="Daybreak Red is now available in AWS GovCloud (US-East)" tabindex="-1">Daybreak Red with GPT-5.6 Cyber now in AWS GovCloud (US-East)</a>
+        <a class="wire-item" href="https://apnews.com/article/ai-schools-classroom-students-google-7ba4219e505db1c11d672f6eefe7155a" title="Google will cut off search access for students at schools that reject AI" tabindex="-1">Google to Cut Search Access for Schools Rejecting AI</a>
+        <a class="wire-item" href="https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months" title="US tech giants&#39; hidden AI debt swells 90% to $3.2T in 6 months" tabindex="-1">US Tech Giants&#39; Hidden AI Debt Swells 90% to $3.2T</a>
+        <a class="wire-item" href="https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/" title="Google will let schools disable its AI tools, but not without sacrificing Search" tabindex="-1">Google will let schools disable AI tools, but not Search</a>
+        <a class="wire-item" href="https://www.theguardian.com/technology/2026/nov/03/ai-powered-malware-artificial-intelligence-hacking-critical-uk-infrastructure" title="AI-powered malware ‘highly likely’ to be used to hack UK infrastructure by 2028" tabindex="-1">AI-powered malware ‘highly likely’ to hack UK infrastructure by 2028</a>
+        <a class="wire-item" href="https://huggingface.co/papers/2611.02497" title="RoboColosseum: Evaluating Physical Intelligence at Scale In-The-Wild" tabindex="-1">RoboColosseum: Evaluating Physical Intelligence At Scale</a>
+        <a class="wire-item" href="https://newsroom.ibm.com/2026-11-04-confluent-introduces-its-streamhouse-architecture-to-power-ai-with-real-time-business-context" title="Confluent Introduces Its Streamhouse Architecture to Power AI With Real-Time Business Context" tabindex="-1">Confluent Introduces Streamhouse Architecture to Power AI</a>
+        <a class="wire-item" href="https://www.washingtonpost.com/technology/2026/11/04/voters-pass-over-20-ballot-measures-ban-or-restrict-data-centers/" title="A nationwide backlash against data centers erupts at the polls" tabindex="-1">Nationwide Backlash Against Data Centers Erupts</a>
+        <a class="wire-item" href="https://www.bbc.co.uk/news/articles/c8vgxyvz6y9ro?at_medium=RSS&amp;at_campaign=rss" title="French blood storage impacted by freezer hacks as theories swirl about culprits" tabindex="-1">French blood storage impacted by freezer hacks</a>
+        <a class="wire-item" href="https://openai.com/index/openai-to-acquire-pierre" title="OpenAI to acquire Pierre Computer Company, Inc." tabindex="-1">OpenAI to acquire Pierre Computer Company, Inc</a>
+        <a class="wire-item" href="https://github.com/postmanlabs/postman-app-support/issues/14370" title="Postman silently auto-installs AI plugins and attempts to share all API data" tabindex="-1">Postman Auto-Installs AI Plugins, Shares API Data</a>
+        <a class="wire-item" href="https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/" title="Agentic cheminformatics with Google Antigravity" tabindex="-1">Agentic cheminformatics with Google Antigravity</a>
+        <a class="wire-item" href="https://openai.com/index/how-we-detect-frontier-model-misalignment" title="How we detect frontier model misalignment" tabindex="-1">How OpenAI detects frontier model misalignment</a>
+        <a class="wire-item" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" title="Dharma Field Extractor: Any Document In, Structured Fields in JSON Out" tabindex="-1">Dharma Field Extractor: Document to Structured JSON</a>
+        <a class="wire-item" href="https://huggingface.co/blog/ibm-research/palette-deck-building" title="Palette: teaching a small model to build decks in your design language" tabindex="-1">Palette: Small Model Builds Decks in Your Design Language</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="digest-shell" data-digest-shell>
+<div class="home" data-scope>
+
+<div class="page-head">
+  <h1 class="ph-date">Wednesday · 4 November 2026</h1>
+</div>
+
+
+<section class="panel">
+<div class="panel-head">
+  <span class="panel-icon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 4h13v16H4z"></path><path d="M17 8h3v10a2 2 0 0 1-3 2"></path><path d="M7 8h7M7 12h7M7 16h4"></path></svg>
+  </span>
+  <div class="panel-id">
+    <h2 class="panel-h">That day&#39;s news</h2>
+  </div>
+</div>
+
+
+<div class="control-line">
+  <button type="button" class="drawer-btn" data-drawer-btn aria-expanded="false" aria-controls="filter-drawer">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
+    Filters<span class="drawer-btn-n" data-filter-count></span>
+  </button>
+  
+  <button type="button" class="follow-apply" data-follow-apply hidden>
+    Following<span class="follow-apply-n" data-follow-apply-n></span>
+  </button>
+  <div class="chip-row" data-chip-row></div>
+</div>
+<div class="filter-drawer" id="filter-drawer" data-drawer hidden>
+  <div class="drawer-group">
+    <span class="drawer-h">Topic</span>
+    <div class="drawer-pills">
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="government"
+                data-label="Government &amp; law" aria-pressed="false">Government &amp; law 7</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="government"
+                aria-pressed="false" title="Follow Government &amp; law">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="security"
+                data-label="Security" aria-pressed="false">Security 6</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="security"
+                aria-pressed="false" title="Follow Security">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="education"
+                data-label="Education" aria-pressed="false">Education 4</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="education"
+                aria-pressed="false" title="Follow Education">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="code"
+                data-label="Code" aria-pressed="false">Code 3</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="code"
+                aria-pressed="false" title="Follow Code">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="money"
+                data-label="Money &amp; markets" aria-pressed="false">Money &amp; markets 3</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="money"
+                aria-pressed="false" title="Follow Money &amp; markets">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="chips"
+                data-label="Chips &amp; datacenters" aria-pressed="false">Chips &amp; datacenters 2</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="chips"
+                aria-pressed="false" title="Follow Chips &amp; datacenters">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="health"
+                data-label="Health" aria-pressed="false">Health 2</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="health"
+                aria-pressed="false" title="Follow Health">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="science"
+                data-label="Science" aria-pressed="false">Science 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="science"
+                aria-pressed="false" title="Follow Science">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="art"
+                data-label="Art &amp; images" aria-pressed="false">Art &amp; images 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="art"
+                aria-pressed="false" title="Follow Art &amp; images">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+      
+      <span class="pill-pair">
+        <button type="button" class="topic-pill" data-filter-btn data-topic="robotics"
+                data-label="Robotics" aria-pressed="false">Robotics 1</button>
+        <button type="button" class="follow-star" data-follow-btn data-follow-topic="robotics"
+                aria-pressed="false" title="Follow Robotics">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 17.3l-5.4 2.9 1.2-6.1L3.2 9.9l6.2-.7z"></path></svg>
+        </button>
+      </span>
+      
+    </div>
+    <p class="drawer-note">
+      The star follows a topic. Following is remembered in this browser only and never
+      auto-hides stories — use the Following button above to apply it.
+    </p>
+  </div>
+</div>
+
+
+<div class="panel-body" data-section>
+<article class="lead" data-story data-story-id="d37889a9ebdda005" data-story-title="Ted Schlein’s Ballistic Ventures seeks $490M for new funds" data-story-source="TechCrunch — AI" data-story-time="22 hours ago" role="button" tabindex="0" data-topics="money security">
+  <div class="lead-text">
+    <div class="lead-kicker">
+      <span class="lead-cat">Policy &amp; business</span>
+      
+    </div>
+    <a class="lead-title story-headline" href="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/" title="Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom">Ted Schlein’s Ballistic Ventures seeks $490M for new funds</a>
+    <p class="lead-dek">Ballistic Ventures, a cybersecurity-focused VC firm, is aiming to raise $490 million across two new funds: $360 million for its third flagship fund and $130 million for Fund B. This fundraising comes amid a boom in AI-driven cybersecurity, with AI-enabled companies accounting for 72% of U.S. cybersecurity venture deals through May this year.</p>
+    
+    <div class="lead-byline">
+      <span class="byline-source">TechCrunch — AI</span>
+      <span class="byline-sep"></span>
+      <span class="byline-meta">22 hours ago</span>
+      <span class="comment-count" data-comment-count data-story-id="d37889a9ebdda005">Add the first comment</span>
+      <a class="byline-link" href="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/">Read at techcrunch.com →</a>
+      <button type="button" class="save-btn" data-save
+        data-item-id="d37889a9ebdda005"
+        data-item-title="Ted Schlein’s Ballistic Ventures seeks $490M for new funds"
+        data-item-url="https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.70"
+        data-item-topics="money security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </div>
+  <div class="imgslot imgslot-lead has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M6 25 32 9l26 16"/>
+  <path d="M13 25v22M25 25v22M39 25v22M51 25v22"/>
+  <path d="M7 55h50"/>
+</svg></div>
+</article>
+
+
+<section data-section>
+
+<div class="also-break">
+  <span class="break-h">Also today</span>
+  <span class="break-rule"></span>
+</div>
+<div class="also-grid">
+  
+  <article class="also-card" data-story data-story-id="b727f10c64045ca2" data-story-title="Axion 1.0: Open Agent Foundation Models, Simplified" data-story-source="Hugging Face Daily Papers" data-story-time="3 days ago" role="button" tabindex="0" data-topics="code">
+    <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M32 7 58 21 32 35 6 21z"/>
+  <path d="M6 31 32 45 58 31"/>
+  <path d="M6 41 32 55 58 41"/>
+</svg></div>
+    <span class="card-cat">Model releases</span>
+    <a class="card-title story-headline" href="https://huggingface.co/papers/2611.03233" title="Axion 1.0: Open Agent Foundation Models, Simplified">Axion 1.0: Open Agent Foundation Models, Simplified</a>
+    <p class="card-dek">Axion 1.0 is introduced as a fully open agent foundation model with strong and broad agentic capabilities, achieved through a simple three-stage training recipe. This process involves two lightweight supervised fine-tuning stages followed by reinforcement learning, without requiring mid-training, DPO, or on-policy distillation. The SFT stages develop self-contained reasoning and tool-dependent reasoning through model-aware data construction and scalable task pipelines.</p>
+    
+    <div class="card-foot">
+      <span class="card-meta">Hugging Face Daily Papers · 3d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="b727f10c64045ca2">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="b727f10c64045ca2"
+        data-item-title="Axion 1.0: Open Agent Foundation Models, Simplified"
+        data-item-url="https://huggingface.co/papers/2611.03233"
+        data-item-date=""
+        data-item-source="Hugging Face Daily Papers"
+        data-item-sig="0.70"
+        data-item-topics="code"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </article>
+  
+  <article class="also-card" data-story data-story-id="add91e24e3212a5f" data-story-title="DuckDuckGo pitches itself to schools amid backlash over Google’s AI" data-story-source="TechCrunch — AI" data-story-time="1 hour ago" role="button" tabindex="0" data-topics="government education">
+    <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M6 25 32 9l26 16"/>
+  <path d="M13 25v22M25 25v22M39 25v22M51 25v22"/>
+  <path d="M7 55h50"/>
+</svg></div>
+    <span class="card-cat">Policy &amp; business</span>
+    <a class="card-title story-headline" href="https://techcrunch.com/2026/11/04/duckduckgo-pitches-itself-to-schools-amid-backlash-over-googles-ai-policy/" title="DuckDuckGo pitches itself to schools amid backlash over Google’s AI policy">DuckDuckGo pitches itself to schools amid backlash over Google’s AI</a>
+    <p class="card-dek">DuckDuckGo is promoting its privacy-focused search engine to schools after Google&#39;s new policy ties AI features to Google Search access. Google announced that schools disabling its AI tools would lose access to Google Search, prompting backlash and an opportunity for DuckDuckGo, which offers AI features but allows users to disable them.</p>
+    
+    <div class="card-foot">
+      <span class="card-meta">TechCrunch — AI · 1h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="add91e24e3212a5f">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="add91e24e3212a5f"
+        data-item-title="DuckDuckGo pitches itself to schools amid backlash over Google’s AI"
+        data-item-url="https://techcrunch.com/2026/11/04/duckduckgo-pitches-itself-to-schools-amid-backlash-over-googles-ai-policy/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.60"
+        data-item-topics="government education"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </article>
+  
+  <article class="also-card" data-story data-story-id="eeaf8afe464ebd80" data-story-title="Google faces backlash for plan to turn off Search for schools" data-story-source="TechCrunch — AI" data-story-time="4 hours ago" role="button" tabindex="0" data-topics="government education">
+    <div class="imgslot imgslot-card has-img fit-contain" aria-hidden="true"><img src="../static/img/deepmind.jpg" alt="" decoding="async"></div>
+    <span class="card-cat">Policy &amp; business</span>
+    <a class="card-title story-headline" href="https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/" title="Google faces backlash for plan that would turn off Search for schools that restrict AI">Google faces backlash for plan to turn off Search for schools</a>
+    <p class="card-dek">Google is facing criticism for its plan to disable Google Search for K-12 schools that opt out of its AI tools. The company stated that Search and AI are deeply integrated, meaning schools restricting AI will lose access to Search, sparking outrage from politicians and experts who call it anti-competitive and a form of &#39;extortion.&#39;</p>
+    
+    <div class="card-foot">
+      <span class="card-meta">TechCrunch — AI · 4h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="eeaf8afe464ebd80">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="eeaf8afe464ebd80"
+        data-item-title="Google faces backlash for plan to turn off Search for schools"
+        data-item-url="https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.60"
+        data-item-topics="government education"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </article>
+  
+</div>
+</section>
+
+</div>
+</section>
+
+
+
+<div class="rule2"></div>
+<div class="home-split">
+<div class="home-main">
+
+
+<section class="worth-section" data-section>
+<span class="section-h">Worth knowing</span>
+
+<div class="worth-row" data-story data-story-id="75679f5aa60bfcf8" data-story-title="Daybreak Red with GPT-5.6 Cyber now in AWS GovCloud (US-East)" data-story-source="OpenAI News" data-story-time="13 hours ago" role="button" tabindex="0" data-topics="government security">
+  <div>
+    <span class="worth-cat">Model releases</span>
+    <a class="worth-title story-headline" href="https://openai.com/index/daybreak-red-aws-govcloud" title="Daybreak Red is now available in AWS GovCloud (US-East)">Daybreak Red with GPT-5.6 Cyber now in AWS GovCloud (US-East)</a>
+    <p class="worth-dek">OpenAI&#39;s Daybreak Red, featuring GPT-5.6 Cyber, is now accessible in AWS GovCloud (US-East) via Amazon Bedrock for authorized cybersecurity applications. This makes advanced AI capabilities available for government-approved cybersecurity operations.</p>
+    
+    <div class="worth-foot">
+      <span class="worth-meta">OpenAI News · 13h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="75679f5aa60bfcf8">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="75679f5aa60bfcf8"
+        data-item-title="Daybreak Red with GPT-5.6 Cyber now in AWS GovCloud (US-East)"
+        data-item-url="https://openai.com/index/daybreak-red-aws-govcloud"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.60"
+        data-item-topics="government security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </div>
+  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/openai.webp" alt="" decoding="async"></div>
+</div>
+
+<div class="worth-row" data-story data-story-id="787b7e01187a6cb8" data-story-title="Google to Cut Search Access for Schools Rejecting AI" data-story-source="Google News" data-story-time="19 hours ago" role="button" tabindex="0" data-topics="government education">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title story-headline" href="https://apnews.com/article/ai-schools-classroom-students-google-7ba4219e505db1c11d672f6eefe7155a" title="Google will cut off search access for students at schools that reject AI">Google to Cut Search Access for Schools Rejecting AI</a>
+    <p class="worth-dek">Google announced it will cut off search access for students at schools that reject AI integration. This controversial policy aims to incentivize AI adoption in educational institutions, potentially creating a divide in access to information for students. The move underscores Google&#39;s commitment to pushing AI in education and the implications for schools&#39; autonomy.</p>
+    <a class="thread-line" href="../archive/2026-11-03.html">Earlier: Google to Disable Search for Schools Rejecting AI (2026-11-03)</a>
+    <div class="worth-foot">
+      <span class="worth-meta">Google News · 2 sources · 19h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="787b7e01187a6cb8">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="787b7e01187a6cb8"
+        data-item-title="Google to Cut Search Access for Schools Rejecting AI"
+        data-item-url="https://apnews.com/article/ai-schools-classroom-students-google-7ba4219e505db1c11d672f6eefe7155a"
+        data-item-date=""
+        data-item-source="Google News"
+        data-item-sig="0.60"
+        data-item-topics="government education"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </div>
+  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/gnews_ai.jpg" alt="" decoding="async"></div>
+</div>
+
+<div class="worth-row" data-story data-story-id="f3900be82c6f7ae6" data-story-title="US Tech Giants&#39; Hidden AI Debt Swells 90% to $3.2T" data-story-source="Hacker News (AI, 100+ points)" data-story-time="23 hours ago" role="button" tabindex="0" data-topics="money chips">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title story-headline" href="https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months" title="US tech giants&#39; hidden AI debt swells 90% to $3.2T in 6 months">US Tech Giants&#39; Hidden AI Debt Swells 90% to $3.2T</a>
+    <p class="worth-dek">US tech giants&#39; hidden AI debt has surged by 90% to an estimated $3.2 trillion in just six months, reflecting the massive investments and operational costs associated with AI development and deployment. This &#34;hidden debt&#34; includes expenses like compute infrastructure, specialized talent, and R&amp;D that aren&#39;t always immediately visible on balance sheets. The rapid increase highlights the immense financial resources being poured into the AI race.</p>
+    
+    <div class="worth-foot">
+      <span class="worth-meta">Hacker News (AI, 100+ points) · 23h ago</span>
+      <span class="comment-count" data-comment-count data-story-id="f3900be82c6f7ae6">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="f3900be82c6f7ae6"
+        data-item-title="US Tech Giants&#39; Hidden AI Debt Swells 90% to $3.2T"
+        data-item-url="https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months"
+        data-item-date=""
+        data-item-source="Hacker News (AI, 100+ points)"
+        data-item-sig="0.60"
+        data-item-topics="money chips"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </div>
+  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M6 25 32 9l26 16"/>
+  <path d="M13 25v22M25 25v22M39 25v22M51 25v22"/>
+  <path d="M7 55h50"/>
+</svg></div>
+</div>
+
+<div class="worth-row" data-story data-story-id="410d5c941f71a7aa" data-story-title="Google will let schools disable AI tools, but not Search" data-story-source="TechCrunch — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="government education">
+  <div>
+    <span class="worth-cat">Policy &amp; business</span>
+    <a class="worth-title story-headline" href="https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/" title="Google will let schools disable its AI tools, but not without sacrificing Search">Google will let schools disable AI tools, but not Search</a>
+    <p class="worth-dek">Google will disable its AI tools for K-12 students by default next year, but schools that choose to restrict AI will lose access to Google Search. The decision, made after consultations with educators, integrates AI features into Search, creating a dilemma for schools using Google&#39;s dominant ecosystem.</p>
+    <a class="thread-line" href="../archive/2026-11-03.html">Earlier: Google to Disable Search for Schools Rejecting AI (2026-11-03)</a>
+    <div class="worth-foot">
+      <span class="worth-meta">TechCrunch — AI · 2 sources · 1d ago</span>
+      <span class="comment-count" data-comment-count data-story-id="410d5c941f71a7aa">Add the first comment</span>
+      <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="410d5c941f71a7aa"
+        data-item-title="Google will let schools disable AI tools, but not Search"
+        data-item-url="https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/"
+        data-item-date=""
+        data-item-source="TechCrunch — AI"
+        data-item-sig="0.60"
+        data-item-topics="government education"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+    </div>
+  </div>
+  <div class="imgslot imgslot-thumb has-img fit-contain" aria-hidden="true"><img src="../static/img/deepmind.jpg" alt="" decoding="async"></div>
+</div>
+
+</section>
+
+
+
+<section class="brief-section" data-section>
+<span class="section-h section-h-brief">In brief — 11 more</span>
+
+
+<div class="brief-row" data-story data-story-id="8330bdd3be4d0a6b" data-story-title="AI-powered malware ‘highly likely’ to hack UK infrastructure by 2028" data-story-source="The Guardian — AI" data-story-time="1 day ago" role="button" tabindex="0" data-topics="government security">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://www.theguardian.com/technology/2026/nov/03/ai-powered-malware-artificial-intelligence-hacking-critical-uk-infrastructure" title="AI-powered malware ‘highly likely’ to be used to hack UK infrastructure by 2028">AI-powered malware ‘highly likely’ to hack UK infrastructure by 2028</a>
+    <span class="comment-count" data-comment-count data-story-id="8330bdd3be4d0a6b">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Policy</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="8330bdd3be4d0a6b"
+        data-item-title="AI-powered malware ‘highly likely’ to hack UK infrastructure by 2028"
+        data-item-url="https://www.theguardian.com/technology/2026/nov/03/ai-powered-malware-artificial-intelligence-hacking-critical-uk-infrastructure"
+        data-item-date=""
+        data-item-source="The Guardian — AI"
+        data-item-sig="0.60"
+        data-item-topics="government security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="18ae6f5695666ebd" data-story-title="RoboColosseum: Evaluating Physical Intelligence At Scale" data-story-source="Hugging Face Daily Papers" data-story-time="3 days ago" role="button" tabindex="0" data-topics="robotics">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://huggingface.co/papers/2611.02497" title="RoboColosseum: Evaluating Physical Intelligence at Scale In-The-Wild">RoboColosseum: Evaluating Physical Intelligence At Scale</a>
+    <span class="comment-count" data-comment-count data-story-id="18ae6f5695666ebd">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Research</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="18ae6f5695666ebd"
+        data-item-title="RoboColosseum: Evaluating Physical Intelligence At Scale"
+        data-item-url="https://huggingface.co/papers/2611.02497"
+        data-item-date=""
+        data-item-source="Hugging Face Daily Papers"
+        data-item-sig="0.60"
+        data-item-topics="robotics"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="db9ec7d5eec3f9ab" data-story-title="Confluent Introduces Streamhouse Architecture to Power AI" data-story-source="gemini_grounding" data-story-time="1 minute ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://newsroom.ibm.com/2026-11-04-confluent-introduces-its-streamhouse-architecture-to-power-ai-with-real-time-business-context" title="Confluent Introduces Its Streamhouse Architecture to Power AI With Real-Time Business Context">Confluent Introduces Streamhouse Architecture to Power AI</a>
+    <span class="comment-count" data-comment-count data-story-id="db9ec7d5eec3f9ab">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="db9ec7d5eec3f9ab"
+        data-item-title="Confluent Introduces Streamhouse Architecture to Power AI"
+        data-item-url="https://newsroom.ibm.com/2026-11-04-confluent-introduces-its-streamhouse-architecture-to-power-ai-with-real-time-business-context"
+        data-item-date=""
+        data-item-source="gemini_grounding"
+        data-item-sig="0.50"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="5f53ae256127008e" data-story-title="Nationwide Backlash Against Data Centers Erupts" data-story-source="Google News" data-story-time="6 minutes ago" role="button" tabindex="0" data-topics="chips government">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://www.washingtonpost.com/technology/2026/11/04/voters-pass-over-20-ballot-measures-ban-or-restrict-data-centers/" title="A nationwide backlash against data centers erupts at the polls">Nationwide Backlash Against Data Centers Erupts</a>
+    <span class="comment-count" data-comment-count data-story-id="5f53ae256127008e">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Policy</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="5f53ae256127008e"
+        data-item-title="Nationwide Backlash Against Data Centers Erupts"
+        data-item-url="https://www.washingtonpost.com/technology/2026/11/04/voters-pass-over-20-ballot-measures-ban-or-restrict-data-centers/"
+        data-item-date=""
+        data-item-source="Google News"
+        data-item-sig="0.50"
+        data-item-topics="chips government"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="ca70ab29b22d7345" data-story-title="French blood storage impacted by freezer hacks" data-story-source="BBC — Technology" data-story-time="4 hours ago" role="button" tabindex="0" data-topics="security health">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://www.bbc.co.uk/news/articles/c8vgxyvz6y9ro?at_medium=RSS&amp;at_campaign=rss" title="French blood storage impacted by freezer hacks as theories swirl about culprits">French blood storage impacted by freezer hacks</a>
+    <span class="comment-count" data-comment-count data-story-id="ca70ab29b22d7345">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Policy</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="ca70ab29b22d7345"
+        data-item-title="French blood storage impacted by freezer hacks"
+        data-item-url="https://www.bbc.co.uk/news/articles/c8vgxyvz6y9ro?at_medium=RSS&amp;at_campaign=rss"
+        data-item-date=""
+        data-item-source="BBC — Technology"
+        data-item-sig="0.50"
+        data-item-topics="security health"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="3a06f84c0f51a102" data-story-title="OpenAI to acquire Pierre Computer Company, Inc" data-story-source="OpenAI News" data-story-time="6 hours ago" role="button" tabindex="0" data-topics="code money">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://openai.com/index/openai-to-acquire-pierre" title="OpenAI to acquire Pierre Computer Company, Inc.">OpenAI to acquire Pierre Computer Company, Inc</a>
+    <span class="comment-count" data-comment-count data-story-id="3a06f84c0f51a102">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Policy</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="3a06f84c0f51a102"
+        data-item-title="OpenAI to acquire Pierre Computer Company, Inc"
+        data-item-url="https://openai.com/index/openai-to-acquire-pierre"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.50"
+        data-item-topics="code money"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="da9a5824109ffaf4" data-story-title="Postman Auto-Installs AI Plugins, Shares API Data" data-story-source="Hacker News (AI, 100+ points)" data-story-time="1 day ago" role="button" tabindex="0" data-topics="code security">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://github.com/postmanlabs/postman-app-support/issues/14370" title="Postman silently auto-installs AI plugins and attempts to share all API data">Postman Auto-Installs AI Plugins, Shares API Data</a>
+    <span class="comment-count" data-comment-count data-story-id="da9a5824109ffaf4">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="da9a5824109ffaf4"
+        data-item-title="Postman Auto-Installs AI Plugins, Shares API Data"
+        data-item-url="https://github.com/postmanlabs/postman-app-support/issues/14370"
+        data-item-date=""
+        data-item-source="Hacker News (AI, 100+ points)"
+        data-item-sig="0.50"
+        data-item-topics="code security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="7b04a568c5adccd6" data-story-title="Agentic cheminformatics with Google Antigravity" data-story-source="Google DeepMind Blog" data-story-time="1 day ago" role="button" tabindex="0" data-topics="science health">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/" title="Agentic cheminformatics with Google Antigravity">Agentic cheminformatics with Google Antigravity</a>
+    <span class="comment-count" data-comment-count data-story-id="7b04a568c5adccd6">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="7b04a568c5adccd6"
+        data-item-title="Agentic cheminformatics with Google Antigravity"
+        data-item-url="https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/"
+        data-item-date=""
+        data-item-source="Google DeepMind Blog"
+        data-item-sig="0.50"
+        data-item-topics="science health"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="d28967fce9c692cd" data-story-title="How OpenAI detects frontier model misalignment" data-story-source="OpenAI News" data-story-time="6 days ago" role="button" tabindex="0" data-topics="security">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://openai.com/index/how-we-detect-frontier-model-misalignment" title="How we detect frontier model misalignment">How OpenAI detects frontier model misalignment</a>
+    <span class="comment-count" data-comment-count data-story-id="d28967fce9c692cd">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="d28967fce9c692cd"
+        data-item-title="How OpenAI detects frontier model misalignment"
+        data-item-url="https://openai.com/index/how-we-detect-frontier-model-misalignment"
+        data-item-date=""
+        data-item-source="OpenAI News"
+        data-item-sig="0.50"
+        data-item-topics="security"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="5afc49da7bd40515" data-story-title="Dharma Field Extractor: Document to Structured JSON" data-story-source="Hugging Face Blog" data-story-time="2 hours ago" role="button" tabindex="0" data-topics="">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor" title="Dharma Field Extractor: Any Document In, Structured Fields in JSON Out">Dharma Field Extractor: Document to Structured JSON</a>
+    <span class="comment-count" data-comment-count data-story-id="5afc49da7bd40515">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="5afc49da7bd40515"
+        data-item-title="Dharma Field Extractor: Document to Structured JSON"
+        data-item-url="https://huggingface.co/blog/Dharma-AI/dharma-field-extractor"
+        data-item-date=""
+        data-item-source="Hugging Face Blog"
+        data-item-sig="0.40"
+        data-item-topics=""
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+<div class="brief-row" data-story data-story-id="bc4177032a04e266" data-story-title="Palette: Small Model Builds Decks in Your Design Language" data-story-source="Hugging Face Blog" data-story-time="1 day ago" role="button" tabindex="0" data-topics="art">
+  <div class="brief-main">
+    <a class="brief-title story-headline" href="https://huggingface.co/blog/ibm-research/palette-deck-building" title="Palette: teaching a small model to build decks in your design language">Palette: Small Model Builds Decks in Your Design Language</a>
+    <span class="comment-count" data-comment-count data-story-id="bc4177032a04e266">Add the first comment</span>
+  </div>
+  <span class="brief-cat">Tools</span>
+  <button type="button" class="save-btn save-btn-compact" data-save
+        data-item-id="bc4177032a04e266"
+        data-item-title="Palette: Small Model Builds Decks in Your Design Language"
+        data-item-url="https://huggingface.co/blog/ibm-research/palette-deck-building"
+        data-item-date=""
+        data-item-source="Hugging Face Blog"
+        data-item-sig="0.40"
+        data-item-topics="art"
+        aria-pressed="false">
+  <svg class="save-ico" width="13" height="13" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"></path></svg>
+  <span class="save-btn-label" data-save-label>Save</span>
+</button>
+</div>
+
+</section>
+
+
+</div>
+<aside class="aside">
+  <div class="aside-card">
+    <span class="aside-h">Signal index</span>
+    <p class="aside-sub">Stories by significance band. 0.60 and up is major.</p>
+    
+    <div class="band-row">
+      <div class="band-top">
+        <span class="band-score">0.60 <span class="band-tier">major</span></span>
+        <span class="band-count">8</span>
+      </div>
+      <div class="band-bar" style="background:var(--acc);width:100%"></div>
+    </div>
+    
+    <div class="band-row">
+      <div class="band-top">
+        <span class="band-score">0.50 <span class="band-tier">high</span></span>
+        <span class="band-count">7</span>
+      </div>
+      <div class="band-bar" style="background:var(--ink);width:88%"></div>
+    </div>
+    
+    <div class="band-row">
+      <div class="band-top">
+        <span class="band-score">0.40 <span class="band-tier">high</span></span>
+        <span class="band-count">2</span>
+      </div>
+      <div class="band-bar" style="background:var(--muted);width:25%"></div>
+    </div>
+    
+    <div class="band-row">
+      <div class="band-top">
+        <span class="band-score">0.30 <span class="band-tier">mid</span></span>
+        <span class="band-count">0</span>
+      </div>
+      <div class="band-bar" style="background:var(--n2);width:4%"></div>
+    </div>
+    
+  </div>
+  
+  <div class="source-alert">
+    <span class="source-alert-h">Source alert</span>
+    <span class="source-alert-body">No working feed for <b>Import AI (Jack Clark)</b> — 0 items collected.</span>
+  </div>
+  
+</aside>
+</div>
+
+</div>
+<aside class="comment-rail" data-comment-rail hidden>
+  <div class="rail-head">
+    <div class="rail-head-text">
+      <h2 class="rail-title" data-rail-title></h2>
+      <p class="rail-meta"><span data-rail-source></span> · <span data-rail-time></span></p>
+      <span class="rail-count" data-rail-count></span>
+    </div>
+    <button type="button" class="rail-follow" data-rail-follow aria-pressed="false">Follow</button>
+    <button type="button" class="rail-close" data-rail-close aria-label="Close comments">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+  <div class="rail-body">
+    <div class="rail-empty" data-rail-empty>
+      <span class="rail-empty-h">No comments yet</span>
+      <p>Start the first thread below.</p>
+    </div>
+    <div class="rail-threads" data-rail-threads></div>
+  </div>
+  <form class="rail-composer" data-rail-composer>
+    <textarea class="rail-input" data-rail-input rows="3" placeholder="Start a thread…"></textarea>
+    <div class="rail-composer-bar">
+      <div class="vis-seg" role="group" aria-label="Visibility">
+        <button type="button" class="vis-opt is-on" data-vis="public" aria-pressed="true">Public</button>
+        <button type="button" class="vis-opt" data-vis="private" aria-pressed="false">Private</button>
+      </div>
+      <button type="submit" class="rail-post">Post thread</button>
+    </div>
+  </form>
+</aside>
+</div>
+</div>
+<footer class="site-footer">
+  <span class="term-line">digest --items 19 --status ok</span>
+  <div class="site-footer-tools">
+    <span class="site-footer-label">Theme</span>
+    <div class="theme-picker">
+  
+  <button type="button" class="theme-swatch" data-theme-btn="0"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(0)" title="White · Cobalt">
+    <span style="background:#ffffff"></span><span style="background:#2438d6"></span><span style="background:#16182b"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="1"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(1)" title="White · Teal">
+    <span style="background:#ffffff"></span><span style="background:#0e7c6b"></span><span style="background:#14201d"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="2"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(2)" title="White · Raspberry">
+    <span style="background:#ffffff"></span><span style="background:#c2185b"></span><span style="background:#1f0f16"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="3"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(3)" title="White · Ember">
+    <span style="background:#ffffff"></span><span style="background:#c2410c"></span><span style="background:#1f1c17"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="4"
+          aria-pressed="true"
+          onclick="__aiDigestSetTheme(4)" title="Mist · Signal red">
+    <span style="background:#f3f2f2"></span><span style="background:#ec3013"></span><span style="background:#201e1d"></span>
+  </button>
+  
+  <button type="button" class="theme-swatch" data-theme-btn="5"
+          aria-pressed="false"
+          onclick="__aiDigestSetTheme(5)" title="Boncom · Maroon">
+    <span style="background:#f4f2ec"></span><span style="background:#ff1a22"></span><span style="background:#1a1a1a"></span>
+  </button>
+  
+</div>
+    <a href="index.html">Archive index</a>
+    
+    <a href="../sources.html">Sources</a>
+    <a href="../saved.html">Saved</a>
+    <a href="../feed.xml">RSS</a>
+  </div>
+</footer>
+<script>(function(){
+  var scope=document.querySelector('[data-scope]'); if(!scope) return;
+  var pills=scope.querySelectorAll('[data-filter-btn]');
+  var sections=scope.querySelectorAll('[data-section]');
+  var items=scope.querySelectorAll('[data-topics]');
+  var chipRow=scope.querySelector('[data-chip-row]');
+  var countEl=scope.querySelector('[data-filter-count]');
+  var drawerBtn=scope.querySelector('[data-drawer-btn]');
+  var drawer=scope.querySelector('[data-drawer]');
+  var on=[];
+  function has(el,topic){
+    return (' '+(el.getAttribute('data-topics')||'')+' ').indexOf(' '+topic+' ')>=0;
+  }
+  function kept(el){
+    if(!on.length) return true;
+    for(var i=0;i<on.length;i++) if(has(el,on[i])) return true;
+    return false;
+  }
+  function chip(topic,label){
+    var b=document.createElement('button');
+    b.type='button'; b.className='chip';
+    b.appendChild(document.createTextNode(label));
+    var x=document.createElement('span'); x.className='chip-x'; x.textContent='×';
+    b.appendChild(x);
+    b.setAttribute('aria-label','Remove filter: '+label);
+    b.addEventListener('click',function(){toggle(topic);});
+    return b;
+  }
+  function paint(){
+    for(var i=0;i<items.length;i++) items[i].classList.toggle('is-filtered',!kept(items[i]));
+    for(var s=0;s<sections.length;s++){
+      var n=sections[s].querySelectorAll('[data-topics]:not(.is-filtered)').length;
+      sections[s].classList.toggle('is-filtered',n===0);
+    }
+    for(var p=0;p<pills.length;p++){
+      var t=pills[p].getAttribute('data-topic'),live=on.indexOf(t)>=0;
+      pills[p].classList.toggle('active',live);
+      pills[p].setAttribute('aria-pressed',live?'true':'false');
+    }
+    if(countEl) countEl.textContent=on.length?' '+on.length:'';
+    if(chipRow){
+      while(chipRow.firstChild) chipRow.removeChild(chipRow.firstChild);
+      for(var c=0;c<on.length;c++){
+        var src=scope.querySelector('[data-topic="'+on[c]+'"]');
+        chipRow.appendChild(chip(on[c],src?src.getAttribute('data-label'):on[c]));
+      }
+    }
+  }
+  function toggle(topic){
+    var at=on.indexOf(topic);
+    if(at>=0) on.splice(at,1); else on.push(topic);
+    paint();
+  }
+  for(var k=0;k<pills.length;k++)(function(b){
+    b.addEventListener('click',function(){toggle(b.getAttribute('data-topic'));});
+  })(pills[k]);
+  
+  try{
+    var want=(new URLSearchParams(location.search).get('topics')||'').split(',');
+    for(var q=0;q<want.length;q++){
+      var t=want[q].trim();
+      if(t&&scope.querySelector('[data-topic="'+t+'"]')&&on.indexOf(t)<0) on.push(t);
+    }
+    if(on.length){
+      paint();
+      if(drawer){drawer.removeAttribute('hidden');}   
+      if(drawerBtn){drawerBtn.setAttribute('aria-expanded','true');drawerBtn.classList.add('active');}
+    }
+  }catch(e){/* URLSearchParams 가 없는 아주 오래된 브라우저면 필터를 안 걸고 전체를 보여준다 */}
+  if(drawerBtn&&drawer) drawerBtn.addEventListener('click',function(){
+    var open=drawer.hasAttribute('hidden');
+    if(open) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden','');
+    drawerBtn.setAttribute('aria-expanded',open?'true':'false');
+    drawerBtn.classList.toggle('active',open);
+  });
+  
+  var followApply=scope.querySelector('[data-follow-apply]');
+  if(followApply&&window.AIDigestFollow) followApply.addEventListener('click',function(){
+    var want=window.AIDigestFollow.read().topics.filter(function(t){
+      return scope.querySelector('[data-topic="'+t+'"]');   // 오늘 안 붙은 토픽은 걸 수 없다
+    });
+    var same=want.length===on.length&&want.every(function(t){return on.indexOf(t)>=0;});
+    on=same?[]:want;
+    followApply.classList.toggle('active',!same);
+    paint();
+  });
+})();</script>
+</body></html>
